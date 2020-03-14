@@ -76,10 +76,12 @@ export function fetchCities(e) {
           );
         });
 
-        Promise.all(sirets.map(fetchSiret)).then(res => {
+        Promise.allSettled(sirets.map(fetchSiret)).then(res => {
           console.log('RES', res);
 
-          res.forEach(r => {
+          const data = res.filter(r => r.value).map(r => r.value);
+
+          data.forEach(r => {
             console.log('SIRET', r.siret);
             console.log('UNITE LEGALE', r.uniteLegale);
           });
