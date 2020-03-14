@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import fetchSiret from '../api.js';
+  import { fetchCities } from '../api';
 
   let dataP;
   function fetchData(e) {
@@ -44,7 +44,7 @@
 </svelte:head>
 
 <h1>Find by SIRET</h1>
-<input bind:value on:change="{fetchData}" />
+<input bind:value on:change="{fetchCities}" />
 
 {#if dataP} {#await dataP}
 <p>...waiting</p>
