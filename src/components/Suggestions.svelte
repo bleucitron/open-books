@@ -1,5 +1,4 @@
 <script>
-  // export let find;
   export let suggestions;
 </script>
 

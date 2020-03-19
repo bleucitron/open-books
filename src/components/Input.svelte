@@ -1,24 +1,12 @@
 <script>
   export let search;
   export let searching;
-  // import { getCities, getSirens, getSiret, getBudget } from '../api';
 
-  // let dataP;
-
-  // function search(e) {
-  //   const text = e.target.value;
-  //   dataP = fetchCities(text);
-  // }
-
-  // function fetchCities(text) {
-  //   console.log('TEXT', text);
-
-  //   return getCities(text).then(cities => {
-  //     console.log('Villes', cities);
-
-  //     return cities;
-  //   });
-  // }
+  function handleInput(e) {
+    const text = e.target.value;
+    search(text);
+    value = text;
+  }
 
   let value = '';
 </script>
@@ -49,7 +37,7 @@
 <div>
   <div class="searchbar">
     <div>{searching}</div>
-    <input bind:value on:change="{search}" placeholder="Entrez une ville" />
+    <input on:input="{handleInput}" placeholder="Entrez une ville" />
   </div>
   <slot></slot>
 </div>

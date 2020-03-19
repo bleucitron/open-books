@@ -6,8 +6,7 @@
   let citiesP;
   let searching = false;
 
-  function search(e) {
-    const text = e.target.value;
+  function search(text) {
     searching = true;
     citiesP = fetchCities(text);
   }
@@ -18,7 +17,7 @@
     return getCities(text).then(cities => {
       console.log('Villes', cities);
       searching = false;
-      return cities;
+      return cities.slice(0, 5);
     });
   }
 
@@ -109,7 +108,7 @@
 <h1>Find by SIRET</h1>
 <Input {search} {searching}>
   {#if citiesP} {#await citiesP then cities}
-  <Suggestions suggestions={cities}/>
+  <Suggestions suggestions={cities} />
   {:catch error}
   <p style="color: red">{error.message}</p>
   {/await}{/if}
