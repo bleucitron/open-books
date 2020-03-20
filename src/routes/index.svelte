@@ -3,8 +3,10 @@
   import Suggestions from '../components/Suggestions.svelte';
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
+  let value = '';
   let citiesP;
   let selected;
+  let budgets;
   let searching = false;
 
   function search(text) {
@@ -13,10 +15,12 @@
   }
 
   function select(city) {
-    selected = city;
     citiesP = null;
 
-    console.log('Selected', selected);
+    fetchBudgets(city).then(res => {
+      budgets = res;
+      console.log('Budgets', budgets);
+    });
   }
 
   function fetchCities(text) {
@@ -29,63 +33,39 @@
     });
   }
 
-  // function fetchCities(text) {
-  //   console.log('TEXT', text);
+  function fetchBudgets({ nom, code }) {
+    return getSirens(nom, code).then(siren => {
+      console.log('SIREN', siren);
+      return getBudget(siren, code).then(data => {
+        const sirets = [
+          ...new Set(data.records.map(({ fields }) => fields.ident)),
+        ];
 
-  //   return getCities(text).then(data => {
-  //     console.log('Villes', data);
+        console.log('SIRETS in data', sirets);
+        const dataBySiret = Object.fromEntries(
+          sirets.map(siret => {
+            const nb = data.records.filter(
+              ({ fields }) => fields.ident === siret,
+            ).length;
 
-  //     const { nom, code } = data[0];
+            return [siret, { siret, nb }];
+          }),
+        );
 
-  //     console.log('NOM', nom, code);
+        budgets = dataBySiret;
 
-  //     return getSirens(nom, code).then(siren => {
-  //       console.log('SIREN', siren);
-  //       return getBudget(siren, code).then(data => {
-  //         const sirets = [
-  //           ...new Set(data.records.map(({ fields }) => fields.ident)),
-  //         ];
+        return Promise.allSettled(sirets.map(getSiret)).then(res => {
+          const data = res.filter(r => r.value).map(r => r.value);
 
-  //         console.log('SIRETS in data', sirets);
-  //         const dataBySiret = Object.fromEntries(
-  //           sirets.map(siret => {
-  //             const nb = data.records.filter(
-  //               ({ fields }) => fields.ident === siret,
-  //             ).length;
+          data.forEach(d => {
+            dataBySiret[d.siret].detail = d;
+          });
 
-  //             console.log('SIRET', siret);
-  //             console.log('NB', nb);
-
-  //             return [siret, { siret, nb }];
-  //           }),
-  //         );
-
-  //         console.log('Data by Siret', dataBySiret);
-
-  //         return Promise.allSettled(sirets.map(getSiret)).then(res => {
-  //           console.log('RES', res);
-
-  //           const data = res.filter(r => r.value).map(r => r.value);
-
-  //           data.forEach(d => {
-  //             dataBySiret[d.siret].detail = d;
-  //           });
-
-  //           return Object.values(dataBySiret);
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
-
-  let value = '';
-
-  // let cities;
-
-  // function setCities(data) {
-  //   console.log('Data', data);
-  //   cities = data;
-  // }
+          return Object.values(dataBySiret);
+        });
+      });
+    });
+  }
 </script>
 
 <style>
