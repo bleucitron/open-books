@@ -1,5 +1,6 @@
 <script>
   export let suggestions;
+  export let select;
 </script>
 
 <style>
@@ -26,11 +27,13 @@
 </style>
 
 <ul>
-  {#each suggestions as { nom, departement }}
-    <li>
-      <div class="name">{nom}</div>
-      {#if departement}
-        <div class="other">{`${departement.code} - ${departement.nom}`}</div>
+  {#each suggestions as suggestion}
+    <li on:click={() => select(suggestion)}>
+      <div class="name">{suggestion.nom}</div>
+      {#if suggestion.departement}
+        <div class="other">
+          {`${suggestion.departement.code} - ${suggestion.departement.nom}`}
+        </div>
       {/if}
     </li>
   {/each}

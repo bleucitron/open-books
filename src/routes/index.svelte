@@ -4,11 +4,19 @@
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
   let citiesP;
+  let selected;
   let searching = false;
 
   function search(text) {
     searching = true;
     citiesP = fetchCities(text);
+  }
+
+  function select(city) {
+    selected = city;
+    citiesP = null;
+
+    console.log('Selected', selected);
   }
 
   function fetchCities(text) {
@@ -104,7 +112,7 @@
 <Search {search} {searching}>
   {#if citiesP}
     {#await citiesP then cities}
-      <Suggestions suggestions="{cities}" />
+      <Suggestions suggestions={cities} {select} />
     {/await}
   {/if}
 </Search>
