@@ -1,6 +1,12 @@
 <script>
+  import { onMount } from 'svelte';
   export let search;
-  export let searching;
+  // export let searching;
+
+  onMount(async () => {
+    value = 'Bordeaux';
+    search(value);
+  });
 
   function handleInput(e) {
     const text = e.target.value;
@@ -36,8 +42,8 @@
 
 <div class="Search">
   <div class="searchbar">
-    <div>{searching}</div>
-    <input on:input="{handleInput}" placeholder="Entrez une ville" />
+    <!-- <div>{searching}</div> -->
+    <input bind:value on:input={handleInput} placeholder="Entrez une ville" />
   </div>
   <slot />
 </div>

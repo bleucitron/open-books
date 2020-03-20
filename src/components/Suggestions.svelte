@@ -13,7 +13,8 @@
   }
 
   li:hover {
-    background: #ddd;
+    background: #444;
+    color: white;
     cursor: pointer;
   }
 
@@ -25,10 +26,12 @@
 </style>
 
 <ul>
-  {#each suggestions as { nom, departement, region }}
+  {#each suggestions as { nom, departement }}
     <li>
-      <div class="name">{`${nom} (${departement.code})`}</div>
-      <div class="other">{`${departement.nom} - ${region.nom}`}</div>
+      <div class="name">{nom}</div>
+      {#if departement}
+        <div class="other">{`${departement.code} - ${departement.nom}`}</div>
+      {/if}
     </li>
   {/each}
 </ul>
