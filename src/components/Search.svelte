@@ -34,10 +34,10 @@
   }
 </style>
 
-<div>
+<div class="Search">
   <div class="searchbar">
     <div>{searching}</div>
     <input on:input="{handleInput}" placeholder="Entrez une ville" />
   </div>
-  <slot></slot>
+  <slot />
 </div>

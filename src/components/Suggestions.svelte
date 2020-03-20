@@ -25,10 +25,10 @@
 </style>
 
 <ul>
-  {#each suggestions as {nom, departement, region}}
-  <li>
-    <div class="name">{`${nom} (${departement.code})`}</div>
-    <div class="other">{`${departement.nom} - ${region.nom}`}</div>
-  </li>
+  {#each suggestions as { nom, departement, region }}
+    <li>
+      <div class="name">{`${nom} (${departement.code})`}</div>
+      <div class="other">{`${departement.nom} - ${region.nom}`}</div>
+    </li>
   {/each}
 </ul>

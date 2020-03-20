@@ -1,5 +1,5 @@
 <script>
-  import Input from '../components/Input.svelte';
+  import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
@@ -106,13 +106,13 @@
 </svelte:head>
 
 <h1>Find by SIRET</h1>
-<Input {search} {searching}>
-  {#if citiesP} {#await citiesP then cities}
-  <Suggestions suggestions={cities} />
-  {:catch error}
-  <p style="color: red">{error.message}</p>
-  {/await}{/if}
-</Input>
+<Search {search} {searching}>
+  {#if citiesP}
+    {#await citiesP then cities}
+      <Suggestions suggestions="{cities}" />
+    {/await}
+  {/if}
+</Search>
 
 <!-- {#if dataP} {#await dataP}
 <p>...waiting</p>

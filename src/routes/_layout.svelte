@@ -15,12 +15,11 @@
   }
 </style>
 
-
 <svelte:head>
-  <link rel='stylesheet' href='./styles.css'>
+  <link rel="stylesheet" href="./styles.css" />
 </svelte:head>
 
-<Nav {segment}/>
+<Nav {segment} />
 <main>
-  <slot></slot>
+  <slot />
 </main>
