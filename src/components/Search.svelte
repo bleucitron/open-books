@@ -1,11 +1,17 @@
 <script>
   import { onMount } from 'svelte';
   export let search;
-  export let departement;
-  // export let searching;
+  export let searching;
+  export let selected;
+
+  let value = 'Bordeaux';
+
+  $: if (selected) {
+    value = selected.nom;
+  }
+  $: department = selected && selected.departement;
 
   onMount(async () => {
-    value = 'Bordeaux';
     search(value);
   });
 
@@ -14,8 +20,6 @@
     search(text);
     value = text;
   }
-
-  let value = '';
 </script>
 
 <style>
@@ -27,7 +31,6 @@
     flex: 1 0;
     outline: none;
     font-size: 2rem;
-    font-size: Raleway;
     border: none;
     border-bottom: 1px solid transparent;
   }
@@ -43,10 +46,12 @@
 
 <div class="Search">
   <div class="searchbar">
-    <!-- <div>{searching}</div> -->
-    <input bind:value on:input={handleInput} placeholder="Entrez une ville" />
-    {#if departement}
-      <div>{departement.nom}</div>
+    <input {value} on:input={handleInput} placeholder="Entrez une ville" />
+    {#if department}
+      <div>{department.nom}</div>
+    {/if}
+    {#if searching}
+      <div>Recherche</div>
     {/if}
   </div>
   <slot />

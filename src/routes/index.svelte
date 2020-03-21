@@ -4,7 +4,6 @@
   import Sirets from '../components/Sirets.svelte';
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
-  let value = '';
   let citiesP;
   let selectedCity;
   let selectedSiret;
@@ -17,6 +16,8 @@
     searching = true;
     siretsP = null;
     selectedCity = null;
+
+    console.log('TEXT', text);
 
     citiesP = fetchCities(text);
   }
@@ -32,8 +33,6 @@
   }
 
   function fetchCities(text) {
-    console.log('TEXT', text);
-
     return getCities(text).then(cities => {
       console.log('Villes', cities);
       searching = false;
@@ -97,7 +96,7 @@
 </svelte:head>
 
 <h1>Find by SIRET</h1>
-<Search {search} {searching} {departement}>
+<Search {search} {searching} selected={selectedCity}>
   {#if citiesP}
     {#await citiesP then cities}
       <Suggestions suggestions={cities} {select} />
