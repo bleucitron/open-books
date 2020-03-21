@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   export let search;
+  export let departement;
   // export let searching;
 
   onMount(async () => {
@@ -44,6 +45,9 @@
   <div class="searchbar">
     <!-- <div>{searching}</div> -->
     <input bind:value on:input={handleInput} placeholder="Entrez une ville" />
+    {#if departement}
+      <div>{departement.nom}</div>
+    {/if}
   </div>
   <slot />
 </div>

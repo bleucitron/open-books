@@ -1,25 +1,33 @@
 <script>
   import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';
+  import Sirets from '../components/Sirets.svelte';
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
   let value = '';
   let citiesP;
-  let selected;
-  let budgets;
+  let selectedCity;
+  let selectedSiret;
+  let siretsP;
   let searching = false;
+
+  $: departement = selectedCity && selectedCity.departement;
 
   function search(text) {
     searching = true;
+    siretsP = null;
+    selectedCity = null;
+
     citiesP = fetchCities(text);
   }
 
   function select(city) {
     citiesP = null;
 
-    fetchBudgets(city).then(res => {
-      budgets = res;
-      console.log('Budgets', budgets);
+    selectedCity = city;
+    siretsP = fetchBudgets(city).then(res => {
+      console.log('Budgets', res);
+      return res;
     });
   }
 
@@ -33,7 +41,9 @@
     });
   }
 
-  function fetchBudgets({ nom, code }) {
+  function fetchBudgets(city) {
+    const { nom, code } = city;
+
     return getSirens(nom, code).then(siren => {
       console.log('SIREN', siren);
       return getBudget(siren, code).then(data => {
@@ -44,15 +54,13 @@
         console.log('SIRETS in data', sirets);
         const dataBySiret = Object.fromEntries(
           sirets.map(siret => {
-            const nb = data.records.filter(
+            const records = data.records.filter(
               ({ fields }) => fields.ident === siret,
-            ).length;
+            );
 
-            return [siret, { siret, nb }];
+            return [siret, { id: siret, city, records }];
           }),
         );
-
-        budgets = dataBySiret;
 
         return Promise.allSettled(sirets.map(getSiret)).then(res => {
           const data = res.filter(r => r.value).map(r => r.value);
@@ -89,30 +97,19 @@
 </svelte:head>
 
 <h1>Find by SIRET</h1>
-<Search {search} {searching}>
+<Search {search} {searching} {departement}>
   {#if citiesP}
     {#await citiesP then cities}
       <Suggestions suggestions={cities} {select} />
     {/await}
   {/if}
 </Search>
-
-<!-- {#if dataP} {#await dataP}
-<p>...waiting</p>
-{:then ets}
-<ul>
-  {#each ets as et}
-  <li>
-    {#if et.detail}
-    <div>{et.detail.uniteLegale.denominationUniteLegale}</div>
-    {:else}
-    <div>Unknown</div>
-    {/if}
-    <div>{et.siret}</div>
-    <div>{et.nb}</div>
-  </li>
-  {/each}
-</ul>
-{:catch error}
-<p style="color: red">{error.message}</p>
-{/await} {/if} -->
+{#if siretsP}
+  {#await siretsP}
+    <div>Loading</div>
+  {:then sirets}
+    <Sirets {sirets} />
+  {:catch error}
+    <div style="color: red">{error}</div>
+  {/await}
+{/if}
