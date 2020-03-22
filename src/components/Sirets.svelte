@@ -8,7 +8,11 @@
 </style>
 
 <ul class="Sirets">
-  {#each sirets as siret}
-    <Siret {...siret} />
-  {/each}
+  {#if sirets.length !== 0}
+    {#each sirets as siret}
+      <Siret {...siret} />
+    {/each}
+  {:else}
+    <div>Aucun enregistrement</div>
+  {/if}
 </ul>

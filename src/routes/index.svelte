@@ -45,6 +45,12 @@
 
     return getSirens(nom, code).then(siren => {
       console.log('SIREN', siren);
+
+      selectedCity = {
+        ...selectedCity,
+        siren,
+      };
+
       return getBudget(siren, code).then(data => {
         const sirets = [
           ...new Set(data.records.map(({ fields }) => fields.ident)),
