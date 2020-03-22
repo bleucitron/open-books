@@ -92,7 +92,7 @@
 
   @media (min-width: 480px) {
     h1 {
-      font-size: 4em;
+      font-size: 2em;
     }
   }
 </style>
@@ -101,7 +101,10 @@
   <title>Open Books</title>
 </svelte:head>
 
-<h1>Find by SIRET</h1>
+<header>
+  <h1>Livres ouverts</h1>
+  <p>Les données budgétaires des communes</p>
+</header>
 <Search {search} {searching} selected={selectedCity}>
   {#if citiesP}
     {#await citiesP then cities}

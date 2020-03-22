@@ -1,7 +1,7 @@
 <script>
-  import Nav from '../components/Nav.svelte';
+  // import Nav from '../components/Nav.svelte';
 
-  export let segment;
+  // export let segment;
 </script>
 
 <style>
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </svelte:head>
 
-<Nav {segment} />
+<!-- <Nav {segment} /> -->
 <main>
   <slot />
 </main>
