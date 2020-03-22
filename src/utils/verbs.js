@@ -4,5 +4,7 @@ export function get(...p) {
   return axios
     .get(...p)
     .then(({ data }) => data)
-    .catch(e => console.error(e));
+    .catch(e => {
+      throw e;
+    });
 }
