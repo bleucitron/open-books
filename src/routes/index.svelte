@@ -5,6 +5,7 @@
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
   let citiesP;
+  let previousCities;
   let selectedCity;
   let selectedSiret;
   let siretsP;
@@ -36,7 +37,9 @@
     return getCities(text).then(cities => {
       console.log('Villes', cities);
       searching = false;
-      return cities.slice(0, 5);
+      const currentCities = cities.slice(0, 5);
+      previousCities = currentCities;
+      return currentCities;
     });
   }
 
@@ -109,7 +112,9 @@
 </header>
 <Search {search} {searching} selected={selectedCity}>
   {#if citiesP}
-    {#await citiesP then cities}
+    {#await citiesP}
+      <Suggestions suggestions={previousCities} />
+    {:then cities}
       <Suggestions suggestions={cities} {select} />
     {/await}
   {/if}

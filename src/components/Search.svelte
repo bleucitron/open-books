@@ -84,6 +84,12 @@
       color: #bbb;
     }
   }
+
+  @media (max-width: 480px) {
+    input {
+      font-size: 1rem;
+    }
+  }
 </style>
 
 <div class="Search">

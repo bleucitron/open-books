@@ -1,6 +1,11 @@
 <script>
-  export let suggestions;
+  export let suggestions = [];
   export let select;
+
+  function _safeSelect(...a) {
+    select?.(...a);
+  }
+
 </script>
 
 <style>
@@ -28,7 +33,7 @@
 
 <ul>
   {#each suggestions as suggestion}
-    <li on:click={() => select(suggestion)}>
+    <li on:click={() => _safeSelect(suggestion)}>
       <div class="name">{suggestion.nom}</div>
       {#if suggestion.departement}
         <div class="other">
