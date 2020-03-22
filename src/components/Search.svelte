@@ -69,6 +69,10 @@
 
   .departement {
     padding: 0 1rem;
+
+    .hyphen {
+      margin: 0 0.5rem;
+    }
   }
 
   input {
@@ -89,6 +93,12 @@
     input {
       font-size: 1rem;
     }
+    .departement {
+      .name,
+      .hyphen {
+        display: none;
+      }
+    }
   }
 </style>
 
@@ -104,7 +114,11 @@
       on:blur={() => setFocus(false)}
       placeholder="Entrez une ville" />
     {#if department}
-      <div class="departement">{`${department.code} - ${department.nom}`}</div>
+      <div class="departement">
+        <div class="code">{department.code}</div>
+        <div class="hyphen">-</div>
+        <div class="name">{department.nom}</div>
+      </div>
     {/if}
   </div>
   <slot />
