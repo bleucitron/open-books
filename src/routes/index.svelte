@@ -81,13 +81,15 @@
   }
 </script>
 
-<style>
-  h1 {
-    margin: 0 auto;
-    font-size: 2.8em;
-    text-transform: uppercase;
-    font-weight: 700;
-    text-align: center;
+<style lang="scss">
+  header {
+    h1 {
+      margin: 0 auto;
+      font-size: 2.8em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-align: center;
+    }
   }
 
   @media (min-width: 480px) {
