@@ -1,10 +1,12 @@
 <script>
   import { onMount } from 'svelte';
+  import IoIosSearch from 'svelte-icons/io/IoIosSearch.svelte';
   export let search;
   export let searching;
   export let selected;
 
   let value = 'Bordeaux';
+  let focus = false;
 
   $: if (selected) {
     value = selected.nom;
@@ -14,6 +16,10 @@
   onMount(async () => {
     search(value);
   });
+
+  function setFocus(v) {
+    focus = v;
+  }
 
   function handleInput(e) {
     const text = e.target.value;
@@ -36,35 +42,63 @@
   .searchbar {
     display: flex;
     border-color: white;
+
+    * {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.selected {
+      * {
+        background: steelblue;
+      }
+    }
+
+    &.focus {
+      * {
+        background: #444;
+      }
+    }
+  }
+
+  .icon {
+    width: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .departement {
+    padding: 0 1rem;
   }
 
   input {
     flex: 1 0;
     padding: 1rem;
+    padding-left: 0;
     outline: none;
     font-size: 2rem;
     border: none;
     border-bottom: 1px solid transparent;
-  }
 
-  input:focus {
-    border-bottom: 1px solid black;
-    background: #444;
-  }
-
-  input::placeholder {
-    color: #bbb;
+    &::placeholder {
+      color: #bbb;
+    }
   }
 </style>
 
 <div class="Search">
-  <div class="searchbar">
-    <input {value} on:input={handleInput} placeholder="Entrez une ville" />
+  <div class="searchbar" class:focus class:selected>
+    <div class="icon">
+      <IoIosSearch />
+    </div>
+    <input
+      {value}
+      on:input={handleInput}
+      on:focus={() => setFocus(true)}
+      on:blur={() => setFocus(false)}
+      placeholder="Entrez une ville" />
     {#if department}
-      <div>{department.nom}</div>
-    {/if}
-    {#if searching}
-      <div>Recherche</div>
+      <div class="departement">{`${department.code} - ${department.nom}`}</div>
     {/if}
   </div>
   <slot />
