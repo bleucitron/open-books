@@ -22,13 +22,25 @@
   }
 </script>
 
-<style>
+<style lang="scss">
+  * {
+    background: grey;
+    color: white;
+  }
+
+  .Search {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
   .searchbar {
     display: flex;
+    border-color: white;
   }
 
   input {
     flex: 1 0;
+    padding: 1rem;
     outline: none;
     font-size: 2rem;
     border: none;
@@ -37,6 +49,7 @@
 
   input:focus {
     border-bottom: 1px solid black;
+    background: #444;
   }
 
   input::placeholder {

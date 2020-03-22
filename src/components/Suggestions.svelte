@@ -10,7 +10,7 @@
 
   li {
     display: flex;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
   }
 
   li:hover {
