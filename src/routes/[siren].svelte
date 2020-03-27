@@ -10,6 +10,7 @@
 </script>
 
 <script>
+  import { city } from '../stores.js';
   import Sirets from '../components/Sirets.svelte';
   export let siren;
   export let code;
@@ -50,7 +51,7 @@
   <title>{`Budget pour ${siren}`}</title>
 </svelte:head>
 
-<h1>{siren}</h1>
+<h1>{$city.nom}</h1>
 
 <div class="content">
   {#await siretsP}

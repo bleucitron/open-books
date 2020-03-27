@@ -1,35 +1,30 @@
 <script>
+  import { city } from '../stores.js';
   import { goto } from '@sapper/app';
+
+  import { getCities, getSirens, getSiret, getBudget } from '../api';
 
   import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';
 
-  import { getCities, getSirens, getSiret, getBudget } from '../api';
-
   let citiesP;
   let previousCities;
-  let selectedCity;
-  let selectedSiret;
   let siretsP;
   let searching = false;
 
-  $: departement = selectedCity && selectedCity.departement;
+  $: departement = $city && $city.departement;
 
   function search(text) {
-    searching = true;
-    siretsP = null;
-    selectedCity = null;
-
     console.log('TEXT', text);
-
+    searching = true;
     citiesP = fetchCities(text);
   }
 
-  function select(city) {
+  function select(c) {
     citiesP = null;
 
-    selectedCity = city;
-    siretsP = fetchBudgets(city).then(res => {
+    city.set(c);
+    siretsP = fetchBudgets(c).then(res => {
       console.log('Budgets', res);
       return res;
     });
@@ -51,39 +46,12 @@
     return getSirens(nom, code).then(siren => {
       console.log('SIREN', siren);
 
-      selectedCity = {
-        ...selectedCity,
+      city = {
+        ...city,
         siren,
       };
 
       goto(`/${siren}?name=${nom}&code=${code}`);
-
-      // return getBudget(siren, code).then(data => {
-      //   const sirets = [
-      //     ...new Set(data.records.map(({ fields }) => fields.ident)),
-      //   ];
-
-      //   console.log('SIRETS in data', sirets);
-      //   const dataBySiret = Object.fromEntries(
-      //     sirets.map(siret => {
-      //       const records = data.records.filter(
-      //         ({ fields }) => fields.ident === siret,
-      //       );
-
-      //       return [siret, { id: siret, city, records }];
-      //     }),
-      //   );
-
-      //   return Promise.allSettled(sirets.map(getSiret)).then(res => {
-      //     const data = res.filter(r => r.value).map(r => r.value);
-
-      //     data.forEach(d => {
-      //       dataBySiret[d.siret].detail = d;
-      //     });
-
-      //     return Object.values(dataBySiret);
-      //   });
-      // });
     });
   }
 </script>
@@ -114,7 +82,7 @@
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
 </header>
-<Search {search} {searching} selected={selectedCity}>
+<Search {search} {searching} selected={$city}>
   {#if citiesP}
     {#await citiesP}
       <Suggestions suggestions={previousCities} />

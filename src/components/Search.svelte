@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import IoIosSearch from 'svelte-icons/io/IoIosSearch.svelte';
+
   export let search;
   export let searching;
   export let selected;
@@ -11,7 +12,8 @@
   $: if (selected) {
     value = selected.nom;
   }
-  $: department = selected && selected.departement;
+  $: department =
+    selected && (value === selected.nom ? selected.departement : undefined);
 
   onMount(async () => {
     search(value);
