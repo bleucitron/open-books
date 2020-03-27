@@ -1,7 +1,9 @@
 <script>
+  import { goto } from '@sapper/app';
+
   import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';
-  import Sirets from '../components/Sirets.svelte';
+
   import { getCities, getSirens, getSiret, getBudget } from '../api';
 
   let citiesP;
@@ -54,32 +56,34 @@
         siren,
       };
 
-      return getBudget(siren, code).then(data => {
-        const sirets = [
-          ...new Set(data.records.map(({ fields }) => fields.ident)),
-        ];
+      goto(`/${siren}?name=${nom}&code=${code}`);
 
-        console.log('SIRETS in data', sirets);
-        const dataBySiret = Object.fromEntries(
-          sirets.map(siret => {
-            const records = data.records.filter(
-              ({ fields }) => fields.ident === siret,
-            );
+      // return getBudget(siren, code).then(data => {
+      //   const sirets = [
+      //     ...new Set(data.records.map(({ fields }) => fields.ident)),
+      //   ];
 
-            return [siret, { id: siret, city, records }];
-          }),
-        );
+      //   console.log('SIRETS in data', sirets);
+      //   const dataBySiret = Object.fromEntries(
+      //     sirets.map(siret => {
+      //       const records = data.records.filter(
+      //         ({ fields }) => fields.ident === siret,
+      //       );
 
-        return Promise.allSettled(sirets.map(getSiret)).then(res => {
-          const data = res.filter(r => r.value).map(r => r.value);
+      //       return [siret, { id: siret, city, records }];
+      //     }),
+      //   );
 
-          data.forEach(d => {
-            dataBySiret[d.siret].detail = d;
-          });
+      //   return Promise.allSettled(sirets.map(getSiret)).then(res => {
+      //     const data = res.filter(r => r.value).map(r => r.value);
 
-          return Object.values(dataBySiret);
-        });
-      });
+      //     data.forEach(d => {
+      //       dataBySiret[d.siret].detail = d;
+      //     });
+
+      //     return Object.values(dataBySiret);
+      //   });
+      // });
     });
   }
 </script>
@@ -119,12 +123,3 @@
     {/await}
   {/if}
 </Search>
-{#if siretsP}
-  {#await siretsP}
-    <div>Loading</div>
-  {:then sirets}
-    <Sirets {sirets} />
-  {:catch error}
-    <div style="color: red">{error}</div>
-  {/await}
-{/if}
