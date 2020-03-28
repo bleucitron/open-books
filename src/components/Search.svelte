@@ -3,7 +3,6 @@
   import IoIosSearch from 'svelte-icons/io/IoIosSearch.svelte';
 
   export let search;
-  export let searching;
   export let selected;
 
   let value = 'Bordeaux';

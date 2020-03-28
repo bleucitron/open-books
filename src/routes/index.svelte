@@ -9,13 +9,11 @@
 
   let citiesP;
   let previousCities;
-  let searching = false;
 
   $: departement = $city && $city.departement;
 
   function search(text) {
     console.log('TEXT', text);
-    searching = true;
     citiesP = fetchCities(text);
   }
 
@@ -29,7 +27,6 @@
   function fetchCities(text) {
     return getCities(text).then(cities => {
       console.log('Villes', cities);
-      searching = false;
       const currentCities = cities.slice(0, 5);
       previousCities = currentCities;
       return currentCities;
@@ -63,7 +60,7 @@
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
 </header>
-<Search {search} {searching} selected={$city}>
+<Search {search} selected={$city}>
   {#if citiesP}
     {#await citiesP}
       <Suggestions suggestions={previousCities} />
