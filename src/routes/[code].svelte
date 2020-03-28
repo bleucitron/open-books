@@ -9,6 +9,7 @@
     return {
       siren,
       code,
+      name,
     };
   }
 </script>
@@ -18,6 +19,7 @@
   import Sirets from '../components/Sirets.svelte';
   export let siren;
   export let code;
+  export let name;
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -29,17 +31,53 @@
   const siretsP = getBudgetsBySiret(siren, code);
 </script>
 
+<style lang="scss">
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h1 {
+      margin-bottom: 0;
+    }
+  }
+
+  .departement {
+    display: flex;
+    padding: 0 1rem;
+
+    .hyphen {
+      margin: 0 0.5rem;
+    }
+  }
+</style>
+
 <svelte:head>
   <title>{`Budget pour ${siren}`}</title>
 </svelte:head>
 
-{#await cityP}
+<header>
+  <h1>{name}</h1>
+  {#await cityP}
+    <div>Loading</div>
+  {:then city}
+    <div class="departement">
+      <div class="code">{city.departement.code}</div>
+      <div class="hyphen">-</div>
+      <div class="name">{city.departement.nom}</div>
+    </div>
+  {:catch error}
+    <div style="color: red">{error}</div>
+  {/await}
+</header>
+
+<!-- {#await cityP}
   <div>Loading</div>
 {:then city}
-  <h1>{city.nom}</h1>
+
 {:catch error}
   <div style="color: red">{error}</div>
-{/await}
+{/await} -->
 
 <div class="content">
   {#await siretsP}
