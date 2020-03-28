@@ -1,7 +1,7 @@
 <script>
   export let id;
   export let records;
-  export let select;
+  // export let select;
   export let detail;
 
   const main = detail && detail.etablissementSiege;

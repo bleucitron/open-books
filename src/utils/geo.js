@@ -11,3 +11,11 @@ export function makeGetCitiesEndpoint(text) {
 
   return `${base}?${allParams}`;
 }
+
+export function makeGetCityEndpoint(code) {
+  const base = '/communes';
+
+  const fieldsString = `fields=${fields.join(',')}`;
+
+  return `${base}/${code}?${fieldsString}`;
+}

@@ -2,14 +2,13 @@
   import { city } from '../stores.js';
   import { goto } from '@sapper/app';
 
-  import { getCities, getSirens, getSiret, getBudget } from '../api';
+  import { getCities, getSirens, getSiret } from '../api';
 
   import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';
 
   let citiesP;
   let previousCities;
-  let siretsP;
   let searching = false;
 
   $: departement = $city && $city.departement;
@@ -20,13 +19,20 @@
     citiesP = fetchCities(text);
   }
 
-  function select(c) {
+  function select(selectedCity) {
+    const { nom, code } = selectedCity;
     citiesP = null;
 
-    city.set(c);
-    siretsP = fetchBudgets(c).then(res => {
-      console.log('Budgets', res);
-      return res;
+    return getSirens(nom, code).then(siren => {
+      console.log('SIREN', siren);
+
+      selectedCity = {
+        ...selectedCity,
+        siren,
+      };
+      city.set(selectedCity);
+
+      goto(`/${siren}?name=${nom}&code=${code}`);
     });
   }
 
@@ -37,21 +43,6 @@
       const currentCities = cities.slice(0, 5);
       previousCities = currentCities;
       return currentCities;
-    });
-  }
-
-  function fetchBudgets(city) {
-    const { nom, code } = city;
-
-    return getSirens(nom, code).then(siren => {
-      console.log('SIREN', siren);
-
-      city = {
-        ...city,
-        siren,
-      };
-
-      goto(`/${siren}?name=${nom}&code=${code}`);
     });
   }
 </script>

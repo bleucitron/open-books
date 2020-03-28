@@ -1,5 +1,5 @@
 <script context="module">
-  import { getSiret, getBudget, getCities } from '../api';
+  import { getBudgetsBySiret, getCity } from '../api';
 
   export async function preload(page, session) {
     const { siren } = page.params;
@@ -14,51 +14,15 @@
   import Sirets from '../components/Sirets.svelte';
   export let siren;
   export let code;
-  export let name;
 
   const cityP = $city
     ? Promise.resolve($city)
-    : fetchCity(name, code).then(result => {
+    : getCity(code).then(result => {
         city.set(result);
         return result;
       });
 
-  const siretsP = fetchBudgets(siren, code);
-
-  function fetchCity(text, code) {
-    return getCities(text).then(cities =>
-      cities.find(city => city.code === code),
-    );
-  }
-
-  function fetchBudgets(siren, code) {
-    return getBudget(siren, code).then(data => {
-      const sirets = [
-        ...new Set(data.records.map(({ fields }) => fields.ident)),
-      ];
-
-      console.log('SIRETS in data', sirets);
-      const dataBySiret = Object.fromEntries(
-        sirets.map(siret => {
-          const records = data.records.filter(
-            ({ fields }) => fields.ident === siret,
-          );
-
-          return [siret, { id: siret, records }];
-        }),
-      );
-
-      return Promise.allSettled(sirets.map(getSiret)).then(res => {
-        const data = res.filter(r => r.value).map(r => r.value);
-
-        data.forEach(d => {
-          dataBySiret[d.siret].detail = d;
-        });
-
-        return Object.values(dataBySiret);
-      });
-    });
-  }
+  const siretsP = getBudgetsBySiret(siren, code);
 </script>
 
 <svelte:head>
