@@ -15,8 +15,10 @@
 </script>
 
 <script>
+  import Spinner from 'svelte-spinner';
   import { city } from '../stores.js';
   import Sirets from '../components/Sirets.svelte';
+
   export let siren;
   export let code;
   export let name;
@@ -59,7 +61,7 @@
 <header>
   <h1>{name}</h1>
   {#await cityP}
-    <div>Loading</div>
+    <Spinner />
   {:then city}
     <div class="departement">
       <div class="code">{city.departement.code}</div>
@@ -71,17 +73,9 @@
   {/await}
 </header>
 
-<!-- {#await cityP}
-  <div>Loading</div>
-{:then city}
-
-{:catch error}
-  <div style="color: red">{error}</div>
-{/await} -->
-
 <div class="content">
   {#await siretsP}
-    <div>Loading</div>
+    <Spinner />
   {:then sirets}
     <Sirets {sirets} />
   {:catch error}
