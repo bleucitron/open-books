@@ -1,11 +1,15 @@
 <script context="module">
-  import { getBudgetsBySiret, getCity } from '../api';
+  import { getBudgetsBySiret, getSirens, getCity } from '../api';
 
   export async function preload(page, session) {
-    const { siren } = page.params;
-    const { name, code } = page.query;
+    const { code } = page.params;
+    const { name } = page.query;
 
-    return { siren, name, code };
+    const siren = await getSirens(name, code);
+    return {
+      siren,
+      code,
+    };
   }
 </script>
 

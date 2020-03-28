@@ -23,17 +23,7 @@
     const { nom, code } = selectedCity;
     citiesP = null;
 
-    return getSirens(nom, code).then(siren => {
-      console.log('SIREN', siren);
-
-      selectedCity = {
-        ...selectedCity,
-        siren,
-      };
-      city.set(selectedCity);
-
-      goto(`/${siren}?name=${nom}&code=${code}`);
-    });
+    city.set(selectedCity);
   }
 
   function fetchCities(text) {

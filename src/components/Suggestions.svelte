@@ -13,8 +13,11 @@
     margin: 0;
   }
 
-  li {
+  a {
     display: flex;
+  }
+
+  li {
     padding: 0.5rem 1rem;
   }
 
@@ -34,12 +37,14 @@
 <ul>
   {#each suggestions as suggestion}
     <li on:click={() => _safeSelect(suggestion)}>
+    <a href={`/${suggestion.code}?name=${suggestion.nom}`} rel=prefetch>
       <div class="name">{suggestion.nom}</div>
       {#if suggestion.departement}
         <div class="other">
           {`${suggestion.departement.code} - ${suggestion.departement.nom}`}
         </div>
       {/if}
+    </a>
     </li>
   {/each}
 </ul>
