@@ -15,13 +15,10 @@
 
   a {
     display: flex;
-  }
-
-  li {
     padding: 0.5rem 1rem;
   }
 
-  li:hover {
+  a:hover {
     background: #444;
     color: white;
     cursor: pointer;
