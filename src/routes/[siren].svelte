@@ -1,5 +1,5 @@
 <script context="module">
-  import { getSiret, getBudget } from '../api';
+  import { getSiret, getBudget, getCities } from '../api';
 
   export async function preload(page, session) {
     const { siren } = page.params;
@@ -14,8 +14,22 @@
   import Sirets from '../components/Sirets.svelte';
   export let siren;
   export let code;
+  export let name;
+
+  const cityP = $city
+    ? Promise.resolve($city)
+    : fetchCity(name, code).then(result => {
+        city.set(result);
+        return result;
+      });
 
   const siretsP = fetchBudgets(siren, code);
+
+  function fetchCity(text, code) {
+    return getCities(text).then(cities =>
+      cities.find(city => city.code === code),
+    );
+  }
 
   function fetchBudgets(siren, code) {
     return getBudget(siren, code).then(data => {
@@ -51,7 +65,13 @@
   <title>{`Budget pour ${siren}`}</title>
 </svelte:head>
 
-<h1>{$city.nom}</h1>
+{#await cityP}
+  <div>Loading</div>
+{:then city}
+  <h1>{city.nom}</h1>
+{:catch error}
+  <div style="color: red">{error}</div>
+{/await}
 
 <div class="content">
   {#await siretsP}
