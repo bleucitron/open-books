@@ -11,8 +11,8 @@ export function getCities(text) {
   });
 }
 
-export function getCity(code) {
-  const endpoint = makeGetCityEndpoint(code);
+export function getCity(insee) {
+  const endpoint = makeGetCityEndpoint(insee);
 
   return get(endpoint, {
     baseURL,

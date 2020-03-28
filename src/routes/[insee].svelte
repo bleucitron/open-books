@@ -2,13 +2,13 @@
   import { getBudgetsBySiret, getSirens, getCity } from '../api';
 
   export async function preload(page, session) {
-    const { code } = page.params;
+    const { insee } = page.params;
     const { name } = page.query;
 
-    const siren = await getSirens(name, code);
+    const siren = await getSirens(name, insee);
     return {
       siren,
-      code,
+      insee,
       name,
     };
   }
@@ -20,17 +20,17 @@
   import Sirets from '../components/Sirets.svelte';
 
   export let siren;
-  export let code;
+  export let insee;
   export let name;
 
   const cityP = $city
     ? Promise.resolve($city)
-    : getCity(code).then(result => {
+    : getCity(insee).then(result => {
         city.set(result);
         return result;
       });
 
-  const siretsP = getBudgetsBySiret(siren, code);
+  const siretsP = getBudgetsBySiret(siren, insee);
 </script>
 
 <style lang="scss">
