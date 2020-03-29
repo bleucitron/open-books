@@ -10,8 +10,6 @@
   let citiesP;
   let previousCities;
 
-  $: departement = $city && $city.departement;
-
   function search(text) {
     console.log('TEXT', text);
     citiesP = fetchCities(text);
