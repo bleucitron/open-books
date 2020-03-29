@@ -5,6 +5,7 @@ export function get(...p) {
     .get(...p)
     .then(({ data }) => data)
     .catch(e => {
+      console.error(e);
       throw e;
     });
 }
