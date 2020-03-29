@@ -23,6 +23,11 @@
   export let insee;
   export let name;
 
+  const start = 2012;
+  const end = new Date().getFullYear();
+
+  const years = [...Array(end - start).keys()].map(x => x + start);
+
   const cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then(result => {
@@ -30,9 +35,20 @@
         return result;
       });
 
-  const siretsP = getBudgetsBySiret(siren, insee).then(d => {
-    console.log('DATA', d);
-    return d;
+  const siretsP = Promise.allSettled(
+    years.map(year => getBudgetsBySiret(siren, year)),
+  ).then(results => {
+    console.log(
+      'RESULTS',
+      results
+        .filter(r => r.value)
+        .map(r => r.value)
+        .flat(),
+    );
+    return results
+      .filter(r => r.value)
+      .map(r => r.value)
+      .flat();
   });
 </script>
 

@@ -1,7 +1,7 @@
 <script>
-  export let id;
+  export let siret;
   export let records;
-  // export let select;
+  export let year;
   export let detail;
 
   const main = detail && detail.etablissementSiege;
@@ -12,6 +12,7 @@
 </style>
 
 <li class="Siret" class:main>
-  <div>{`Siret n° ${id}`}</div>
+  <div>{`Siret n° ${siret}`}</div>
+  <div>{year}</div>
   <div>{`${records.length} enregistrements`}</div>
 </li>
