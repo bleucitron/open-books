@@ -1,9 +1,3 @@
-<script>
-  // import Nav from '../components/Nav.svelte';
-
-  // export let segment;
-</script>
-
 <style>
   main {
     position: relative;
@@ -15,11 +9,6 @@
   }
 </style>
 
-<svelte:head>
-  <link rel="stylesheet" href="./styles.css" />
-</svelte:head>
-
-<!-- <Nav {segment} /> -->
 <main>
   <slot />
 </main>
