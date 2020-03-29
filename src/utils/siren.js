@@ -5,6 +5,19 @@ export function makeGetSiretEndpoint(siret) {
   return `/siret/${siret}`;
 }
 
+export function makeGetSiretsEndpoint(siren) {
+  const base = '/siret';
+
+  const param = `siren:"${siren}"`;
+
+  const number = `nombre=${nbResults}`;
+
+  const query = `q=${param}`;
+  const allParams = [query, number].join('&');
+
+  return `${base}?${allParams}`;
+}
+
 export function makeSearchSiretEndpoint(text, code) {
   const base = '/siret';
 

@@ -2,7 +2,7 @@ import { getBudgets } from './budget';
 import { getSiret } from './siren';
 
 export function getBudgetsBySiret(siren, year = 2018) {
-  return getBudgets(siren, year).then(data => {
+  return getBudgets({ siren, year }).then(data => {
     const sirets = [...new Set(data.records.map(({ fields }) => fields.ident))];
 
     console.log('SIRETS in data', sirets);
