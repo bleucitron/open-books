@@ -30,7 +30,10 @@
         return result;
       });
 
-  const siretsP = getBudgetsBySiret(siren, insee);
+  const siretsP = getBudgetsBySiret(siren, insee).then(d => {
+    console.log('DATA', d);
+    return d;
+  });
 </script>
 
 <style lang="scss">
