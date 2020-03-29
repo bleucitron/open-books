@@ -1,40 +1,51 @@
 <script>
-  import { onMount } from 'svelte';
-  import fetchSiret from '../api.js';
+  import { city } from '../stores.js';
+  import { goto } from '@sapper/app';
 
-  let dataP;
-  function fetchData(e) {
-    dataP = fetchSiret(value).then(([siren, result]) => {
-      console.log('SIREN results', siren);
-      console.log('DATA results', result.data);
-      const exercices = new Set(
-        result.data.records.map(record => record.fields.exer),
-      );
+  import { getCities, getSirens, getSiret } from '../api';
 
-      return { info: siren.data.etablissement, records: result.data.records };
+  import Search from '../components/Search.svelte';
+  import Suggestions from '../components/Suggestions.svelte';
+
+  let citiesP;
+  let previousCities;
+
+  function search(text) {
+    console.log('TEXT', text);
+    citiesP = fetchCities(text);
+  }
+
+  function select(selectedCity) {
+    const { nom, code } = selectedCity;
+    citiesP = null;
+
+    city.set(selectedCity);
+  }
+
+  function fetchCities(text) {
+    return getCities(text).then(cities => {
+      console.log('Villes', cities);
+      const currentCities = cities.slice(0, 5);
+      previousCities = currentCities;
+      return currentCities;
     });
   }
-
-  let value = '';
 </script>
 
-<style>
-  h1,
-  p {
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin: 0 0 0.5em 0;
+<style lang="scss">
+  header {
+    h1 {
+      margin: 0 auto;
+      font-size: 2.8em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-align: center;
+    }
   }
 
   @media (min-width: 480px) {
     h1 {
-      font-size: 4em;
+      font-size: 2em;
     }
   }
 </style>
@@ -43,13 +54,16 @@
   <title>Open Books</title>
 </svelte:head>
 
-<h1>Find by SIRET</h1>
-<input bind:value on:change="{fetchData}" />
-
-{#if dataP} {#await dataP}
-<p>...waiting</p>
-{:then data}
-<p>Etablissement {data.info.uniteLegale.denominationUniteLegale}</p>
-{:catch error}
-<p style="color: red">{error.message}</p>
-{/await} {/if}
+<header>
+  <h1>Livres ouverts</h1>
+  <p>Les données budgétaires des communes</p>
+</header>
+<Search {search} selected={$city}>
+  {#if citiesP}
+    {#await citiesP}
+      <Suggestions suggestions={previousCities} {select} />
+    {:then cities}
+      <Suggestions suggestions={cities} {select} />
+    {/await}
+  {/if}
+</Search>
