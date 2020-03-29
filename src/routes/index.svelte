@@ -61,7 +61,7 @@
 <Search {search} selected={$city}>
   {#if citiesP}
     {#await citiesP}
-      <Suggestions suggestions={previousCities} />
+      <Suggestions suggestions={previousCities} {select} />
     {:then cities}
       <Suggestions suggestions={cities} {select} />
     {/await}
