@@ -12,14 +12,10 @@ const byYear = {
 
 const base = '/api/records/1.0/search';
 
-export function makeBudgetSimpleEndpoint(siren, code, year) {
+export function makeBudgetSimpleEndpoint(siren, year) {
   const dataset = `dataset=balances-comptables-des-communes-en-${year}`;
 
-  const c = code.slice(2);
-  const sirenParam = `siren:${siren}`;
-  const inseeParam = `insee:${c}`;
-
-  const params = [sirenParam, inseeParam].join('&');
+  const params = `siren:${siren}`;
   const query = `q=${params}`;
 
   const rows = `rows=${nbResults}`;
@@ -29,14 +25,10 @@ export function makeBudgetSimpleEndpoint(siren, code, year) {
   return `${base}?${allParams}`;
 }
 
-export function makeBudgetCroiseEndpoint(siren, code, year) {
+export function makeBudgetCroiseEndpoint(siren, year) {
   const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${byYear[year]}`;
 
-  const c = code.slice(2);
-  const sirenParam = `siren:${siren}`;
-  const inseeParam = `insee:${c}`;
-
-  const params = [sirenParam, inseeParam].join('&');
+  const params = `siren:${siren}`;
   const query = `q=${params}`;
 
   const rows = `rows=${nbResults}`;
