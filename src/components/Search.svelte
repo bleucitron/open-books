@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import IoIosSearch from 'svelte-icons/io/IoIosSearch.svelte';
+  import Icon from 'svelte-awesome/components/Icon.svelte';
+  import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
   export let search;
   export let selected;
@@ -106,7 +107,7 @@
 <div class="Search">
   <div class="searchbar" class:focus class:selected>
     <div class="icon">
-      <IoIosSearch />
+      <Icon data={faSearch} scale="1.5" />
     </div>
     <input
       {value}

@@ -1,11 +1,5 @@
 <script context="module">
-  import {
-    getBudgetsBySiret,
-    getSirens,
-    getMainSiret,
-    getBudgets,
-    getCity,
-  } from '../api';
+  import { getSirens, getMainSiret, getCity } from '../api';
 
   export async function preload(page, session) {
     const { insee } = page.params;
@@ -24,10 +18,11 @@
 </script>
 
 <script>
-  import { Map } from 'immutable';
   import Spinner from 'svelte-spinner';
+  import { Map } from 'immutable';
   import { city } from '../stores.js';
   import Sirets from '../components/Sirets.svelte';
+  import Siret from '../components/Siret.svelte';
 
   export let siren;
   export let mainSiret;
@@ -38,11 +33,6 @@
   let selectedSiret = mainSiret;
   let selectedYear = 2018;
 
-  const start = 2012;
-  const end = new Date().getFullYear();
-
-  const years = [...Array(end - start).keys()].map(x => x + start);
-
   const cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then(result => {
@@ -50,26 +40,9 @@
         return result;
       });
 
-  getBudgets({ ident: mainSiret, year: 2018 }).then(d => {
-    entries = Map({ [mainSiret]: { 2018: d.records } });
-  });
-  $: {
-    console.log('ENTRIES', entries.getIn([mainSiret, 2018]));
+  function saveRecords(siret, year, records) {
+    entries = entries.setIn([mainSiret, year], records);
   }
-
-  // years.map(year => getBudgetsBySiret(siren, year).then(results => {
-  //   results.forEach(record => {
-  //     entries = {
-  //       ...entries,
-  //       [record.siret]:
-  //     }
-  //   })
-
-  //   entries = {
-  //     ...entries,
-
-  //   }
-  // }))
 </script>
 
 <style lang="scss">
@@ -113,11 +86,9 @@
 </header>
 
 <div class="content">
-  <!-- {#await siretsP}
-    <Spinner />
-  {:then sirets}
-    <Sirets {sirets} />
-  {:catch error}
-    <div style="color: red">{error}</div>
-  {/await} -->
+  <ul>
+    <Siret
+      siret={mainSiret}
+      save={(...args) => saveRecords(mainSiret, ...args)} />
+  </ul>
 </div>
