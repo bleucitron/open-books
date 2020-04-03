@@ -1,27 +1,20 @@
-<script context="module">
-  const start = 2012;
-  // const end = 2019;
-  const end = new Date().getFullYear();
-
-  const years = [...Array(end - start).keys()].map(x => x + start);
-</script>
-
 <script>
   import Spinner from 'svelte-spinner';
-  import { getBudgets } from '../api';
 
   export let siret;
-  export let save;
-
-  const recordsPs = years.map(year => {
-    return getBudgets({ ident: siret, year }).then(({ records }) => {
-      save(year, records);
-      return records;
-    });
-  });
+  export let years;
+  export let recordsPs;
 </script>
 
 <style>
+  .Siret {
+    margin: 2rem 0;
+  }
+
+  .id {
+    margin-bottom: 0.5rem;
+  }
+
   .years {
     display: flex;
     justify-content: space-between;
@@ -60,21 +53,18 @@
     opacity: 0.3;
   }
 
-  .pending {
-    opacity: 0.5;
+  .unavailable,
+  .error {
+    opacity: 0.4;
   }
 
   .ready {
     background: #177317;
   }
-
-  .error {
-    opacity: 0.5;
-  }
 </style>
 
 <li class="Siret">
-  <div>{`Siret n° ${siret}`}</div>
+  <div class="id">{`Siret n° ${siret}`}</div>
 
   <ul class="years">
     {#each years as year, i}
@@ -86,7 +76,7 @@
           </div>
         </li>
       {:then records}
-        <li class="year ready">
+        <li class={records.length === 0 ? 'year unavailable' : 'year ready'}>
           <h3>{year}</h3>
           <div class="icon">{`${records.length}`}</div>
         </li>

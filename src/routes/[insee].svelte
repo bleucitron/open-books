@@ -1,5 +1,9 @@
 <script context="module">
   import { getSirens, getMainSiret, getCity } from '../api';
+  const start = 2012;
+  // const end = 2019;
+  const end = new Date().getFullYear();
+  const years = [...Array(end - start).keys()].map(x => x + start).reverse();
 
   export async function preload(page, session) {
     const { insee } = page.params;
@@ -23,7 +27,7 @@
   import { city } from '../stores.js';
   import Sirets from '../components/Sirets.svelte';
   import Siret from '../components/Siret.svelte';
-  import { getBudgetsBySiret } from '../api';
+  import { getBudgets, getBudgetsBySiret } from '../api';
 
   export let siren;
   export let mainSiret;
@@ -36,8 +40,15 @@
 
   function saveRecords(siret, year, records) {
     entries = entries.setIn([mainSiret, year], records);
-    console.log('Entries', entries.toJS());
+    // console.log('Entries', entries.toJS());
   }
+
+  const mainRecordsP = years.map(year => {
+    return getBudgets({ ident: mainSiret, year }).then(({ records }) => {
+      saveRecords(year, records);
+      return records;
+    });
+  });
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -46,10 +57,24 @@
         return result;
       });
 
-  const budgetsP = getBudgetsBySiret(siren).then(results => {
-    results.forEach(({ siret, year, records }) => {
-      if (siret !== mainSiret) entries.setIn([siret, year], records);
-    });
+  const siretsP = getBudgetsBySiret(siren, selectedYear).then(results => {
+    return results
+      .filter(record => record.siret !== mainSiret)
+      .sort((r1, r2) => {
+        return r2.records.length - r1.records.length;
+      })
+      .map(({ siret, year, records }) => {
+        const recordsPs = years.map(year => {
+          if (year === selectedYear) return Promise.resolve(records);
+
+          return getBudgets({ ident: siret, year }).then(({ records }) => {
+            saveRecords(year, records);
+            return records;
+          });
+        });
+
+        return { id: siret, recordsPs };
+      });
   });
 </script>
 
@@ -95,8 +120,15 @@
 
 <div class="content">
   <ul>
-    <Siret
-      siret={mainSiret}
-      save={(...args) => saveRecords(mainSiret, ...args)} />
+    <Siret siret={mainSiret} {years} recordsPs={mainRecordsP} />
+    {#await siretsP}
+      <Spinner />
+    {:then sirets}
+      {#each sirets as siret}
+        <Siret siret={siret.id} {years} recordsPs={siret.recordsPs} />
+      {/each}
+    {:catch error}
+      <div style="color: red">{error}</div>
+    {/await}
   </ul>
 </div>

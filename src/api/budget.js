@@ -11,7 +11,7 @@ export function getBudgets(params) {
   });
 }
 
-export function getBudgetsBySiret(siren, year = 2018) {
+export function getBudgetsBySiret(siren, year) {
   return getBudgets({ siren, year }).then(data => {
     const sirets = [...new Set(data.records.map(({ fields }) => fields.ident))];
 
