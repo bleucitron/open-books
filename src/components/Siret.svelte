@@ -8,8 +8,6 @@
 
 <script>
   import Spinner from 'svelte-spinner';
-  import Icon from 'svelte-awesome/components/Icon.svelte';
-  import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
   import { getBudgets } from '../api';
 
   export let siret;
@@ -84,22 +82,18 @@
         <li class="year pending">
           <h3>{year}</h3>
           <div class="icon">
-            <Spinner color="white" />
+            <Spinner color="white" class="icon" />
           </div>
         </li>
       {:then records}
         <li class="year ready">
           <h3>{year}</h3>
-          <div class="icon">
-            <div>{`${records.length}`}</div>
-          </div>
+          <div class="icon">{`${records.length}`}</div>
         </li>
       {:catch error}
         <li class="year error">
           <h3>{year}</h3>
-          <div class="icon">
-            <Icon data={faTimes} />
-          </div>
+          <i class="fas fa-times icon" />
         </li>
       {/await}
     {/each}

@@ -1,7 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import Icon from 'svelte-awesome/components/Icon.svelte';
-  import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
   export let search;
   export let selected;
@@ -64,9 +62,9 @@
     }
   }
 
-  .icon {
+  i {
     width: 2rem;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
   }
 
   .departement {
@@ -106,9 +104,7 @@
 
 <div class="Search">
   <div class="searchbar" class:focus class:selected>
-    <div class="icon">
-      <Icon data={faSearch} scale="1.5" />
-    </div>
+    <i class="fas fa-search fa-2x" />
     <input
       {value}
       on:input={handleInput}
