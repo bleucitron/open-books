@@ -23,6 +23,7 @@
   import { city } from '../stores.js';
   import Sirets from '../components/Sirets.svelte';
   import Siret from '../components/Siret.svelte';
+  import { getBudgetsBySiret } from '../api';
 
   export let siren;
   export let mainSiret;
@@ -33,6 +34,11 @@
   let selectedSiret = mainSiret;
   let selectedYear = 2018;
 
+  function saveRecords(siret, year, records) {
+    entries = entries.setIn([mainSiret, year], records);
+    console.log('Entries', entries.toJS());
+  }
+
   const cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then(result => {
@@ -40,9 +46,11 @@
         return result;
       });
 
-  function saveRecords(siret, year, records) {
-    entries = entries.setIn([mainSiret, year], records);
-  }
+  const budgetsP = getBudgetsBySiret(siren).then(results => {
+    results.forEach(({ siret, year, records }) => {
+      if (siret !== mainSiret) entries.setIn([siret, year], records);
+    });
+  });
 </script>
 
 <style lang="scss">
