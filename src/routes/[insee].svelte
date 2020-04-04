@@ -106,12 +106,18 @@
       bottom: 0;
       right: 0;
       display: flex;
-      padding: 0 1rem;
+      margin-right: 1rem;
 
       .hyphen {
         margin: 0 0.5rem;
       }
     }
+  }
+
+  .spinner {
+    display: flex;
+    flex: 1 0;
+    justify-content: center;
   }
 
   .content {
@@ -133,29 +139,31 @@
 
 <header>
   <h1>{name}</h1>
-  {#await cityP}
-    <Spinner />
-  {:then city}
-    <div class="departement">
+
+  <div class="departement">
+    {#await cityP}
+      <Spinner color="white" />
+    {:then city}
       <div class="code">{city.departement.code}</div>
       <div class="hyphen">-</div>
       <div class="name">{city.departement.nom}</div>
-    </div>
-  {:catch error}
-    <div style="color: red">{error}</div>
-  {/await}
+    {:catch error}
+      <div style="color: red">{error}</div>
+    {/await}
+  </div>
 </header>
 
 <div class="content">
   <ul>
     <Siret siret={mainSiret} {years} recordsPs={mainRecordsP} />
     {#await siretsP}
-      <Spinner />
+      <div class="spinner">
+        <Spinner />
+      </div>
     {:then sirets}
-      <Spinner />
-      <!-- {#each sirets as siret}
+      {#each sirets as siret}
         <Siret siret={siret.id} {years} recordsPs={siret.recordsPs} />
-      {/each} -->
+      {/each}
     {:catch error}
       <div style="color: red">{error}</div>
     {/await}
