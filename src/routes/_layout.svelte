@@ -3,7 +3,6 @@
     position: relative;
     max-width: 56em;
     background-color: white;
-    padding: 2rem 0;
     margin: 0 auto;
     box-sizing: border-box;
   }

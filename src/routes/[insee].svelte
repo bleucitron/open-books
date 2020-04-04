@@ -83,9 +83,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 2rem;
+    padding-top: 2rem;
+    background: #333;
+    color: white;
 
     h1 {
       margin-bottom: 0;
+      font-size: 3rem;
+      line-height: 2rem;
     }
   }
 

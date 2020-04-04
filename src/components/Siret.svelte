@@ -11,13 +11,22 @@
     margin: 2rem 0;
   }
 
+  .id,
+  .years {
+    padding: 0 2rem;
+  }
+
   .id {
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    line-height: 1.4rem;
   }
 
   .years {
     display: flex;
     justify-content: space-between;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    background: #333;
   }
 
   .year {
@@ -28,7 +37,7 @@
     margin: 0 0.5rem;
     padding: 0.5rem;
     height: 2.8rem;
-    background: grey;
+    background: #666;
     color: white;
     border-radius: 8px;
   }
@@ -55,11 +64,11 @@
 
   .unavailable,
   .error {
-    opacity: 0.4;
+    opacity: 0.2;
   }
 
-  .ready {
-    background: #177317;
+  .pending {
+    opacity: 0.6;
   }
 </style>
 
