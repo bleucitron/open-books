@@ -80,27 +80,49 @@
 
 <style lang="scss">
   header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    height: 4rem;
     padding: 0 2rem;
     padding-top: 2rem;
     background: #333;
     color: white;
 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     h1 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin-left: 2rem;
       margin-bottom: 0;
       font-size: 3rem;
       line-height: 2rem;
     }
+
+    .departement {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      padding: 0 1rem;
+
+      .hyphen {
+        margin: 0 0.5rem;
+      }
+    }
   }
 
-  .departement {
-    display: flex;
-    padding: 0 1rem;
+  .content {
+    flex: 1 0;
 
-    .hyphen {
-      margin: 0 0.5rem;
+    ul {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
     }
   }
 </style>
@@ -130,9 +152,10 @@
     {#await siretsP}
       <Spinner />
     {:then sirets}
-      {#each sirets as siret}
+      <Spinner />
+      <!-- {#each sirets as siret}
         <Siret siret={siret.id} {years} recordsPs={siret.recordsPs} />
-      {/each}
+      {/each} -->
     {:catch error}
       <div style="color: red">{error}</div>
     {/await}

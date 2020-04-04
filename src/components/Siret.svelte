@@ -8,7 +8,7 @@
 
 <style>
   .Siret {
-    margin: 2rem 0;
+    margin-top: 2rem;
   }
 
   .id,
