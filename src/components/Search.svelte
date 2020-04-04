@@ -37,6 +37,7 @@
   .Search {
     border-radius: 1rem;
     overflow: hidden;
+    margin: 2rem;
   }
 
   .searchbar {

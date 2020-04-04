@@ -41,6 +41,10 @@
       font-weight: 700;
       text-align: center;
     }
+
+    p {
+      text-align: center;
+    }
   }
 
   @media (min-width: 480px) {
