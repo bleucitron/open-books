@@ -1,9 +1,12 @@
 <script>
   import Spinner from 'svelte-spinner';
+  import { makeCSV } from '../utils';
 
   export let siret;
   export let years;
   export let recordsPs;
+
+  const downloadPs = recordsPs.map(recordsP => recordsP.then(makeCSV));
 </script>
 
 <style>
@@ -31,6 +34,9 @@
 
   .year {
     flex: 1 0;
+  }
+
+  .year a {
     display: flex;
     flex-flow: column;
     align-items: stretch;
@@ -41,6 +47,10 @@
     color: white;
     border-radius: 8px;
   }
+
+  /* .year.ready:hover a {
+    background: #777;
+  } */
 
   .year:first-child {
     margin-left: 0;
@@ -77,22 +87,28 @@
 
   <ul class="years">
     {#each years as year, i}
-      {#await recordsPs[i]}
+      {#await downloadPs[i]}
         <li class="year pending">
-          <h3>{year}</h3>
-          <div class="icon">
-            <Spinner color="white" class="icon" />
-          </div>
+          <a href>
+            <h3>{year}</h3>
+            <div class="icon">
+              <Spinner color="white" class="icon" />
+            </div>
+          </a>
         </li>
-      {:then records}
-        <li class={records.length === 0 ? 'year unavailable' : 'year ready'}>
-          <h3>{year}</h3>
-          <div class="icon">{`${records.length}`}</div>
+      {:then download}
+        <li class={download.length === 0 ? 'year unavailable' : 'year ready'}>
+          <a href={download.csv} download={`${siret}_${year}.csv`}>
+            <h3>{year}</h3>
+            <div class="icon">{download.length}</div>
+          </a>
         </li>
       {:catch error}
         <li class="year error">
-          <h3>{year}</h3>
-          <i class="fas fa-times icon" />
+          <a href>
+            <h3>{year}</h3>
+            <i class="fas fa-times icon" />
+          </a>
         </li>
       {/await}
     {/each}
