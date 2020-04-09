@@ -1,8 +1,38 @@
 import csvString from 'json2csv';
 
-export function makeCSV(data) {
-  const fields = Object.keys(data[0]);
+const fields = [
+  'EXER',
+  'IDENT',
+  'NDEPT',
+  'LBUDG',
+  'INSEE',
+  'CBUDG',
+  'CTYPE',
+  'CSTYP',
+  'NOMEN',
+  'SIREN',
+  'CREGI',
+  'CACTI',
+  'SECTEUR',
+  'FINESS',
+  'CODBUD1',
+  'CATEG',
+  'BAL',
+  'FONCTION',
+  'COMPTE',
+  'BEDEB',
+  'BECRE',
+  'OBNETDEB',
+  'OBNETCRE',
+  'ONBDEB',
+  'ONBCRE',
+  'OOBDEB',
+  'OOBCRE',
+  'SD',
+  'SC',
+].map(t => t.toLowerCase());
 
+export function makeCSV(data) {
   return csvString
     .parseAsync(data, { fields })
     .then(csv => {
