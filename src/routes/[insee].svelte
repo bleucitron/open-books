@@ -44,8 +44,9 @@
   }
 
   const mainRecordsP = years.map(year => {
-    return getBudgets({ ident: mainSiret, year }).then(({ records }) => {
+    return getBudgets({ ident: mainSiret, year }).then(records => {
       saveRecords(year, records);
+
       return records;
     });
   });
@@ -59,7 +60,7 @@
 
   const siretsP = getBudgetsBySiret(siren, selectedYear).then(results => {
     return results
-      .filter(record => record.siret !== mainSiret)
+      .filter(result => result.siret !== mainSiret)
       .sort((r1, r2) => {
         return r2.records.length - r1.records.length;
       })
@@ -67,7 +68,7 @@
         const recordsPs = years.map(year => {
           if (year === selectedYear) return Promise.resolve(records);
 
-          return getBudgets({ ident: siret, year }).then(({ records }) => {
+          return getBudgets({ ident: siret, year }).then(records => {
             saveRecords(year, records);
             return records;
           });

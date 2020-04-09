@@ -8,18 +8,16 @@ export function getBudgets(params) {
 
   return get(endpoint, {
     baseURL,
-  });
+  }).then(({ records }) => records.map((record) => record.fields));
 }
 
 export function getBudgetsBySiret(siren, year) {
-  return getBudgets({ siren, year }).then(data => {
-    const sirets = [...new Set(data.records.map(({ fields }) => fields.ident))];
+  return getBudgets({ siren, year }).then((data) => {
+    const sirets = [...new Set(data.map(({ ident }) => ident))];
 
     const dataBySiret = Object.fromEntries(
-      sirets.map(siret => {
-        const records = data.records.filter(
-          ({ fields }) => fields.ident === siret,
-        );
+      sirets.map((siret) => {
+        const records = data.filter(({ ident }) => ident === siret);
 
         return [siret, { siret, year, records }];
       }),
