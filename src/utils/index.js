@@ -39,10 +39,7 @@ export function makeCSV(data) {
       csv = 'data:text/csv;charset=utf-8,' + csv;
       csv = encodeURI(csv);
 
-      return {
-        length: data.length,
-        csv,
-      };
+      return csv;
     })
     .catch(err => console.error(err));
 }

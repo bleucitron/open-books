@@ -6,7 +6,20 @@
   export let years;
   export let recordsPs;
 
-  const downloadPs = recordsPs.map(recordsP => recordsP.then(makeCSV));
+  const downloadPs = recordsPs.map(recordsP =>
+    recordsP.then(async records => {
+      const nomen = [...new Set(records.map(record => record.nomen))];
+      const length = records.length;
+
+      const csv = await makeCSV(records);
+
+      return {
+        nomen,
+        length,
+        csv,
+      };
+    }),
+  );
 </script>
 
 <style>
@@ -20,6 +33,8 @@
   }
 
   .id {
+    display: flex;
+    justify-content: space-between;
     font-size: 2rem;
     line-height: 1.4rem;
   }
@@ -27,22 +42,25 @@
   .years {
     display: flex;
     justify-content: space-between;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     background: #333;
   }
 
   .year {
     flex: 1 0;
+    display: flex;
+    align-items: stretch;
   }
 
   .year a {
+    flex: 1 0;
+    height: 4rem;
     display: flex;
     flex-flow: column;
     align-items: stretch;
     margin: 0 0.5rem;
     padding: 0.5rem;
-    height: 2.8rem;
     background: #666;
     color: white;
     border-radius: 8px;
@@ -64,7 +82,7 @@
     text-align: center;
   }
 
-  .icon {
+  .info {
     display: flex;
     align-items: center;
     flex: 1 0;
@@ -91,23 +109,33 @@
         <li class="year pending">
           <a href>
             <h3>{year}</h3>
-            <div class="icon">
+            <div class="info">
               <Spinner color="white" class="icon" />
             </div>
           </a>
         </li>
       {:then download}
-        <li class={download.length === 0 ? 'year unavailable' : 'year ready'}>
-          <a href={download.csv} download={`${siret}_${year}.csv`}>
-            <h3>{year}</h3>
-            <div class="icon">{download.length}</div>
-          </a>
-        </li>
+        {#if download.length !== 0}
+          <li class="year ready">
+            <a href={download.csv} download={`${siret}_${year}.csv`}>
+              <h3>{year}</h3>
+              <div class="info">{download.nomen}</div>
+              <div class="info">{download.length}</div>
+            </a>
+          </li>
+        {:else}
+          <li class="year unavailable">
+            <a href>
+              <h3>{year}</h3>
+              <i class="fas fa-times info" />
+            </a>
+          </li>
+        {/if}
       {:catch error}
         <li class="year error">
           <a href>
             <h3>{year}</h3>
-            <i class="fas fa-times icon" />
+            <i class="fas fa-times info" />
           </a>
         </li>
       {/await}

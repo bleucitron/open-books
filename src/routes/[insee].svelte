@@ -81,7 +81,7 @@
 
 <style lang="scss">
   header {
-    height: 4rem;
+    height: 2rem;
     padding: 0 2rem;
     padding-top: 2rem;
     background: #333;
