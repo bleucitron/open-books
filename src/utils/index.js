@@ -5,7 +5,7 @@ export function makeCSV(data) {
 
   return csvString
     .parseAsync(data, { fields })
-    .then((csv) => {
+    .then(csv => {
       csv = 'data:text/csv;charset=utf-8,' + csv;
       csv = encodeURI(csv);
 
@@ -14,5 +14,5 @@ export function makeCSV(data) {
         csv,
       };
     })
-    .catch((err) => console.error(err));
+    .catch(err => console.error(err));
 }
