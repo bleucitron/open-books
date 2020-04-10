@@ -43,3 +43,7 @@ export function makeCSV(data) {
     })
     .catch(err => console.error(err));
 }
+
+export function normalizeText(text) {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}

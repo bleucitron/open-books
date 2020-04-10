@@ -1,3 +1,5 @@
+import { normalizeText } from '.';
+
 const nbResults = 1000;
 const category = 7210;
 
@@ -21,7 +23,8 @@ export function makeGetSiretsEndpoint(siren) {
 export function makeSearchSiretEndpoint(text, code) {
   const base = '/siret';
 
-  const nameParam = `denominationUniteLegale:"${text}"`;
+  const normalizedText = normalizeText(text);
+  const nameParam = `denominationUniteLegale:"${normalizedText}"`;
   const cityParam = `codeCommuneEtablissement:${code}`;
   const typeParam = `categorieJuridiqueUniteLegale:${category}`;
 
