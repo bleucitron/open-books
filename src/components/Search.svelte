@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   export let search;
+  export let clear;
   export let selected;
 
   let value = 'Bordeaux';
@@ -14,6 +15,11 @@
   onMount(async () => {
     search(value);
   });
+
+  function reset() {
+    value = '';
+    clear();
+  }
 
   function setFocus(v) {
     focus = v;
@@ -65,6 +71,10 @@
     width: 2rem;
     padding: 0 1rem;
     font-size: 1.5rem;
+
+    &.fa-times:hover {
+      cursor: pointer;
+    }
   }
 
   input {
@@ -97,6 +107,9 @@
       on:focus={() => setFocus(true)}
       on:blur={() => setFocus(false)}
       placeholder="Entrez une ville" />
+    {#if value}
+      <i class="fas fa-times" on:click={reset} />
+    {/if}
   </div>
   <slot />
 </div>

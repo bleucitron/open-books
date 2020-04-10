@@ -15,9 +15,13 @@
     citiesP = fetchCities(text);
   }
 
+  function clear() {
+    citiesP = null;
+  }
+
   function select(selectedCity) {
     const { nom, code } = selectedCity;
-    citiesP = null;
+    clear();
 
     city.set(selectedCity);
   }
@@ -62,7 +66,7 @@
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
 </header>
-<Search {search} selected={$city}>
+<Search {search} {clear} selected={$city}>
   {#if citiesP}
     {#await citiesP}
       <Suggestions suggestions={previousCities} {select} />
