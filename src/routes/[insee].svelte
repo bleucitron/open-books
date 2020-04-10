@@ -129,7 +129,6 @@
       margin: 0;
       display: flex;
       flex-flow: column;
-      justify-content: space-between;
     }
   }
 </style>
