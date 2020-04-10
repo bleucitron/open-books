@@ -64,6 +64,7 @@
   i {
     width: 2rem;
     padding: 0 1rem;
+    font-size: 1.5rem;
   }
 
   input {
@@ -89,7 +90,7 @@
 
 <div class="Search">
   <div class="searchbar" class:focus>
-    <i class="fas fa-search fa-2x" />
+    <i class="fas fa-search" />
     <input
       {value}
       on:input={handleInput}
