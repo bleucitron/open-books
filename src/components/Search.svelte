@@ -10,8 +10,6 @@
   $: if (selected) {
     value = selected.nom;
   }
-  $: department =
-    selected && (value === selected.nom ? selected.departement : undefined);
 
   onMount(async () => {
     search(value);
@@ -68,14 +66,6 @@
     padding: 0 1rem;
   }
 
-  .departement {
-    padding: 0 1rem;
-
-    .hyphen {
-      margin: 0 0.5rem;
-    }
-  }
-
   input {
     flex: 1 0;
     padding: 1rem;
@@ -94,17 +84,11 @@
     input {
       font-size: 1rem;
     }
-    .departement {
-      .name,
-      .hyphen {
-        display: none;
-      }
-    }
   }
 </style>
 
 <div class="Search">
-  <div class="searchbar" class:focus class:selected>
+  <div class="searchbar" class:focus>
     <i class="fas fa-search fa-2x" />
     <input
       {value}
@@ -112,13 +96,6 @@
       on:focus={() => setFocus(true)}
       on:blur={() => setFocus(false)}
       placeholder="Entrez une ville" />
-    {#if department}
-      <div class="departement">
-        <div class="code">{department.code}</div>
-        <div class="hyphen">-</div>
-        <div class="name">{department.nom}</div>
-      </div>
-    {/if}
   </div>
   <slot />
 </div>
