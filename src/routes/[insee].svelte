@@ -117,8 +117,8 @@
 
   .spinner {
     display: flex;
-    flex: 1 0;
     justify-content: center;
+    margin-top: 1rem;
   }
 
   .content {
