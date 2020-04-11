@@ -35,12 +35,6 @@ const fields = [
 export function makeCSV(data) {
   return csvString
     .parseAsync(data, { fields })
-    .then(csv => {
-      csv = 'data:text/csv;charset=utf-8,' + csv;
-      csv = encodeURI(csv);
-
-      return csv;
-    })
     .catch(err => console.error(err));
 }
 

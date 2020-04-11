@@ -13,10 +13,13 @@
 
       const csv = await makeCSV(records);
 
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+
       return {
         nomen,
         length,
-        csv,
+        url,
       };
     }),
   );
@@ -66,9 +69,9 @@
     border-radius: 8px;
   }
 
-  /* .year.ready:hover a {
+  .year.ready:hover a {
     background: #777;
-  } */
+  }
 
   .year:first-child {
     margin-left: 0;
@@ -117,7 +120,7 @@
       {:then download}
         {#if download.length !== 0}
           <li class="year ready">
-            <a href={download.csv} download={`${siret}_${year}.csv`}>
+            <a href={download.url} download={`${siret}_${year}.csv`}>
               <h3>{year}</h3>
               <div class="info">{download.nomen}</div>
               <div class="info">{download.length}</div>
