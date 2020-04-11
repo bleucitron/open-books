@@ -1,4 +1,3 @@
 export { getCity, getCities } from './geo';
-export { getSirens, getSiret } from './siren';
-export { getBudgets } from './budget';
-export { getBudgetsBySiret } from './mixed';
+export { getSirens, getSiret, getMainSiret } from './siren';
+export { getBudgets, getBudgetsBySiret } from './budget';

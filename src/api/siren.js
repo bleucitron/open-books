@@ -1,6 +1,7 @@
 import { get } from '../utils/verbs';
 import {
   makeGetSiretEndpoint,
+  makeGetSiretsEndpoint,
   makeSearchSiretEndpoint,
   extractSirens,
 } from '../utils/siren';
@@ -13,20 +14,28 @@ const headers = {
   Authorization: `Bearer ${token}`,
 };
 
+const options = {
+  baseURL,
+  headers,
+};
+
 export function getSiret(siret) {
   const endpoint = makeGetSiretEndpoint(siret);
 
-  return get(endpoint, {
-    baseURL,
-    headers,
-  }).then(({ etablissement }) => etablissement);
+  return get(endpoint, options).then(({ etablissement }) => etablissement);
+}
+
+export function getMainSiret(siren) {
+  const endpoint = makeGetSiretsEndpoint(siren);
+
+  return get(endpoint, options).then(
+    ({ etablissements }) =>
+      etablissements.find(e => e.etablissementSiege).siret,
+  );
 }
 
 export function getSirens(text, code) {
   const endpoint = makeSearchSiretEndpoint(text, code);
 
-  return get(endpoint, {
-    baseURL,
-    headers,
-  }).then(extractSirens);
+  return get(endpoint, options).then(extractSirens);
 }

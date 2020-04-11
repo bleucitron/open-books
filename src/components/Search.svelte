@@ -1,8 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import IoIosSearch from 'svelte-icons/io/IoIosSearch.svelte';
 
   export let search;
+  export let clear;
   export let selected;
 
   let value = 'Bordeaux';
@@ -11,12 +11,15 @@
   $: if (selected) {
     value = selected.nom;
   }
-  $: department =
-    selected && (value === selected.nom ? selected.departement : undefined);
 
   onMount(async () => {
     search(value);
   });
+
+  function reset() {
+    value = '';
+    clear();
+  }
 
   function setFocus(v) {
     focus = v;
@@ -38,6 +41,7 @@
   .Search {
     border-radius: 1rem;
     overflow: hidden;
+    margin: 2rem;
   }
 
   .searchbar {
@@ -63,16 +67,13 @@
     }
   }
 
-  .icon {
+  i {
     width: 2rem;
-    padding: 0 0.5rem;
-  }
-
-  .departement {
     padding: 0 1rem;
+    font-size: 1.5rem;
 
-    .hyphen {
-      margin: 0 0.5rem;
+    &.fa-times:hover {
+      cursor: pointer;
     }
   }
 
@@ -94,32 +95,20 @@
     input {
       font-size: 1rem;
     }
-    .departement {
-      .name,
-      .hyphen {
-        display: none;
-      }
-    }
   }
 </style>
 
 <div class="Search">
-  <div class="searchbar" class:focus class:selected>
-    <div class="icon">
-      <IoIosSearch />
-    </div>
+  <div class="searchbar" class:focus>
+    <i class="fas fa-search" />
     <input
       {value}
       on:input={handleInput}
       on:focus={() => setFocus(true)}
       on:blur={() => setFocus(false)}
       placeholder="Entrez une ville" />
-    {#if department}
-      <div class="departement">
-        <div class="code">{department.code}</div>
-        <div class="hyphen">-</div>
-        <div class="name">{department.nom}</div>
-      </div>
+    {#if value}
+      <i class="fas fa-times" on:click={reset} />
     {/if}
   </div>
   <slot />
