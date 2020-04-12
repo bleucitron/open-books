@@ -3,8 +3,9 @@
   import { makeCSV } from '../utils';
 
   export let siret;
-  export let years;
+  export let label;
   export let recordsPs;
+  export let years;
 
   const downloadPs = recordsPs.map(recordsP =>
     recordsP.then(async records => {
@@ -30,16 +31,24 @@
     margin-top: 2rem;
   }
 
-  .id,
+  header,
   .years {
     padding: 0 2rem;
   }
 
-  .id {
+  header {
     display: flex;
     justify-content: space-between;
     font-size: 2rem;
     line-height: 1.4rem;
+  }
+
+  .id {
+    font-size: 1.2rem;
+  }
+
+  .label {
+    text-transform: capitalize;
   }
 
   .years {
@@ -54,6 +63,7 @@
     flex: 1 0;
     display: flex;
     align-items: stretch;
+    margin: 0 0.5rem;
   }
 
   .year a {
@@ -62,7 +72,6 @@
     display: flex;
     flex-flow: column;
     align-items: stretch;
-    margin: 0 0.5rem;
     padding: 0.5rem;
     background: #666;
     color: white;
@@ -104,7 +113,12 @@
 </style>
 
 <li class="Siret">
-  <div class="id">{`Siret n° ${siret}`}</div>
+  <header>
+    <div class="label">
+      {#if label}{label}{:else}Commune{/if}
+    </div>
+    <div class="id">{`Siret n° ${siret}`}</div>
+  </header>
 
   <ul class="years">
     {#each years as year, i}

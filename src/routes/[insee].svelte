@@ -64,17 +64,23 @@
       .sort((r1, r2) => {
         return r2.records.length - r1.records.length;
       })
-      .map(({ siret, year, records }) => {
+      .map(({ siret, records }) => {
+        const label = [
+          ...new Set(records.map(record => record.lbudg.toLowerCase())),
+        ];
+
         const recordsPs = years.map(year => {
           if (year === selectedYear) return Promise.resolve(records);
 
           return getBudgets({ ident: siret, year }).then(records => {
+            const label = [...new Set(records.map(record => record.lbudg))];
+
             saveRecords(year, records);
             return records;
           });
         });
 
-        return { id: siret, recordsPs };
+        return { id: siret, label, recordsPs };
       });
   });
 </script>
@@ -89,25 +95,16 @@
 
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
 
     h1 {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      margin-left: 2rem;
-      margin-bottom: 0;
       font-size: 3rem;
       line-height: 2rem;
     }
 
     .departement {
-      position: absolute;
-      bottom: 0;
-      right: 0;
       display: flex;
-      margin-right: 1rem;
 
       .hyphen {
         margin: 0 0.5rem;
@@ -162,7 +159,11 @@
       </div>
     {:then sirets}
       {#each sirets as siret}
-        <Siret siret={siret.id} {years} recordsPs={siret.recordsPs} />
+        <Siret
+          {years}
+          siret={siret.id}
+          label={siret.label}
+          recordsPs={siret.recordsPs} />
       {/each}
     {:catch error}
       <div style="color: red">{error}</div>
