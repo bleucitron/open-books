@@ -3,7 +3,7 @@
   const start = 2012;
   // const end = 2019;
   const end = new Date().getFullYear();
-  const years = [...Array(end - start).keys()].map(x => x + start).reverse();
+  const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
     const { insee } = page.params;
