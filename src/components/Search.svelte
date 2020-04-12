@@ -54,12 +54,6 @@
       align-items: center;
     }
 
-    &.selected {
-      * {
-        background: steelblue;
-      }
-    }
-
     &.focus {
       * {
         background: #444;
