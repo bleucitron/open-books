@@ -1,5 +1,5 @@
 <script context="module">
-  import { getSirens, getMainSiret, getCity } from '../api';
+  import { getSirens, getMainSiret, getCity } from '../../api';
   const start = 2012;
   // const end = 2019;
   const end = new Date().getFullYear();
@@ -24,28 +24,27 @@
 <script>
   import Spinner from 'svelte-spinner';
   import { Map } from 'immutable';
-  import { city } from '../stores.js';
-  import Sirets from '../components/Sirets.svelte';
-  import Siret from '../components/Siret.svelte';
-  import { getBudgets, getBudgetsBySiret } from '../api';
+  import { city, entries } from '../../stores.js';
+  import Sirets from '../../components/Sirets.svelte';
+  import Siret from '../../components/Siret.svelte';
+  import { getBudgets, getBudgetsBySiret } from '../../api';
 
   export let siren;
   export let mainSiret;
   export let insee;
   export let name;
 
-  let entries = new Map();
   let selectedSiret = mainSiret;
   let selectedYear = 2018;
 
   function saveRecords(siret, year, records) {
-    entries = entries.setIn([mainSiret, year], records);
-    // console.log('Entries', entries.toJS());
+    entries.set($entries.setIn([siret, year], records));
+    // console.log('ENTRIES', $entries.toJS());
   }
 
   const mainRecordsP = years.map(year => {
     return getBudgets({ ident: mainSiret, year }).then(records => {
-      saveRecords(year, records);
+      saveRecords(mainSiret, year, records);
 
       return records;
     });
@@ -75,7 +74,7 @@
           return getBudgets({ ident: siret, year }).then(records => {
             const label = [...new Set(records.map(record => record.lbudg))];
 
-            saveRecords(year, records);
+            saveRecords(siret, year, records);
             return records;
           });
         });
