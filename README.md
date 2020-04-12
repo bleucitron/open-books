@@ -1,6 +1,6 @@
 # Open books
 
-You can visit the beta website [here](open-books.now.sh).
+You can visit the beta website [here](https://open-books.now.sh).
 
 Data exploration for https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-2018/table/
 
