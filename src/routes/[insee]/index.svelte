@@ -25,7 +25,8 @@
 <script>
   import Spinner from 'svelte-spinner';
   import { Map } from 'immutable';
-  import { city, entries } from '../../stores.js';
+  import city from '../../stores/city';
+  import { saveRecords } from '../../stores/entries';
   import Sirets from '../../components/Sirets.svelte';
   import Siret from '../../components/Siret.svelte';
   import { getBudgets, getBudgetsBySiret } from '../../api';
@@ -36,11 +37,6 @@
   export let name;
 
   let selectedYear = 2018;
-
-  function saveRecords(siret, year, records) {
-    entries.set($entries.setIn([siret, year], records));
-    // console.log('ENTRIES', $entries.toJS());
-  }
 
   const recordsP = years.map(year => {
     return getBudgets({ ident: siret, year }).then(records => {
@@ -151,14 +147,23 @@
 
 <div class="content">
   <ul>
-    <Siret id={siret} {name} {years} recordsPs={recordsP} />
+    <Siret
+      id={siret}
+      city={{ name, code: insee }}
+      {years}
+      recordsPs={recordsP} />
     {#await siretsP}
       <div class="spinner">
         <Spinner />
       </div>
     {:then sirets}
       {#each sirets as siret}
-        <Siret id={siret.id} {name} {years} recordsPs={siret.recordsPs} />
+        <Siret
+          id={siret.id}
+          city={{ name, code: insee }}
+          {name}
+          {years}
+          recordsPs={siret.recordsPs} />
       {/each}
     {:catch error}
       <div style="color: red">{error}</div>

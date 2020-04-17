@@ -4,32 +4,37 @@
 
   export let id;
   export let recordsPs;
-  export let name;
+  export let city;
   export let years;
 
   let allLabels = [];
 
-  const downloadPs = recordsPs.map(recordsP =>
-    recordsP.then(async records => {
-      const nomen = [...new Set(records.map(record => record.nomen))];
-      const length = records.length;
+  const downloadPs = recordsPs.map(recordsP => {
+    return recordsP
+      .then(async records => {
+        const nomen = [...new Set(records.map(record => record.nomen))];
+        const length = records.length;
 
-      const labels = records.map(record => record.lbudg.toLowerCase());
-      allLabels = [...new Set([...allLabels, ...labels])];
+        const labels = records.map(record => record.lbudg.toLowerCase());
+        allLabels = [...new Set([...allLabels, ...labels])];
 
-      const csv = await makeCSV(records);
+        const csv = await makeCSV(records);
 
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
 
-      return {
-        nomen,
-        labels,
-        length,
-        url,
-      };
-    }),
-  );
+        return {
+          nomen,
+          labels,
+          length,
+          url,
+        };
+      })
+      .catch(e => {
+        console.error('ERROR', e);
+        throw e;
+      });
+  });
 
   function makeLabel(labels) {
     if (labels.length === 0) return '';
@@ -39,7 +44,7 @@
 
     const label = labels[0];
 
-    const isSame = label.toLowerCase() === name.toLowerCase();
+    const isSame = label.toLowerCase() === city.name.toLowerCase();
     if (isSame) return 'Commune';
 
     return label;
@@ -56,7 +61,7 @@
     padding: 0 2rem;
   }
 
-  header {
+  header a {
     display: flex;
     justify-content: space-between;
     font-size: 2rem;
@@ -134,8 +139,10 @@
 
 <li class="Siret">
   <header>
-    <div class="label">{makeLabel(allLabels)}</div>
-    <div class="id">{`Siret n° ${id}`}</div>
+    <a href={`/${city.code}/${id}?name=${city.name}`}>
+      <div class="label">{makeLabel(allLabels)}</div>
+      <div class="id">{`Siret n° ${id}`}</div>
+    </a>
   </header>
 
   <ul class="years">
