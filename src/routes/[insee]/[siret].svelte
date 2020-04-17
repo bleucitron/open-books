@@ -40,7 +40,7 @@
 
   let selectedYear = 2018;
 
-  const recordsP = years.map(year => {
+  const recordsPs = years.map(year => {
     const records = $entries.getIn([siret, year]);
 
     if (records) return Promise.resolve(records);
@@ -52,32 +52,23 @@
     });
   });
 
+  const valuesPs = recordsPs.map(recordsP => {
+    return recordsP.then(records => {
+      const debit = records.reduce((sum, { sd }) => sum + sd, 0);
+      const credit = records.reduce((sum, { sc }) => sum + sc, 0);
+      return {
+        debit,
+        credit,
+      };
+    });
+  });
+
   const cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then(result => {
         city.set(result);
         return result;
       });
-
-  const siretsP = getBudgetsBySiret(siren, selectedYear).then(results => {
-    return results
-      .filter(result => result.siret !== siret)
-      .sort((r1, r2) => {
-        return r1.siret - r2.siret;
-      })
-      .map(({ siret, records }) => {
-        const recordsPs = years.map(year => {
-          if (year === selectedYear) return Promise.resolve(records);
-
-          return getBudgets({ ident: siret, year }).then(records => {
-            saveRecords(siret, year, records);
-            return records;
-          });
-        });
-
-        return { id: siret, recordsPs };
-      });
-  });
 </script>
 
 <style lang="scss">
@@ -117,9 +108,11 @@
     flex: 1 0;
 
     ul {
-      height: 100%;
       margin: 0;
       display: flex;
+    }
+
+    .sirets {
       flex-flow: column;
     }
   }
@@ -152,22 +145,26 @@
 </header>
 
 <div class="content">
-  <ul>
-    <Siret
-      id={siret}
-      city={{ name, code: insee }}
-      {years}
-      recordsPs={recordsP} />
-    <!-- {#await siretsP}
-      <div class="spinner">
-        <Spinner />
-      </div>
-    {:then sirets}
-      {#each sirets as siret}
-        <Siret id={siret.id} {name} {years} recordsPs={siret.recordsPs} />
-      {/each}
-    {:catch error}
-      <div style="color: red">{error}</div>
-    {/await} -->
+  <ul class="sirets">
+    <Siret id={siret} city={{ name, code: insee }} {years} {recordsPs} />
+  </ul>
+  <ul class="budgets">
+    {#each years as year, i}
+      {#await valuesPs[i]}
+        <li class="year pending">
+          <Spinner color="white" class="icon" />
+        </li>
+      {:then values}
+        <li class="year ready">
+          <div class="info">{values.debit}</div>
+          <div class="info">{values.credit}</div>
+        </li>
+      {:catch error}
+        <li class="year error">
+          <i class="fas fa-times info" />
+        </li>
+      {/await}
+    {/each}
+
   </ul>
 </div>
