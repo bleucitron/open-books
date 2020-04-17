@@ -7,10 +7,11 @@
 
   export async function preload(page, session) {
     const { insee } = page.params;
-    let { name, siret } = page.query;
+    let { name } = page.query;
 
     const siren = await getSirens(name, insee);
-    siret = siret || (await getMainSiret(siren));
+
+    const siret = await getMainSiret(siren);
 
     return {
       siren,
@@ -123,7 +124,13 @@
 </style>
 
 <svelte:head>
-  <title>{`Budget pour ${siren}`}</title>
+  {#await cityP}
+    <title>{`Budgets pour ${name}`}</title>
+  {:then city}
+    <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
+  {:catch error}
+    <title>{`Budgets pour ${name}`}</title>
+  {/await}
 </svelte:head>
 
 <header>
