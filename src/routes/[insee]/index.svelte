@@ -61,7 +61,7 @@
     return results
       .filter(result => result.siret !== siret)
       .sort((r1, r2) => {
-        return r2.records.length - r1.records.length;
+        return r1.siret - r2.siret;
       })
       .map(({ siret, records }) => {
         const recordsPs = years.map(year => {
