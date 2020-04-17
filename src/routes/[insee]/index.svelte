@@ -7,14 +7,14 @@
 
   export async function preload(page, session) {
     const { insee } = page.params;
-    const { name } = page.query;
+    let { name, siret } = page.query;
 
     const siren = await getSirens(name, insee);
-    const mainSiret = await getMainSiret(siren);
+    siret = siret || (await getMainSiret(siren));
 
     return {
       siren,
-      mainSiret,
+      siret,
       insee,
       name,
     };
@@ -30,11 +30,10 @@
   import { getBudgets, getBudgetsBySiret } from '../../api';
 
   export let siren;
-  export let mainSiret;
+  export let siret;
   export let insee;
   export let name;
 
-  let selectedSiret = mainSiret;
   let selectedYear = 2018;
 
   function saveRecords(siret, year, records) {
@@ -42,9 +41,9 @@
     // console.log('ENTRIES', $entries.toJS());
   }
 
-  const mainRecordsP = years.map(year => {
-    return getBudgets({ ident: mainSiret, year }).then(records => {
-      saveRecords(mainSiret, year, records);
+  const recordsP = years.map(year => {
+    return getBudgets({ ident: siret, year }).then(records => {
+      saveRecords(siret, year, records);
 
       return records;
     });
@@ -59,27 +58,21 @@
 
   const siretsP = getBudgetsBySiret(siren, selectedYear).then(results => {
     return results
-      .filter(result => result.siret !== mainSiret)
+      .filter(result => result.siret !== siret)
       .sort((r1, r2) => {
         return r2.records.length - r1.records.length;
       })
       .map(({ siret, records }) => {
-        const label = [
-          ...new Set(records.map(record => record.lbudg.toLowerCase())),
-        ];
-
         const recordsPs = years.map(year => {
           if (year === selectedYear) return Promise.resolve(records);
 
           return getBudgets({ ident: siret, year }).then(records => {
-            const label = [...new Set(records.map(record => record.lbudg))];
-
             saveRecords(siret, year, records);
             return records;
           });
         });
 
-        return { id: siret, label, recordsPs };
+        return { id: siret, recordsPs };
       });
   });
 </script>
@@ -151,18 +144,14 @@
 
 <div class="content">
   <ul>
-    <Siret siret={mainSiret} {years} recordsPs={mainRecordsP} />
+    <Siret id={siret} {name} {years} recordsPs={recordsP} />
     {#await siretsP}
       <div class="spinner">
         <Spinner />
       </div>
     {:then sirets}
       {#each sirets as siret}
-        <Siret
-          {years}
-          siret={siret.id}
-          label={siret.label}
-          recordsPs={siret.recordsPs} />
+        <Siret id={siret.id} {name} {years} recordsPs={siret.recordsPs} />
       {/each}
     {:catch error}
       <div style="color: red">{error}</div>

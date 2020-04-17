@@ -2,7 +2,7 @@
   import { city } from '../stores.js';
   import { goto } from '@sapper/app';
 
-  import { getCities, getSirens, getSiret } from '../api';
+  import { getCities, getSirens } from '../api';
 
   import Search from '../components/Search.svelte';
   import Suggestions from '../components/Suggestions.svelte';

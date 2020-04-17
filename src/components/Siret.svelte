@@ -2,15 +2,20 @@
   import Spinner from 'svelte-spinner';
   import { makeCSV } from '../utils';
 
-  export let siret;
-  export let label;
+  export let id;
   export let recordsPs;
+  export let name;
   export let years;
+
+  let allLabels = [];
 
   const downloadPs = recordsPs.map(recordsP =>
     recordsP.then(async records => {
       const nomen = [...new Set(records.map(record => record.nomen))];
       const length = records.length;
+
+      const labels = records.map(record => record.lbudg.toLowerCase());
+      allLabels = [...new Set([...allLabels, ...labels])];
 
       const csv = await makeCSV(records);
 
@@ -19,11 +24,26 @@
 
       return {
         nomen,
+        labels,
         length,
         url,
       };
     }),
   );
+
+  function makeLabel(labels) {
+    if (labels.length === 0) return '';
+    if (labels.length > 1) {
+      console.error('More than 1 label for', id);
+    }
+
+    const label = labels[0];
+
+    const isSame = label.toLowerCase() === name.toLowerCase();
+    if (isSame) return 'Commune';
+
+    return label;
+  }
 </script>
 
 <style>
@@ -114,10 +134,8 @@
 
 <li class="Siret">
   <header>
-    <div class="label">
-      {#if label}{label}{:else}Commune{/if}
-    </div>
-    <div class="id">{`Siret n° ${siret}`}</div>
+    <div class="label">{makeLabel(allLabels)}</div>
+    <div class="id">{`Siret n° ${id}`}</div>
   </header>
 
   <ul class="years">
@@ -134,7 +152,7 @@
       {:then download}
         {#if download.length !== 0}
           <li class="year ready">
-            <a href={download.url} download={`${siret}_${year}.csv`}>
+            <a href={download.url} download={`${id}_${year}.csv`}>
               <h3>{year}</h3>
               <div class="info">{download.nomen}</div>
               <div class="info">{download.length}</div>
