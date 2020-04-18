@@ -1,5 +1,6 @@
 <script>
   import Spinner from 'svelte-spinner';
+  import Year from './Year.svelte';
   import { makeCSV } from '../utils';
 
   export let id;
@@ -9,31 +10,36 @@
 
   let allLabels = [];
 
-  const downloadPs = recordsPs.map(recordsP => {
-    return recordsP
-      .then(async records => {
-        const nomen = [...new Set(records.map(record => record.nomen))];
-        const length = records.length;
+  const infoPs = recordsPs.map((recordsP, i) => {
+    return recordsP.then(async records => {
+      const nomen = [...new Set(records.map(record => record.nomen))];
+      const length = records.length;
 
-        const labels = records.map(record => record.lbudg.toLowerCase());
-        allLabels = [...new Set([...allLabels, ...labels])];
+      const labels = records.map(record => record.lbudg.toLowerCase());
+      allLabels = [...new Set([...allLabels, ...labels])];
 
-        const csv = await makeCSV(records);
+      const csv = await makeCSV(records);
 
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const name = `${id}_${years[i]}.csv`;
+      const url = URL.createObjectURL(blob);
 
-        return {
-          nomen,
-          labels,
-          length,
-          url,
-        };
-      })
-      .catch(e => {
-        console.error('ERROR', e);
-        throw e;
-      });
+      const debit = records.reduce((sum, { sd }) => sum + sd, 0);
+      const credit = records.reduce((sum, { sc }) => sum + sc, 0);
+
+      return {
+        nomen,
+        length,
+        url,
+        name,
+        debit,
+        credit,
+      };
+    });
+  });
+
+  const maxP = Promise.all(infoPs).then(results => {
+    return Math.max(...results.map(v => v.credit));
   });
 
   function makeLabel(labels) {
@@ -79,61 +85,11 @@
   .years {
     display: flex;
     justify-content: space-between;
-    padding-top: 1rem;
+    align-items: stretch;
+    padding-top: 3rem;
     padding-bottom: 1rem;
     background: #333;
-  }
-
-  .year {
-    flex: 1 0;
-    display: flex;
-    align-items: stretch;
-    margin: 0 0.5rem;
-  }
-
-  .year a {
-    flex: 1 0;
-    height: 4rem;
-    display: flex;
-    flex-flow: column;
-    align-items: stretch;
-    padding: 0.5rem;
-    background: #666;
-    color: white;
-    border-radius: 8px;
-  }
-
-  .year.ready:hover a {
-    background: #777;
-  }
-
-  .year:first-child {
-    margin-left: 0;
-  }
-
-  .year:last-child {
-    margin-right: 0;
-  }
-
-  h3 {
-    text-align: center;
-  }
-
-  .info {
-    display: flex;
-    align-items: center;
-    flex: 1 0;
-    justify-content: space-around;
-    opacity: 0.3;
-  }
-
-  .unavailable,
-  .error {
-    opacity: 0.2;
-  }
-
-  .pending {
-    opacity: 0.6;
+    height: 20rem;
   }
 </style>
 
@@ -147,39 +103,10 @@
 
   <ul class="years">
     {#each years as year, i}
-      {#await downloadPs[i]}
-        <li class="year pending">
-          <a href>
-            <h3>{year}</h3>
-            <div class="info">
-              <Spinner color="white" class="icon" />
-            </div>
-          </a>
-        </li>
-      {:then download}
-        {#if download.length !== 0}
-          <li class="year ready">
-            <a href={download.url} download={`${id}_${year}.csv`}>
-              <h3>{year}</h3>
-              <div class="info">{download.nomen}</div>
-              <div class="info">{download.length}</div>
-            </a>
-          </li>
-        {:else}
-          <li class="year unavailable">
-            <a href>
-              <h3>{year}</h3>
-              <i class="fas fa-times info" />
-            </a>
-          </li>
-        {/if}
-      {:catch error}
-        <li class="year error">
-          <a href>
-            <h3>{year}</h3>
-            <i class="fas fa-times info" />
-          </a>
-        </li>
+      {#await infoPs[i]}
+        <Year {year} {maxP} />
+      {:then info}
+        <Year {year} {info} {maxP} />
       {/await}
     {/each}
   </ul>

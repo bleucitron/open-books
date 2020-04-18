@@ -39,11 +39,13 @@
   let selectedYear = 2018;
 
   const recordsP = years.map(year => {
-    return getBudgets({ ident: siret, year }).then(records => {
-      saveRecords(siret, year, records);
+    return getBudgets({ ident: siret, year })
+      .then(records => {
+        saveRecords(siret, year, records);
 
-      return records;
-    });
+        return records;
+      })
+      .catch(() => []);
   });
 
   const cityP = $city
@@ -63,10 +65,12 @@
         const recordsPs = years.map(year => {
           if (year === selectedYear) return Promise.resolve(records);
 
-          return getBudgets({ ident: siret, year }).then(records => {
-            saveRecords(siret, year, records);
-            return records;
-          });
+          return getBudgets({ ident: siret, year })
+            .then(records => {
+              saveRecords(siret, year, records);
+              return records;
+            })
+            .catch(() => []);
         });
 
         return { id: siret, recordsPs };
@@ -76,7 +80,6 @@
 
 <style lang="scss">
   header {
-    height: 2rem;
     padding: 0 2rem;
     padding-top: 2rem;
     background: #333;
