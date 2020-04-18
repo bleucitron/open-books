@@ -6,7 +6,7 @@
   export let info = null;
   export let maxP = null;
 
-  let height = 100;
+  let height;
 
   const pending = !info;
   const unavailable = !pending && info.length === 0;
@@ -14,7 +14,9 @@
 
   if (maxP)
     maxP.then(max => {
-      if (!pending) height = (info.credit / max) * 100;
+      if (!pending) {
+        setTimeout(() => (height = (info.credit / max) * 100 + '%'), 50);
+      }
     });
 
   const classes = classnames('Year', { pending, unavailable, ready });
@@ -39,6 +41,7 @@
   .Year a {
     display: flex;
     padding: 0.5rem;
+    height: 1.5rem;
     flex-flow: column;
     align-items: center;
     background: #666;
@@ -94,7 +97,9 @@
     color: transparent;
   }
 
-  svg {
+  .spinner {
+    display: flex;
+    align-items: center;
     flex: 1 0;
   }
 </style>
@@ -102,11 +107,13 @@
 <li class={classes}>
   <div class="info">
     {#if pending}
-      <Spinner color="white" />
+      <div class="spinner">
+        <Spinner color="white" />
+      </div>
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <a {href} {download} style={`height: ${height}%;`}>{info.length}</a>
+      <a {href} {download} style={`height: ${height};`}>{info.length}</a>
     {/if}
   </div>
   <h3>{year}</h3>
