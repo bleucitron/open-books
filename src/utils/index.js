@@ -41,3 +41,13 @@ export function makeCSV(data) {
 export function normalizeText(text) {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
+
+export function formatValue(value) {
+  return new Intl.NumberFormat('fr', {
+    style: 'currency',
+    notation: 'compact',
+    minimumSignificantDigits: 3,
+    maximumSignificantDigits: 3,
+    currency: 'EUR',
+  }).format(value);
+}

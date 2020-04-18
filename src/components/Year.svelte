@@ -1,6 +1,7 @@
 <script>
   import Spinner from 'svelte-spinner';
   import classnames from 'classnames';
+  import { formatValue } from '../utils';
 
   export let year;
   export let info = null;
@@ -21,7 +22,6 @@
 
   const classes = classnames('Year', { pending, unavailable, ready });
 
-  // height = ready ? 100 : height;
   const href = ready ? info.url : null;
   const download = ready ? info.name : null;
 </script>
@@ -29,6 +29,7 @@
 <style>
   .Year {
     flex: 1 0;
+    width: 2rem;
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
@@ -113,7 +114,9 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <a {href} {download} style={`height: ${height};`}>{info.length}</a>
+      <a {href} {download} style={`height: ${height};`}>
+        {formatValue(info.credit)}
+      </a>
     {/if}
   </div>
   <h3>{year}</h3>
