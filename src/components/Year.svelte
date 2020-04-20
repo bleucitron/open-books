@@ -4,26 +4,26 @@
   import { formatValue } from '../utils';
 
   export let year;
-  export let info = null;
+  export let length = 0;
+  export let value = null;
+  export let url = null;
+  export let file = null;
   export let maxP = null;
 
   let height;
 
-  const pending = !info;
-  const unavailable = !pending && info.length === 0;
+  const pending = value === null;
+  const unavailable = !pending && length === 0;
   const ready = !pending && !unavailable;
 
   if (maxP)
     maxP.then(max => {
       if (!pending) {
-        setTimeout(() => (height = (info.credit / max) * 100 + '%'), 50);
+        setTimeout(() => (height = (value / max) * 100 + '%'), 50);
       }
     });
 
   const classes = classnames('Year', { pending, unavailable, ready });
-
-  const href = ready ? info.url : null;
-  const download = ready ? info.name : null;
 </script>
 
 <style>
@@ -114,8 +114,8 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <a {href} {download} style={`height: ${height};`}>
-        {formatValue(info.credit)}
+      <a href={url} download={file} style={`height: ${height};`}>
+        {formatValue(value)}
       </a>
     {/if}
   </div>

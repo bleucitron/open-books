@@ -4,41 +4,19 @@
   import { makeCSV } from '../utils';
 
   export let id;
-  export let recordsPs;
+  export let budgetPs;
   export let city;
   export let years;
 
   let allLabels = [];
 
-  const infoPs = recordsPs.map((recordsP, i) => {
-    return recordsP.then(async records => {
-      const nomen = [...new Set(records.map(record => record.nomen))];
-      const length = records.length;
+  budgetPs.forEach((budgetP, i) =>
+    budgetP.then(({ length, label }) => {
+      if (length > 0) allLabels = [...new Set([...allLabels, label])];
+    }),
+  );
 
-      const labels = records.map(record => record.lbudg.toLowerCase());
-      allLabels = [...new Set([...allLabels, ...labels])];
-
-      const csv = await makeCSV(records);
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const name = `${id}_${years[i]}.csv`;
-      const url = URL.createObjectURL(blob);
-
-      const debit = records.reduce((sum, { sd }) => sum + sd, 0);
-      const credit = records.reduce((sum, { sc }) => sum + sc, 0);
-
-      return {
-        nomen,
-        length,
-        url,
-        name,
-        debit,
-        credit,
-      };
-    });
-  });
-
-  const maxP = Promise.all(infoPs).then(results => {
+  const maxP = Promise.all(budgetPs).then(results => {
     return Math.max(...results.map(v => v.credit));
   });
 
@@ -103,10 +81,16 @@
 
   <ul class="years">
     {#each years as year, i}
-      {#await infoPs[i]}
+      {#await budgetPs[i]}
         <Year {year} {maxP} />
-      {:then info}
-        <Year {year} {info} {maxP} />
+      {:then budget}
+        <Year
+          {year}
+          value={budget.credit}
+          length={budget.length}
+          url={budget.url}
+          file={budget.file}
+          {maxP} />
       {/await}
     {/each}
   </ul>

@@ -25,11 +25,14 @@
 <script>
   import Spinner from 'svelte-spinner';
   import { Map } from 'immutable';
+
   import city from '../../stores/city';
-  import { saveRecords } from '../../stores/entries';
+  import budgets, { saveBudget } from '../../stores/budgets';
   import Sirets from '../../components/Sirets.svelte';
   import Siret from '../../components/Siret.svelte';
-  import { getBudgets, getBudgetsFromSiren } from '../../api';
+  import { getRecords, getRecordsFromSiren } from '../../api';
+
+  import { makeBudget } from './_utils';
 
   export let siren;
   export let siret;
@@ -38,15 +41,11 @@
 
   let selectedYear = 2018;
 
-  const recordsP = years.map(year => {
-    return getBudgets({ ident: siret, year })
-      .then(records => {
-        saveRecords(siret, year, records);
-
-        return records;
-      })
-      .catch(() => []);
-  });
+  const budgetPs = years.map(year =>
+    getRecords({ ident: siret, year })
+      .catch(() => [])
+      .then(records => makeBudget(siret, year, records).then(saveBudget)),
+  );
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -55,27 +54,25 @@
         return result;
       });
 
-  const siretsP = getBudgetsFromSiren(siren, selectedYear).then(results => {
-    return results
+  const siretsP = getRecordsFromSiren(siren, selectedYear).then(results =>
+    results
       .filter(result => result.siret !== siret)
-      .sort((r1, r2) => {
-        return r1.siret - r2.siret;
-      })
+      .sort((r1, r2) => r1.siret - r2.siret)
       .map(({ siret, records }) => {
-        const recordsPs = years.map(year => {
-          if (year === selectedYear) return Promise.resolve(records);
+        const budgetPs = years.map(year => {
+          const recordsP =
+            year === selectedYear
+              ? Promise.resolve(records)
+              : getRecords({ ident: siret, year }).catch(() => []);
 
-          return getBudgets({ ident: siret, year })
-            .then(records => {
-              saveRecords(siret, year, records);
-              return records;
-            })
-            .catch(() => []);
+          return recordsP.then(records =>
+            makeBudget(siret, year, records).then(saveBudget),
+          );
         });
 
-        return { id: siret, recordsPs };
-      });
-  });
+        return { id: siret, budgetPs };
+      }),
+  );
 </script>
 
 <style lang="scss">
@@ -150,11 +147,7 @@
 
 <div class="content">
   <ul>
-    <Siret
-      id={siret}
-      city={{ name, code: insee }}
-      {years}
-      recordsPs={recordsP} />
+    <Siret id={siret} city={{ name, code: insee }} {years} {budgetPs} />
     {#await siretsP}
       <div class="spinner">
         <Spinner />
@@ -166,7 +159,7 @@
           city={{ name, code: insee }}
           {name}
           {years}
-          recordsPs={siret.recordsPs} />
+          budgetPs={siret.budgetPs} />
       {/each}
     {:catch error}
       <div style="color: red">{error}</div>

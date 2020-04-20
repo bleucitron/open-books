@@ -3,7 +3,7 @@ import { makeBudgetCroiseEndpoint } from '../utils/budget';
 
 const baseURL = 'https://data.economie.gouv.fr';
 
-export function getBudgets(params) {
+export function getRecords(params) {
   const endpoint = makeBudgetCroiseEndpoint(params);
 
   return get(endpoint, {
@@ -11,8 +11,8 @@ export function getBudgets(params) {
   }).then(({ records }) => records.map(record => record.fields));
 }
 
-export function getBudgetsFromSiren(siren, year) {
-  return getBudgets({ siren, year }).then(data => {
+export function getRecordsFromSiren(siren, year) {
+  return getRecords({ siren, year }).then(data => {
     const sirets = [...new Set(data.map(({ ident }) => ident))];
 
     const dataBySiret = Object.fromEntries(
