@@ -29,7 +29,7 @@
   import { saveRecords } from '../../stores/entries';
   import Sirets from '../../components/Sirets.svelte';
   import Siret from '../../components/Siret.svelte';
-  import { getBudgets, getBudgetsBySiret } from '../../api';
+  import { getBudgets, getBudgetsFromSiren } from '../../api';
 
   export let siren;
   export let siret;
@@ -55,7 +55,7 @@
         return result;
       });
 
-  const siretsP = getBudgetsBySiret(siren, selectedYear).then(results => {
+  const siretsP = getBudgetsFromSiren(siren, selectedYear).then(results => {
     return results
       .filter(result => result.siret !== siret)
       .sort((r1, r2) => {

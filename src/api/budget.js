@@ -11,7 +11,7 @@ export function getBudgets(params) {
   }).then(({ records }) => records.map(record => record.fields));
 }
 
-export function getBudgetsBySiret(siren, year) {
+export function getBudgetsFromSiren(siren, year) {
   return getBudgets({ siren, year }).then(data => {
     const sirets = [...new Set(data.map(({ ident }) => ident))];
 
