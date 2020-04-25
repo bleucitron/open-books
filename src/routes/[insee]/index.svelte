@@ -122,21 +122,8 @@
     }
   }
 
-  .spinner {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-
   .content {
     flex: 1 0;
-
-    ul {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-flow: column;
-    }
   }
 </style>
 
