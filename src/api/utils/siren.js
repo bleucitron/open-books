@@ -1,4 +1,4 @@
-import { normalizeText } from '.';
+import { normalizeText } from '../../utils';
 
 const nbResults = 1000;
 const category = 7210;

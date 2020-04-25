@@ -1,5 +1,5 @@
-import { get } from '../utils/verbs';
-import { makeGetCitiesEndpoint, makeGetCityEndpoint } from '../utils/geo';
+import { get } from './utils/verbs';
+import { makeGetCitiesEndpoint, makeGetCityEndpoint } from './utils/geo';
 
 const baseURL = 'https://geo.api.gouv.fr/';
 

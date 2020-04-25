@@ -1,5 +1,5 @@
-import { get } from '../utils/verbs';
-import { makeBudgetCroiseEndpoint } from '../utils/budget';
+import { get } from './utils/verbs';
+import { makeBudgetCroiseEndpoint } from './utils/budget';
 
 const baseURL = 'https://data.economie.gouv.fr';
 

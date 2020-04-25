@@ -1,10 +1,10 @@
-import { get } from '../utils/verbs';
+import { get } from './utils/verbs';
 import {
   makeGetSiretEndpoint,
   makeGetSiretsEndpoint,
   makeSearchSiretEndpoint,
   extractSirens,
-} from '../utils/siren';
+} from './utils/siren';
 
 const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
 const baseURL = 'https://api.insee.fr/entreprises/sirene/V3';
