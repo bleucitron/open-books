@@ -2,10 +2,14 @@
   import Spinner from 'svelte-spinner';
   export let mainSiretP;
   export let otherSiretsP;
+  export let select;
+  export let selected;
 </script>
 
 <style>
-
+  .selected {
+    color: blue;
+  }
 </style>
 
 <ul class="Sirets">
@@ -13,14 +17,24 @@
     {#await mainSiretP}
       <Spinner />
     {:then mainSiret}
-      {mainSiret.label}
+      <div
+        on:click={() => select(mainSiret.id)}
+        class={selected === mainSiret.id ? 'selected' : ''}>
+        {mainSiret.label}
+      </div>
     {/await}
   </li>
   {#await otherSiretsP}
     <Spinner />
   {:then sirets}
     {#each sirets as siret}
-      <li>{siret.label}</li>
+      <li>
+        <div
+          on:click={() => select(siret.id)}
+          class={selected === siret.id ? 'selected' : ''}>
+          {siret.label}
+        </div>
+      </li>
     {/each}
   {/await}
 </ul>

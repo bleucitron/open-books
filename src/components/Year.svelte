@@ -5,7 +5,7 @@
 
   export let year;
   export let pending = false;
-  export let value;
+  export let value = undefined;
   export let maxP;
 
   let height;

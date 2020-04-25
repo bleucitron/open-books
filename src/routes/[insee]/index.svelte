@@ -43,6 +43,10 @@
   let selectedSiret = siret;
   let selectedYear = 2018;
 
+  function select(s) {
+    selectedSiret = s;
+  }
+
   const mainSiretP = Promise.resolve({
     id: selectedSiret,
     label: 'Commune',
@@ -161,6 +165,6 @@
 </header>
 
 <div class="content">
-  <Sirets {mainSiretP} {otherSiretsP} />
+  <Sirets {mainSiretP} {otherSiretsP} selected={selectedSiret} {select} />
   <Years {years} {valuePs} />
 </div>
