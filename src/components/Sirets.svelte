@@ -1,6 +1,7 @@
 <script>
-  import Siret from '../components/Siret.svelte';
-  export let sirets;
+  import Spinner from 'svelte-spinner';
+  export let mainSiretP;
+  export let otherSiretsP;
 </script>
 
 <style>
@@ -8,11 +9,18 @@
 </style>
 
 <ul class="Sirets">
-  {#if sirets.length !== 0}
+  <li>
+    {#await mainSiretP}
+      <Spinner />
+    {:then mainSiret}
+      {mainSiret.label}
+    {/await}
+  </li>
+  {#await otherSiretsP}
+    <Spinner />
+  {:then sirets}
     {#each sirets as siret}
-      <Siret {...siret} />
+      <li>{siret.label}</li>
     {/each}
-  {:else}
-    <div>Aucun enregistrement</div>
-  {/if}
+  {/await}
 </ul>

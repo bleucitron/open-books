@@ -1,0 +1,33 @@
+<script>
+  import Spinner from 'svelte-spinner';
+  import Year from './Year.svelte';
+
+  export let valuePs;
+  export let years;
+
+  const maxP = Promise.all(valuePs).then(values => {
+    return Math.max(...values.filter(value => value));
+  });
+</script>
+
+<style>
+  .Years {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    background: #333;
+    height: 20rem;
+  }
+</style>
+
+<ul class="Years">
+  {#each years as year, i}
+    {#await valuePs[i]}
+      <Year {year} pending={true} {maxP} />
+    {:then value}
+      <Year {year} {value} {maxP} />
+    {/await}
+  {/each}
+</ul>

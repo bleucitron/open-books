@@ -4,16 +4,13 @@
   import { formatValue } from '../utils';
 
   export let year;
-  export let length = 0;
-  export let value = null;
-  export let url = null;
-  export let file = null;
-  export let maxP = null;
+  export let pending = false;
+  export let value;
+  export let maxP;
 
   let height;
 
-  const pending = value === null;
-  const unavailable = !pending && length === 0;
+  const unavailable = !pending && !value;
   const ready = !pending && !unavailable;
 
   if (maxP)
@@ -114,9 +111,7 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <a href={url} download={file} style={`height: ${height};`}>
-        {formatValue(value)}
-      </a>
+      <a style={`height: ${height};`}>{formatValue(value)}</a>
     {/if}
   </div>
   <h3>{year}</h3>

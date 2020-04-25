@@ -6,8 +6,10 @@ const budgets = writable(new Map());
 export default budgets;
 
 export function saveBudget(budget) {
-  const { siret, year } = budget;
-  budgets.update(state => state.setIn([siret, year], budget));
+  if (budget) {
+    const { siret, year } = budget;
+    budgets.update(state => state.setIn([siret, year], budget));
+  }
 
   // console.log('ENTRIES', $budgets.toJS());
   return budget;
