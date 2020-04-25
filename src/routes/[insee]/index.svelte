@@ -54,16 +54,19 @@
 
   $: budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
 
-  $: budgetPs = years.map(year =>
-    getRecords({ ident: selectedSiret, year })
-      .catch(() => [])
-      .then(records => {
-        const b = makeBudget(selectedSiret, year, records);
-        budget.add(year, b);
+  $: budgetPs = years.map(year => {
+    const budgetFromStore = budget.get()[year];
+    return budgetFromStore
+      ? Promise.resolve(budgetFromStore)
+      : getRecords({ ident: selectedSiret, year })
+          .catch(() => [])
+          .then(records => {
+            const b = makeBudget(selectedSiret, year, records);
+            budget.add(year, b);
 
-        return b;
-      }),
-  );
+            return b;
+          });
+  });
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),

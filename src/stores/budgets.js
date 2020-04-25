@@ -4,7 +4,8 @@ const budgets = writable({});
 budgets.get = () => get(budgets);
 
 export function createBudget(siret) {
-  const { subscribe, update } = writable({});
+  const b = writable({});
+  const { subscribe, update } = b;
 
   const budget = {
     subscribe,
@@ -13,6 +14,7 @@ export function createBudget(siret) {
         s[year] = budget;
         return s;
       }),
+    get: () => get(b),
   };
 
   budgets.update(s => {
