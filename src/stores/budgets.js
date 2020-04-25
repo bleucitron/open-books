@@ -1,16 +1,26 @@
-import { writable } from 'svelte/store';
-import { Map } from 'immutable';
+import { writable, get } from 'svelte/store';
 
-const budgets = writable(new Map());
+const budgets = writable({});
+budgets.get = () => get(budgets);
 
-export default budgets;
+export function createBudget(siret) {
+  const { subscribe, update } = writable({});
 
-export function saveBudget(budget) {
-  if (budget) {
-    const { siret, year } = budget;
-    budgets.update(state => state.setIn([siret, year], budget));
-  }
+  const budget = {
+    subscribe,
+    add: (year, budget) =>
+      update(s => {
+        s[year] = budget;
+        return s;
+      }),
+  };
 
-  // console.log('ENTRIES', $budgets.toJS());
+  budgets.update(s => {
+    s[siret] = budget;
+    return s;
+  });
+
   return budget;
 }
+
+export default budgets;

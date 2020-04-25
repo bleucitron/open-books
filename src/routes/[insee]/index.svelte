@@ -27,7 +27,7 @@
   import { Map } from 'immutable';
 
   import city from '../../stores/city';
-  import budgets, { saveBudget } from '../../stores/budgets';
+  import budgets, { createBudget } from '../../stores/budgets';
   import Sirets from '../../components/Sirets.svelte';
   import Siret from '../../components/Siret.svelte';
   import Years from '../../components/Years.svelte';
@@ -44,17 +44,24 @@
   let selectedYear = 2018;
 
   const mainSiretP = Promise.resolve({
-    siret: selectedSiret,
+    id: selectedSiret,
     label: 'Commune',
   });
 
-  const budgetPs = years.map(year =>
-    getRecords({ ident: siret, year })
+  $: budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
+
+  $: budgetPs = years.map(year =>
+    getRecords({ ident: selectedSiret, year })
       .catch(() => [])
-      .then(records => saveBudget(makeBudget(siret, year, records))),
+      .then(records => {
+        const b = makeBudget(selectedSiret, year, records);
+        budget.add(year, b);
+
+        return b;
+      }),
   );
 
-  const valuePs = budgetPs.map(budgetP =>
+  $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
   );
 
@@ -70,12 +77,14 @@
       .filter(result => result.siret !== siret)
       .sort((r1, r2) => r1.siret - r2.siret)
       .map(({ siret, records }) => {
-        const budget = makeBudget(siret, selectedYear, records);
-        saveBudget(budget);
+        const b = makeBudget(siret, selectedYear, records);
+
+        let budget = createBudget(siret);
+        budget.add(selectedYear, b);
 
         return {
-          siret,
-          label: budget.label,
+          id: siret,
+          label: b.label,
         };
       }),
   );
