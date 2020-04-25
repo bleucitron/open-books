@@ -24,7 +24,6 @@
 
 <script>
   import Spinner from 'svelte-spinner';
-  import { Map } from 'immutable';
 
   import city from '../../stores/city';
   import budgets, { createBudget } from '../../stores/budgets';

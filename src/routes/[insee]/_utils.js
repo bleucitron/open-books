@@ -1,5 +1,3 @@
-import { Set } from 'immutable';
-
 import { makeCSV } from '../../utils';
 
 export function makeLabel(records) {
