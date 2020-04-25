@@ -5,7 +5,7 @@
   export let valuePs;
   export let years;
 
-  const maxP = Promise.all(valuePs).then(values => {
+  $: maxP = Promise.all(valuePs).then(values => {
     return Math.max(...values.filter(value => value));
   });
 </script>
