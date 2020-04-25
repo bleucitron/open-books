@@ -22,8 +22,8 @@ export function getRecordsFromSiren(siren, year) {
         return [siret, { siret, year, records }];
       }),
     );
-    console.log('SIRETS in data', sirets);
-    console.log('SIRETS data', dataBySiret);
+    // console.log('SIRETS in data', sirets);
+    // console.log('SIRETS data', dataBySiret);
 
     return Object.values(dataBySiret);
   });
