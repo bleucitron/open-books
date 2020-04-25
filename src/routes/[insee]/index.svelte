@@ -56,7 +56,8 @@
 
   $: budgetPs = years.map(year => {
     const budgetFromStore = budget.get()[year];
-    return budgetFromStore
+
+    return budgetFromStore !== undefined
       ? Promise.resolve(budgetFromStore)
       : getRecords({ ident: selectedSiret, year })
           .catch(() => [])

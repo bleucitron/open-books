@@ -20,7 +20,7 @@ export function makeLabel(records) {
 export function makeBudget(siret, year, records) {
   const length = records.length;
 
-  if (length === 0) return undefined;
+  if (length === 0) return null;
 
   const debit = records.reduce((sum, { sd }) => sum + sd, 0);
   const credit = records.reduce((sum, { sc }) => sum + sc, 0);
