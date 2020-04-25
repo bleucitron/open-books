@@ -27,9 +27,8 @@
 
   import city from '../../stores/city';
   import budgets, { createBudget } from '../../stores/budgets';
-  import Sirets from '../../components/Sirets.svelte';
-  import Siret from '../../components/Siret.svelte';
-  import Years from '../../components/Years.svelte';
+  import Sirets from './_components/Sirets.svelte';
+  import Years from './_components/Years.svelte';
   import { getRecords, getRecordsFromSiren } from '../../api';
 
   import { makeBudget, makeLabel } from './_utils';

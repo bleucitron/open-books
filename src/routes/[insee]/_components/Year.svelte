@@ -1,7 +1,7 @@
 <script>
   import Spinner from 'svelte-spinner';
   import classnames from 'classnames';
-  import { formatValue } from '../utils';
+  import { formatValue } from '../../../utils';
 
   export let year;
   export let pending = false;
