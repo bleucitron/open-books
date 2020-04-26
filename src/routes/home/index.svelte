@@ -1,6 +1,5 @@
 <script>
   import city from '../../stores/city';
-  import { goto } from '@sapper/app';
 
   import { getCities, getSirens } from '../../api';
 

@@ -6,15 +6,16 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
-    let { name, insee } = page.query;
+    let { name, insee, siret } = page.query;
 
     const siren = await getSirens(name, insee);
 
-    const siret = await getMainSiret(siren);
+    const mainSiret = await getMainSiret(siren);
 
     return {
       siren,
       siret,
+      mainSiret,
       insee,
       name,
     };
@@ -22,6 +23,7 @@
 </script>
 
 <script>
+  import { goto } from '@sapper/app';
   import Spinner from 'svelte-spinner';
 
   import city from '../../stores/city';
@@ -34,14 +36,16 @@
 
   export let siren;
   export let siret;
+  export let mainSiret;
   export let insee;
   export let name;
 
-  let selectedSiret = siret;
+  let selectedSiret = siret || mainSiret;
   let selectedYear = 2018;
 
-  function select(s) {
-    selectedSiret = s;
+  function select(siret) {
+    selectedSiret = siret;
+    goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}`);
   }
 
   function formatLabel(label) {
@@ -51,7 +55,7 @@
   }
 
   const mainSiretP = Promise.resolve({
-    id: selectedSiret,
+    id: mainSiret,
   });
 
   $: budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
@@ -84,7 +88,7 @@
 
   const otherSiretsP = getRecordsFromSiren(siren, selectedYear).then(results =>
     results
-      .filter(result => result.siret !== siret)
+      .filter(result => result.siret !== mainSiret)
       .sort((r1, r2) => r1.siret - r2.siret)
       .map(({ siret, records }) => {
         const b = makeBudget(siret, selectedYear, records);
