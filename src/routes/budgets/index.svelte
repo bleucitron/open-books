@@ -6,8 +6,7 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
-    const { insee } = page.params;
-    let { name } = page.query;
+    let { name, insee } = page.query;
 
     const siren = await getSirens(name, insee);
 

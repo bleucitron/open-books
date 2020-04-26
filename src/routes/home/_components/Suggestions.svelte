@@ -29,7 +29,9 @@
 <ul>
   {#each suggestions as suggestion}
     <li on:click={() => select(suggestion)}>
-      <a href={`/${suggestion.code}?name=${suggestion.nom}`} rel="prefetch">
+      <a
+        href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
+        rel="prefetch">
         <div class="name">{suggestion.nom}</div>
         {#if suggestion.departement}
           <div class="other">

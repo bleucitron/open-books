@@ -37,7 +37,7 @@
     color: white;
   }
 
-  .Year a {
+  .Year .value {
     display: flex;
     padding: 0.5rem;
     height: 1.5rem;
@@ -82,7 +82,7 @@
     opacity: 0.4;
   }
 
-  .pending a {
+  .pending div {
     padding: 0;
   }
 
@@ -112,7 +112,7 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <a style={`height: ${height};`}>{formatValue(value)}</a>
+      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
     {/if}
   </div>
   <h3>{year}</h3>
