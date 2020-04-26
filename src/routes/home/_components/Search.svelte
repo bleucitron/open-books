@@ -41,7 +41,9 @@
   .Search {
     border-radius: 1rem;
     overflow: hidden;
-    margin: 2rem;
+    margin: 2rem auto;
+    max-width: 75%;
+    width: 50rem;
   }
 
   .searchbar {

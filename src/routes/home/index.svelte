@@ -39,7 +39,7 @@
 <style lang="scss">
   header {
     h1 {
-      margin: 0 auto;
+      margin: 2rem auto 1rem;
       font-size: 2.8em;
       text-transform: uppercase;
       font-weight: 700;
