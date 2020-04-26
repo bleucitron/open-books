@@ -26,13 +26,14 @@
 <style>
   .Year {
     flex: 1 0;
-    width: 2rem;
+    width: 4rem;
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
     align-items: stretch;
     margin: 0 0.5rem;
     opacity: 0.6;
+    font-size: 0.8rem;
     color: white;
   }
 
