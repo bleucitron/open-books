@@ -31,7 +31,7 @@
   import Years from './_components/Years.svelte';
   import { getRecords, getRecordsFromSiren } from '../../api';
 
-  import { makeBudget, makeLabel } from './_utils';
+  import { makeBudget } from './_utils';
 
   export let siren;
   export let siret;
@@ -45,9 +45,14 @@
     selectedSiret = s;
   }
 
+  function formatLabel(label) {
+    if (!label) return 'Commune';
+
+    return label.replace(name.toLowerCase(), '');
+  }
+
   const mainSiretP = Promise.resolve({
     id: selectedSiret,
-    label: 'Commune',
   });
 
   $: budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
@@ -124,6 +129,11 @@
 
   .content {
     flex: 1 0;
+    display: flex;
+  }
+
+  .dataviz {
+    flex: 1 0;
   }
 </style>
 
@@ -154,6 +164,13 @@
 </header>
 
 <div class="content">
-  <Sirets {mainSiretP} {otherSiretsP} selected={selectedSiret} {select} />
-  <Years {years} {valuePs} />
+  <Sirets
+    {mainSiretP}
+    {otherSiretsP}
+    selected={selectedSiret}
+    {select}
+    format={formatLabel} />
+  <div class="dataviz">
+    <Years {years} {valuePs} />
+  </div>
 </div>

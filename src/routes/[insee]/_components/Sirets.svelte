@@ -4,36 +4,52 @@
   export let otherSiretsP;
   export let select;
   export let selected;
+  export let format;
 </script>
 
-<style>
-  .selected {
-    color: blue;
+<style lang="scss">
+  .Sirets {
+    padding: 0 1rem;
+    width: 15rem;
+  }
+
+  li {
+    cursor: pointer;
+    opacity: 50%;
+    text-transform: capitalize;
+
+    &:hover {
+      opacity: 70%;
+    }
+
+    &.selected {
+      opacity: 100%;
+    }
   }
 </style>
 
 <ul class="Sirets">
-  <li>
-    {#await mainSiretP}
+  {#await mainSiretP}
+    <div class="spinner">
       <Spinner />
-    {:then mainSiret}
-      <div
-        on:click={() => select(mainSiret.id)}
-        class={selected === mainSiret.id ? 'selected' : ''}>
-        {mainSiret.label}
-      </div>
-    {/await}
-  </li>
+    </div>
+  {:then mainSiret}
+    <li
+      on:click={() => select(mainSiret.id)}
+      class={selected === mainSiret.id ? 'selected' : ''}>
+      {format(mainSiret.label)}
+    </li>
+  {/await}
   {#await otherSiretsP}
-    <Spinner />
+    <div class="spinner">
+      <Spinner />
+    </div>
   {:then sirets}
     {#each sirets as siret}
-      <li>
-        <div
-          on:click={() => select(siret.id)}
-          class={selected === siret.id ? 'selected' : ''}>
-          {siret.label}
-        </div>
+      <li
+        on:click={() => select(siret.id)}
+        class={selected === siret.id ? 'selected' : ''}>
+        {format(siret.label)}
       </li>
     {/each}
   {/await}
