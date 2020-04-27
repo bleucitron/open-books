@@ -88,22 +88,29 @@
         return result;
       });
 
-  const siretsP = getRecordsFromSiren(siren, selectedYear).then(results =>
-    results
-      .sort((r1, r2) => r1.siret - r2.siret)
-      .map(({ siret, records }) => {
-        const b = makeBudget(siret, selectedYear, records);
+  const siretsP = getRecordsFromSiren(siren, selectedYear)
+    .then(results =>
+      results
+        .sort((r1, r2) => r1.siret - r2.siret)
+        .map(({ siret, records }) => {
+          const b = makeBudget(siret, selectedYear, records);
 
-        if (siret !== mainSiret) {
-          createBudget(siret).add(selectedYear, b);
-        }
+          if (siret !== mainSiret) {
+            createBudget(siret).add(selectedYear, b);
+          }
 
-        return {
-          id: siret,
-          label: formatNavLabel(b.label),
-        };
-      }),
-  );
+          return {
+            id: siret,
+            label: formatNavLabel(b.label),
+          };
+        }),
+    )
+    .then(sirets => {
+      if (sirets.length === 1 && sirets[0].id === selectedSiret) {
+        return [];
+      }
+      return sirets;
+    });
 </script>
 
 <style lang="scss">
