@@ -48,10 +48,12 @@
     goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}`);
   }
 
-  function formatLabel(label) {
-    if (!label) return 'Commune';
+  function formatNavLabel(label) {
+    const n = name.toLowerCase();
 
-    return label.replace(name.toLowerCase(), '');
+    if (label === n) return 'Commune';
+
+    return label.replace(n, '');
   }
 
   const mainSiretP = Promise.resolve({
@@ -86,19 +88,19 @@
         return result;
       });
 
-  const otherSiretsP = getRecordsFromSiren(siren, selectedYear).then(results =>
+  const siretsP = getRecordsFromSiren(siren, selectedYear).then(results =>
     results
-      .filter(result => result.siret !== mainSiret)
       .sort((r1, r2) => r1.siret - r2.siret)
       .map(({ siret, records }) => {
         const b = makeBudget(siret, selectedYear, records);
 
-        let budget = createBudget(siret);
-        budget.add(selectedYear, b);
+        if (siret !== mainSiret) {
+          createBudget(siret).add(selectedYear, b);
+        }
 
         return {
           id: siret,
-          label: b.label,
+          label: formatNavLabel(b.label),
         };
       }),
   );
@@ -167,12 +169,7 @@
 </header>
 
 <div class="content">
-  <Sirets
-    {mainSiretP}
-    {otherSiretsP}
-    selected={selectedSiret}
-    {select}
-    format={formatLabel} />
+  <Sirets {siretsP} selected={selectedSiret} {select} />
   <div class="dataviz">
     <Years {years} {valuePs} />
   </div>
