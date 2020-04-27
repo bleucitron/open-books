@@ -150,6 +150,8 @@
     }
 
     h2 {
+      margin-left: 1rem;
+      text-transform: capitalize;
       line-height: 0.7;
     }
 
