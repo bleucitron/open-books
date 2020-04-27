@@ -10,12 +10,11 @@
 
     const siren = await getSirens(name, insee);
 
-    const mainSiret = await getMainSiret(siren);
+    siret = siret || (await getMainSiret(siren));
 
     return {
       siren,
       siret,
-      mainSiret,
       insee,
       name,
     };
@@ -36,11 +35,10 @@
 
   export let siren;
   export let siret;
-  export let mainSiret;
   export let insee;
   export let name;
 
-  let selectedSiret = siret || mainSiret;
+  let selectedSiret = siret;
   let selectedYear = 2018;
   let budget;
   let label;
@@ -60,10 +58,6 @@
   function formatTitleLabel(label) {
     return label ? label.replace(name.toLowerCase(), '') : '';
   }
-
-  const mainSiretP = Promise.resolve({
-    id: mainSiret,
-  });
 
   $: {
     budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
@@ -109,7 +103,7 @@
         .map(({ siret, records }) => {
           const b = makeBudget(siret, selectedYear, records);
 
-          if (siret !== mainSiret) {
+          if (siret !== selectedSiret) {
             createBudget(siret).add(selectedYear, b);
           }
 
