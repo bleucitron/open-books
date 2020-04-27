@@ -26,7 +26,7 @@
 <style>
   .Year {
     flex: 1 0;
-    width: 4rem;
+    width: 5rem;
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
@@ -37,9 +37,10 @@
     color: white;
   }
 
-  .Year .value {
+  .value {
     display: flex;
-    padding: 0.5rem;
+    box-sizing: border-box;
+    padding: 3px;
     height: 1.5rem;
     flex-flow: column;
     align-items: center;
