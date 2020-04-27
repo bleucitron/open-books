@@ -6,9 +6,9 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
-    let { name, insee, siret } = page.query;
+    let { name, insee, siren, siret } = page.query;
 
-    const siren = await getSirens(name, insee);
+    siren = siren || (await getSirens(name, insee));
 
     siret = siret || (await getMainSiret(siren));
 
@@ -45,7 +45,7 @@
 
   function select(siret) {
     selectedSiret = siret;
-    goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}`);
+    goto(`/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${siret}`);
   }
 
   function formatNavLabel(label) {
