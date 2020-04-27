@@ -42,6 +42,8 @@
 
   let selectedSiret = siret || mainSiret;
   let selectedYear = 2018;
+  let budget;
+  let label;
 
   function select(siret) {
     selectedSiret = siret;
@@ -52,15 +54,24 @@
     const n = name.toLowerCase();
 
     if (label === n) return 'Commune';
-
     return label.replace(n, '');
+  }
+
+  function formatTitleLabel(label) {
+    return label ? label.replace(name.toLowerCase(), '') : '';
   }
 
   const mainSiretP = Promise.resolve({
     id: mainSiret,
   });
 
-  $: budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
+  $: {
+    budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
+
+    const yearBudget = budget.get()[selectedYear];
+
+    if (yearBudget) label = yearBudget.label;
+  }
 
   $: budgetPs = years.map(year => {
     const budgetFromStore = budget.get()[year];
@@ -73,6 +84,9 @@
             const b = makeBudget(selectedSiret, year, records);
             budget.add(year, b);
 
+            if (!label && b) {
+              label = b.label;
+            }
             return b;
           });
   });
@@ -125,9 +139,18 @@
     align-items: flex-end;
     justify-content: space-between;
 
+    .labels {
+      display: flex;
+      align-items: flex-end;
+    }
+
     h1 {
       font-size: 3rem;
       line-height: 2rem;
+    }
+
+    h2 {
+      line-height: 0.7;
     }
 
     .departement {
@@ -160,7 +183,10 @@
 </svelte:head>
 
 <header>
-  <h1>{name}</h1>
+  <div class="labels">
+    <h1>{name}</h1>
+    <h2>{formatTitleLabel(label)}</h2>
+  </div>
 
   <div class="departement">
     {#await cityP}
