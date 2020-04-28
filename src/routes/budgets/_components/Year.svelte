@@ -7,8 +7,11 @@
   export let pending = false;
   export let value = undefined;
   export let maxP;
+  export let select = undefined;
+  export let selected = false;
 
   let height;
+  let transitioned;
 
   const unavailable = !pending && !value;
   const ready = !pending && !unavailable;
@@ -20,7 +23,11 @@
       }
     });
 
-  const classes = classnames('Year', { pending, unavailable, ready });
+  $: classes = classnames('Year', { pending, unavailable, ready, selected });
+
+  function _select() {
+    if (select) select();
+  }
 </script>
 
 <style>
@@ -35,6 +42,7 @@
     opacity: 0.6;
     font-size: 0.8rem;
     color: white;
+    cursor: pointer;
   }
 
   .value {
@@ -47,6 +55,10 @@
     background: #666;
     border-radius: 8px;
     transition: height 0.5s ease-in-out;
+  }
+
+  .selected {
+    opacity: 1;
   }
 
   .Year.ready:hover {
@@ -113,7 +125,9 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
+      <div class="value" on:click={_select} style={`height: ${height};`}>
+        {formatValue(value)}
+      </div>
     {/if}
   </div>
   <h3>{year}</h3>

@@ -4,6 +4,8 @@
 
   export let valuePs;
   export let years;
+  export let select;
+  export let selected;
 
   $: maxP = Promise.all(valuePs).then(values => {
     return Math.max(...values.filter(value => value));
@@ -28,7 +30,12 @@
     {#await valuePs[i]}
       <Year {year} pending={true} {maxP} />
     {:then value}
-      <Year {year} {value} {maxP} />
+      <Year
+        {year}
+        {value}
+        {maxP}
+        selected={year === selected}
+        select={() => select(year)} />
     {/await}
   {/each}
 </ul>

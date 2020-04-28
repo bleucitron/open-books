@@ -6,15 +6,18 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
-    let { name, insee, siren, siret } = page.query;
+    let { name, insee, siren, siret, year } = page.query;
 
     siren = siren || (await getSirens(name, insee));
 
     siret = siret || (await getMainSiret(siren));
 
+    year = parseInt(year) || 2018;
+
     return {
       siren,
       siret,
+      year,
       insee,
       name,
     };
@@ -26,26 +29,32 @@
   import Spinner from 'svelte-spinner';
 
   import city from '../../stores/city';
-  import budgets, { createBudget } from '../../stores/budgets';
+  import budgetsFromStore, { createBudget } from '../../stores/budgets';
   import Sirets from './_components/Sirets.svelte';
   import Years from './_components/Years.svelte';
+  import Summary from './_components/Summary.svelte';
   import { getRecords, getRecordsFromSiren } from '../../api';
 
   import { makeBudget } from './_utils';
 
   export let siren;
   export let siret;
+  export let year;
   export let insee;
   export let name;
 
-  let selectedSiret = siret;
-  let selectedYear = 2018;
   let budget;
-  let label;
 
-  function select(siret) {
-    selectedSiret = siret;
-    goto(`/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${siret}`);
+  function selectSiret(s) {
+    goto(
+      `/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${s}&year=${year}`,
+    );
+  }
+
+  function selectYear(y) {
+    goto(
+      `/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${siret}&year=${y}`,
+    );
   }
 
   function formatNavLabel(label) {
@@ -59,31 +68,27 @@
     return label ? label.replace(name.toLowerCase(), '') : '';
   }
 
-  $: {
-    budget = budgets.get()[selectedSiret] || createBudget(selectedSiret);
+  $: budgets = budgetsFromStore.get()[siret] || createBudget(siret);
 
-    const yearBudget = budget.get()[selectedYear];
-
-    if (yearBudget) label = yearBudget.label;
-  }
-
-  $: budgetPs = years.map(year => {
-    const budgetFromStore = budget.get()[year];
+  $: budgetPs = years.map(y => {
+    const budgetFromStore = budgets.get()[y];
 
     return budgetFromStore !== undefined
       ? Promise.resolve(budgetFromStore)
-      : getRecords({ ident: selectedSiret, year })
+      : getRecords({ ident: siret, year: y })
           .catch(() => [])
           .then(records => {
-            const b = makeBudget(selectedSiret, year, records);
-            budget.add(year, b);
+            const b = makeBudget(siret, y, records);
+            budgets.add(y, b);
 
-            if (!label && b) {
-              label = b.label;
-            }
             return b;
           });
   });
+
+  $: {
+    const yearIndex = years.findIndex(y => y === year);
+    budgetPs[yearIndex].then(b => (budget = b));
+  }
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
@@ -96,25 +101,25 @@
         return result;
       });
 
-  const siretsP = getRecordsFromSiren(siren, selectedYear)
+  const siretsP = getRecordsFromSiren(siren, year)
     .then(results =>
       results
         .sort((r1, r2) => r1.siret - r2.siret)
-        .map(({ siret, records }) => {
-          const b = makeBudget(siret, selectedYear, records);
+        .map(({ siret: s, records }) => {
+          const b = makeBudget(s, year, records);
 
-          if (siret !== selectedSiret) {
-            createBudget(siret).add(selectedYear, b);
+          if (s !== siret) {
+            createBudget(s).add(year, b);
           }
 
           return {
-            id: siret,
+            id: s,
             label: formatNavLabel(b.label),
           };
         }),
     )
     .then(sirets => {
-      if (sirets.length === 1 && sirets[0].id === selectedSiret) {
+      if (sirets.length === 1 && sirets[0].id === siret) {
         return [];
       }
       return sirets;
@@ -181,7 +186,9 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    <h2>{formatTitleLabel(label)}</h2>
+    {#if budget}
+      <h2>{formatTitleLabel(budget.label)}</h2>
+    {/if}
   </div>
 
   <div class="departement">
@@ -198,8 +205,11 @@
 </header>
 
 <div class="content">
-  <Sirets {siretsP} selected={selectedSiret} {select} />
+  <Sirets {siretsP} selected={siret} select={selectSiret} />
   <div class="dataviz">
-    <Years {years} {valuePs} />
+    <Years {years} {valuePs} selected={year} select={selectYear} />
+    {#if budget}
+      <Summary {budget} />
+    {/if}
   </div>
 </div>
