@@ -86,6 +86,7 @@
   });
 
   $: {
+    budget = undefined;
     const yearIndex = years.findIndex(y => y === year);
     budgetPs[yearIndex].then(b => (budget = b));
   }
@@ -170,6 +171,13 @@
 
   .dataviz {
     flex: 1 0;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
+
+  .info {
+    width: 15rem;
   }
 </style>
 
@@ -205,11 +213,12 @@
 </header>
 
 <div class="content">
-  <Sirets {siretsP} selected={siret} select={selectSiret} />
+  <nav>
+    <Sirets {siretsP} selected={siret} select={selectSiret} />
+  </nav>
   <div class="dataviz">
     <Years {years} {valuePs} selected={year} select={selectYear} />
-    {#if budget}
-      <Summary {budget} />
-    {/if}
+    <Summary {year} {budget} />
   </div>
+  <div class="info" />
 </div>

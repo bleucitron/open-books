@@ -7,8 +7,8 @@
 
 <style lang="scss">
   .Sirets {
-    padding: 0 1rem;
     width: 15rem;
+    padding: 0 1rem;
   }
 
   li {
