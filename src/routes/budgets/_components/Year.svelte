@@ -26,7 +26,7 @@
   $: classes = classnames('Year', { pending, unavailable, ready, selected });
 
   function _select() {
-    if (select) select();
+    if (ready && select) select();
   }
 </script>
 
@@ -42,7 +42,6 @@
     opacity: 0.6;
     font-size: 0.8rem;
     color: white;
-    cursor: pointer;
   }
 
   .value {
@@ -59,6 +58,10 @@
 
   .selected {
     opacity: 1;
+  }
+
+  .Year.ready {
+    cursor: pointer;
   }
 
   .Year.ready:hover {
@@ -116,7 +119,7 @@
   }
 </style>
 
-<li class={classes}>
+<li class={classes} on:click={_select}>
   <div class="info">
     {#if pending}
       <div class="spinner">
@@ -125,9 +128,7 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
-      <div class="value" on:click={_select} style={`height: ${height};`}>
-        {formatValue(value)}
-      </div>
+      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
     {/if}
   </div>
   <h3>{year}</h3>

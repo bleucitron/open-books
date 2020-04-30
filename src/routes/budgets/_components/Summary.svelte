@@ -33,7 +33,7 @@
 
   h3 {
     font-size: 2.5rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
     margin-bottom: 5rem;
   }
 
