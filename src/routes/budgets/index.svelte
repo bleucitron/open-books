@@ -3,6 +3,7 @@
   const start = 2012;
   // const end = 2019;
   const end = new Date().getFullYear();
+  const defaultYear = end - 2;
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
@@ -12,7 +13,7 @@
 
     siret = siret || (await getMainSiret(siren));
 
-    year = parseInt(year) || 2018;
+    year = parseInt(year) || defaultYear;
 
     return {
       siren,
@@ -102,15 +103,15 @@
         return result;
       });
 
-  const siretsP = getRecordsFromSiren(siren, year)
+  const siretsP = getRecordsFromSiren(siren, defaultYear)
     .then(results =>
       results
         .sort((r1, r2) => r1.siret - r2.siret)
         .map(({ siret: s, records }) => {
-          const b = makeBudget(s, year, records);
+          const b = makeBudget(s, defaultYear, records);
 
           if (s !== siret) {
-            createBudget(s).add(year, b);
+            createBudget(s).add(defaultYear, b);
           }
 
           return {
