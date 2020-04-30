@@ -119,7 +119,7 @@
         }),
     )
     .then(sirets => {
-      if (sirets.length === 1 && sirets[0].id === siret) {
+      if (sirets.length === 1) {
         return [];
       }
       return sirets;
