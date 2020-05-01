@@ -45,6 +45,7 @@
   export let name;
 
   let budget;
+  let labels;
 
   function selectSiret(s) {
     goto(
@@ -58,15 +59,14 @@
     );
   }
 
-  function formatNavLabel(label) {
+  function formatLabel(label) {
     const n = name.toLowerCase();
 
-    if (label === n) return 'Commune';
-    return label.replace(n, '');
-  }
-
-  function formatTitleLabel(label) {
-    return label ? label.replace(name.toLowerCase(), '') : '';
+    if (label === n) return '';
+    return label
+      .replace(n, '')
+      .trim()
+      .toLowerCase();
   }
 
   $: budgets = budgetsFromStore.get()[siret] || createBudget(siret);
@@ -86,15 +86,17 @@
           });
   });
 
-  $: {
-    budget = undefined;
-    const yearIndex = years.findIndex(y => y === year);
-    budgetPs[yearIndex].then(b => (budget = b));
-  }
+  $: yearIndex = years.findIndex(y => y === year);
+  $: label = labels && labels.find(l => l.id === siret).label;
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
   );
+
+  $: {
+    budget = undefined;
+    budgetPs[yearIndex].then(b => (budget = b));
+  }
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -116,14 +118,17 @@
 
           return {
             id: s,
-            label: formatNavLabel(b.label),
+            label: formatLabel(b.label),
           };
         }),
     )
     .then(sirets => {
+      labels = sirets;
+
       if (sirets.length === 1) {
         return [];
       }
+
       return sirets;
     });
 </script>
@@ -195,9 +200,7 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    {#if budget}
-      <h2>{formatTitleLabel(budget.label)}</h2>
-    {/if}
+    <h2>{label || ''}</h2>
   </div>
 
   <div class="departement">

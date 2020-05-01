@@ -3,6 +3,8 @@
   export let siretsP;
   export let select;
   export let selected;
+
+  const defaultLabel = 'commune';
 </script>
 
 <style lang="scss">
@@ -36,7 +38,7 @@
       <li
         on:click={() => select(siret.id)}
         class={selected === siret.id ? 'selected' : ''}>
-        {siret.label}
+        {siret.label || defaultLabel}
       </li>
     {/each}
   {/await}
