@@ -1,7 +1,16 @@
 import { writable, get } from 'svelte/store';
 
 const budgets = writable({});
-budgets.get = () => get(budgets);
+budgets.get = (siret, year) => {
+  let output = get(budgets);
+
+  if (siret) {
+    output = output[siret];
+    if (year) output = output.get()[year];
+  }
+
+  return output;
+};
 
 export function createBudget(siret) {
   const b = writable({});
@@ -14,7 +23,7 @@ export function createBudget(siret) {
         s[year] = budget;
         return s;
       }),
-    get: () => get(b),
+    get: year => (year ? get(b)[year] : get(b)),
   };
 
   budgets.update(s => {

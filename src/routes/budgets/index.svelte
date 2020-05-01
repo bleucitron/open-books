@@ -69,10 +69,10 @@
       .toLowerCase();
   }
 
-  $: budgets = budgetsFromStore.get()[siret] || createBudget(siret);
+  $: budgets = budgetsFromStore.get(siret) || createBudget(siret);
 
   $: budgetPs = years.map(y => {
-    const budgetFromStore = budgets.get()[y];
+    const budgetFromStore = budgets.get(y);
 
     return budgetFromStore !== undefined
       ? Promise.resolve(budgetFromStore)
