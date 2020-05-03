@@ -1,5 +1,3 @@
-import { makeCSV } from '../../utils';
-
 export function makeBudget(siret, year, records) {
   const length = records.length;
 
@@ -22,12 +20,6 @@ export function makeBudget(siret, year, records) {
   const label = labels.length > 0 ? labels[0] : '';
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
-  // const csv = await makeCSV(records);
-
-  // const blob = new Blob([csv], { type: 'text/csv' });
-  // const file = `${siret}_${year}.csv`;
-  // const url = URL.createObjectURL(blob);
-
   return {
     siret,
     year,
@@ -36,9 +28,6 @@ export function makeBudget(siret, year, records) {
     debit,
     credit,
     label,
-    // csv,
-    // file,
-    // url,
     records,
   };
 }

@@ -1,7 +1,8 @@
 <script>
   import Spinner from 'svelte-spinner';
   import classnames from 'classnames';
-  import { formatValue } from '../../../utils';
+  import Csv from './Csv.svelte';
+  import { formatValue, makeCSV } from '../../../utils';
 
   export let budget;
   export let year;
@@ -12,7 +13,7 @@
     flex: 1 0;
     display: flex;
     flex-flow: column;
-    align-items: center;
+    align-items: stretch;
     width: 100%;
   }
 
@@ -35,6 +36,8 @@
     font-size: 2.5rem;
     margin-top: 1rem;
     margin-bottom: 5rem;
+    text-align: center;
+    position: relative;
   }
 
   h4 {
@@ -44,10 +47,20 @@
   .none {
     font-size: 1.5rem;
   }
+
+  .spinner,
+  .none {
+    text-align: center;
+  }
 </style>
 
 <div class="Budget">
-  <h3>{year}</h3>
+  <h3>
+    {year}
+    {#if budget}
+      <Csv data={budget} />
+    {/if}
+  </h3>
   {#if budget === undefined}
     <div class="spinner">
       <Spinner />
