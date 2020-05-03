@@ -213,9 +213,11 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    {#if label}
-      <h2>{label}</h2>
-    {/if}
+    {#await siretsP then sirets}
+      {#if sirets.length !== 0}
+        <h2>{label}</h2>
+      {/if}
+    {/await}
   </div>
 
   <div class="departement">
