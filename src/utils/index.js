@@ -65,7 +65,6 @@ export function formatValue(value) {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
     notation: 'compact',
-    minimumSignificantDigits: 3,
     maximumSignificantDigits: 3,
     currency: 'EUR',
   }).format(value);
