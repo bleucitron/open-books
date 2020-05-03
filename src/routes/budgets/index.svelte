@@ -36,7 +36,7 @@
   import Summary from './_components/Summary.svelte';
   import { getRecords, getRecordsFromSiren } from '../../api';
 
-  import { makeBudget } from './_utils';
+  import { displayLabel, makeBudget } from './_utils';
 
   export let siren;
   export let siret;
@@ -59,16 +59,6 @@
     );
   }
 
-  function formatLabel(label) {
-    const n = name.toLowerCase();
-
-    if (label === n) return '';
-    return label
-      .replace(n, '')
-      .trim()
-      .toLowerCase();
-  }
-
   $: budgets = budgetsFromStore.get(siret) || createBudget(siret);
 
   $: budgetPs = years.map(y => {
@@ -79,7 +69,7 @@
       : getRecords({ ident: siret, year: y })
           .catch(() => [])
           .then(records => {
-            const b = makeBudget(siret, y, records);
+            const b = makeBudget({ city: name, siret, year: y, records });
             budgets.add(y, b);
 
             return b;
@@ -110,7 +100,12 @@
       results
         .sort((r1, r2) => r1.siret - r2.siret)
         .map(({ siret: s, records }) => {
-          const b = makeBudget(s, defaultYear, records);
+          const b = makeBudget({
+            city: name,
+            siret: s,
+            year: defaultYear,
+            records,
+          });
 
           if (s !== siret) {
             createBudget(s).add(defaultYear, b);
@@ -118,7 +113,7 @@
 
           return {
             id: s,
-            label: formatLabel(b.label),
+            label: b.label,
           };
         }),
     )
@@ -200,7 +195,7 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    <h2>{label || ''}</h2>
+    <h2>{displayLabel(label)}</h2>
   </div>
 
   <div class="departement">

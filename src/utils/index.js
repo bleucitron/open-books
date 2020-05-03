@@ -33,20 +33,23 @@ const fields = [
 ].map(t => t.toLowerCase());
 
 export async function makeCSV(data) {
-  const years = [...new Set(data.map(d => d.exer))];
+  const { city, label, records } = data;
+
+  const years = [...new Set(records.map(d => d.exer))];
   const year = years.length === 1 ? years[0] : null;
-  const sirets = [...new Set(data.map(d => d.ident))];
+  const sirets = [...new Set(records.map(d => d.ident))];
   const siret = sirets.length === 1 ? sirets[0] : null;
 
-  let file = 'budget';
+  let file = `budget_${city.toLowerCase()}`;
 
+  if (label) file += `_${label.split(' ').join('_')}`;
   if (siret) file += `_${siret}`;
   if (year) file += `_${year}`;
 
   file += '.csv';
 
   const csv = await csvString
-    .parseAsync(data, { fields })
+    .parseAsync(records, { fields })
     .catch(err => console.error(err));
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
