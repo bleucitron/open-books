@@ -1,3 +1,5 @@
+import { normalizeText } from '../../utils';
+
 const DEFAULT_LABEL = 'commune';
 
 export function displayLabel(label) {
@@ -7,9 +9,10 @@ export function displayLabel(label) {
 }
 
 function formatLabel(label, name) {
-  const n = name.toLowerCase();
+  const l = normalizeText(label);
+  const n = normalizeText(name.toLowerCase());
 
-  if (label === n) return DEFAULT_LABEL;
+  if (l === n) return DEFAULT_LABEL;
   return label.replace(n, '').trim().toLowerCase();
 }
 
