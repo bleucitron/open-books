@@ -132,7 +132,7 @@
 <style lang="scss">
   header {
     padding: 0 2rem;
-    padding-top: 2rem;
+    padding-top: 2.5rem;
     padding-bottom: 0.2rem;
     background: #151515;
     color: white;
@@ -198,6 +198,26 @@
   .info {
     width: 15rem;
   }
+
+  .back {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 1.2rem;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.1;
+    cursor: pointer;
+  }
+
+  .back:hover {
+    background: #333;
+    opacity: 0.8;
+  }
 </style>
 
 <svelte:head>
@@ -211,6 +231,9 @@
 </svelte:head>
 
 <header>
+  <a class='back' href="/">
+    <i class="fas fa-arrow-left" />
+  </a>
   <div class="labels">
     <h1>{name}</h1>
     {#await siretsP then sirets}
