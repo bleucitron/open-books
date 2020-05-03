@@ -1,5 +1,6 @@
 <script>
-  import Spinner from 'svelte-spinner';
+  import Spinner from './Spinner.svelte';
+
   export let siretsP;
   export let select;
   export let selected;
@@ -9,30 +10,30 @@
 
 <style lang="scss">
   .Sirets {
+    display: flex;
+    flex-flow: column;
     width: 15rem;
-    padding: 0 1rem;
+    margin: 0;
   }
 
   li {
     cursor: pointer;
-    opacity: 50%;
+    opacity: 0.2;
     text-transform: capitalize;
 
     &:hover {
-      opacity: 70%;
+      opacity: 0.8;
     }
 
     &.selected {
-      opacity: 100%;
+      opacity: 1;
     }
   }
 </style>
 
 <ul class="Sirets">
   {#await siretsP}
-    <div class="spinner">
-      <Spinner />
-    </div>
+    <Spinner color={'#999'} />
   {:then sirets}
     {#each sirets as siret}
       <li

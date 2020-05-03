@@ -27,16 +27,17 @@
 
 <script>
   import { goto } from '@sapper/app';
-  import Spinner from 'svelte-spinner';
 
   import city from '../../stores/city';
   import budgetsFromStore, { createBudget } from '../../stores/budgets';
   import Sirets from './_components/Sirets.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import Csv from './_components/Csv.svelte';
+  import Spinner from './_components/Spinner.svelte';
   import { getRecords, getRecordsFromSiren } from '../../api';
 
-  import { displayLabel, makeBudget } from './_utils';
+  import { makeBudget } from './_utils';
 
   export let siren;
   export let siret;
@@ -132,7 +133,8 @@
   header {
     padding: 0 2rem;
     padding-top: 2rem;
-    background: #333;
+    padding-bottom: 0.2rem;
+    background: #151515;
     color: white;
 
     position: relative;
@@ -147,13 +149,13 @@
 
     h1 {
       font-size: 3rem;
-      line-height: 2rem;
+      line-height: 3rem;
     }
 
     h2 {
       margin-left: 1rem;
+      line-height: 1.9rem;
       text-transform: capitalize;
-      line-height: 0.7;
     }
 
     .departement {
@@ -165,16 +167,31 @@
     }
   }
 
+  h3 {
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  nav {
+    color: white;
+    display: flex;
+    padding: 1rem 2rem;
+  }
+
   .content {
     flex: 1 0;
     display: flex;
+    flex-flow: column;
   }
 
   .dataviz {
     flex: 1 0;
     display: flex;
     flex-flow: column;
-    align-items: center;
+    align-items: stretch;
+    padding: 1rem 2rem 5rem;
+    background: white;
   }
 
   .info {
@@ -195,12 +212,14 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    <h2>{displayLabel(label)}</h2>
+    {#if label}
+      <h2>{label}</h2>
+    {/if}
   </div>
 
   <div class="departement">
     {#await cityP}
-      <Spinner color="white" />
+      <Spinner />
     {:then city}
       <div class="code">{city.departement.code}</div>
       <div class="hyphen">-</div>
@@ -214,9 +233,15 @@
 <div class="content">
   <nav>
     <Sirets {siretsP} selected={siret} select={selectSiret} />
+    <Years {years} {valuePs} selected={year} select={selectYear} />
   </nav>
   <div class="dataviz">
-    <Years {years} {valuePs} selected={year} select={selectYear} />
+  <h3>
+    {year}
+    {#if budget}
+      <Csv data={budget} />
+    {/if}
+  </h3>
     <Summary {year} {budget} />
   </div>
   <div class="info" />

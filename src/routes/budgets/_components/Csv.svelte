@@ -14,7 +14,6 @@
     right: 0;
     font-size: 1.3rem;
     top: 0;
-    bottom: 0;
     display: flex;
     align-items: center;
   }
@@ -28,11 +27,15 @@
     border-radius: 50%;
     cursor: pointer;
 
-    &:hover {
-      background: #333;
+    i {
+      opacity: 0.5;
+    }
 
+    &:hover {
+      background: #eee;
       i {
-        color: white;
+        background: white;
+        opacity: 1;
       }
     }
   }

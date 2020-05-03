@@ -1,18 +1,17 @@
 <script>
-  import Spinner from 'svelte-spinner';
   import classnames from 'classnames';
-  import Csv from './Csv.svelte';
+  import Spinner from './Spinner.svelte';
   import { formatValue, makeCSV } from '../../../utils';
 
   export let budget;
-  export let year;
 </script>
 
 <style>
-  .Budget {
+  .Summary {
     flex: 1 0;
     display: flex;
     flex-flow: column;
+    justify-content: center;
     align-items: stretch;
     width: 100%;
   }
@@ -32,39 +31,19 @@
     font-size: 4rem;
   }
 
-  h3 {
-    font-size: 2.5rem;
-    margin-top: 1rem;
-    margin-bottom: 5rem;
-    text-align: center;
-    position: relative;
-  }
-
   h4 {
     font-size: 1.5rem;
   }
 
   .none {
     font-size: 1.5rem;
-  }
-
-  .spinner,
-  .none {
     text-align: center;
   }
 </style>
 
-<div class="Budget">
-  <h3>
-    {year}
-    {#if budget}
-      <Csv data={budget} />
-    {/if}
-  </h3>
+<div class="Summary">
   {#if budget === undefined}
-    <div class="spinner">
-      <Spinner />
-    </div>
+    <Spinner color={'#333'} size={'3rem'} />
   {:else if budget === null}
     <div class="none">Aucun budget</div>
   {:else}

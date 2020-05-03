@@ -1,6 +1,6 @@
 <script>
-  import Spinner from 'svelte-spinner';
   import classnames from 'classnames';
+  import Spinner from './Spinner.svelte';
   import { formatValue } from '../../../utils';
 
   export let year;
@@ -56,15 +56,19 @@
     transition: height 0.5s ease-in-out;
   }
 
-  .selected {
-    opacity: 1;
-  }
-
   .Year.ready {
     cursor: pointer;
   }
 
   .Year.ready:hover {
+    opacity: 0.8;
+  }
+
+  .Year.selected {
+    opacity: 1;
+  }
+
+  .Year.selected:hover {
     opacity: 1;
   }
 
@@ -91,11 +95,11 @@
   }
 
   .unavailable {
-    opacity: 0.2;
+    opacity: 0.1;
   }
 
   .pending {
-    opacity: 0.4;
+    opacity: 0.2;
   }
 
   .pending div {
@@ -122,9 +126,7 @@
 <li class={classes} on:click={_select}>
   <div class="info">
     {#if pending}
-      <div class="spinner">
-        <Spinner color="white" />
-      </div>
+      <Spinner />
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
