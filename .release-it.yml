@@ -1,0 +1,4 @@
+npm: false
+changelog: false
+git:
+  commitMessage: "chore: release ${version}"
