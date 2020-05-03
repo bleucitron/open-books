@@ -175,6 +175,7 @@
 
   nav {
     color: white;
+    background: #333;
     display: flex;
     padding: 1rem 2rem;
   }

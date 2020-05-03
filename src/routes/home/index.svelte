@@ -65,12 +65,15 @@
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
 </header>
-<Search {search} {clear} selected={$city}>
-  {#if citiesP}
-    {#await citiesP}
-      <Suggestions suggestions={previousCities} {select} />
-    {:then cities}
-      <Suggestions suggestions={cities} {select} />
-    {/await}
-  {/if}
-</Search>
+<div>
+  <Search {search} {clear} selected={$city}>
+    {#if citiesP}
+      {#await citiesP}
+        <Suggestions suggestions={previousCities} {select} />
+      {:then cities}
+        <Suggestions suggestions={cities} {select} />
+      {/await}
+    {/if}
+  </Search>
+</div>
+

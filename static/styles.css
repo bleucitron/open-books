@@ -2,8 +2,6 @@
   display: flex;
   flex-flow: column;
   height: 100vh;
-
-  background: #333;
 }
 
 ul {

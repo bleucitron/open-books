@@ -34,7 +34,7 @@
 
 <style lang="scss">
   * {
-    background: grey;
+    background: #444;
     color: white;
   }
 
@@ -58,7 +58,7 @@
 
     &.focus {
       * {
-        background: #444;
+        background: #333;
       }
     }
   }

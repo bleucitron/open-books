@@ -9,20 +9,21 @@
   }
 
   a {
+    background: #555;
     display: flex;
     padding: 0.5rem 1rem;
   }
 
   a:hover {
-    background: #444;
+    background: #333;
     color: white;
     cursor: pointer;
   }
 
   .other {
     margin-left: 0.5rem;
-    color: #aaa;
     font-style: italic;
+    opacity: 0.3;
   }
 </style>
 
