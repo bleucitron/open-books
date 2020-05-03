@@ -30,6 +30,7 @@
 
   import city from '../../stores/city';
   import budgetsFromStore, { createBudget } from '../../stores/budgets';
+  import Nav from '../_components/Nav.svelte';
   import Sirets from './_components/Sirets.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
@@ -173,7 +174,8 @@
     position: relative;
   }
 
-  nav {
+  menu {
+    margin: 0;
     color: white;
     background: #333;
     display: flex;
@@ -198,26 +200,6 @@
   .info {
     width: 15rem;
   }
-
-  .back {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    font-size: 1.2rem;
-    width: 1.7rem;
-    height: 1.7rem;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.1;
-    cursor: pointer;
-  }
-
-  .back:hover {
-    background: #333;
-    opacity: 0.8;
-  }
 </style>
 
 <svelte:head>
@@ -230,10 +212,9 @@
   {/await}
 </svelte:head>
 
+<Nav />
+
 <header>
-  <a class='back' href="/">
-    <i class="fas fa-arrow-left" />
-  </a>
   <div class="labels">
     <h1>{name}</h1>
     {#await siretsP then sirets}
@@ -257,10 +238,10 @@
 </header>
 
 <div class="content">
-  <nav>
+  <menu>
     <Sirets {siretsP} selected={siret} select={selectSiret} />
     <Years {years} {valuePs} selected={year} select={selectYear} />
-  </nav>
+  </menu>
   <div class="dataviz">
   <h3>
     {year}

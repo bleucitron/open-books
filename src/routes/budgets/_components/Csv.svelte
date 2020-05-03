@@ -28,7 +28,7 @@
     cursor: pointer;
 
     i {
-      opacity: 0.5;
+      opacity: 0.2;
     }
 
     &:hover {

@@ -3,6 +3,7 @@
 
   import { getCities, getSirens } from '../../api';
 
+  import Nav from '../_components/Nav.svelte';
   import Search from './_components/Search.svelte';
   import Suggestions from './_components/Suggestions.svelte';
 
@@ -61,10 +62,13 @@
   <title>Open Books</title>
 </svelte:head>
 
+<Nav home />
+
 <header>
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
 </header>
+
 <div>
   <Search {search} {clear} selected={$city}>
     {#if citiesP}
