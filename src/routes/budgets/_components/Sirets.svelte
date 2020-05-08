@@ -1,9 +1,11 @@
 <script>
   import Spinner from './Spinner.svelte';
 
-  export let siretsP;
+  export let labelsFromId;
   export let select;
   export let selected;
+
+  $: labels = Object.values(labelsFromId);
 
   const defaultLabel = 'commune';
 </script>
@@ -32,15 +34,13 @@
 </style>
 
 <ul class="Sirets">
-  {#await siretsP}
+  {#if labels.length === 0}
     <Spinner color={'#999'} />
-  {:then sirets}
-    {#each sirets as siret}
-      <li
-        on:click={() => select(siret.id)}
-        class={selected === siret.id ? 'selected' : ''}>
-        {siret.label || defaultLabel}
+  {:else}
+    {#each labels as { id, label }}
+      <li on:click={() => select(id)} class={selected === id ? 'selected' : ''}>
+        {label || defaultLabel}
       </li>
     {/each}
-  {/await}
+  {/if}
 </ul>

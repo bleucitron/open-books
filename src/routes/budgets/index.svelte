@@ -25,7 +25,6 @@
 
     return {
       sirens,
-      sirets,
       siret,
       year,
       insee,
@@ -50,14 +49,13 @@
   import { makeBudget, orderRecordsBySiret } from './_utils';
 
   export let sirens;
-  export let sirets;
   export let siret;
   export let year;
   export let insee;
   export let name;
 
   let budget;
-  let labels;
+  let labels = {};
 
   function selectSiret(s) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
@@ -85,7 +83,7 @@
   });
 
   $: yearIndex = years.findIndex(y => y === year);
-  $: label = labels && labels.find(l => l.id === siret).label;
+  $: label = labels[siret] && labels[siret].label;
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
@@ -103,37 +101,28 @@
         return result;
       });
 
-  const siretsP = getRecords({ siren: sirens, year: defaultYear })
-    .then(records => {
+  [...years].reverse().map(year => {
+    getRecords({ siren: sirens, year }).then(records => {
       const data = orderRecordsBySiret(records).map(({ siret: s, records }) => {
         const b = makeBudget({
           city: name,
           siret: s,
-          year: defaultYear,
+          year,
           records,
         });
 
         if (s !== siret) {
-          createBudget(s).add(defaultYear, b);
+          const budget = budgetsFromStore.get(s) || createBudget(s);
+          budget.add(year, b);
         }
 
-        return {
-          id: s,
-          label: b.label,
-        };
+        return [s, { id: s, label: b.label }];
       });
 
-      return data;
-    })
-    .then(sirets => {
-      labels = sirets;
-
-      if (sirets.length === 1) {
-        return [];
-      }
-
-      return sirets;
+      const newLabels = Object.fromEntries(data);
+      labels = { ...labels, ...newLabels };
     });
+  });
 </script>
 
 <style lang="scss">
@@ -223,11 +212,9 @@
 <header>
   <div class="labels">
     <h1>{name}</h1>
-    {#await siretsP then sirets}
-      {#if sirets.length !== 0}
-        <h2>{label}</h2>
-      {/if}
-    {/await}
+    {#if label}
+      <h2>{label}</h2>
+    {/if}
   </div>
 
   <div class="departement">
@@ -245,7 +232,7 @@
 
 <div class="content">
   <menu>
-    <Sirets {siretsP} selected={siret} select={selectSiret} />
+    <Sirets labelsFromId={labels} selected={siret} select={selectSiret} />
     <Years {years} {valuePs} selected={year} select={selectYear} />
   </menu>
   <div class="dataviz">
