@@ -1,5 +1,7 @@
 <script context="module">
-  import { getSirens, getMainSiret, getCity } from '../../api';
+  import { getSiretsFromInsee, getCity } from '../../api';
+  import { extractSirens } from '../../api/utils/siren';
+
   const start = 2012;
   // const end = 2019;
   const end = new Date().getFullYear();
@@ -7,16 +9,23 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page, session) {
-    let { name, insee, siren, siret, year } = page.query;
+    let { name, insee, siret, year } = page.query;
 
-    siren = siren || (await getSirens(name, insee));
+    const siretsFromCode = await getSiretsFromInsee(name, insee);
 
-    siret = siret || (await getMainSiret(siren));
+    const sirens = extractSirens(siretsFromCode);
+    const sirets = siretsFromCode
+      .filter(e => e.etablissementSiege)
+      .map(e => e.siret)
+      .sort();
+
+    siret = siret || sirets[0];
 
     year = parseInt(year) || defaultYear;
 
     return {
-      siren,
+      sirens,
+      sirets,
       siret,
       year,
       insee,
@@ -36,11 +45,12 @@
   import Summary from './_components/Summary.svelte';
   import Csv from './_components/Csv.svelte';
   import Spinner from './_components/Spinner.svelte';
-  import { getRecords, getRecordsFromSiren } from '../../api';
+  import { getRecords } from '../../api';
 
-  import { makeBudget } from './_utils';
+  import { makeBudget, orderRecordsBySiret } from './_utils';
 
-  export let siren;
+  export let sirens;
+  export let sirets;
   export let siret;
   export let year;
   export let insee;
@@ -50,15 +60,11 @@
   let labels;
 
   function selectSiret(s) {
-    goto(
-      `/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${s}&year=${year}`,
-    );
+    goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
   }
 
   function selectYear(y) {
-    goto(
-      `/budgets?name=${name}&insee=${insee}&siren=${siren}&siret=${siret}&year=${y}`,
-    );
+    goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
   }
 
   $: budgets = budgetsFromStore.get(siret) || createBudget(siret);
@@ -68,7 +74,7 @@
 
     return budgetFromStore !== undefined
       ? Promise.resolve(budgetFromStore)
-      : getRecords({ ident: siret, year: y })
+      : getRecords({ ident: [siret], year: y })
           .catch(() => [])
           .then(records => {
             const b = makeBudget({ city: name, siret, year: y, records });
@@ -97,28 +103,28 @@
         return result;
       });
 
-  const siretsP = getRecordsFromSiren(siren, defaultYear)
-    .then(results =>
-      results
-        .sort((r1, r2) => r1.siret - r2.siret)
-        .map(({ siret: s, records }) => {
-          const b = makeBudget({
-            city: name,
-            siret: s,
-            year: defaultYear,
-            records,
-          });
+  const siretsP = getRecords({ siren: sirens, year: defaultYear })
+    .then(records => {
+      const data = orderRecordsBySiret(records).map(({ siret: s, records }) => {
+        const b = makeBudget({
+          city: name,
+          siret: s,
+          year: defaultYear,
+          records,
+        });
 
-          if (s !== siret) {
-            createBudget(s).add(defaultYear, b);
-          }
+        if (s !== siret) {
+          createBudget(s).add(defaultYear, b);
+        }
 
-          return {
-            id: s,
-            label: b.label,
-          };
-        }),
-    )
+        return {
+          id: s,
+          label: b.label,
+        };
+      });
+
+      return data;
+    })
     .then(sirets => {
       labels = sirets;
 
@@ -243,12 +249,12 @@
     <Years {years} {valuePs} selected={year} select={selectYear} />
   </menu>
   <div class="dataviz">
-  <h3>
-    {year}
-    {#if budget}
-      <Csv data={budget} />
-    {/if}
-  </h3>
+    <h3>
+      {year}
+      {#if budget}
+        <Csv data={budget} />
+      {/if}
+    </h3>
     <Summary {year} {budget} />
   </div>
   <div class="info" />

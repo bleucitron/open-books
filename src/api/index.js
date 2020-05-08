@@ -1,3 +1,3 @@
 export { getCity, getCities } from './geo';
-export { getSirens, getSiret, getMainSiret } from './siren';
-export { getRecords, getRecordsFromSiren } from './budget';
+export { getSiretsFromInsee, getSiret } from './siren';
+export { getRecords } from './budget';

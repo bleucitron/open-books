@@ -7,10 +7,10 @@ export function makeGetSiretEndpoint(siret) {
   return `/siret/${siret}`;
 }
 
-export function makeGetSiretsEndpoint(siren) {
+export function makeGetSiretsEndpoint(sirens) {
   const base = '/siret';
 
-  const param = `siren:"${siren}"`;
+  const param = sirens.map(s => `siren:"${s}"`).join(' OR ');
 
   const number = `nombre=${nbResults}`;
 
@@ -37,6 +37,6 @@ export function makeSearchSiretEndpoint(text, code) {
   return `${base}?${allParams}`;
 }
 
-export function extractSirens({ etablissements }) {
+export function extractSirens(etablissements) {
   return [...new Set(etablissements.map(({ siren }) => siren))];
 }

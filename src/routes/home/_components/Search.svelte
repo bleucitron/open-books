@@ -5,7 +5,7 @@
   export let clear;
   export let selected;
 
-  let value = 'Bordeaux';
+  let value = 'Annecy';
   let focus = false;
 
   $: if (selected) {

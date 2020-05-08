@@ -1,10 +1,5 @@
 import { get } from './utils/verbs';
-import {
-  makeGetSiretEndpoint,
-  makeGetSiretsEndpoint,
-  makeSearchSiretEndpoint,
-  extractSirens,
-} from './utils/siren';
+import { makeGetSiretEndpoint, makeSearchSiretEndpoint } from './utils/siren';
 
 const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
 const baseURL = 'https://api.insee.fr/entreprises/sirene/V3';
@@ -25,17 +20,8 @@ export function getSiret(siret) {
   return get(endpoint, options).then(({ etablissement }) => etablissement);
 }
 
-export function getMainSiret(siren) {
-  const endpoint = makeGetSiretsEndpoint(siren);
-
-  return get(endpoint, options).then(
-    ({ etablissements }) =>
-      etablissements.find(e => e.etablissementSiege).siret,
-  );
-}
-
-export function getSirens(text, code) {
+export function getSiretsFromInsee(text, code) {
   const endpoint = makeSearchSiretEndpoint(text, code);
 
-  return get(endpoint, options).then(extractSirens);
+  return get(endpoint, options).then(r => r.etablissements);
 }

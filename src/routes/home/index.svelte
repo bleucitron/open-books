@@ -1,7 +1,7 @@
 <script>
   import city from '../../stores/city';
 
-  import { getCities, getSirens } from '../../api';
+  import { getCities } from '../../api';
 
   import Nav from '../_components/Nav.svelte';
   import Search from './_components/Search.svelte';
@@ -80,4 +80,3 @@
     {/if}
   </Search>
 </div>
-

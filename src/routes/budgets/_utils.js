@@ -16,6 +16,20 @@ function formatLabel(label, name) {
   return label.replace(n, '').trim().toLowerCase();
 }
 
+export function orderRecordsBySiret(records) {
+  const sirets = [...new Set(records.map(({ ident }) => ident))];
+
+  return sirets
+    .map(siret => {
+      const siretRecords = records.filter(({ ident }) => {
+        return ident === siret;
+      });
+
+      return { siret, records: siretRecords };
+    })
+    .sort((r1, r2) => r1.siret - r2.siret);
+}
+
 export function makeBudget(data) {
   const { city, siret, year, records } = data;
 
