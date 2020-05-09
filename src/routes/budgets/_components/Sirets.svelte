@@ -5,7 +5,7 @@
   export let select;
   export let selected;
 
-  $: labels = Object.values(labelsFromId);
+  $: labels = labelsFromId && Object.values(labelsFromId);
 
   const defaultLabel = 'commune';
 </script>
@@ -34,7 +34,7 @@
 </style>
 
 <ul class="Sirets">
-  {#if labels.length === 0}
+  {#if !labels}
     <Spinner color={'#999'} />
   {:else}
     {#each labels as { id, label }}

@@ -55,7 +55,7 @@
   export let name;
 
   let budget;
-  let labels = {};
+  let labels;
 
   function selectSiret(s) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
@@ -83,7 +83,7 @@
   });
 
   $: yearIndex = years.findIndex(y => y === year);
-  $: label = labels[siret] && labels[siret].label;
+  $: label = labels && labels[siret] && labels[siret].label;
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
@@ -120,7 +120,7 @@
       });
 
       const newLabels = Object.fromEntries(data);
-      labels = { ...labels, ...newLabels };
+      labels = labels ? { ...labels, ...newLabels } : { ...newLabels };
     });
   });
 </script>
