@@ -3,6 +3,49 @@ import { normalizeText } from '../../utils';
 const nbResults = 1000;
 const category = 7210;
 
+function buildParamString(paramByKey) {
+  return Object.entries(paramByKey)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        const s = value.map(v => `${key}:${v}`).join(' OR ');
+
+        return `(${s})`;
+      }
+
+      return `${key}:${value}`;
+    })
+    .join(' AND ');
+}
+
+const codesByMain = {
+  // Codes for Arrondissements
+  69123: {
+    name: 'Lyon',
+    nb: 9,
+    base: 69380,
+  },
+  75056: {
+    name: 'Paris',
+    nb: 20,
+    base: 75100,
+  },
+  13055: {
+    name: 'Marseille',
+    nb: 16,
+    base: 13200,
+  },
+};
+
+export function checkCodes(code) {
+  if (code in codesByMain) {
+    const { nb, base } = codesByMain[code];
+
+    return [code, ...Array(nb).keys()].map(e => base + e + 1);
+  }
+
+  return [code];
+}
+
 export function makeGetSiretEndpoint(siret) {
   return `/siret/${siret}`;
 }
@@ -20,17 +63,17 @@ export function makeGetSiretsEndpoint(sirens) {
   return `${base}?${allParams}`;
 }
 
-export function makeSearchSiretEndpoint(text, code) {
+export function makeSearchSiretEndpoint(text, codes) {
   const base = '/siret';
 
-  const normalizedText = normalizeText(text);
-  const nameParam = `denominationUniteLegale:"${normalizedText}"`;
-  const cityParam = `codeCommuneEtablissement:${code}`;
-  const typeParam = `categorieJuridiqueUniteLegale:${category}`;
+  const params = buildParamString({
+    denominationUniteLegale: normalizeText(text),
+    codeCommuneEtablissement: codes,
+    categorieJuridiqueUniteLegale: category,
+  });
 
   const number = `nombre=${nbResults}`;
 
-  const params = [nameParam, cityParam, typeParam].join(' AND ');
   const query = `q=${params}`;
   const allParams = [query, number].join('&');
 
