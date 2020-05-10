@@ -116,7 +116,7 @@
           budget.add(year, b);
         }
 
-        return [s, { id: s, label: b.label }];
+        return [s, { siret: s, label: b.label }];
       });
 
       const newLabels = Object.fromEntries(data);
