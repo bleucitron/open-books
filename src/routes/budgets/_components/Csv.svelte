@@ -3,7 +3,7 @@
 
   export let data;
 
-  console.log('DATA', data);
+  // console.log('DATA', data);
 
   const csvP = makeCSV(data);
 </script>
