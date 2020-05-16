@@ -126,9 +126,7 @@
 
 <style lang="scss">
   header {
-    padding: 0 2rem;
-    padding-top: 2.5rem;
-    padding-bottom: 0.2rem;
+    padding: 0.5rem 0.5rem 0rem 3rem;
     background: #151515;
     color: white;
 
@@ -139,17 +137,16 @@
 
     .labels {
       display: flex;
-      align-items: flex-end;
+      align-items: baseline;
     }
 
     h1 {
-      font-size: 3rem;
-      line-height: 3rem;
+      font-size: 2rem;
     }
 
     h2 {
+      font-size: 1.2rem;
       margin-left: 1rem;
-      line-height: 1.9rem;
       text-transform: capitalize;
     }
 
@@ -226,5 +223,4 @@
     <Years {years} {valuePs} selected={year} select={selectYear} />
     <Summary {year} {budget} />
   </div>
-  <!-- <div class="info" /> -->
 </div>
