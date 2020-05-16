@@ -42,7 +42,6 @@
   import Sirets from './_components/Sirets.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Csv from './_components/Csv.svelte';
   import Spinner from './_components/Spinner.svelte';
   import { getRecords } from '../../api';
 
@@ -163,37 +162,26 @@
     }
   }
 
-  h3 {
-    font-size: 2.5rem;
-    text-align: center;
-    position: relative;
-  }
-
   menu {
     margin: 0;
     color: white;
     background: #333;
     display: flex;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
   }
 
   .content {
     flex: 1 0;
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
   }
 
   .dataviz {
     flex: 1 0;
     display: flex;
     flex-flow: column;
-    align-items: stretch;
-    padding: 1rem 2rem 5rem;
-    background: white;
-  }
-
-  .info {
-    width: 15rem;
+    align-items: center;
+    background: #333;
   }
 </style>
 
@@ -233,16 +221,10 @@
 <div class="content">
   <menu>
     <Sirets labelsFromId={labels} selected={siret} select={selectSiret} />
-    <Years {years} {valuePs} selected={year} select={selectYear} />
   </menu>
   <div class="dataviz">
-    <h3>
-      {year}
-      {#if budget}
-        <Csv data={budget} />
-      {/if}
-    </h3>
+    <Years {years} {valuePs} selected={year} select={selectYear} />
     <Summary {year} {budget} />
   </div>
-  <div class="info" />
+  <!-- <div class="info" /> -->
 </div>
