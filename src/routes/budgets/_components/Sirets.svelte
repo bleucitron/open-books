@@ -41,7 +41,6 @@
   }
 
   li {
-    cursor: pointer;
     text-transform: capitalize;
     font-size: 1rem;
     text-align: right;
@@ -49,6 +48,31 @@
 
     > div {
       opacity: 0.2;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.7;
+
+        .info {
+          opacity: 0.4;
+        }
+
+        .siren {
+          opacity: 1;
+        }
+      }
+    }
+
+    &.selected > div {
+      opacity: 1;
+
+      .info {
+        opacity: 0.4;
+      }
+
+      .siren {
+        opacity: 1;
+      }
     }
 
     .info {
@@ -69,34 +93,6 @@
     &:not(.main) .siren {
       opacity: 0;
     }
-
-    &:hover {
-      > div {
-        opacity: 0.7;
-      }
-
-      .info {
-        opacity: 0.4;
-      }
-
-      .siren {
-        opacity: 1;
-      }
-    }
-
-    &.selected {
-      > div {
-        opacity: 1;
-      }
-
-      .info {
-        opacity: 0.4;
-      }
-
-      .siren {
-        opacity: 1;
-      }
-    }
   }
 </style>
 
@@ -105,10 +101,8 @@
     <Spinner color={'#999'} />
   {:else}
     {#each labels as { siret, siren, etabl, label, main }}
-      <li
-        on:click={() => select(siret)}
-        class={classnames({ selected: selected === siret, main })}>
-        <div>
+      <li class={classnames({ selected: selected === siret, main })}>
+        <div on:click={() => select(siret)}>
           <div class="info">
             <span class="siren">{siren}</span>
             <span class="siret">{etabl}</span>
