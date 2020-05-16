@@ -2,8 +2,10 @@
   import classnames from 'classnames';
   import Spinner from './Spinner.svelte';
   import { formatValue, makeCSV } from '../../../utils';
+  import Csv from '../_components/Csv.svelte';
 
   export let budget;
+  export let year;
 </script>
 
 <style>
@@ -14,9 +16,11 @@
     justify-content: center;
     align-items: stretch;
     width: 100%;
+    background: white;
   }
 
   .values {
+    flex: 1 0;
     display: flex;
     width: 100%;
     align-items: center;
@@ -31,6 +35,13 @@
     font-size: 4rem;
   }
 
+  h3 {
+    margin: 0.5rem;
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+
   h4 {
     font-size: 1.5rem;
   }
@@ -42,10 +53,16 @@
 </style>
 
 <div class="Summary">
+  <h3>
+    {year}
+    {#if budget}
+      <Csv data={budget} />
+    {/if}
+  </h3>
   {#if budget === undefined}
     <Spinner color={'#333'} size={'3rem'} />
   {:else if budget === null}
-    <div class="none">Aucun budget</div>
+    <div class="values none">Aucun budget</div>
   {:else}
     <div class="values">
       <div class="value credit">

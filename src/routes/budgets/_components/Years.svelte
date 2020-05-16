@@ -17,7 +17,7 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    padding: 0rem 2rem;
+    padding: 1rem 2rem;
     margin: 0;
     background: #333;
     height: 10rem;
