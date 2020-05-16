@@ -126,7 +126,8 @@
 
 <style lang="scss">
   header {
-    padding: 0.5rem 0.5rem 0rem 3rem;
+    padding: 0.5rem;
+    padding-bottom: 0;
     background: #151515;
     color: white;
 
@@ -180,6 +181,19 @@
     align-items: center;
     background: #333;
   }
+
+  .back {
+    font-size: 1.4rem;
+    width: 1.4rem;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+
+    opacity: 0.1;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 </style>
 
 <svelte:head>
@@ -192,10 +206,11 @@
   {/await}
 </svelte:head>
 
-<Nav />
-
 <header>
   <div class="labels">
+    <a class="back" href="/">
+      <i class="fas fa-arrow-left" />
+    </a>
     <h1>{name}</h1>
     {#if label}
       <h2>{label}</h2>
