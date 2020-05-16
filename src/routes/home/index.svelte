@@ -59,7 +59,7 @@
 </style>
 
 <svelte:head>
-  <title>Open Books</title>
+  <title>Livres ouverts</title>
 </svelte:head>
 
 <Nav home />
