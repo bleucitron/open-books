@@ -44,7 +44,7 @@
   import Spinner from './_components/Spinner.svelte';
   import { getRecords } from '../../api';
 
-  import { makeBudget, orderRecordsBySiret } from './_utils';
+  import { makeBudget, makeId, orderRecordsBySiret } from './_utils';
 
   export let sirens;
   export let siret;
@@ -52,8 +52,7 @@
   export let insee;
   export let name;
 
-  let budgets = [];
-  let budget;
+  let budgetById = {};
   let labels;
 
   function selectSiret(s) {
@@ -65,9 +64,10 @@
   }
 
   function getBudget(siret, year) {
-    const budget = budgets.find(
-      budget => budget.siret === siret && budget.year === year,
-    );
+    const id = makeId(siret, year);
+    const budget = budgetById[id];
+
+    if (budget === null) return Promise.resolve(null);
 
     return budget !== undefined
       ? Promise.resolve(budget)
@@ -76,7 +76,7 @@
           .then(records => {
             const b = makeBudget({ city: name, siret, year, records });
 
-            if (b) budgets = [...budgets, b];
+            budgetById[id] = b;
 
             return b;
           });
@@ -91,10 +91,8 @@
     budgetP.then(budget => budget && budget.credit),
   );
 
-  $: {
-    budget = undefined;
-    budgetPs[yearIndex].then(b => (budget = b));
-  }
+  $: id = makeId(siret, year);
+  $: budget = budgetById[id];
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -113,7 +111,8 @@
           records,
         });
 
-        if (s !== siret && b) budgets = [...budgets, b];
+        const id = makeId(s, year);
+        if (s !== siret) budgetById[id] = b;
 
         return [s, { siret: s, label: b.label }];
       });

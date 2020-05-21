@@ -8,6 +8,10 @@ export function displayLabel(label) {
   return label === DEFAULT_LABEL ? '' : label;
 }
 
+export function makeId(siret, year) {
+  return `${siret}_${year}`;
+}
+
 function formatLabel(label, name) {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
