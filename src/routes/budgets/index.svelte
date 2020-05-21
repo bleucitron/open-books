@@ -38,7 +38,7 @@
 
   import city from '../../stores/city';
   import Nav from '../_components/Nav.svelte';
-  import Sirets from './_components/Sirets.svelte';
+  import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
   import Spinner from './_components/Spinner.svelte';
@@ -85,7 +85,21 @@
   $: budgetPs = years.map(y => getBudget(siret, y));
 
   $: yearIndex = years.findIndex(y => y === year);
-  $: label = labels && labels[siret] && labels[siret].label;
+
+  $: sirets = [
+    ...new Set(
+      Object.values(budgetById)
+        .filter(b => b)
+        .map(b => b.siret),
+    ),
+  ].sort();
+
+  $: labels = sirets.map(s => {
+    const id = makeId(s, year);
+    const budget = budgetById[id];
+
+    return budget || Object.values(budgetById).find(b => b && b.siret === s);
+  });
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
@@ -93,6 +107,7 @@
 
   $: id = makeId(siret, year);
   $: budget = budgetById[id];
+  $: label = budget && budget.label;
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -113,12 +128,7 @@
 
         const id = makeId(s, year);
         if (s !== siret) budgetById[id] = b;
-
-        return [s, { siret: s, label: b.label }];
       });
-
-      const newLabels = Object.fromEntries(data);
-      labels = labels ? { ...labels, ...newLabels } : { ...newLabels };
     });
   });
 </script>
@@ -231,7 +241,7 @@
 
 <div class="content">
   <menu>
-    <Sirets labelsFromId={labels} selected={siret} select={selectSiret} />
+    <Labels {labels} selected={siret} select={selectSiret} />
   </menu>
   <div class="dataviz">
     <Years {years} {valuePs} selected={year} select={selectYear} />
