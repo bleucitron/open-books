@@ -37,7 +37,6 @@
   import { goto } from '@sapper/app';
 
   import city from '../../stores/city';
-  import budgetsBySiret, { createBudget } from '../../stores/budgets';
   import Nav from '../_components/Nav.svelte';
   import Sirets from './_components/Sirets.svelte';
   import Years from './_components/Years.svelte';
@@ -53,6 +52,7 @@
   export let insee;
   export let name;
 
+  let budgets = [];
   let budget;
   let labels;
 
@@ -64,22 +64,25 @@
     goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
   }
 
-  $: budgetsByYear = budgetsBySiret.get(siret) || createBudget(siret);
-
-  $: budgetPs = years.map(y => {
-    const budget = budgetsByYear.get(y);
+  function getBudget(siret, year) {
+    const budget = budgets.find(
+      budget => budget.siret === siret && budget.year === year,
+    );
 
     return budget !== undefined
       ? Promise.resolve(budget)
-      : getRecords({ ident: [siret], year: y })
+      : getRecords({ ident: [siret], year })
           .catch(() => [])
           .then(records => {
-            const b = makeBudget({ city: name, siret, year: y, records });
-            budgetsByYear.add(y, b);
+            const b = makeBudget({ city: name, siret, year, records });
+
+            if (b) budgets = [...budgets, b];
 
             return b;
           });
-  });
+  }
+
+  $: budgetPs = years.map(y => getBudget(siret, y));
 
   $: yearIndex = years.findIndex(y => y === year);
   $: label = labels && labels[siret] && labels[siret].label;
@@ -110,10 +113,7 @@
           records,
         });
 
-        if (s !== siret) {
-          const budgetsByYear = budgetsBySiret.get(s) || createBudget(s);
-          budgetsByYear.add(year, b);
-        }
+        if (s !== siret && b) budgets = [...budgets, b];
 
         return [s, { siret: s, label: b.label }];
       });
