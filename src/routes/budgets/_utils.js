@@ -20,12 +20,21 @@ function extractEtabl(siret) {
   return siret.substring(9);
 }
 
+const toRemove = ['-', ' de'];
+
 function formatLabel(label, name) {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
 
   if (l === n) return DEFAULT_LABEL;
-  return label.replace(n, '').trim().toLowerCase();
+
+  let formatted = label.replace(n, '').trim().toLowerCase();
+
+  toRemove.forEach(c => {
+    formatted = formatted.replace(new RegExp(`${c}$`), '');
+  });
+
+  return formatted;
 }
 
 export function orderRecordsBySiret(records) {
