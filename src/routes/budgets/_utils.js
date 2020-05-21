@@ -12,6 +12,14 @@ export function makeId(siret, year) {
   return `${siret}_${year}`;
 }
 
+function extractSiren(siret) {
+  return siret.substring(0, 9);
+}
+
+function extractEtabl(siret) {
+  return siret.substring(9);
+}
+
 function formatLabel(label, name) {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
@@ -41,6 +49,9 @@ export function makeBudget(data) {
 
   if (length === 0) return null;
 
+  const siren = extractSiren(siret);
+  const etabl = extractEtabl(siret);
+
   const debit = records.reduce((sum, { sd }) => sum + sd, 0);
   const credit = records.reduce((sum, { sc }) => sum + sc, 0);
   const labels = [
@@ -60,6 +71,8 @@ export function makeBudget(data) {
 
   return {
     siret,
+    siren,
+    etabl,
     city,
     year,
     nomen,
