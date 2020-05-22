@@ -2,13 +2,11 @@
   import { stores } from '@sapper/app';
   import Nav from './_components/Nav.svelte';
 
-  const { page } = stores();
-
-  $: path = $page.path;
+  export let segment;
 </script>
 
-{#if path !== '/budgets'}
-  <Nav {path} />
+{#if segment !== 'budgets'}
+  <Nav path={segment || 'home'} />
 {/if}
 
 <slot />
