@@ -44,6 +44,7 @@
     margin: 2rem auto;
     max-width: 75%;
     width: 50rem;
+    height: fit-content;
   }
 
   .searchbar {

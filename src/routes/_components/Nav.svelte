@@ -5,8 +5,6 @@
 
 <style lang="scss">
   header {
-    position: fixed;
-    width: 100%;
     display: flex;
     justify-content: space-between;
     height: 3rem;
@@ -22,10 +20,22 @@
   .home {
     font-size: 1.5rem;
 
-    span {
+    > div {
+      display: flex;
+      align-items: baseline;
+    }
+
+    h1 {
       color: black;
       margin: 0 0.5rem;
       font-size: 1.4rem;
+    }
+
+    h2 {
+      color: #bbb;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -53,6 +63,7 @@
     align-items: stretch;
     padding: 0.5rem;
     color: black;
+    background: white;
     z-index: 1;
 
     a {
@@ -85,8 +96,11 @@
 
 <header>
   <a href="/" class={classnames('home', { current: path === 'home' })}>
-    <i class="fas fa-book-open" />
-    <span>Livres ouverts</span>
+    <div>
+      <i class="fas fa-book-open" />
+      <h1>Livres ouverts</h1>
+      <h2>Les données budgétaires des communes</h2>
+    </div>
   </a>
   <nav class="Nav">
     <a href="/about" class={classnames({ current: path === 'about' })}>

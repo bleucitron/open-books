@@ -1,8 +1,7 @@
 <style>
   main {
-    padding: 2rem 0;
-    width: 60%;
-    margin: 0 auto;
+    padding: 2rem 20%;
+    padding-bottom: 5rem;
   }
 
   a {
@@ -17,6 +16,11 @@
   ul {
     padding-left: 2rem;
     list-style: initial;
+  }
+
+  main {
+    flex: 1 0;
+    overflow-y: scroll;
   }
 </style>
 
