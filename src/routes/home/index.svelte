@@ -62,8 +62,6 @@
   <title>Livres ouverts</title>
 </svelte:head>
 
-<Nav home />
-
 <header>
   <h1>Livres ouverts</h1>
   <p>Les données budgétaires des communes</p>
