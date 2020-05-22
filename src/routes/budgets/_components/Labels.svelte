@@ -5,6 +5,7 @@
   export let labels;
   export let select;
   export let selected;
+  export let loadingP;
 
   const defaultLabel = 'commune';
 
@@ -13,6 +14,7 @@
 
 <style lang="scss">
   .Labels {
+    position: relative;
     display: flex;
     flex-flow: column;
     width: 15rem;
@@ -23,7 +25,7 @@
     border-top: 1px solid rgba(white, 0.1);
     margin-bottom: 0.5rem;
 
-    &:first-child {
+    &:first-of-type {
       border: none;
     }
   }
@@ -72,33 +74,42 @@
       opacity: 0;
     }
   }
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 </style>
 
 <ul class="Labels">
-  {#if labels.length === 0}
-    <Spinner color={'#999'} />
-  {:else}
-    {#each sirens as siren}
-      <li class="siren">
-        <ul>
-          {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label, main }, i}
-            <li
-              class={classnames({
-                siret: true,
-                selected: selected === siret,
-                main: i === 0,
-              })}>
-              <div on:click={() => select(siret)}>
-                <div class="info">
-                  <span class="siren">{siren}</span>
-                  <span class="etabl">{etabl}</span>
-                </div>
-                <div class="label">{label || defaultLabel}</div>
+  {#await loadingP}
+    <div class="loading">
+      <Spinner color={'#999'} />
+    </div>
+  {:then}
+
+  {/await}
+  {#each sirens as siren}
+    <li class="siren">
+      <ul>
+        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label, main }, i}
+          <li
+            class={classnames({
+              siret: true,
+              selected: selected === siret,
+              main: i === 0,
+            })}>
+            <div on:click={() => select(siret)}>
+              <div class="info">
+                <span class="siren">{siren}</span>
+                <span class="etabl">{etabl}</span>
               </div>
-            </li>
-          {/each}
-        </ul>
-      </li>
-    {/each}
-  {/if}
+              <div class="label">{label || defaultLabel}</div>
+            </div>
+          </li>
+        {/each}
+      </ul>
+    </li>
+  {/each}
 </ul>

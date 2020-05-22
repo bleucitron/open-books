@@ -116,21 +116,27 @@
         return result;
       });
 
-  [...years].reverse().map(year => {
-    getRecords({ siren: sirens, year }).then(records => {
-      const data = orderRecordsBySiret(records).map(({ siret: s, records }) => {
-        const b = makeBudget({
-          city: name,
-          siret: s,
-          year,
-          records,
-        });
+  const otherBudgetPs = [...years].reverse().map(year =>
+    getRecords({ siren: sirens, year })
+      .catch(() => [])
+      .then(records => {
+        const data = orderRecordsBySiret(records).map(
+          ({ siret: s, records }) => {
+            const b = makeBudget({
+              city: name,
+              siret: s,
+              year,
+              records,
+            });
 
-        const id = makeId(s, year);
-        if (s !== siret) budgetById[id] = b;
-      });
-    });
-  });
+            const id = makeId(s, year);
+            if (s !== siret) budgetById[id] = b;
+          },
+        );
+      }),
+  );
+
+  $: loadingP = Promise.all([...budgetPs, ...otherBudgetPs]);
 </script>
 
 <style lang="scss">
@@ -241,7 +247,7 @@
 
 <div class="content">
   <menu>
-    <Labels {labels} selected={siret} select={selectSiret} />
+    <Labels {labels} {loadingP} selected={siret} select={selectSiret} />
   </menu>
   <div class="dataviz">
     <Years {years} {valuePs} selected={year} select={selectYear} />
