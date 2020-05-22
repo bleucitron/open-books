@@ -5,6 +5,8 @@
 
 <style lang="scss">
   header {
+    position: fixed;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     height: 3rem;
