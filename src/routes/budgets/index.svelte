@@ -146,13 +146,9 @@
 
   $: id = makeId(siret, year);
   $: budget = budgetById[id];
-  $: {
-    if (budget) label = budget.label;
-    else {
-      const similarBudget = findSimilarBudget(siret);
-      if (similarBudget) label = similarBudget.label;
-    }
-  }
+  $: similar = findSimilarBudget(siret);
+  $: safeBudget = budget || similar;
+  $: label = safeBudget ? safeBudget.label : '';
 </script>
 
 <style lang="scss">
