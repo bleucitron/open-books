@@ -51,6 +51,13 @@
     }
   }
 
+  main {
+    flex: 1 0;
+    display: flex;
+    align-items: center;
+    padding-bottom: 40%;
+  }
+
   @media (min-width: 480px) {
     h1 {
       font-size: 2em;
@@ -62,12 +69,7 @@
   <title>Livres ouverts</title>
 </svelte:head>
 
-<header>
-  <h1>Livres ouverts</h1>
-  <p>Les données budgétaires des communes</p>
-</header>
-
-<div>
+<main>
   <Search {search} {clear} selected={$city}>
     {#if citiesP}
       {#await citiesP}
@@ -77,4 +79,4 @@
       {/await}
     {/if}
   </Search>
-</div>
+</main>
