@@ -17,7 +17,7 @@
   a {
     margin: 0.2rem;
 
-    opacity: 0.1;
+    opacity: 0.2;
     cursor: pointer;
 
     &:hover {
@@ -48,8 +48,8 @@
 </style>
 
 <nav class="Nav">
-  <a href="/" class={classnames({ current: '/' === path })}>Accueil</a>
-  <a href="/about" class={classnames({ current: '/about' === path })}>
+  <a href="/" class={classnames({ current: path === 'home' })}>Accueil</a>
+  <a href="/about" class={classnames({ current: path === 'about' })}>
     À propos
   </a>
   <a href="https://github.com/iOiurson/open-books">
