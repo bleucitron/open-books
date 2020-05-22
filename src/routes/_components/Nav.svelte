@@ -1,8 +1,8 @@
 <script>
   import classnames from 'classnames';
-  export let home;
+  export let path;
 
-  $: classes = classnames('Nav', { home });
+  $: classes = classnames('Nav', { path });
 </script>
 
 <style lang="scss">
@@ -12,12 +12,8 @@
     align-items: flex-end;
     height: 2rem;
     padding: 0.5rem;
-    color: white;
+    color: black;
     z-index: 1;
-
-    &.home {
-      color: black;
-    }
   }
 
   a {
