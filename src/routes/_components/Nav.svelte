@@ -4,55 +4,87 @@
 </script>
 
 <style lang="scss">
-  nav {
+  header {
     display: flex;
-    justify-content: flex-end;
-    align-items: stretch;
-    height: 2rem;
-    padding: 0.5rem;
-    color: black;
-    z-index: 1;
+    justify-content: space-between;
+    height: 3rem;
   }
 
   a {
     display: flex;
     align-items: center;
     margin: 0 0.5rem;
-
-    opacity: 0.2;
     cursor: pointer;
+  }
+
+  .home {
+    font-size: 1.5rem;
+  }
+
+  a {
+    transition: color 0.3s ease-in-out;
 
     &:hover {
-      color: darkorchid;
-      opacity: 0.8;
+      color: coral;
     }
 
     &.current {
-      opacity: 1;
+      color: cornflowerblue;
+      cursor: unset;
 
       &:hover {
-        color: unset;
+        color: cornflowerblue;
         opacity: unset;
-        cursor: unset;
       }
     }
+  }
 
-    i {
-      font-size: 1.2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
+  nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 0.5rem;
+    color: black;
+    z-index: 1;
+
+    a {
+      transition: color 0.3s ease-in-out;
+
+      &:hover {
+        color: coral;
+      }
+
+      &.current {
+        color: cornflowerblue;
+        cursor: unset;
+
+        &:hover {
+          color: cornflowerblue;
+          opacity: unset;
+        }
+      }
+
+      i {
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      }
     }
   }
 </style>
 
-<nav class="Nav">
-  <a href="/" class={classnames({ current: path === 'home' })}>Accueil</a>
-  <a href="/about" class={classnames({ current: path === 'about' })}>
-    À propos
+<header>
+  <a href="/" class={classnames('home', { current: path === 'home' })}>
+    <i class="fas fa-book-open" />
   </a>
-  <a href="https://github.com/iOiurson/open-books">
-    <i class="fab fa-github" />
-  </a>
-</nav>
+  <nav class="Nav">
+    <a href="/about" class={classnames({ current: path === 'about' })}>
+      À propos
+    </a>
+    <a href="https://github.com/iOiurson/open-books">
+      <i class="fab fa-github" />
+    </a>
+  </nav>
+</header>
