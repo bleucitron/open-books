@@ -13,6 +13,11 @@
     text-align: center;
     margin-top: 2rem;
   }
+
+  ul {
+    padding-left: 2rem;
+    list-style: initial;
+  }
 </style>
 
 <svelte:head>
