@@ -57,32 +57,66 @@
 
   function selectSiret(s) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
+
+    budgetPs = years.map(y => {
+      const id = makeId(s, y);
+      return Promise.resolve(budgetById[id]);
+    });
   }
 
   function selectYear(y) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
   }
 
-  function getBudget(siret, year) {
-    const id = makeId(siret, year);
-    const budget = budgetById[id];
+  const cityP = $city
+    ? Promise.resolve($city)
+    : getCity(insee).then(result => {
+        city.set(result);
+        return result;
+      });
 
-    if (budget === null) return Promise.resolve(null);
+  let budgetPs = years.map(year =>
+    getRecords({ ident: [siret], year })
+      .catch(() => [])
+      .then(records => {
+        const b = makeBudget({ city: name, siret, year, records });
 
-    return budget !== undefined
-      ? Promise.resolve(budget)
-      : getRecords({ ident: [siret], year })
-          .catch(() => [])
-          .then(records => {
-            const b = makeBudget({ city: name, siret, year, records });
+        const id = makeId(siret, year);
+        budgetById[id] = b;
 
-            budgetById[id] = b;
+        return b;
+      }),
+  );
 
-            return b;
-          });
-  }
+  const otherBudgetPs = [...years].reverse().map(year =>
+    getRecords({ siren: sirens, year })
+      .catch(() => [])
+      .then(records => {
+        const data = orderRecordsBySiret(records).map(
+          ({ siret: s, records }) => {
+            const b = makeBudget({
+              city: name,
+              siret: s,
+              year,
+              records,
+            });
 
-  $: budgetPs = years.map(y => getBudget(siret, y));
+            const id = makeId(s, year);
+            if (s !== siret) budgetById[id] = b;
+          },
+        );
+      }),
+  );
+
+  const loadingP = Promise.all([...budgetPs, ...otherBudgetPs]);
+  loadingP.then(() =>
+    sirets.forEach(siret => {
+      years.forEach(year => {
+        const id = makeId(siret, year);
+        if (!(id in budgetById)) budgetById[id] = null;
+      });
+    }),
+  );
 
   $: yearIndex = years.findIndex(y => y === year);
 
@@ -108,35 +142,6 @@
   $: id = makeId(siret, year);
   $: budget = budgetById[id];
   $: label = budget && budget.label;
-
-  const cityP = $city
-    ? Promise.resolve($city)
-    : getCity(insee).then(result => {
-        city.set(result);
-        return result;
-      });
-
-  const otherBudgetPs = [...years].reverse().map(year =>
-    getRecords({ siren: sirens, year })
-      .catch(() => [])
-      .then(records => {
-        const data = orderRecordsBySiret(records).map(
-          ({ siret: s, records }) => {
-            const b = makeBudget({
-              city: name,
-              siret: s,
-              year,
-              records,
-            });
-
-            const id = makeId(s, year);
-            if (s !== siret) budgetById[id] = b;
-          },
-        );
-      }),
-  );
-
-  $: loadingP = Promise.all([...budgetPs, ...otherBudgetPs]);
 </script>
 
 <style lang="scss">
