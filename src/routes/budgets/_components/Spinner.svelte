@@ -2,7 +2,7 @@
   import Spinner from 'svelte-spinner';
 
   export let color = 'white';
-  export let size;
+  export let size = '1.5rem';
 </script>
 
 <style>
