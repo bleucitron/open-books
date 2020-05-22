@@ -1,6 +1,6 @@
 <script>
   import classnames from 'classnames';
-  import Spinner from './Spinner.svelte';
+  import Spinner from '../../_components/Spinner.svelte';
 
   export let labels;
   export let select;

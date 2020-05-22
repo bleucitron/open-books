@@ -37,14 +37,13 @@
   import { goto } from '@sapper/app';
 
   import city from '../../stores/city';
-  import Nav from '../_components/Nav.svelte';
+  import { getRecords } from '../../api';
+  import { makeBudget, makeId, orderRecordsBySiret } from './_utils';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Spinner from './_components/Spinner.svelte';
-  import { getRecords } from '../../api';
-
-  import { makeBudget, makeId, orderRecordsBySiret } from './_utils';
+  import Nav from '../_components/Nav.svelte';
+  import Spinner from '../_components/Spinner.svelte';
 
   export let sirens;
   export let siret;

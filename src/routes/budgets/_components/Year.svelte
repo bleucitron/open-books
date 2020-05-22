@@ -1,7 +1,7 @@
 <script>
   import classnames from 'classnames';
-  import Spinner from './Spinner.svelte';
   import { formatValue } from '../../../utils';
+  import Spinner from '../../_components/Spinner.svelte';
 
   export let year;
   export let pending = false;

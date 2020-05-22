@@ -1,5 +1,4 @@
 <script>
-  import Spinner from 'svelte-spinner';
   import Year from './Year.svelte';
 
   export let valuePs;

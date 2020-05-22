@@ -1,7 +1,7 @@
 <script>
   import classnames from 'classnames';
-  import Spinner from './Spinner.svelte';
   import { formatValue, makeCSV } from '../../../utils';
+  import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
 
   export let budget;
