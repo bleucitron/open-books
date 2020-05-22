@@ -1,8 +1,6 @@
 <script>
   import classnames from 'classnames';
   export let path;
-
-  $: classes = classnames('Nav', { path });
 </script>
 
 <style lang="scss">
@@ -22,6 +20,21 @@
     opacity: 0.1;
     cursor: pointer;
 
+    &:hover {
+      color: darkorchid;
+      opacity: 0.8;
+    }
+
+    &.current {
+      opacity: 1;
+
+      &:hover {
+        color: unset;
+        opacity: unset;
+        cursor: unset;
+      }
+    }
+
     i {
       font-size: 1.5rem;
       width: 2rem;
@@ -32,16 +45,14 @@
       border-radius: 50%;
     }
   }
-
-  a:hover {
-    opacity: 0.8;
-  }
 </style>
 
-<nav class={classes}>
-  <a href="/">Accueil</a>
-  <a href="/about">À propos</a>
-  <a class="github" href="https://github.com/iOiurson/open-books">
+<nav class="Nav">
+  <a href="/" class={classnames({ current: '/' === path })}>Accueil</a>
+  <a href="/about" class={classnames({ current: '/about' === path })}>
+    À propos
+  </a>
+  <a href="https://github.com/iOiurson/open-books">
     <i class="fab fa-github" />
   </a>
 </nav>

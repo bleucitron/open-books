@@ -4,10 +4,10 @@
 
   const { page } = stores();
 
-  $: path = $page.path.substring(1);
+  $: path = $page.path;
 </script>
 
-{#if path !== 'budgets'}
+{#if path !== '/budgets'}
   <Nav {path} />
 {/if}
 
