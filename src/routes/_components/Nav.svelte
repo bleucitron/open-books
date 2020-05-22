@@ -21,6 +21,12 @@
 
   .home {
     font-size: 1.5rem;
+
+    span {
+      color: black;
+      margin: 0 0.5rem;
+      font-size: 1.4rem;
+    }
   }
 
   a {
@@ -80,6 +86,7 @@
 <header>
   <a href="/" class={classnames('home', { current: path === 'home' })}>
     <i class="fas fa-book-open" />
+    <span>Livres ouverts</span>
   </a>
   <nav class="Nav">
     <a href="/about" class={classnames({ current: path === 'about' })}>
