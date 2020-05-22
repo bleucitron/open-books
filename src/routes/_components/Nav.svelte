@@ -7,7 +7,7 @@
   nav {
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items: stretch;
     height: 2rem;
     padding: 0.5rem;
     color: black;
@@ -15,7 +15,9 @@
   }
 
   a {
-    margin: 0.2rem;
+    display: flex;
+    align-items: center;
+    margin: 0 0.5rem;
 
     opacity: 0.2;
     cursor: pointer;
@@ -36,9 +38,7 @@
     }
 
     i {
-      font-size: 1.5rem;
-      width: 2rem;
-      height: 2rem;
+      font-size: 1.2rem;
       display: flex;
       justify-content: center;
       align-items: center;
