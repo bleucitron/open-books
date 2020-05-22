@@ -153,15 +153,32 @@
 
 <style lang="scss">
   header {
-    padding: 0.5rem;
-    padding-bottom: 0;
+    padding: 0 0.5rem;
+    height: 3rem;
+    box-sizing: border-box;
     background: #151515;
     color: white;
 
     position: relative;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
+
+    .left {
+      display: flex;
+    }
+
+    .info {
+      flex: 1 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .home {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
 
     .labels {
       display: flex;
@@ -180,10 +197,8 @@
 
     .departement {
       display: flex;
-
-      .hyphen {
-        margin: 0 0.5rem;
-      }
+      align-items: flex-end;
+      opacity: 0.3;
     }
   }
 
@@ -209,16 +224,14 @@
     background: #333;
   }
 
-  .back {
-    font-size: 1.4rem;
-    width: 1.4rem;
-    margin-left: 0.5rem;
-    margin-right: 1rem;
-
-    opacity: 0.1;
+  .home {
+    font-size: 1.5rem;
+    margin-right: 1.5rem;
+    color: #444;
+    transition: color 0.3s ease-in-out;
 
     &:hover {
-      opacity: 0.8;
+      color: coral;
     }
   }
 </style>
@@ -234,26 +247,28 @@
 </svelte:head>
 
 <header>
-  <div class="labels">
-    <a class="back" href="/">
-      <i class="fas fa-arrow-left" />
-    </a>
-    <h1>{name}</h1>
-    {#if label}
-      <h2>{label}</h2>
-    {/if}
-  </div>
+  <a class="home" href="/">
+    <i class="fas fa-book-open" />
+  </a>
+  <div class="info">
 
-  <div class="departement">
-    {#await cityP}
-      <Spinner />
-    {:then city}
-      <div class="code">{city.departement.code}</div>
-      <div class="hyphen">-</div>
-      <div class="name">{city.departement.nom}</div>
-    {:catch error}
-      <div style="color: red">{error}</div>
-    {/await}
+    <div class="labels">
+      <h1>{name}</h1>
+      {#if label}
+        <h2>{label}</h2>
+      {/if}
+    </div>
+
+    <div class="departement">
+      {#await cityP}
+        <Spinner />
+      {:then city}
+        <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+      {:catch error}
+        <div style="color: red">{error}</div>
+      {/await}
+
+    </div>
   </div>
 </header>
 
