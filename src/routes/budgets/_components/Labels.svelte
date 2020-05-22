@@ -39,6 +39,7 @@
     > div {
       opacity: 0.2;
       cursor: pointer;
+      transition: color 1s ease-in-out;
 
       &:hover {
         opacity: 0.7;
@@ -55,6 +56,7 @@
 
     &.selected > div {
       opacity: 1;
+      color: coral;
 
       .info {
         opacity: 0.4;
