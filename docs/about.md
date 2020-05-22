@@ -2,7 +2,13 @@
 
 Livres ouverts est un **moteur de recherche** permettant de parcourir **les budgets des différentes communes françaises**.
 
-## À quoi ça sert ?
+## C'est payant ?
+
+**Non.**
+
+Ce projet est porté par un individu avec une ambition citoyenne. Il ne sera **jamais payant**.
+
+## Pourquoi ce projet ?
 
 Depuis plusieurs années, le gouvernement français a une politique promouvant l'ouverture des données publiques.
 
@@ -10,7 +16,7 @@ Néanmoins, malgré la disponibilité de nombreuses données, notamment [sur le 
 
 Les données budgétaires des établissements publics ne font pas exception.
 
-Livres ouverts a pour ambition d'offrir une interface simple permettant d'accéder aux différents budgets des communes françaises.
+Livres ouverts a pour ambition d'**offrir une interface simple permettant à tout le monde d'accéder aux différents budgets des communes françaises**.
 
 ## Qui est concerné.e ?
 
@@ -46,11 +52,11 @@ Il est probable que certaines communes n'aient pas fourni au Ministère leurs do
 
 Celles-ci ne seront donc pas référencées ici.
 
-Néanmoins, il est prévu d'intégrer les données définies par le Ministère comme "_Balances comptable des communes_", qui devraient rendre accessibles plus de communes.
+Néanmoins, **il est prévu d'intégrer les données définies par le Ministère comme "_Balances comptable des communes_", qui devraient rendre accessibles plus de communes.**
 
 ## J'en veux plus !
 
-Actuellement, Livres ouverts ne propose que la navigation par Siret et par année.
+Actuellement, Livres ouverts ne propose que la navigation par Siret et par année, .
 
 Bien que présents dans les CSV à télécharger, aucun détail n'est accessible via l'interface.
 
@@ -70,4 +76,4 @@ Livres ouverts un projet **open-source**, auquel [vous pouvez contribuer](https:
 
 ## Qui puis-je contacter ?
 
-Pour toute question, n'hésitez pas à contacter le mainteneur du projet [sur Twitter](https://twitter.com/r_ourson).
+Pour toute question, **n'hésitez pas** à contacter le mainteneur du projet [sur Twitter](https://twitter.com/r_ourson).

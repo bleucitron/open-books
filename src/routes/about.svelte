@@ -37,7 +37,18 @@
     <strong>les budgets des différentes communes françaises</strong>
     .
   </p>
-  <h2 id="-quoi-a-sert-">À quoi ça sert ?</h2>
+  <h2 id="c-est-payant">C'est payant ?</h2>
+  <p>
+    <strong>Non</strong>
+    .
+  </p>
+
+  <p>
+    Ce projet est porté par un individu avec une ambition citoyenne. Il ne sera
+    <strong>jamais payant</strong>
+    .
+  </p>
+  <h2 id="-quoi-a-sert-">Pourquoi ce projet ?</h2>
   <p>
     Depuis plusieurs années, le gouvernement français a une politique promouvant
     l'ouverture des données publiques.
@@ -52,8 +63,11 @@
     Les données budgétaires des établissements publics ne font pas exception.
   </p>
   <p>
-    Livres ouverts a pour ambition d'offrir une interface simple permettant
-    d'accéder aux différents budgets des communes françaises.
+    Livres ouverts a pour ambition d'
+    <strong>
+      offrir une interface simple permettant à tout le monde d'accéder aux
+      différents budgets des communes françaises.
+    </strong>
   </p>
   <h2 id="qui-est-concern-">Qui est concerné.e ?</h2>
   <p>
@@ -133,19 +147,21 @@
   </p>
   <p>Celles-ci ne seront donc pas référencées ici.</p>
   <p>
-    Néanmoins, il est prévu d'intégrer les données définies par le Ministère
-    comme &quot;
-    <em>Balances comptable des communes</em>
-    &quot;, qui devraient rendre accessibles plus de communes.
+    Néanmoins,
+    <strong>
+      il est prévu d'intégrer les données définies par le Ministère comme &quot;
+      <em>Balances comptable des communes</em>
+      &quot;, qui devraient rendre accessibles plus de communes.
+    </strong>
   </p>
   <h2 id="j-en-veux-plus-">J'en veux plus !</h2>
   <p>
     Actuellement, Livres ouverts ne propose que la navigation par Siret et par
-    année.
+    année, ainsi que des fichiers CSV à télécharger.
   </p>
   <p>
-    Bien que présents dans les CSV à télécharger, aucun détail n'est accessible
-    via l'interface.
+    Bien que présents dans les CSV, aucun détail n'est accessible via
+    l'interface.
   </p>
   <p>
     Dans une version future,
@@ -178,7 +194,9 @@
   </p>
   <h2 id="qui-puis-je-contacter-">Qui puis-je contacter ?</h2>
   <p>
-    Pour toute question, n'hésitez pas à contacter le mainteneur du projet
+    Pour toute question,
+    <strong>n'hésitez pas</strong>
+    à contacter le mainteneur du projet
     <a href="https://twitter.com/r_ourson">sur Twitter</a>
     .
   </p>
