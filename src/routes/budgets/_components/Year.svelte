@@ -30,7 +30,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .Year {
     flex: 1 0;
     width: 5rem;
@@ -39,7 +39,6 @@
     justify-content: flex-end;
     align-items: stretch;
     margin: 0 0.5rem;
-    opacity: 0.6;
     font-size: 0.8rem;
     color: white;
   }
@@ -53,7 +52,7 @@
     align-items: center;
     background: #666;
     border-radius: 8px;
-    transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out, background 0.3s ease-in-out;
   }
 
   .Year.ready {
@@ -61,15 +60,18 @@
   }
 
   .Year.ready:hover {
-    opacity: 0.8;
+    .value {
+      background: cornflowerblue;
+    }
   }
 
   .Year.selected {
-    opacity: 1;
+    .value {
+      background: coral;
+    }
   }
 
   .Year.selected:hover {
-    opacity: 1;
   }
 
   .Year:first-child {

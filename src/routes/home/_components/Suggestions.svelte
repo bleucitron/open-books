@@ -15,7 +15,7 @@
   }
 
   a:hover {
-    background: #333;
+    background: coral;
     color: white;
     cursor: pointer;
   }
