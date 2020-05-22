@@ -53,7 +53,7 @@
   export let name;
 
   let budgetById = {};
-  let labels;
+  let label;
 
   function selectSiret(s) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
@@ -66,6 +66,12 @@
 
   function selectYear(y) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
+  }
+
+  function findSimilarBudget(siret) {
+    return Object.values(budgetById).find(
+      budget => budget && budget.siret === siret,
+    );
   }
 
   const cityP = $city
@@ -132,7 +138,7 @@
     const id = makeId(s, year);
     const budget = budgetById[id];
 
-    return budget || Object.values(budgetById).find(b => b && b.siret === s);
+    return budget || findSimilarBudget(s);
   });
 
   $: valuePs = budgetPs.map(budgetP =>
@@ -141,7 +147,13 @@
 
   $: id = makeId(siret, year);
   $: budget = budgetById[id];
-  $: label = budget && budget.label;
+  $: {
+    if (budget) label = budget.label;
+    else {
+      const similarBudget = findSimilarBudget(siret);
+      if (similarBudget) label = similarBudget.label;
+    }
+  }
 </script>
 
 <style lang="scss">
