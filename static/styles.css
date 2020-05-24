@@ -17,6 +17,10 @@ a {
   color: coral;
 }
 
+.md a:hover {
+  text-decoration: underline;
+}
+
 .md h2 {
   text-align: center;
   margin-top: 2rem;
@@ -25,4 +29,9 @@ a {
 .md ul {
   padding-left: 2rem;
   list-style: initial;
+}
+
+.md blockquote {
+  border-left: 3px solid #ccc;
+  padding-left: 0.5rem;
 }
