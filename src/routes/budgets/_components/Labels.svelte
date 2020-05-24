@@ -56,7 +56,7 @@
 
     &.selected > div {
       opacity: 1;
-      color: coral;
+      color: cornflowerblue;
 
       .info {
         opacity: 0.4;
