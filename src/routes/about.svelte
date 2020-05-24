@@ -12,6 +12,12 @@
     flex: 1 0;
     overflow-y: scroll;
   }
+
+  @media (max-width: 480px) {
+    main {
+      padding: 2rem;
+    }
+  }
 </style>
 
 <svelte:head>
