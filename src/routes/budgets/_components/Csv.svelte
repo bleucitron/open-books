@@ -28,14 +28,14 @@
     cursor: pointer;
 
     i {
-      opacity: 0.2;
+      color: #ddd;
     }
 
     &:hover {
-      background: #eee;
+      background: coral;
       i {
-        background: white;
-        opacity: 1;
+        background: coral;
+        color: white;
       }
     }
   }
