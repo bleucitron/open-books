@@ -40,8 +40,7 @@
   main {
     flex: 1 0;
     display: flex;
-    align-items: center;
-    padding-bottom: 40%;
+    padding-top: 10%;
   }
 </style>
 
