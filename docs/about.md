@@ -22,19 +22,20 @@ Livres ouverts a pour ambition d'**offrir une interface simple permettant à tou
 
 **Tout le monde.**
 
-Les budget des collectivités locales, financés par les impôts locaux de tout un chacun.e, permettent de financer les salaires des fonctionnaires locaux, de construires des écoles, des hôpitaux, de financer des projets d'intérêt public...
+Les budgets des collectivités locales sont financés par les impôts locaux de tout un chacun.e.
+Ils permettent de payer les salaires des fonctionnaires locaux, de construire des écoles, des hôpitaux, de financer des projets d'intérêt public...
 
-Ils concernent donc tout le monde.
+Ils concernent donc tout le monde, et chacun.e est invité.e à parcourir le budget de sa commune avec cet outil.
 
-**Ce projet s'adresse plus particulièrement aux personnes dont l'expertise peut permettre une analyse pertinente de ce type de données: journalistes, économistes, ou autres.**
+Toutefois, **ce projet s'adresse plus particulièrement aux personnes dont l'expertise peut permettre une analyse pertinente de ce type de données**: journalistes, économistes, ou autres.
 
 ## Qu'est-ce que vous ne trouverez pas ici ?
 
 Livres ouverts ne fournit **aucune analyse** des données budgétaires qu'il présente.
 
-Son rôle n'est pas de critiquer ou d'encenser une politique budgétaire, mais de rendre disponible des données au plus grand nombre, afin que d'autres puissent s'en saisir et les analyser.
+Son rôle n'est pas de critiquer ou d'encenser une politique budgétaire, mais de rendre disponible des données au plus grand nombre, afin que certain.e.s puissent s'en saisir et les analyser.
 
-De plus, **aucune manipulation n'est effectuée sur les données**. D'éventuelles simplifications de labels peuvent être effectuées au niveau de l'interface dans un souci de concision, mais les fichiers CSVs que vous pouvez télécharger sont tels qu'ils sont fournis par le Ministère de l'Économie et des Finances.
+De plus, **aucune manipulation n'est effectuée sur les données**. D'éventuelles simplifications de labels peuvent être effectuées au niveau de l'interface dans un souci de concision, mais les fichiers CSV que vous pouvez télécharger sont tels qu'ils sont fournis par le Ministère de l'Économie et des Finances.
 
 ## D'où viennent les données ?
 
@@ -64,23 +65,25 @@ D'autres données concernant les données des communes sont fournies par le Mini
 
 Actuellement, Livres ouverts ne propose que la navigation par Siret et par année.
 
-Bien que présents dans les CSV à télécharger, aucun détail n'est accessible via l'interface.
+Bien que présents dans les fichiers CSV à télécharger, aucun détail n'est accessible via l'interface.
 
 Dans une version future, **il est prévu d'intégrer une navigation croisée nature/fonction** similaire à [celle proposée par le Département de la Gironde pour son budget 2018](https://www.gironde.fr/un-budget-au-service-des-solidarites-humaine-et-territoriale#!/explorer).
 
 Une telle navigation permettra d'explorer chaque budget plus en détail.
 
-De plus, il est envisagé d'intégrer les données d'autres types de collectivités locales: régions, départements, ...
+De plus, **il est envisagé d'intégrer les données d'autres types de collectivités locales**: régions, départements, ...
 
 ## Ça ne marche pas 🤬!
 
 Livres ouverts est **en phase active de développement**, et est certainement sujet à différents bugs. Ceux-ci seront corrigés au fur et à mesure.
 
-**Si vous trouvez un bug, n'hésitez pas à le remonter.**
+**Si vous trouvez un bug, [n'hésitez pas à le remonter](https://twitter.com/r_ourson).**
 
 ## Comment puis-je aider ?
 
-Livres ouverts un projet **open-source**, auquel [vous pouvez contribuer](https://github.com/iOiurson/open-books).
+Livres ouverts un projet **open-source**, auquel tout le monde peut contribuer.
+
+Vous pouvez contribuer [ici](https://github.com/iOiurson/open-books), mais il est nécessaire d'être à l'aise avec [Github](https://github.com/).
 
 ## Qui puis-je contacter ?
 
