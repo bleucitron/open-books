@@ -52,7 +52,7 @@
     align-items: center;
     background: #666;
     border-radius: 8px;
-    transition: height 0.5s ease-in-out, background 0.3s ease-in-out;
+    transition: height 0.5s ease-in-out;
   }
 
   .Year.ready {
@@ -61,13 +61,13 @@
 
   .Year.ready:hover {
     .value {
-      background: cornflowerblue;
+      background: coral;
     }
   }
 
   .Year.selected {
     .value {
-      background: coral;
+      background: cornflowerblue;
     }
   }
 
