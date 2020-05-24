@@ -5,7 +5,7 @@
   export let clear;
   export let selected;
 
-  let value = 'Annecy';
+  let value = '';
   let focus = false;
 
   $: if (selected) {
@@ -84,7 +84,7 @@
     border-bottom: 1px solid transparent;
 
     &::placeholder {
-      color: #bbb;
+      color: #777;
     }
   }
 
@@ -103,7 +103,7 @@
       on:input={handleInput}
       on:focus={() => setFocus(true)}
       on:blur={() => setFocus(false)}
-      placeholder="Entrez une ville" />
+      placeholder="Entrez le nom d'une commune" />
     {#if value}
       <i class="fas fa-times" on:click={reset} />
     {/if}
