@@ -37,31 +37,11 @@
 </script>
 
 <style lang="scss">
-  header {
-    h1 {
-      margin: 2rem auto 1rem;
-      font-size: 2.8em;
-      text-transform: uppercase;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    p {
-      text-align: center;
-    }
-  }
-
   main {
     flex: 1 0;
     display: flex;
     align-items: center;
     padding-bottom: 40%;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 2em;
-    }
   }
 </style>
 
