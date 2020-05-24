@@ -12,3 +12,17 @@ ul {
 a {
   text-decoration: none;
 }
+
+.md a {
+  color: coral;
+}
+
+.md h2 {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.md ul {
+  padding-left: 2rem;
+  list-style: initial;
+}
