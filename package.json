@@ -1,7 +1,7 @@
 {
   "name": "open-books",
   "description": "Search engine for french city budgets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
