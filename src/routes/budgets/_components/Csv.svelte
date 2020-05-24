@@ -5,7 +5,7 @@
 
   // console.log('DATA', data);
 
-  const csvP = makeCSV(data);
+  $: csvP = makeCSV(data);
 </script>
 
 <style lang="scss">
