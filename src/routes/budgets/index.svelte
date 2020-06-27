@@ -11,10 +11,10 @@
   export async function preload(page, session) {
     let { name, insee, siret, year } = page.query;
 
-    const siretsFromCode = await getSiretsFromInsee(name, insee);
+    const siretsFromInsee = await getSiretsFromInsee(name, insee);
 
-    const sirens = extractSirens(siretsFromCode);
-    const sirets = siretsFromCode
+    const sirens = extractSirens(siretsFromInsee);
+    const sirets = siretsFromInsee
       .filter(e => e.etablissementSiege)
       .map(e => e.siret)
       .sort();
