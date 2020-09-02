@@ -1,6 +1,6 @@
 const fields = ['code', 'nom', 'departement', 'region', 'population'];
 
-export function makeGetCitiesEndpoint(text) {
+export function makeGetCitiesEndpoint(text: string): string {
   const base = '/communes';
 
   const name = `nom="${text}"`;
@@ -12,7 +12,7 @@ export function makeGetCitiesEndpoint(text) {
   return `${base}?${allParams}`;
 }
 
-export function makeGetCityEndpoint(code) {
+export function makeGetCityEndpoint(code: string): string {
   const base = '/communes';
 
   const fieldsString = `fields=${fields.join(',')}`;

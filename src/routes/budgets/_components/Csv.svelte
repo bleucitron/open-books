@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { makeCSV } from '../../../utils';
 
-  export let data;
+  import type { Budget } from '../../../interfaces';
 
-  // console.log('DATA', data);
+  export let data: Budget;
 
   $: csvP = makeCSV(data);
 </script>

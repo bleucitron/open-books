@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
   import classnames from 'classnames';
-  export let path;
+  export let path: string;
 </script>
 
 <style lang="scss">

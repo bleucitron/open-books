@@ -1,9 +1,11 @@
-<script>
-  export let suggestions = [];
-  export let select;
+<script lang="ts">
+  import type { City } from '../../../interfaces';
+
+  export let suggestions: City[] = [];
+  export let select: (c: City) => void;
 </script>
 
-<style>
+<style lang="scss">
   ul {
     margin: 0;
   }

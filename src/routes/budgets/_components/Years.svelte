@@ -1,17 +1,17 @@
-<script>
+<script lang="ts">
   import Year from './Year.svelte';
 
-  export let valuePs;
-  export let years;
-  export let select;
-  export let selected;
+  export let valuePs: Promise<number>[];
+  export let years: number[];
+  export let select: (y: number) => void;
+  export let selected: number;
 
   $: maxP = Promise.all(valuePs).then(values => {
     return Math.max(...values.filter(value => value));
   });
 </script>
 
-<style>
+<style lang="scss">
   .Years {
     display: flex;
     justify-content: space-between;

@@ -2,10 +2,12 @@
   import classnames from 'classnames';
   import Spinner from '../../_components/Spinner.svelte';
 
-  export let labels;
-  export let select;
-  export let selected;
-  export let loadingP;
+  import type { Budget } from '../../../interfaces';
+
+  export let labels: Budget[];
+  export let select: (y: string) => void;
+  export let selected: string;
+  export let loadingP: Promise<any>;
 
   const defaultLabel = 'commune';
 
@@ -93,7 +95,7 @@
   {#each sirens as siren}
     <li class="siren">
       <ul>
-        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label, main }, i}
+        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
           <li
             class={classnames({
               siret: true,

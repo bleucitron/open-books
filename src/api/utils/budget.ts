@@ -1,3 +1,5 @@
+import type { BudgetParams } from '../../interfaces';
+
 const nbResults = 10000;
 
 const byYear = {
@@ -12,8 +14,9 @@ const byYear = {
 
 const base = '/api/records/1.0/search';
 
-function buildParamString(paramByKey) {
+function buildParamString(paramByKey: BudgetParams): string {
   return Object.entries(paramByKey)
+    .filter(([key, _]) => key !== 'year')
     .map(([key, value]) => {
       const valueString = Array.isArray(value) ? value.join(' OR ') : value;
 
@@ -22,11 +25,12 @@ function buildParamString(paramByKey) {
     .join('&');
 }
 
-export function makeBudgetSimpleEndpoint({ year, ...rest }) {
+export function makeBudgetSimpleEndpoint(params: BudgetParams): string {
+  const { year } = params;
   const dataset = `dataset=balances-comptables-des-communes-en-${year}`;
 
-  const params = buildParamString(rest);
-  const query = `q=${params}`;
+  const paramString = buildParamString(params);
+  const query = `q=${paramString}`;
 
   const rows = `rows=${nbResults}`;
 
@@ -35,11 +39,12 @@ export function makeBudgetSimpleEndpoint({ year, ...rest }) {
   return `${base}?${allParams}`;
 }
 
-export function makeBudgetCroiseEndpoint({ year, ...rest }) {
+export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
+  const { year } = params;
   const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${byYear[year]}`;
 
-  const params = buildParamString(rest);
-  const query = `q=${params}`;
+  const paramString = buildParamString(params);
+  const query = `q=${paramString}`;
 
   const rows = `rows=${nbResults}`;
 

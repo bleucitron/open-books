@@ -3,6 +3,7 @@ import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
 import babel from '@rollup/plugin-babel';
+import json from '@rollup/plugin-json';
 import md from 'rollup-plugin-md';
 // import typescript from '@rollup/plugin-typescript';
 import typescript from 'rollup-plugin-typescript2';
@@ -16,6 +17,7 @@ const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>
+  warning.code === 'THIS_IS_UNDEFINED' ||
   (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
   (warning.code === 'CIRCULAR_DEPENDENCY' &&
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
@@ -53,6 +55,7 @@ export default {
       }),
       commonjs(),
       md(),
+      json(),
 
       legacy &&
         babel({
@@ -102,7 +105,7 @@ export default {
         hydratable: true,
         dev,
       }),
-      // typescript({ sourceMap: dev }),
+      typescript({ sourceMap: dev }),
       resolve({
         dedupe: ['svelte'],
         extensions: ['.ts', '.js', '.mjs'],

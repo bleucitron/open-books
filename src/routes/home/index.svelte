@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import city from '../../stores/city';
 
   import { getCities } from '../../api';
@@ -7,26 +7,28 @@
   import Search from './_components/Search.svelte';
   import Suggestions from './_components/Suggestions.svelte';
 
-  let citiesP;
-  let previousCities;
+  import type { City } from '../../interfaces';
 
-  function search(text) {
+  let citiesP: Promise<City[]> | undefined;
+  let previousCities: City[];
+
+  function search(text: string): void {
     console.log('TEXT', text);
     citiesP = fetchCities(text);
   }
 
-  function clear() {
-    citiesP = null;
+  function clear(): void {
+    citiesP = undefined;
   }
 
-  function select(selectedCity) {
+  function select(selectedCity: City): void {
     const { nom, code } = selectedCity;
     clear();
 
     city.set(selectedCity);
   }
 
-  function fetchCities(text) {
+  function fetchCities(text: string): Promise<City[]> {
     return getCities(text).then(cities => {
       console.log('Villes', cities);
       const currentCities = cities.slice(0, 5);

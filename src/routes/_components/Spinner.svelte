@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import Spinner from 'svelte-spinner';
 
   export let color = 'white';
   export let size = '1.5rem';
 </script>
 
-<style>
+<style lang="scss">
   .Spinner {
     display: flex;
     justify-content: center;

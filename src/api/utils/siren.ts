@@ -1,9 +1,17 @@
 import { normalizeText } from '../../utils';
 
-const nbResults = 1000;
-const category = 7210;
+import type { Etablissement } from '../../interfaces';
 
-function buildParamString(paramByKey) {
+const nbResults = 1000;
+const category = '7210';
+
+interface Params {
+  denominationUniteLegale: string;
+  codeCommuneEtablissement: number[];
+  categorieJuridiqueUniteLegale: string;
+}
+
+function buildParamString(paramByKey: Params): string {
   return Object.entries(paramByKey)
     .map(([key, value]) => {
       if (Array.isArray(value)) {
@@ -19,38 +27,40 @@ function buildParamString(paramByKey) {
 
 const codesByMain = {
   // Codes for Arrondissements
-  69123: {
+  '69123': {
     name: 'Lyon',
     nb: 9,
     base: 69380,
   },
-  75056: {
+  '75056': {
     name: 'Paris',
     nb: 20,
     base: 75100,
   },
-  13055: {
+  '13055': {
     name: 'Marseille',
     nb: 16,
     base: 13200,
   },
 };
 
-export function checkCodes(code) {
+export function checkCodes(code: string): number[] {
+  let output = [parseInt(code)];
+
   if (code in codesByMain) {
     const { nb, base } = codesByMain[code];
 
-    return [code, ...Array(nb).keys()].map(e => base + e + 1);
+    output = [...output, ...Array(nb).keys()].map(e => base + e + 1);
   }
 
-  return [code];
+  return output;
 }
 
-export function makeGetSiretEndpoint(siret) {
+export function makeGetSiretEndpoint(siret: string): string {
   return `/siret/${siret}`;
 }
 
-export function makeGetSiretsEndpoint(sirens) {
+export function makeGetSiretsEndpoint(sirens: string[]): string {
   const base = '/siret';
 
   const param = sirens.map(s => `siren:"${s}"`).join(' OR ');
@@ -63,7 +73,7 @@ export function makeGetSiretsEndpoint(sirens) {
   return `${base}?${allParams}`;
 }
 
-export function makeSearchSiretEndpoint(text, codes) {
+export function makeSearchSiretEndpoint(text: string, codes: number[]): string {
   const base = '/siret';
 
   const params = buildParamString({
@@ -80,6 +90,6 @@ export function makeSearchSiretEndpoint(text, codes) {
   return `${base}?${allParams}`;
 }
 
-export function extractSirens(etablissements) {
+export function extractSirens(etablissements: Etablissement[]): string[] {
   return [...new Set(etablissements.map(({ siren }) => siren))];
 }

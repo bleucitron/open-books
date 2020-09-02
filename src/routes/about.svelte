@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import marked from 'marked';
   import md from '../../docs/about.md';
 

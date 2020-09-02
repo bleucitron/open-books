@@ -1,6 +1,13 @@
-<script context="module">
+<script lang="ts" context="module">
   import { getSiretsFromInsee, getCity } from '../../api';
   import { extractSirens } from '../../api/utils/siren';
+
+  // interface Query {
+  //   name: string;
+  //   insee: string;
+  //   siret: string;
+  //   year: string;
+  // }
 
   const start = 2012;
   // const end = 2019;
@@ -8,8 +15,16 @@
   const defaultYear = end - 2;
   const years = [...Array(end - start).keys()].map(x => x + start);
 
-  export async function preload(page, session) {
-    let { name, insee, siret, year } = page.query;
+  interface BudgetPageProps {
+    sirens: string[];
+    siret: string;
+    year: number;
+    insee: string;
+    name: string;
+  }
+
+  export async function preload(page) {
+    let { name, insee, siret, year: y } = page.query;
 
     const siretsFromInsee = await getSiretsFromInsee(name, insee);
 
@@ -21,7 +36,7 @@
 
     siret = siret || sirets[0];
 
-    year = parseInt(year) || defaultYear;
+    const year = parseInt(y) || defaultYear;
 
     return {
       sirens,
@@ -33,7 +48,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { goto } from '@sapper/app';
 
   import city from '../../stores/city';
@@ -45,16 +60,18 @@
   import Nav from '../_components/Nav.svelte';
   import Spinner from '../_components/Spinner.svelte';
 
-  export let sirens;
-  export let siret;
-  export let year;
-  export let insee;
-  export let name;
+  import type { Budget, City, Record } from '../../interfaces';
+
+  export let sirens: string[];
+  export let siret: string;
+  export let year: number;
+  export let insee: string;
+  export let name: string;
 
   let budgetById = {};
   let label;
 
-  function selectSiret(s) {
+  function selectSiret(s: string) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
 
     budgetPs = years.map(y => {
@@ -63,27 +80,27 @@
     });
   }
 
-  function selectYear(y) {
+  function selectYear(y: number) {
     goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
   }
 
-  function findSimilarBudget(siret) {
+  function findSimilarBudget(siret: string) {
     return Object.values(budgetById).find(
-      budget => budget && budget.siret === siret,
+      (budget: Budget) => budget && budget.siret === siret,
     );
   }
 
   const cityP = $city
     ? Promise.resolve($city)
-    : getCity(insee).then(result => {
+    : getCity(insee).then((result: City) => {
         city.set(result);
         return result;
       });
 
-  let budgetPs = years.map(year =>
+  let budgetPs: Promise<Budget>[] = years.map(year =>
     getRecords({ ident: [siret], year })
       .catch(() => [])
-      .then(records => {
+      .then((records: Record[]) => {
         const b = makeBudget({ city: name, siret, year, records });
 
         const id = makeId(siret, year);
@@ -93,10 +110,10 @@
       }),
   );
 
-  const otherBudgetPs = [...years].reverse().map(year =>
+  const otherBudgetPs: Promise<void>[] = [...years].reverse().map(year =>
     getRecords({ siren: sirens, year })
       .catch(() => [])
-      .then(records => {
+      .then((records: Record[]) => {
         const data = orderRecordsBySiret(records).map(
           ({ siret: s, records }) => {
             const b = makeBudget({
@@ -129,7 +146,7 @@
     ...new Set(
       Object.values(budgetById)
         .filter(b => b)
-        .map(b => b.siret),
+        .map((b: Budget) => b.siret),
     ),
   ].sort();
 
@@ -236,7 +253,9 @@
   {#await cityP}
     <title>{`Budgets pour ${name}`}</title>
   {:then city}
-    <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
+    {#if city}
+      <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
+    {/if}
   {:catch error}
     <title>{`Budgets pour ${name}`}</title>
   {/await}
@@ -259,7 +278,9 @@
       {#await cityP}
         <Spinner />
       {:then city}
-        <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+        {#if city}
+          <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+        {/if}
       {:catch error}
         <div style="color: red">{error}</div>
       {/await}

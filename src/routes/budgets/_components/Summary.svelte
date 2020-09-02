@@ -1,14 +1,16 @@
-<script>
+<script lang="ts">
   import classnames from 'classnames';
   import { formatValue, makeCSV } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
 
-  export let budget;
-  export let year;
+  import type { Budget } from '../../../interfaces';
+
+  export let budget: Budget;
+  export let year: number;
 </script>
 
-<style>
+<style lang="scss">
   .Summary {
     flex: 1 0;
     display: flex;

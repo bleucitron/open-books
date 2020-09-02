@@ -1,28 +1,30 @@
 import { normalizeText } from '../../utils';
 
+import type { Budget, BudgetRaw, Record } from '../../interfaces';
+
 const DEFAULT_LABEL = 'commune';
 
-export function displayLabel(label) {
+export function displayLabel(label: string): string {
   if (!label) return '';
 
   return label === DEFAULT_LABEL ? '' : label;
 }
 
-export function makeId(siret, year) {
+export function makeId(siret: string, year: number): string {
   return `${siret}_${year}`;
 }
 
-function extractSiren(siret) {
+function extractSiren(siret: string): string {
   return siret.substring(0, 9);
 }
 
-function extractEtabl(siret) {
+function extractEtabl(siret: string): string {
   return siret.substring(9);
 }
 
 const toRemove = ['-', ' de'];
 
-function formatLabel(label, name) {
+function formatLabel(label: string, name: string): string {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
 
@@ -37,7 +39,12 @@ function formatLabel(label, name) {
   return formatted;
 }
 
-export function orderRecordsBySiret(records) {
+interface RecordsWithSiret {
+  siret: string;
+  records: Record[];
+}
+
+export function orderRecordsBySiret(records: Record[]): RecordsWithSiret[] {
   const sirets = [...new Set(records.map(({ ident }) => ident))];
 
   return sirets
@@ -48,15 +55,18 @@ export function orderRecordsBySiret(records) {
 
       return { siret, records: siretRecords };
     })
-    .sort((r1, r2) => r1.siret - r2.siret);
+    .sort(
+      (r1: RecordsWithSiret, r2: RecordsWithSiret) =>
+        parseInt(r1.siret) - parseInt(r2.siret),
+    );
 }
 
-export function makeBudget(data) {
+export function makeBudget(data: BudgetRaw): Budget {
   const { city, siret, year, records } = data;
 
   const length = records.length;
 
-  if (length === 0) return null;
+  // if (length === 0) return null;
 
   const siren = extractSiren(siret);
   const etabl = extractEtabl(siret);

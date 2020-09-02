@@ -1,8 +1,7 @@
-<script>
-  import { stores } from '@sapper/app';
+<script lang="ts">
   import Nav from './_components/Nav.svelte';
 
-  export let segment;
+  export let segment: string;
 </script>
 
 {#if segment !== 'budgets'}

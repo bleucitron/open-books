@@ -1,6 +1,8 @@
-import csvString from 'json2csv';
+import { json2csvAsync as toCSV } from 'json-2-csv';
 
-const fields = [
+import type { Budget, CSV } from '../interfaces';
+
+const keys = [
   'EXER',
   'IDENT',
   'NDEPT',
@@ -32,7 +34,7 @@ const fields = [
   'SC',
 ].map(t => t.toLowerCase());
 
-export async function makeCSV(data) {
+export async function makeCSV(data: Budget): Promise<CSV> {
   const { city, label, records } = data;
 
   const years = [...new Set(records.map(d => d.exer))];
@@ -48,9 +50,7 @@ export async function makeCSV(data) {
 
   file += '.csv';
 
-  const csv = await csvString
-    .parseAsync(records, { fields })
-    .catch(err => console.error(err));
+  const csv = await toCSV(records, { keys });
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
 
@@ -60,13 +60,14 @@ export async function makeCSV(data) {
   };
 }
 
-export function normalizeText(text) {
+export function normalizeText(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-export function formatValue(value) {
+export function formatValue(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
+    // @ts-ignore
     notation: 'compact',
     maximumSignificantDigits: 3,
     currency: 'EUR',

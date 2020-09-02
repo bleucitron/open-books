@@ -1,17 +1,16 @@
-<script>
+<script lang="ts">
   import classnames from 'classnames';
   import { formatValue } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
 
-  export let year;
-  export let pending = false;
-  export let value = undefined;
-  export let maxP;
-  export let select = undefined;
-  export let selected = false;
+  export let year: number;
+  export let pending: boolean = false;
+  export let value: number;
+  export let maxP: Promise<number>;
+  export let select: () => void;
+  export let selected: boolean = false;
 
-  let height;
-  let transitioned;
+  let height: string;
 
   const unavailable = !pending && !value;
   const ready = !pending && !unavailable;
@@ -26,7 +25,7 @@
   $: classes = classnames('Year', { pending, unavailable, ready, selected });
 
   function _select() {
-    if (ready && select) select();
+    if (ready) select?.();
   }
 </script>
 
@@ -71,8 +70,8 @@
     }
   }
 
-  .Year.selected:hover {
-  }
+  // .Year.selected:hover {
+  // }
 
   .Year:first-child {
     margin-left: 0;

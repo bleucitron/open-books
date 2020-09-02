@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
-  export let search;
-  export let clear;
-  export let selected;
+  import type { City } from '../../../interfaces';
+
+  export let search: (s: string) => void;
+  export let clear: () => void;
+  export let selected: City;
 
   let value = '';
   let focus = false;
@@ -16,17 +18,18 @@
     search(value);
   });
 
-  function reset() {
+  function reset(): void {
     value = '';
     clear();
   }
 
-  function setFocus(v) {
+  function setFocus(v: boolean): void {
     focus = v;
   }
 
-  function handleInput(e) {
-    const text = e.target.value;
+  function handleInput(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    const text = target.value;
     search(text);
     value = text;
   }
