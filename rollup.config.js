@@ -2,10 +2,12 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import md from 'rollup-plugin-md';
+// import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
-import sveltePreprocess from 'svelte-preprocess';
+import autoPreprocess from 'svelte-preprocess';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
@@ -14,26 +16,17 @@ const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>
+  (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
   (warning.code === 'CIRCULAR_DEPENDENCY' &&
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning);
 
-const preprocess = sveltePreprocess({
-  babel: {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          loose: true,
-          // No need for babel to resolve modules
-          modules: false,
-          targets: {
-            // ! Very important. Target es6+
-            esmodules: true,
-          },
-        },
-      ],
-    ],
+const preprocess = autoPreprocess({
+  scss: {
+    includePaths: ['src'],
+  },
+  postcss: {
+    plugins: [require('autoprefixer')],
   },
 });
 
@@ -52,8 +45,10 @@ export default {
         hydratable: true,
         emitCss: true,
       }),
+      typescript({ sourceMap: dev }),
       resolve({
         browser: true,
+        extensions: ['.ts', '.js', '.mjs'],
         dedupe: ['svelte'],
       }),
       commonjs(),
@@ -62,7 +57,7 @@ export default {
       legacy &&
         babel({
           extensions: ['.js', '.mjs', '.html', '.svelte'],
-          runtimeHelpers: true,
+          babelHelpers: 'runtime',
           exclude: ['node_modules/@babel/**'],
           presets: [
             [
@@ -89,12 +84,13 @@ export default {
         }),
     ],
 
+    preserveEntrySignatures: false,
     onwarn,
   },
 
   server: {
     input: config.server.input(),
-    output: config.server.output(),
+    output: { ...config.server.output(), exports: 'default' },
     plugins: [
       replace({
         'process.browser': false,
@@ -103,19 +99,22 @@ export default {
       svelte({
         preprocess,
         generate: 'ssr',
+        hydratable: true,
         dev,
       }),
+      // typescript({ sourceMap: dev }),
       resolve({
         dedupe: ['svelte'],
+        extensions: ['.ts', '.js', '.mjs'],
       }),
       commonjs(),
       md(),
     ],
     external: Object.keys(pkg.dependencies).concat(
-      require('module').builtinModules ||
-        Object.keys(process.binding('natives')),
+      require('module').builtinModules,
     ),
 
+    preserveEntrySignatures: 'strict',
     onwarn,
   },
 
@@ -132,6 +131,7 @@ export default {
       !dev && terser(),
     ],
 
+    preserveEntrySignatures: false,
     onwarn,
   },
 };

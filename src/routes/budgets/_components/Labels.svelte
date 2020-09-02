@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import classnames from 'classnames';
   import Spinner from '../../_components/Spinner.svelte';
 
@@ -89,8 +89,6 @@
     <div class="loading">
       <Spinner color={'#999'} />
     </div>
-  {:then}
-
   {/await}
   {#each sirens as siren}
     <li class="siren">

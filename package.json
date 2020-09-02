@@ -1,13 +1,12 @@
 {
   "name": "open-books",
-  "description": "Search engine for french city budgets",
-  "version": "0.1.1",
+  "description": "French cities budgets explorer",
+  "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
-    "release": "release-it",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "test": "run-p --race dev cy:run"
@@ -16,10 +15,11 @@
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "compression": "^1.7.1",
-    "json2csv": "^5.0.0",
-    "marked": "^1.1.0",
+    "json2csv": "^5.0.1",
+    "marked": "^1.1.1",
     "polka": "next",
-    "sirv": "^0.4.0"
+    "sirv": "^1.0.0",
+    "svelte-spinner": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -27,21 +27,25 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@rollup/plugin-commonjs": "^11.0.0",
-    "@rollup/plugin-node-resolve": "^7.0.0",
+    "@rollup/plugin-babel": "^5.0.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.2.0",
-    "esm": "^3.2.25",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "@tsconfig/svelte": "^1.0.8",
+    "autoprefixer": "^9.8.6",
     "node-sass": "^4.14.1",
     "npm-run-all": "^4.1.5",
     "release-it": "^13.6.6",
-    "rollup": "^1.20.0",
-    "rollup-plugin-babel": "^4.0.2",
+    "rollup": "^2.3.4",
     "rollup-plugin-md": "0.0.7",
     "rollup-plugin-svelte": "^5.0.1",
-    "rollup-plugin-terser": "^5.2.0",
-    "sapper": "^0.27.11",
-    "svelte": "^3.20.1",
-    "svelte-preprocess": "^3.5.0",
-    "svelte-spinner": "^2.0.2"
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "sapper": "^0.28.0",
+    "svelte": "^3.17.3",
+    "svelte-check": "^1.0.11",
+    "svelte-preprocess": "^4.0.10",
+    "typescript": "^3.9.7"
   }
 }

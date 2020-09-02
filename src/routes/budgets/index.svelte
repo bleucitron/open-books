@@ -164,10 +164,6 @@
     align-items: center;
     justify-content: space-between;
 
-    .left {
-      display: flex;
-    }
-
     .info {
       flex: 1 0;
       display: flex;
