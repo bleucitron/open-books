@@ -1,4 +1,5 @@
-npm: false
+npm:
+  publish: false
 changelog: false
 git:
-  commitMessage: "chore: release ${version}"
+  commitMessage: 'chore: release ${version}'
