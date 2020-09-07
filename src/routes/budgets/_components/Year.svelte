@@ -5,20 +5,20 @@
 
   export let year: number;
   export let pending: boolean = false;
-  export let value: number;
+  export let value: number | null = null;
   export let maxP: Promise<number>;
-  export let select: () => void;
+  export let select: (() => void) | null = null;
   export let selected: boolean = false;
 
   let height: string;
 
   const unavailable = !pending && !value;
-  const ready = !pending && !unavailable;
+  const ready = !!value;
 
   if (maxP)
     maxP.then(max => {
-      if (!pending) {
-        setTimeout(() => (height = (value / max) * 100 + '%'), 50);
+      if (!unavailable) {
+        setTimeout(() => (height = (value! / max) * 100 + '%'), 50);
       }
     });
 
@@ -130,7 +130,7 @@
       <Spinner size="1.5" />
     {:else if unavailable}
       <i class="fas fa-times" />
-    {:else if ready}
+    {:else if value}
       <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
     {/if}
   </div>

@@ -97,7 +97,7 @@
         return result;
       });
 
-  let budgetPs: Promise<Budget>[] = years.map(year =>
+  let budgetPs: Promise<Budget | null>[] = years.map(year =>
     getRecords({ ident: [siret], year })
       .catch(() => [])
       .then((records: Record[]) => {
@@ -161,11 +161,12 @@
     budgetP.then(budget => budget && budget.credit),
   );
 
+  $: index = years.findIndex(y => y === year);
+  $: budgetP = budgetPs[index];
+
   $: id = makeId(siret, year);
-  $: budget = budgetById[id];
-  $: similar = findSimilarBudget(siret);
-  $: safeBudget = budget || similar;
-  $: label = safeBudget ? safeBudget.label : '';
+  $: budget = budgetById[id] || findSimilarBudget(siret);
+  $: label = budget?.label;
 </script>
 
 <style lang="scss">
@@ -295,6 +296,6 @@
   </menu>
   <div class="dataviz">
     <Years {years} {valuePs} selected={year} select={selectYear} />
-    <Summary {year} {budget} />
+    <Summary {year} {budgetP} />
   </div>
 </div>
