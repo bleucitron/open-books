@@ -127,7 +127,7 @@
 <li class={classes} on:click={_select}>
   <div class="info">
     {#if pending}
-      <Spinner />
+      <Spinner size="1.5" />
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if ready}
