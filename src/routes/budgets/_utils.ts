@@ -61,12 +61,12 @@ export function orderRecordsBySiret(records: Record[]): RecordsWithSiret[] {
     );
 }
 
-export function makeBudget(data: BudgetRaw): Budget {
+export function makeBudget(data: BudgetRaw): Budget | null {
   const { city, siret, year, records } = data;
 
   const length = records.length;
 
-  // if (length === 0) return null;
+  if (length === 0) return null;
 
   const siren = extractSiren(siret);
   const etabl = extractEtabl(siret);

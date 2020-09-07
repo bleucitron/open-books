@@ -6,7 +6,7 @@
 
   import type { Budget } from '../../../interfaces';
 
-  export let budget: Budget;
+  export let budgetP: Promise<Budget | null>;
   export let year: number;
 </script>
 
@@ -57,24 +57,28 @@
 <div class="Summary">
   <h3>
     {year}
-    {#if budget}
-      <Csv data={budget} />
-    {/if}
+    {#await budgetP then budget}
+      {#if budget}
+        <Csv data={budget} />
+      {/if}
+    {/await}
   </h3>
-  {#if budget === undefined}
+  {#await budgetP}
     <Spinner color={'#333'} size={'3'} />
-  {:else if budget === null}
-    <div class="values none">Aucun budget</div>
-  {:else}
-    <div class="values">
-      <div class="value credit">
-        <h4>Recettes</h4>
-        {formatValue(budget.credit)}
+  {:then budget}
+    {#if !budget}
+      <div class="values none">Aucun budget</div>
+    {:else}
+      <div class="values">
+        <div class="value credit">
+          <h4>Recettes</h4>
+          {formatValue(budget.credit)}
+        </div>
+        <div class="value debit">
+          <h4>Dépenses</h4>
+          {formatValue(budget.debit)}
+        </div>
       </div>
-      <div class="value debit">
-        <h4>Dépenses</h4>
-        {formatValue(budget.debit)}
-      </div>
-    </div>
-  {/if}
+    {/if}
+  {/await}
 </div>

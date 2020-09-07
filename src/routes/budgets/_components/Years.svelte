@@ -1,13 +1,17 @@
 <script lang="ts">
   import Year from './Year.svelte';
 
-  export let valuePs: Promise<number>[];
+  import { isNumber as isNotNull } from '../../../utils';
+
+  export let valuePs: Promise<number | null>[];
   export let years: number[];
   export let select: (y: number) => void;
   export let selected: number;
 
   $: maxP = Promise.all(valuePs).then(values => {
-    return Math.max(...values.filter(value => value));
+    const v = values.filter(isNotNull);
+
+    return Math.max(...v);
   });
 </script>
 
