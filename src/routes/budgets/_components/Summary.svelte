@@ -62,7 +62,7 @@
     {/if}
   </h3>
   {#if budget === undefined}
-    <Spinner color={'#333'} size={'3rem'} />
+    <Spinner color={'#333'} size={'3'} />
   {:else if budget === null}
     <div class="values none">Aucun budget</div>
   {:else}

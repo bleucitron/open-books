@@ -1,8 +1,9 @@
 <script lang="ts">
-  import Spinner from 'svelte-spinner';
+  import { Circle } from 'svelte-loading-spinners';
 
   export let color = 'white';
-  export let size = '1.5rem';
+  export let size = '1';
+  export let unit = 'rem';
 </script>
 
 <style lang="scss">
@@ -10,11 +11,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 50%;
     flex: 1 0;
   }
 </style>
 
 <div class="Spinner">
-  <Spinner {color} {size} />
+  <Circle {color} {size} {unit} />
 </div>
