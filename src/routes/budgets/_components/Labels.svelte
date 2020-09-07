@@ -41,7 +41,6 @@
     > div {
       opacity: 0.2;
       cursor: pointer;
-      transition: color 0.2s ease-in-out;
 
       &:hover {
         opacity: 0.7;
