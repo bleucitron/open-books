@@ -44,8 +44,8 @@
 
     return {
       sirens,
-      siret,
-      year,
+      currentSiret: siret,
+      currentYear: year,
       insee,
       name,
     };
@@ -72,8 +72,8 @@
   import type { Budget, BudgetMap, City, Record } from '../../interfaces';
 
   export let sirens: string[];
-  export let siret: string;
-  export let year: number;
+  export let currentSiret: string;
+  export let currentYear: number;
   export let insee: string;
   export let name: string;
 
@@ -85,7 +85,7 @@
       insee,
       siret: s,
       sirens,
-      year,
+      year: currentYear,
     });
 
     goto(url);
@@ -100,7 +100,7 @@
     const url = makeBudgetUrl({
       name,
       insee,
-      siret,
+      siret: currentSiret,
       sirens,
       year: y,
     });
@@ -128,12 +128,17 @@
       });
 
   let budgetPs: Promise<Budget | null>[] = years.map(year =>
-    getRecords({ ident: [siret], year })
+    getRecords({ ident: [currentSiret], year })
       .catch(() => [])
       .then((records: Record[]) => {
-        const b = makeBudget({ city: name, siret, year, records });
+        const b = makeBudget({
+          city: name,
+          siret: currentSiret,
+          year,
+          records,
+        });
 
-        const id = makeId(siret, year);
+        const id = makeId(currentSiret, year);
         budgetById[id] = b;
 
         return b;
@@ -144,19 +149,17 @@
     getRecords({ siren: sirens, year })
       .catch(() => [])
       .then((records: Record[]) => {
-        const data = orderRecordsBySiret(records).map(
-          ({ siret: s, records }) => {
-            const b = makeBudget({
-              city: name,
-              siret: s,
-              year,
-              records,
-            });
+        const data = orderRecordsBySiret(records).map(({ siret, records }) => {
+          const b = makeBudget({
+            city: name,
+            siret,
+            year,
+            records,
+          });
 
-            const id = makeId(s, year);
-            if (s !== siret) budgetById[id] = b;
-          },
-        );
+          const id = makeId(siret, year);
+          if (siret !== currentSiret) budgetById[id] = b;
+        });
       }),
   );
 
@@ -170,7 +173,7 @@
     }),
   );
 
-  $: yearIndex = years.findIndex(y => y === year);
+  $: yearIndex = years.findIndex(y => y === currentYear);
 
   $: sirets = [
     ...new Set(
@@ -182,7 +185,7 @@
 
   $: labels = sirets
     .map(s => {
-      const id = makeId(s, year);
+      const id = makeId(s, currentYear);
       const budget = budgetById[id];
 
       return budget || findSimilarBudget(s);
@@ -193,10 +196,10 @@
     budgetP.then(budget => budget && budget.credit),
   );
 
-  $: index = years.findIndex(y => y === year);
+  $: index = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[index];
 
-  $: label = findSimilarLabel(siret, year);
+  $: label = findSimilarLabel(currentSiret, currentYear);
 </script>
 
 <style lang="scss">
@@ -323,10 +326,10 @@
 
 <div class="content">
   <menu>
-    <Labels {labels} {loadingP} selected={siret} select={selectSiret} />
+    <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    <Years {years} {valuePs} selected={year} select={selectYear} />
-    <Summary {year} {budgetP} />
+    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+    <Summary year={currentYear} {budgetP} />
   </div>
 </div>
