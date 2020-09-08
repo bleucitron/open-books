@@ -108,17 +108,17 @@
     goto(url);
   }
 
-  function findSimilarBudget(siret: string) {
+  $: findSimilarBudget = function (siret: string) {
     return Object.values(budgetById).find(
       budget => budget && budget.siret === siret,
     );
-  }
+  };
 
-  function findSimilarLabel(siret, year) {
-    const id = makeId(siret, year);
-    const budget = budgetById[id] || findSimilarBudget(siret);
+  $: findSimilarLabel = function () {
+    const id = makeId(currentSiret, currentYear);
+    const budget = budgetById[id] || findSimilarBudget(currentSiret);
     return budget?.label;
-  }
+  };
 
   const cityP = $city
     ? Promise.resolve($city)
@@ -198,8 +198,7 @@
 
   $: index = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[index];
-
-  $: label = findSimilarLabel(currentSiret, currentYear);
+  $: label = findSimilarLabel();
 </script>
 
 <style lang="scss">
