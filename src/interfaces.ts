@@ -40,6 +40,10 @@ export interface Budget {
   records: Record[];
 }
 
+export interface BudgetMap {
+  [k: string]: Budget | null;
+}
+
 export interface BudgetRaw {
   city: string;
   siret: string;
@@ -74,4 +78,12 @@ export interface Etablissement {
 export interface CSV {
   file: string;
   url: string;
+}
+
+export interface UrlData {
+  name: string;
+  insee: string;
+  siret: string;
+  sirens: string[];
+  year: number;
 }

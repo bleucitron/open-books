@@ -24,19 +24,23 @@
   }
 
   export async function preload(page) {
-    let { name, insee, siret, year: y } = page.query;
+    let { name, insee, siret, sirens, year } = page.query;
 
-    const siretsFromInsee = await getSiretsFromInsee(name, insee);
+    sirens = sirens?.split(',');
+    year = parseInt(year) || defaultYear;
 
-    const sirens = extractSirens(siretsFromInsee);
-    const sirets = siretsFromInsee
-      .filter(e => e.etablissementSiege)
-      .map(e => e.siret)
-      .sort();
+    if (!siret || !sirens) {
+      const siretsFromInsee = await getSiretsFromInsee(name, insee);
 
-    siret = siret || sirets[0];
+      sirens = extractSirens(siretsFromInsee);
 
-    const year = parseInt(y) || defaultYear;
+      const sirets = siretsFromInsee
+        .filter(e => e.etablissementSiege)
+        .map(e => e.siret)
+        .sort();
+
+      siret = sirets[0];
+    }
 
     return {
       sirens,
@@ -53,14 +57,19 @@
 
   import city from '../../stores/city';
   import { getRecords } from '../../api';
-  import { makeBudget, makeId, orderRecordsBySiret } from './_utils';
+  import {
+    makeBudget,
+    makeId,
+    makeBudgetUrl,
+    orderRecordsBySiret,
+  } from './_utils';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
   import Nav from '../_components/Nav.svelte';
   import Spinner from '../_components/Spinner.svelte';
 
-  import type { Budget, City, Record } from '../../interfaces';
+  import type { Budget, BudgetMap, City, Record } from '../../interfaces';
 
   export let sirens: string[];
   export let siret: string;
@@ -68,11 +77,18 @@
   export let insee: string;
   export let name: string;
 
-  let budgetById = {};
-  let label;
+  let budgetById: BudgetMap = {};
 
   function selectSiret(s: string) {
-    goto(`/budgets?name=${name}&insee=${insee}&siret=${s}&year=${year}`);
+    const url = makeBudgetUrl({
+      name,
+      insee,
+      siret: s,
+      sirens,
+      year,
+    });
+
+    goto(url);
 
     budgetPs = years.map(y => {
       const id = makeId(s, y);
@@ -81,13 +97,27 @@
   }
 
   function selectYear(y: number) {
-    goto(`/budgets?name=${name}&insee=${insee}&siret=${siret}&year=${y}`);
+    const url = makeBudgetUrl({
+      name,
+      insee,
+      siret,
+      sirens,
+      year: y,
+    });
+
+    goto(url);
   }
 
   function findSimilarBudget(siret: string) {
     return Object.values(budgetById).find(
-      (budget: Budget) => budget && budget.siret === siret,
+      budget => budget && budget.siret === siret,
     );
+  }
+
+  function findSimilarLabel(siret, year) {
+    const id = makeId(siret, year);
+    const budget = budgetById[id] || findSimilarBudget(siret);
+    return budget?.label;
   }
 
   const cityP = $city
@@ -150,12 +180,14 @@
     ),
   ].sort();
 
-  $: labels = sirets.map(s => {
-    const id = makeId(s, year);
-    const budget = budgetById[id];
+  $: labels = sirets
+    .map(s => {
+      const id = makeId(s, year);
+      const budget = budgetById[id];
 
-    return budget || findSimilarBudget(s);
-  });
+      return budget || findSimilarBudget(s);
+    })
+    .filter(l => l) as Budget[];
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => budget && budget.credit),
@@ -164,9 +196,7 @@
   $: index = years.findIndex(y => y === year);
   $: budgetP = budgetPs[index];
 
-  $: id = makeId(siret, year);
-  $: budget = budgetById[id] || findSimilarBudget(siret);
-  $: label = budget?.label;
+  $: label = findSimilarLabel(siret, year);
 </script>
 
 <style lang="scss">
@@ -270,6 +300,7 @@
 
     <div class="labels">
       <h1>{name}</h1>
+
       {#if label}
         <h2>{label}</h2>
       {/if}
