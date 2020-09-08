@@ -64,10 +64,6 @@ export function normalizeText(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-export function isNumber(v): v is number {
-  return typeof v === 'number';
-}
-
 export function formatValue(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
