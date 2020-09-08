@@ -1,6 +1,6 @@
 import { normalizeText } from '../../utils';
 
-import type { Budget, BudgetRaw, Record } from '../../interfaces';
+import type { Budget, BudgetRaw, Record, UrlData } from '../../interfaces';
 
 const DEFAULT_LABEL = 'commune';
 
@@ -20,6 +20,12 @@ function extractSiren(siret: string): string {
 
 function extractEtabl(siret: string): string {
   return siret.substring(9);
+}
+
+export function makeBudgetUrl({ name, insee, siret, sirens, year }: UrlData) {
+  const sirensAsString = sirens.join(',');
+
+  return `/budgets?name=${name}&insee=${insee}&siret=${siret}&sirens=${sirensAsString}&year=${year}`;
 }
 
 const toRemove = ['-', ' de'];
