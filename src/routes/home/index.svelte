@@ -3,7 +3,6 @@
 
   import { getCities } from '../../api';
 
-  import Nav from '../_components/Nav.svelte';
   import Search from './_components/Search.svelte';
   import Suggestions from './_components/Suggestions.svelte';
 

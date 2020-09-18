@@ -66,7 +66,6 @@
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Nav from '../_components/Nav.svelte';
   import Spinner from '../_components/Spinner.svelte';
 
   import type { Budget, BudgetMap, City, Record } from '../../interfaces';
