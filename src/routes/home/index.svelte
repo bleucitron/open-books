@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   import city from '../../stores/city';
 
   import { getCities } from '../../api';
@@ -7,6 +9,8 @@
   import Suggestions from './_components/Suggestions.svelte';
 
   import type { City } from '../../interfaces';
+
+  onMount(() => select(null));
 
   let citiesP: Promise<City[]> | undefined;
   let previousCities: City[];
@@ -20,11 +24,8 @@
     citiesP = undefined;
   }
 
-  function select(selectedCity: City): void {
-    const { nom, code } = selectedCity;
-    clear();
-
-    city.set(selectedCity);
+  function select(c: City | null): void {
+    city.set(c);
   }
 
   function fetchCities(text: string): Promise<City[]> {
@@ -55,7 +56,7 @@
       {#await citiesP}
         <Suggestions suggestions={previousCities} {select} />
       {:then cities}
-        <Suggestions suggestions={cities} {select} />
+        <Suggestions suggestions={cities} {select} city={$city} />
       {/await}
     {/if}
   </Search>
