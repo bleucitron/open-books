@@ -26,6 +26,11 @@ export interface Record {
   siren: string;
 }
 
+export interface RecordsWithSiret {
+  siret: string;
+  records: Record[];
+}
+
 export interface Budget {
   city: string;
   siren: string;
