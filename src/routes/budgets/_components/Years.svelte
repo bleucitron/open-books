@@ -13,6 +13,22 @@
   });
 </script>
 
+<ul class="Years">
+  {#each years as year, i}
+    {#await valuePs[i]}
+      <Year {year} pending={true} {maxP} />
+    {:then value}
+      <Year
+        {year}
+        {value}
+        {maxP}
+        selected={year === selected}
+        select={() => select(year)}
+      />
+    {/await}
+  {/each}
+</ul>
+
 <style lang="scss">
   .Years {
     display: flex;
@@ -25,18 +41,3 @@
     width: fit-content;
   }
 </style>
-
-<ul class="Years">
-  {#each years as year, i}
-    {#await valuePs[i]}
-      <Year {year} pending={true} {maxP} />
-    {:then value}
-      <Year
-        {year}
-        {value}
-        {maxP}
-        selected={year === selected}
-        select={() => select(year)} />
-    {/await}
-  {/each}
-</ul>

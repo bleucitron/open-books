@@ -6,6 +6,10 @@
   export let unit = 'rem';
 </script>
 
+<div class="Spinner">
+  <Circle {color} {size} {unit} />
+</div>
+
 <style lang="scss">
   .Spinner {
     display: flex;
@@ -14,7 +18,3 @@
     flex: 1 0;
   }
 </style>
-
-<div class="Spinner">
-  <Circle {color} {size} {unit} />
-</div>

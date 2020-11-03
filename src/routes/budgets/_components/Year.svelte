@@ -29,6 +29,19 @@
   }
 </script>
 
+<li class={classes} on:click={_select}>
+  <div class="info">
+    {#if pending}
+      <Spinner size="1.5" />
+    {:else if unavailable}
+      <i class="fas fa-times" />
+    {:else if value}
+      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
+    {/if}
+  </div>
+  <h3>{year}</h3>
+</li>
+
 <style lang="scss">
   .Year {
     flex: 1 0;
@@ -123,16 +136,3 @@
     flex: 1 0;
   }
 </style>
-
-<li class={classes} on:click={_select}>
-  <div class="info">
-    {#if pending}
-      <Spinner size="1.5" />
-    {:else if unavailable}
-      <i class="fas fa-times" />
-    {:else if value}
-      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
-    {/if}
-  </div>
-  <h3>{year}</h3>
-</li>

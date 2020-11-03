@@ -38,14 +38,6 @@
   }
 </script>
 
-<style lang="scss">
-  main {
-    flex: 1 0;
-    display: flex;
-    padding-top: 10%;
-  }
-</style>
-
 <svelte:head>
   <title>Livres ouverts</title>
 </svelte:head>
@@ -61,3 +53,11 @@
     {/if}
   </Search>
 </main>
+
+<style lang="scss">
+  main {
+    flex: 1 0;
+    display: flex;
+    padding-top: 10%;
+  }
+</style>

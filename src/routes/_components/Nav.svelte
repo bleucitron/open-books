@@ -3,6 +3,24 @@
   export let path: string;
 </script>
 
+<header>
+  <a href="/" class={classnames('home', { current: path === 'home' })}>
+    <div>
+      <i class="fas fa-book-open" />
+      <h1>Livres ouverts</h1>
+      <h2>Les données budgétaires des communes</h2>
+    </div>
+  </a>
+  <nav class="Nav">
+    <a href="/about" class={classnames({ current: path === 'about' })}>
+      À propos
+    </a>
+    <a href="https://github.com/iOiurson/open-books">
+      <i class="fab fa-github" />
+    </a>
+  </nav>
+</header>
+
 <style lang="scss">
   header {
     display: flex;
@@ -93,21 +111,3 @@
     }
   }
 </style>
-
-<header>
-  <a href="/" class={classnames('home', { current: path === 'home' })}>
-    <div>
-      <i class="fas fa-book-open" />
-      <h1>Livres ouverts</h1>
-      <h2>Les données budgétaires des communes</h2>
-    </div>
-  </a>
-  <nav class="Nav">
-    <a href="/about" class={classnames({ current: path === 'about' })}>
-      À propos
-    </a>
-    <a href="https://github.com/iOiurson/open-books">
-      <i class="fab fa-github" />
-    </a>
-  </nav>
-</header>

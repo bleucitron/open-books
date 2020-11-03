@@ -8,6 +8,14 @@
   $: csvP = makeCSV(data);
 </script>
 
+<div class="Csv">
+  {#await csvP then csv}
+    <a href={csv.url} download={csv.file}>
+      <i class="fas fa-file-download" />
+    </a>
+  {/await}
+</div>
+
 <style lang="scss">
   .Csv {
     position: absolute;
@@ -40,11 +48,3 @@
     }
   }
 </style>
-
-<div class="Csv">
-  {#await csvP then csv}
-    <a href={csv.url} download={csv.file}>
-      <i class="fas fa-file-download" />
-    </a>
-  {/await}
-</div>

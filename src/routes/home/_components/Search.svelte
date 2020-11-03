@@ -35,6 +35,23 @@
   }
 </script>
 
+<div class="Search">
+  <div class="searchbar" class:focus>
+    <i class="fas fa-search" />
+    <input
+      {value}
+      on:input={handleInput}
+      on:focus={() => setFocus(true)}
+      on:blur={() => setFocus(false)}
+      placeholder="Entrez le nom d'une commune"
+    />
+    {#if value}
+      <i class="fas fa-times" on:click={reset} />
+    {/if}
+  </div>
+  <slot />
+</div>
+
 <style lang="scss">
   * {
     background: #444;
@@ -97,19 +114,3 @@
     }
   }
 </style>
-
-<div class="Search">
-  <div class="searchbar" class:focus>
-    <i class="fas fa-search" />
-    <input
-      {value}
-      on:input={handleInput}
-      on:focus={() => setFocus(true)}
-      on:blur={() => setFocus(false)}
-      placeholder="Entrez le nom d'une commune" />
-    {#if value}
-      <i class="fas fa-times" on:click={reset} />
-    {/if}
-  </div>
-  <slot />
-</div>
