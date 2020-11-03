@@ -99,15 +99,6 @@
     goto(url);
   }
 
-  function setMissingBudgetsAsNull() {
-    sirets.forEach(siret => {
-      years.forEach(year => {
-        const id = makeId(siret, year);
-        if (!(id in budgetById)) budgetById[id] = null;
-      });
-    });
-  }
-
   $: findSimilarBudget = function (siret: string) {
     return Object.values(budgetById).find(
       budget => budget && budget.siret === siret,
@@ -168,7 +159,6 @@
   const allPs = [...budgetPs, ...otherBudgetPs] as Promise<any>[];
 
   const loadingP = Promise.all(allPs);
-  loadingP.then(setMissingBudgetsAsNull);
 
   $: sirets = [
     ...new Set(
