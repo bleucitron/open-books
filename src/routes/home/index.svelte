@@ -3,14 +3,19 @@
 
   import city from '../../stores/city';
 
-  import { getCities } from '../../api';
+  import { getCities, getModel } from '../../api';
 
   import Search from './_components/Search.svelte';
   import Suggestions from './_components/Suggestions.svelte';
 
   import type { City } from '../../interfaces';
 
-  onMount(() => select(null));
+  onMount(async () => {
+    select(null);
+    const model = await getModel(2014, 'M14', 20000);
+
+    console.log('MODEL', model);
+  });
 
   let citiesP: Promise<City[]> | undefined;
   let previousCities: City[];

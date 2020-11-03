@@ -53,3 +53,16 @@ export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
 
   return `${base}?dataset=${allParams}`;
 }
+
+export function makeModelEndpoint(
+  year: number,
+  code: string,
+  population: number,
+) {
+  let fileName = `${code}_COM_SUP3500.xml`;
+
+  if (population < 3500) fileName = `${code}_COM_500_3500.xml`;
+  if (population < 500) fileName = `${code}_COM_INF500.xml`;
+
+  return [year, code, fileName].join('/');
+}
