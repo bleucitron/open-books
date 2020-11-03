@@ -2,12 +2,13 @@
   import { getSiretsFromInsee, getCity } from '../../api';
   import { extractSirens } from '../../api/utils/siren';
 
-  // interface Query {
-  //   name: string;
-  //   insee: string;
-  //   siret: string;
-  //   year: string;
-  // }
+  interface Query {
+    name: string;
+    insee: string;
+    siret: string;
+    sirenString: string;
+    year: string;
+  }
 
   const start = 2012;
   // const end = 2019;
@@ -15,11 +16,11 @@
   const defaultYear = end - 2;
   const years = [...Array(end - start).keys()].map(x => x + start);
 
-  export async function preload(page) {
-    let { name, insee, siret, sirens, year } = page.query;
+  export async function preload(page: { query: Query }) {
+    let { name, insee, siret, sirenString, year: y } = page.query;
 
-    sirens = sirens?.split(',');
-    year = parseInt(year) || defaultYear;
+    let sirens = sirenString?.split(',');
+    let year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
       const siretsFromInsee = await getSiretsFromInsee(name, insee);
