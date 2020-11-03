@@ -55,7 +55,7 @@
     makeId,
     makeBudgetUrl,
     orderRecordsBySiret,
-  } from './_utils';
+  } from '../../utils';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
