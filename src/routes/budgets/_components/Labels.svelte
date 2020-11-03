@@ -14,6 +14,37 @@
   $: sirens = [...new Set(labels.map(({ siren }) => siren))];
 </script>
 
+<ul class="Labels">
+  {#await loadingP}
+    <div class="loading">
+      <Spinner color={'#999'} />
+    </div>
+  {/await}
+  {#each sirens as siren}
+    <li class="siren">
+      <ul>
+        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
+          <li
+            class={classnames({
+              siret: true,
+              selected: selected === siret,
+              main: i === 0,
+            })}
+          >
+            <div on:click={() => select(siret)}>
+              <div class="info">
+                <span class="siren">{siren}</span>
+                <span class="etabl">{etabl}</span>
+              </div>
+              <div class="label">{label || defaultLabel}</div>
+            </div>
+          </li>
+        {/each}
+      </ul>
+    </li>
+  {/each}
+</ul>
+
 <style lang="scss">
   .Labels {
     position: relative;
@@ -84,33 +115,3 @@
     left: 0;
   }
 </style>
-
-<ul class="Labels">
-  {#await loadingP}
-    <div class="loading">
-      <Spinner color={'#999'} />
-    </div>
-  {/await}
-  {#each sirens as siren}
-    <li class="siren">
-      <ul>
-        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
-          <li
-            class={classnames({
-              siret: true,
-              selected: selected === siret,
-              main: i === 0,
-            })}>
-            <div on:click={() => select(siret)}>
-              <div class="info">
-                <span class="siren">{siren}</span>
-                <span class="etabl">{etabl}</span>
-              </div>
-              <div class="label">{label || defaultLabel}</div>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    </li>
-  {/each}
-</ul>

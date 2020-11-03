@@ -7,6 +7,30 @@
   export let city: City | null;
 </script>
 
+<ul>
+  {#each suggestions as suggestion}
+    <li class="Suggestion" on:click={() => select(suggestion)}>
+      <a
+        href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
+        rel="prefetch"
+      >
+        <div class="infos">
+          <div class="name">{suggestion.nom}</div>
+          {#if suggestion.departement}
+            <div class="other">
+              {`${suggestion.departement.code} - ${suggestion.departement.nom}`}
+            </div>
+          {/if}
+        </div>
+
+        {#if city && city.code === suggestion.code}
+          <Spinner />
+        {/if}
+      </a>
+    </li>
+  {/each}
+</ul>
+
 <style lang="scss">
   ul {
     margin: 0;
@@ -38,26 +62,3 @@
     justify-content: flex-end;
   }
 </style>
-
-<ul>
-  {#each suggestions as suggestion}
-    <li class="Suggestion" on:click={() => select(suggestion)}>
-      <a
-        href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
-        rel="prefetch">
-        <div class="infos">
-          <div class="name">{suggestion.nom}</div>
-          {#if suggestion.departement}
-            <div class="other">
-              {`${suggestion.departement.code} - ${suggestion.departement.nom}`}
-            </div>
-          {/if}
-        </div>
-
-        {#if city && city.code === suggestion.code}
-          <Spinner />
-        {/if}
-      </a>
-    </li>
-  {/each}
-</ul>

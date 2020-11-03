@@ -5,6 +5,14 @@
   const content = marked(md);
 </script>
 
+<svelte:head>
+  <title>À propos de Livres ouverts</title>
+</svelte:head>
+
+<main class="md">
+  {@html content}
+</main>
+
 <style lang="scss">
   main {
     padding: 2rem 20%;
@@ -19,11 +27,3 @@
     }
   }
 </style>
-
-<svelte:head>
-  <title>À propos de Livres ouverts</title>
-</svelte:head>
-
-<main class="md">
-  {@html content}
-</main>

@@ -10,6 +10,35 @@
   export let year: number;
 </script>
 
+<div class="Summary">
+  <h3>
+    {year}
+    {#await budgetP then budget}
+      {#if budget}
+        <Csv data={budget} />
+      {/if}
+    {/await}
+  </h3>
+  {#await budgetP}
+    <Spinner color={'#333'} size={'3'} />
+  {:then budget}
+    {#if !budget}
+      <div class="values none">Aucun budget</div>
+    {:else}
+      <div class="values">
+        <div class="value credit">
+          <h4>Recettes</h4>
+          {formatValue(budget.credit)}
+        </div>
+        <div class="value debit">
+          <h4>Dépenses</h4>
+          {formatValue(budget.debit)}
+        </div>
+      </div>
+    {/if}
+  {/await}
+</div>
+
 <style lang="scss">
   .Summary {
     flex: 1 0;
@@ -53,32 +82,3 @@
     text-align: center;
   }
 </style>
-
-<div class="Summary">
-  <h3>
-    {year}
-    {#await budgetP then budget}
-      {#if budget}
-        <Csv data={budget} />
-      {/if}
-    {/await}
-  </h3>
-  {#await budgetP}
-    <Spinner color={'#333'} size={'3'} />
-  {:then budget}
-    {#if !budget}
-      <div class="values none">Aucun budget</div>
-    {:else}
-      <div class="values">
-        <div class="value credit">
-          <h4>Recettes</h4>
-          {formatValue(budget.credit)}
-        </div>
-        <div class="value debit">
-          <h4>Dépenses</h4>
-          {formatValue(budget.debit)}
-        </div>
-      </div>
-    {/if}
-  {/await}
-</div>

@@ -200,6 +200,57 @@
   $: label = findSimilarLabel();
 </script>
 
+<svelte:head>
+  {#await cityP}
+    <title>{`Budgets pour ${name}`}</title>
+  {:then city}
+    {#if city}
+      <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
+    {/if}
+  {:catch error}
+    <title>{`Budgets pour ${name}`}</title>
+  {/await}
+</svelte:head>
+
+<header>
+  <a class="home" href="/">
+    <i class="fas fa-book-open" />
+  </a>
+  <div class="info">
+
+    <div class="labels">
+      <h1>{name}</h1>
+
+      {#if label}
+        <h2>{label}</h2>
+      {/if}
+    </div>
+
+    <div class="departement">
+      {#await cityP}
+        <Spinner />
+      {:then city}
+        {#if city}
+          <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+        {/if}
+      {:catch error}
+        <div style="color: red">{error}</div>
+      {/await}
+
+    </div>
+  </div>
+</header>
+
+<div class="content">
+  <menu>
+    <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
+  </menu>
+  <div class="dataviz">
+    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+    <Summary year={currentYear} {budgetP} />
+  </div>
+</div>
+
 <style lang="scss">
   header {
     padding: 0 0.5rem;
@@ -280,54 +331,3 @@
     }
   }
 </style>
-
-<svelte:head>
-  {#await cityP}
-    <title>{`Budgets pour ${name}`}</title>
-  {:then city}
-    {#if city}
-      <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
-    {/if}
-  {:catch error}
-    <title>{`Budgets pour ${name}`}</title>
-  {/await}
-</svelte:head>
-
-<header>
-  <a class="home" href="/">
-    <i class="fas fa-book-open" />
-  </a>
-  <div class="info">
-
-    <div class="labels">
-      <h1>{name}</h1>
-
-      {#if label}
-        <h2>{label}</h2>
-      {/if}
-    </div>
-
-    <div class="departement">
-      {#await cityP}
-        <Spinner />
-      {:then city}
-        {#if city}
-          <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
-        {/if}
-      {:catch error}
-        <div style="color: red">{error}</div>
-      {/await}
-
-    </div>
-  </div>
-</header>
-
-<div class="content">
-  <menu>
-    <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
-  </menu>
-  <div class="dataviz">
-    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
-    <Summary year={currentYear} {budgetP} />
-  </div>
-</div>
