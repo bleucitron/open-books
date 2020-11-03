@@ -289,7 +289,8 @@
     color: white;
     background: #333;
     display: flex;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
+    padding-right: 1.5rem;
   }
 
   .content {
