@@ -28,8 +28,8 @@
     city.set(c);
   }
 
-  function fetchCities(text: string): Promise<City[]> {
-    return getCities(text).then(cities => {
+  async function fetchCities(text: string): Promise<City[]> {
+    return await getCities(text).then(cities => {
       console.log('Villes', cities);
       const currentCities = cities.slice(0, 5);
       previousCities = currentCities;

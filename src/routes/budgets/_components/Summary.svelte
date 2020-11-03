@@ -1,6 +1,5 @@
 <script lang="ts">
-  import classnames from 'classnames';
-  import { formatValue, makeCSV } from '../../../utils';
+  import { formatValue } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
 
