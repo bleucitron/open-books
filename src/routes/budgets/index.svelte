@@ -15,14 +15,6 @@
   const defaultYear = end - 2;
   const years = [...Array(end - start).keys()].map(x => x + start);
 
-  interface BudgetPageProps {
-    sirens: string[];
-    siret: string;
-    year: number;
-    insee: string;
-    name: string;
-  }
-
   export async function preload(page) {
     let { name, insee, siret, sirens, year } = page.query;
 
@@ -107,6 +99,15 @@
     goto(url);
   }
 
+  function setMissingBudgetsAsNull() {
+    sirets.forEach(siret => {
+      years.forEach(year => {
+        const id = makeId(siret, year);
+        if (!(id in budgetById)) budgetById[id] = null;
+      });
+    });
+  }
+
   $: findSimilarBudget = function (siret: string) {
     return Object.values(budgetById).find(
       budget => budget && budget.siret === siret,
@@ -126,7 +127,7 @@
         return result;
       });
 
-  let budgetPs: Promise<Budget | null>[] = years.map(year =>
+  let budgetPs = years.map(year =>
     getRecords({ ident: [currentSiret], year })
       .catch(() => [])
       .then((records: Record[]) => {
@@ -144,11 +145,11 @@
       }),
   );
 
-  const otherBudgetPs: Promise<void>[] = [...years].reverse().map(year =>
+  const otherBudgetPs = [...years].reverse().map(year =>
     getRecords({ siren: sirens, year })
       .catch(() => [])
-      .then((records: Record[]) => {
-        const data = orderRecordsBySiret(records).map(({ siret, records }) => {
+      .then((records: Record[]) =>
+        orderRecordsBySiret(records).map(({ siret, records }) => {
           const b = makeBudget({
             city: name,
             siret,
@@ -158,21 +159,16 @@
 
           const id = makeId(siret, year);
           if (siret !== currentSiret) budgetById[id] = b;
-        });
-      }),
+
+          return b;
+        }),
+      ),
   );
 
-  const loadingP = Promise.all([...budgetPs, ...otherBudgetPs]);
-  loadingP.then(() =>
-    sirets.forEach(siret => {
-      years.forEach(year => {
-        const id = makeId(siret, year);
-        if (!(id in budgetById)) budgetById[id] = null;
-      });
-    }),
-  );
+  const allPs = [...budgetPs, ...otherBudgetPs] as Promise<any>[];
 
-  $: yearIndex = years.findIndex(y => y === currentYear);
+  const loadingP = Promise.all(allPs);
+  loadingP.then(setMissingBudgetsAsNull);
 
   $: sirets = [
     ...new Set(
@@ -195,8 +191,8 @@
     budgetP.then(budget => budget && budget.credit),
   );
 
-  $: index = years.findIndex(y => y === currentYear);
-  $: budgetP = budgetPs[index];
+  $: yearIndex = years.findIndex(y => y === currentYear);
+  $: budgetP = budgetPs[yearIndex];
   $: label = findSimilarLabel();
 </script>
 
@@ -207,7 +203,7 @@
     {#if city}
       <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
     {/if}
-  {:catch error}
+  {:catch}
     <title>{`Budgets pour ${name}`}</title>
   {/await}
 </svelte:head>
