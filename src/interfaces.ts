@@ -73,6 +73,15 @@ export interface City extends InseeEntity {
   region: InseeEntity;
 }
 
+export interface FonctionTree {
+  [code: string]: {
+    code: string;
+    label: string;
+    short: string;
+    subFonctions: FonctionTree;
+  };
+}
+
 export interface Etablissement {
   siren: string;
   nic: string;
