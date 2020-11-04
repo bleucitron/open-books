@@ -1,12 +1,14 @@
 import { json2csvAsync as toCSV } from 'json-2-csv';
 
-import { extractSiren, extractEtabl, formatLabel } from './misc';
+import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 import type {
   CSV,
   Budget,
   BudgetRaw,
   Record,
   RecordsWithSiret,
+  FonctionTree,
+  FonctionTreeValue,
 } from '../interfaces';
 
 const keys = [
@@ -77,8 +79,10 @@ export function makeBudget(data: BudgetRaw): Budget | null {
   const siren = extractSiren(siret);
   const etabl = extractEtabl(siret);
 
-  const debit = records.reduce((sum, { sd }) => sum + sd, 0);
-  const credit = records.reduce((sum, { sc }) => sum + sc, 0);
+  // const debit = sumBy(records, 'sd');
+  // const credit = sumBy(records, 'sc');
+  const debit = sumBy(records, BudgetCode.OBNETDEB);
+  const credit = sumBy(records, BudgetCode.OBNETCRE);
   const labels = [
     ...new Set(records.map(record => record.lbudg.toLowerCase())),
   ];
@@ -131,15 +135,25 @@ export function extractFonctions(e: Element) {
     throw `${e.tagName} Not a <RefFonc> or a <RefFonctionnelle>`;
 
   const data = [...e.children].map(element => {
-    const code = element.getAttribute('Code');
-    const label = element.getAttribute('Libelle');
-    const short = element.getAttribute('Lib_court');
+    const code = element.getAttribute('Code') as string;
+    const label = element.getAttribute('Libelle') as string;
+    const short = element.getAttribute('Lib_court') as string;
 
-    return [
+    const value: FonctionTreeValue = {
       code,
-      { code, label, short, subFunctions: extractFonctions(element) },
-    ];
+      label,
+    };
+
+    if (label !== short) {
+      value.short = short;
+    }
+
+    if (element.children.length > 0) value.subTree = extractFonctions(element);
+
+    return [code, value];
   });
+
+  if (data.length === 0) return null;
 
   return Object.fromEntries(data);
 }
@@ -153,4 +167,66 @@ export function makeFonctionTree(txt: string) {
   if (!refFonc) throw 'No <RefFonctionnelles> found';
 
   return extractFonctions(refFonc);
+}
+
+export enum BudgetCode {
+  OBNETDEB = 'obnetdeb',
+  OBNETCRE = 'obnetcre',
+  OOBDEB = 'oobdeb',
+  OOBCRE = 'oobcre',
+}
+
+export enum BudgetType {
+  DEBIT = 'obnetdeb',
+  CREDIT = 'obnetcre',
+}
+
+export function fonctionFromTree(
+  code: string,
+  tree: FonctionTree | FonctionTreeValue,
+) {
+  if (!(code in tree)) return fonctionFromTree(code, tree[code[0]].subTree);
+
+  return tree[code];
+}
+
+export function aggregateData(records: Record[], tree: FonctionTree) {
+  const aggregate = Object.values(tree).map(fonction => {
+    let { code, subTree } = fonction;
+
+    let obnetdeb;
+    let obnetcre;
+    let oobdeb;
+    let oobcre;
+    let subAgg;
+    const filteredRecords = records.filter(r => r.fonction?.startsWith(code));
+
+    if (!subTree) {
+      obnetdeb = sumBy(filteredRecords, BudgetCode.OBNETDEB);
+      obnetcre = sumBy(filteredRecords, BudgetCode.OBNETCRE);
+      oobdeb = sumBy(filteredRecords, BudgetCode.OOBDEB);
+      oobcre = sumBy(filteredRecords, BudgetCode.OOBCRE);
+    } else {
+      subAgg = aggregateData(filteredRecords, subTree);
+      const values = Object.values(subAgg) as FonctionTreeValue[];
+      obnetdeb = sumBy(values, BudgetCode.OBNETDEB);
+      obnetcre = sumBy(values, BudgetCode.OBNETCRE);
+      oobdeb = sumBy(values, BudgetCode.OOBDEB);
+      oobcre = sumBy(values, BudgetCode.OOBCRE);
+    }
+
+    return [
+      code,
+      {
+        ...fonction,
+        obnetdeb,
+        obnetcre,
+        oobdeb,
+        oobcre,
+        subTree: subAgg,
+      },
+    ];
+  });
+
+  return Object.fromEntries(aggregate);
 }

@@ -20,12 +20,19 @@ export function normalizeText(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+export function formatFullValue(value: number) {
+  return new Intl.NumberFormat('fr', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(value);
+}
+
 export function formatValue(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
     // @ts-ignore
     notation: 'compact',
-    maximumSignificantDigits: 3,
+    // maximumSignificantDigits: order,
     currency: 'EUR',
   }).format(value);
 }
@@ -54,4 +61,12 @@ export function formatLabel(label: string, name: string): string {
   });
 
   return formatted;
+}
+
+export function sumBy(list: object[], key: string) {
+  return list.reduce((acc, cur) => acc + cur[key], 0);
+}
+
+export function pathFromString(s: string) {
+  return s?.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
 }

@@ -67,6 +67,8 @@
   export let currentYear: number;
   export let insee: string;
   export let name: string;
+  let type: string;
+  let fonction: string;
 
   let budgetById: BudgetMap = {};
 
@@ -233,7 +235,7 @@
   </menu>
   <div class="dataviz">
     <Years {years} {valuePs} selected={currentYear} select={selectYear} />
-    <Summary year={currentYear} {budgetP} />
+    <Summary bind:type bind:fonction year={currentYear} {budgetP} />
   </div>
 </div>
 

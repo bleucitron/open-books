@@ -10,6 +10,7 @@ export interface Record {
   cstyp: string;
   ctype: string;
   exer: string;
+  fonction?: string;
   ident: string;
   insee: string;
   lbudg: string;
@@ -73,13 +74,15 @@ export interface City extends InseeEntity {
   region: InseeEntity;
 }
 
+export interface FonctionTreeValue {
+  code: string;
+  label: string;
+  short?: string;
+  subTree?: FonctionTree;
+}
+
 export interface FonctionTree {
-  [code: string]: {
-    code: string;
-    label: string;
-    short: string;
-    subFonctions: FonctionTree;
-  };
+  [code: string]: FonctionTreeValue;
 }
 
 export interface Etablissement {

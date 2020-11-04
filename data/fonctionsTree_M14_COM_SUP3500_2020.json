@@ -3,12 +3,12 @@
     "code": "0",
     "label": "Services généraux des administrations publiques locales",
     "short": "Services généraux administrat° publiques",
-    "subFonctions": {
+    "subTree": {
       "01": { "code": "01", "label": "Opérations non ventilables" },
       "02": {
         "code": "02",
         "label": "Administration générale",
-        "subFonctions": {
+        "subTree": {
           "020": {
             "code": "020",
             "label": "Administration générale de la collectivité",
@@ -37,7 +37,7 @@
         "code": "04",
         "label": "Coopération décentralisée, actions européennes et internationales",
         "short": "Coopérat° décentralisée, act° européen.",
-        "subFonctions": {
+        "subTree": {
           "041": { "code": "041", "label": "Subvention globale" },
           "048": {
             "code": "048",
@@ -51,11 +51,11 @@
   "1": {
     "code": "1",
     "label": "Sécurité et salubrité publiques",
-    "subFonctions": {
+    "subTree": {
       "11": {
         "code": "11",
         "label": "Sécurité intérieure",
-        "subFonctions": {
+        "subTree": {
           "110": { "code": "110", "label": "Services communs" },
           "111": { "code": "111", "label": "Police nationale" },
           "112": { "code": "112", "label": "Police municipale" },
@@ -72,12 +72,12 @@
   "2": {
     "code": "2",
     "label": "Enseignement - Formation",
-    "subFonctions": {
+    "subTree": {
       "20": { "code": "20", "label": "Services communs" },
       "21": {
         "code": "21",
         "label": "Enseignement du premier degré",
-        "subFonctions": {
+        "subTree": {
           "211": { "code": "211", "label": "Ecoles maternelles" },
           "212": { "code": "212", "label": "Ecoles primaires" },
           "213": { "code": "213", "label": "Classes regroupées" }
@@ -89,7 +89,7 @@
       "25": {
         "code": "25",
         "label": "Services annexes de l'enseignement",
-        "subFonctions": {
+        "subTree": {
           "251": {
             "code": "251",
             "label": "Hébergement et restauration scolaire"
@@ -109,12 +109,12 @@
   "3": {
     "code": "3",
     "label": "Culture",
-    "subFonctions": {
+    "subTree": {
       "30": { "code": "30", "label": "Services communs" },
       "31": {
         "code": "31",
         "label": "Expression artistique",
-        "subFonctions": {
+        "subTree": {
           "311": {
             "code": "311",
             "label": "Expression musicale, lyrique et chorégraphique",
@@ -136,7 +136,7 @@
         "code": "32",
         "label": "Conservation et diffusion des patrimoines",
         "short": "Conservation et diffusion des patrimoine",
-        "subFonctions": {
+        "subTree": {
           "321": { "code": "321", "label": "Bibliothèques et médiathèques" },
           "322": { "code": "322", "label": "Musées" },
           "323": { "code": "323", "label": "Archives" },
@@ -149,12 +149,12 @@
   "4": {
     "code": "4",
     "label": "Sport et jeunesse",
-    "subFonctions": {
+    "subTree": {
       "40": { "code": "40", "label": "Services communs" },
       "41": {
         "code": "41",
         "label": "Sports",
-        "subFonctions": {
+        "subTree": {
           "411": { "code": "411", "label": "Salles de sport, gymnases" },
           "412": { "code": "412", "label": "Stades" },
           "413": { "code": "413", "label": "Piscines" },
@@ -168,7 +168,7 @@
       "42": {
         "code": "42",
         "label": "Jeunesse",
-        "subFonctions": {
+        "subTree": {
           "421": { "code": "421", "label": "Centres de loisirs" },
           "422": { "code": "422", "label": "Autres activités pour les jeunes" },
           "423": { "code": "423", "label": "Colonies de vacances" }
@@ -179,11 +179,11 @@
   "5": {
     "code": "5",
     "label": "Interventions sociales et santé",
-    "subFonctions": {
+    "subTree": {
       "51": {
         "code": "51",
         "label": "Santé",
-        "subFonctions": {
+        "subTree": {
           "510": { "code": "510", "label": "Services communs" },
           "511": {
             "code": "511",
@@ -196,7 +196,7 @@
       "52": {
         "code": "52",
         "label": "Interventions sociales",
-        "subFonctions": {
+        "subTree": {
           "520": { "code": "520", "label": "Services communs" },
           "521": {
             "code": "521",
@@ -221,7 +221,7 @@
   "6": {
     "code": "6",
     "label": "Famille",
-    "subFonctions": {
+    "subTree": {
       "60": { "code": "60", "label": "Services communs" },
       "61": { "code": "61", "label": "Services en faveur des personnes âgées" },
       "62": { "code": "62", "label": "Actions en faveur de la maternité" },
@@ -232,7 +232,7 @@
   "7": {
     "code": "7",
     "label": "Logement",
-    "subFonctions": {
+    "subTree": {
       "70": { "code": "70", "label": "Services communs" },
       "71": { "code": "71", "label": "Parc privé de la ville" },
       "72": { "code": "72", "label": "Aide au secteur locatif" },
@@ -243,11 +243,11 @@
     "code": "8",
     "label": "Aménagement et services urbains, environnement",
     "short": "Aménagt et services urbains, environnemt",
-    "subFonctions": {
+    "subTree": {
       "81": {
         "code": "81",
         "label": "Services urbains",
-        "subFonctions": {
+        "subTree": {
           "810": { "code": "810", "label": "Services communs" },
           "811": { "code": "811", "label": "Eau et assainissement" },
           "812": {
@@ -264,7 +264,7 @@
       "82": {
         "code": "82",
         "label": "Aménagement urbain",
-        "subFonctions": {
+        "subTree": {
           "820": { "code": "820", "label": "Services communs" },
           "821": { "code": "821", "label": "Equipements de voirie" },
           "822": { "code": "822", "label": "Voirie communale et routes" },
@@ -278,7 +278,7 @@
       "83": {
         "code": "83",
         "label": "Environnement",
-        "subFonctions": {
+        "subTree": {
           "830": { "code": "830", "label": "Services communs" },
           "831": { "code": "831", "label": "Aménagement des eaux" },
           "832": {
@@ -294,7 +294,7 @@
   "9": {
     "code": "9",
     "label": "Action économique",
-    "subFonctions": {
+    "subTree": {
       "90": { "code": "90", "label": "Interventions économiques" },
       "91": { "code": "91", "label": "Foires et marchés" },
       "92": {
