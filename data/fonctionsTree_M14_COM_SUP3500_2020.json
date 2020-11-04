@@ -1,0 +1,319 @@
+{
+  "0": {
+    "code": "0",
+    "label": "Services généraux des administrations publiques locales",
+    "short": "Services généraux administrat° publiques",
+    "subFonctions": {
+      "01": { "code": "01", "label": "Opérations non ventilables" },
+      "02": {
+        "code": "02",
+        "label": "Administration générale",
+        "subFonctions": {
+          "020": {
+            "code": "020",
+            "label": "Administration générale de la collectivité",
+            "short": "Administrat°générale collectivité"
+          },
+          "021": { "code": "021", "label": "Assemblée locale" },
+          "022": {
+            "code": "022",
+            "label": "Administration générale de l'état"
+          },
+          "023": {
+            "code": "023",
+            "label": "Information, communication, publicité"
+          },
+          "024": { "code": "024", "label": "Fêtes et cérémonies" },
+          "025": {
+            "code": "025",
+            "label": "Aides aux associations (non classées ailleurs)",
+            "short": "Aides aux assoc. (non classées ailleurs)"
+          },
+          "026": { "code": "026", "label": "Cimetières et pompes funèbres" }
+        }
+      },
+      "03": { "code": "03", "label": "Justice" },
+      "04": {
+        "code": "04",
+        "label": "Coopération décentralisée, actions européennes et internationales",
+        "short": "Coopérat° décentralisée, act° européen.",
+        "subFonctions": {
+          "041": { "code": "041", "label": "Subvention globale" },
+          "048": {
+            "code": "048",
+            "label": "Autres actions de coopération décentralisée",
+            "short": "Autres act° de coopérat° décentralisée"
+          }
+        }
+      }
+    }
+  },
+  "1": {
+    "code": "1",
+    "label": "Sécurité et salubrité publiques",
+    "subFonctions": {
+      "11": {
+        "code": "11",
+        "label": "Sécurité intérieure",
+        "subFonctions": {
+          "110": { "code": "110", "label": "Services communs" },
+          "111": { "code": "111", "label": "Police nationale" },
+          "112": { "code": "112", "label": "Police municipale" },
+          "113": { "code": "113", "label": "Pompiers, incendies et secours" },
+          "114": {
+            "code": "114",
+            "label": "Autres services de protection civile"
+          }
+        }
+      },
+      "12": { "code": "12", "label": "Hygiène et salubrité publique" }
+    }
+  },
+  "2": {
+    "code": "2",
+    "label": "Enseignement - Formation",
+    "subFonctions": {
+      "20": { "code": "20", "label": "Services communs" },
+      "21": {
+        "code": "21",
+        "label": "Enseignement du premier degré",
+        "subFonctions": {
+          "211": { "code": "211", "label": "Ecoles maternelles" },
+          "212": { "code": "212", "label": "Ecoles primaires" },
+          "213": { "code": "213", "label": "Classes regroupées" }
+        }
+      },
+      "22": { "code": "22", "label": "Enseignement du deuxième degré" },
+      "23": { "code": "23", "label": "Enseignement supérieur" },
+      "24": { "code": "24", "label": "Formation continue" },
+      "25": {
+        "code": "25",
+        "label": "Services annexes de l'enseignement",
+        "subFonctions": {
+          "251": {
+            "code": "251",
+            "label": "Hébergement et restauration scolaire"
+          },
+          "252": { "code": "252", "label": "Transports scolaires" },
+          "253": { "code": "253", "label": "Sport scolaire" },
+          "254": { "code": "254", "label": "Médecine scolaire" },
+          "255": {
+            "code": "255",
+            "label": "Classes de découverte et autres services annexes de l'enseignement",
+            "short": "Classes de découverte et autres services"
+          }
+        }
+      }
+    }
+  },
+  "3": {
+    "code": "3",
+    "label": "Culture",
+    "subFonctions": {
+      "30": { "code": "30", "label": "Services communs" },
+      "31": {
+        "code": "31",
+        "label": "Expression artistique",
+        "subFonctions": {
+          "311": {
+            "code": "311",
+            "label": "Expression musicale, lyrique et chorégraphique",
+            "short": "Expression musicale, lyrique et choré."
+          },
+          "312": {
+            "code": "312",
+            "label": "Arts plastiques et autres activités artistiques",
+            "short": "Arts plastiques, activités artistiques"
+          },
+          "313": { "code": "313", "label": "Théâtres" },
+          "314": {
+            "code": "314",
+            "label": "Cinémas et autres salles de spectacles"
+          }
+        }
+      },
+      "32": {
+        "code": "32",
+        "label": "Conservation et diffusion des patrimoines",
+        "short": "Conservation et diffusion des patrimoine",
+        "subFonctions": {
+          "321": { "code": "321", "label": "Bibliothèques et médiathèques" },
+          "322": { "code": "322", "label": "Musées" },
+          "323": { "code": "323", "label": "Archives" },
+          "324": { "code": "324", "label": "Entretien du patrimoine culturel" }
+        }
+      },
+      "33": { "code": "33", "label": "Action culturelle" }
+    }
+  },
+  "4": {
+    "code": "4",
+    "label": "Sport et jeunesse",
+    "subFonctions": {
+      "40": { "code": "40", "label": "Services communs" },
+      "41": {
+        "code": "41",
+        "label": "Sports",
+        "subFonctions": {
+          "411": { "code": "411", "label": "Salles de sport, gymnases" },
+          "412": { "code": "412", "label": "Stades" },
+          "413": { "code": "413", "label": "Piscines" },
+          "414": {
+            "code": "414",
+            "label": "Autres équipements sportifs ou de loisir"
+          },
+          "415": { "code": "415", "label": "Manifestations sportives" }
+        }
+      },
+      "42": {
+        "code": "42",
+        "label": "Jeunesse",
+        "subFonctions": {
+          "421": { "code": "421", "label": "Centres de loisirs" },
+          "422": { "code": "422", "label": "Autres activités pour les jeunes" },
+          "423": { "code": "423", "label": "Colonies de vacances" }
+        }
+      }
+    }
+  },
+  "5": {
+    "code": "5",
+    "label": "Interventions sociales et santé",
+    "subFonctions": {
+      "51": {
+        "code": "51",
+        "label": "Santé",
+        "subFonctions": {
+          "510": { "code": "510", "label": "Services communs" },
+          "511": {
+            "code": "511",
+            "label": "Dispensaires et autres établissements sanitaires",
+            "short": "Dispensaires, autres établist sanitaires"
+          },
+          "512": { "code": "512", "label": "Actions de prévention sanitaire" }
+        }
+      },
+      "52": {
+        "code": "52",
+        "label": "Interventions sociales",
+        "subFonctions": {
+          "520": { "code": "520", "label": "Services communs" },
+          "521": {
+            "code": "521",
+            "label": "Services à caractère social pour handicapés et inadaptés",
+            "short": "Services à caractère social handicapés"
+          },
+          "522": {
+            "code": "522",
+            "label": "Actions en faveur de l'enfance et de l'adolescence",
+            "short": "Act° pour l'enfance et l'adolescence"
+          },
+          "523": {
+            "code": "523",
+            "label": "Actions en faveur des personnes en difficulté",
+            "short": "Act° pour personnes en difficulté"
+          },
+          "524": { "code": "524", "label": "Autres services" }
+        }
+      }
+    }
+  },
+  "6": {
+    "code": "6",
+    "label": "Famille",
+    "subFonctions": {
+      "60": { "code": "60", "label": "Services communs" },
+      "61": { "code": "61", "label": "Services en faveur des personnes âgées" },
+      "62": { "code": "62", "label": "Actions en faveur de la maternité" },
+      "63": { "code": "63", "label": "Aides à la famille" },
+      "64": { "code": "64", "label": "Crèches et garderies" }
+    }
+  },
+  "7": {
+    "code": "7",
+    "label": "Logement",
+    "subFonctions": {
+      "70": { "code": "70", "label": "Services communs" },
+      "71": { "code": "71", "label": "Parc privé de la ville" },
+      "72": { "code": "72", "label": "Aide au secteur locatif" },
+      "73": { "code": "73", "label": "Aides à l'accession à la propriété" }
+    }
+  },
+  "8": {
+    "code": "8",
+    "label": "Aménagement et services urbains, environnement",
+    "short": "Aménagt et services urbains, environnemt",
+    "subFonctions": {
+      "81": {
+        "code": "81",
+        "label": "Services urbains",
+        "subFonctions": {
+          "810": { "code": "810", "label": "Services communs" },
+          "811": { "code": "811", "label": "Eau et assainissement" },
+          "812": {
+            "code": "812",
+            "label": "Collecte et traitement des ordures ménagères",
+            "short": "Collecte et traitement ordures ménagères"
+          },
+          "813": { "code": "813", "label": "Propreté urbaine" },
+          "814": { "code": "814", "label": "Eclairage public" },
+          "815": { "code": "815", "label": "Transports urbains" },
+          "816": { "code": "816", "label": "Autres réseaux et services divers" }
+        }
+      },
+      "82": {
+        "code": "82",
+        "label": "Aménagement urbain",
+        "subFonctions": {
+          "820": { "code": "820", "label": "Services communs" },
+          "821": { "code": "821", "label": "Equipements de voirie" },
+          "822": { "code": "822", "label": "Voirie communale et routes" },
+          "823": { "code": "823", "label": "Espaces verts urbains" },
+          "824": {
+            "code": "824",
+            "label": "Autres opérations d'aménagement urbain"
+          }
+        }
+      },
+      "83": {
+        "code": "83",
+        "label": "Environnement",
+        "subFonctions": {
+          "830": { "code": "830", "label": "Services communs" },
+          "831": { "code": "831", "label": "Aménagement des eaux" },
+          "832": {
+            "code": "832",
+            "label": "Actions spécifiques de lutte contre la pollution",
+            "short": "Act° spécif. lutte contre la pollution"
+          },
+          "833": { "code": "833", "label": "Préservation du milieu naturel" }
+        }
+      }
+    }
+  },
+  "9": {
+    "code": "9",
+    "label": "Action économique",
+    "subFonctions": {
+      "90": { "code": "90", "label": "Interventions économiques" },
+      "91": { "code": "91", "label": "Foires et marchés" },
+      "92": {
+        "code": "92",
+        "label": "Aides à l'agriculture et aux industries agro-alimentaires",
+        "short": "Aides à l'agriculture et aux industries"
+      },
+      "93": {
+        "code": "93",
+        "label": "Aides à l'énergie, aux industries manufacturières et au bâtiment et travaux publics",
+        "short": "Aides à l'énergie, indus. manufact., BTP"
+      },
+      "94": {
+        "code": "94",
+        "label": "Aides au commerce et aux services marchands",
+        "short": "Aides commerce et services marchands"
+      },
+      "95": { "code": "95", "label": "Aides au tourisme" },
+      "96": { "code": "96", "label": "Aides aux services publics" }
+    }
+  }
+}
