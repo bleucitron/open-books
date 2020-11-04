@@ -125,3 +125,32 @@ export function orderRecordsBySiret(records: Record[]): RecordsWithSiret[] {
         parseInt(r1.siret) - parseInt(r2.siret),
     );
 }
+
+export function extractFonctions(e: Element) {
+  if (e.tagName !== 'RefFonc' && e.tagName !== 'RefFonctionnelles')
+    throw `${e.tagName} Not a <RefFonc> or a <RefFonctionnelle>`;
+
+  const data = [...e.children].map(element => {
+    const code = element.getAttribute('Code');
+    const label = element.getAttribute('Libelle');
+    const short = element.getAttribute('Lib_court');
+
+    return [
+      code,
+      { code, label, short, subFunctions: extractFonctions(element) },
+    ];
+  });
+
+  return Object.fromEntries(data);
+}
+
+export function makeFonctionTree(txt: string) {
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(txt, 'application/xml');
+
+  const refFonc = doc.querySelector('RefFonctionnelles');
+
+  if (!refFonc) throw 'No <RefFonctionnelles> found';
+
+  return extractFonctions(refFonc);
+}

@@ -54,15 +54,21 @@ export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
   return `${base}?dataset=${allParams}`;
 }
 
-export function makeModelEndpoint(
+export function makeNomenEndpoint(
   year: number,
   code: string,
-  population: number,
+  population?: number,
 ) {
-  let fileName = `${code}_COM_SUP3500.xml`;
+  let suffix = '';
+  const extension = 'xml';
 
-  if (population < 3500) fileName = `${code}_COM_500_3500.xml`;
-  if (population < 500) fileName = `${code}_COM_INF500.xml`;
+  if (code === 'M14') {
+    if (!population || population >= 3500) suffix = `_COM_SUP3500`;
+    else if (population < 3500) suffix = `_COM_500_3500`;
+    else if (population < 500) suffix = `_COM_INF500`;
+  }
+
+  let fileName = `${code}${suffix}.${extension}`;
 
   return [year, code, fileName].join('/');
 }
