@@ -9,14 +9,14 @@
   } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
-
   import type { Budget, FonctionTree } from '../../../interfaces';
+
+  import ChartManager from './ChartManager.svelte';
 
   export let budgetP: Promise<Budget | null>;
   export let year: number;
 
   let makeFonctionTree: (s: string) => FonctionTree;
-  let nomenCode: string;
   const fonctionTreeByCode = {};
 
   onMount(async () => {
@@ -39,19 +39,12 @@
     return tree;
   }
 
-  $: budgetP.then(async budget => {
+  $: treeP = budgetP.then(async budget => {
     if (budget) {
       const { year, nomen: code } = budget;
-      nomenCode = code;
-
-      fonctionTreeByCode[nomenCode] = getFonctionTree(
-        year,
-        code,
-        $city?.population,
-      );
+      return await getFonctionTree(year, code, $city?.population);
     }
   });
-  $: console.log('TREE', fonctionTreeByCode[nomenCode]);
 </script>
 
 <div class="Summary">
@@ -76,7 +69,7 @@
     {#if !budget}
       <div class="values none">Aucun budget</div>
     {:else}
-      <div class="values">
+      <!-- <div class="values">
         <div class="value credit">
           <h4>Recettes</h4>
           {formatValue(budget.credit)}
@@ -85,7 +78,10 @@
           <h4>Dépenses</h4>
           {formatValue(budget.debit)}
         </div>
-      </div>
+      </div> -->
+      {#await treeP then tree}
+        <ChartManager {budget} {tree} />
+      {/await}
     {/if}
   {/await}
 </div>
@@ -101,21 +97,25 @@
     background: white;
   }
 
-  .values {
-    flex: 1 0;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-  }
+  // .values {
+  //   flex: 1 0;
+  //   display: flex;
+  //   width: 100%;
+  //   align-items: center;
+  //   justify-content: center;
+  //   font-size: 3rem;
+  // }
 
-  .value {
-    text-align: center;
-    width: 40%;
-    margin: 0 1rem;
-    font-size: 4rem;
-  }
+  // .value {
+  //   text-align: center;
+  //   width: 40%;
+  //   margin: 0 1rem;
+  //   font-size: 4rem;
+  // }
+
+  // h4 {
+  //   font-size: 1.5rem;
+  // }
 
   h3 {
     margin: 0.5rem;
@@ -123,10 +123,6 @@
     font-size: 2.5rem;
     text-align: center;
     position: relative;
-  }
-
-  h4 {
-    font-size: 1.5rem;
   }
 
   .nomen {

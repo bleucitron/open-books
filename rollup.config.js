@@ -112,6 +112,7 @@ export default {
       }),
       commonjs(),
       md(),
+      json(),
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules,

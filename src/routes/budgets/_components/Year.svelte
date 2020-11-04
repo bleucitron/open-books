@@ -36,7 +36,9 @@
     {:else if unavailable}
       <i class="fas fa-times" />
     {:else if value}
-      <div class="value" style={`height: ${height};`}>{formatValue(value)}</div>
+      <div class="value" style={`height: ${height};`}>
+        {formatValue(value, 3)}
+      </div>
     {/if}
   </div>
   <h3>{year}</h3>
