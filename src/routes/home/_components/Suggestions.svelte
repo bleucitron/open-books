@@ -4,7 +4,7 @@
 
   export let suggestions: City[] = [];
   export let select: (c: City) => void;
-  export let city: City | null;
+  export let city: City | null = null;
 </script>
 
 <ul>
