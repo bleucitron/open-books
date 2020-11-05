@@ -11,10 +11,9 @@
   }
 
   const start = 2012;
-  // const end = 2019;
   const end = new Date().getFullYear();
-  const defaultYear = end - 2;
-  const years = [...Array(end - start).keys()].map(x => x + start);
+  const defaultYear = end - 1;
+  const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
   export async function preload(page: { query: Query }) {
     let { name, insee, siret, sirens: sirenString, year: y } = page.query;
