@@ -6,7 +6,7 @@
     name: string;
     insee: string;
     siret: string;
-    sirenString: string;
+    sirens: string;
     year: string;
   }
 
@@ -17,7 +17,7 @@
   const years = [...Array(end - start).keys()].map(x => x + start);
 
   export async function preload(page: { query: Query }) {
-    let { name, insee, siret, sirenString, year: y } = page.query;
+    let { name, insee, siret, sirens: sirenString, year: y } = page.query;
 
     let sirens = sirenString?.split(',');
     let year = parseInt(y) || defaultYear;
