@@ -235,7 +235,7 @@
   </menu>
   <div class="dataviz">
     <Years {years} {valuePs} selected={currentYear} select={selectYear} />
-    <Summary bind:type bind:fonction year={currentYear} {budgetP} />
+    <Summary year={currentYear} {budgetP} />
   </div>
 </div>
 

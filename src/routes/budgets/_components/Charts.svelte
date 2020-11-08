@@ -1,12 +1,12 @@
 <script lang="ts">
   import Bar from './Bar.svelte';
   import { sumBy } from '../../../utils';
+  import type { Code } from '../../../interfaces';
 
   export let values: any[];
-  export let selectFonction: (f: string) => void;
+  export let selectCode: (f: Code) => void;
 
   $: total = sumBy(values, 'value');
-  $: console.log('total', total);
 </script>
 
 <div class="chart">
@@ -15,7 +15,7 @@
       {label}
       {value}
       percentage={value / total}
-      handleClick={clickable ? () => selectFonction(code) : undefined}
+      handleClick={clickable ? () => selectCode(code) : undefined}
     />
   {/each}
 </div>

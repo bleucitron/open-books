@@ -1,3 +1,5 @@
+import type { BudgetType } from './utils/budget';
+
 export interface Record {
   bal: string;
   becre: number;
@@ -62,6 +64,9 @@ export interface BudgetParams {
   siren?: string[];
   year: number;
 }
+
+export type Type = BudgetType | undefined;
+export type Code = string | undefined;
 
 interface InseeEntity {
   code: string;
