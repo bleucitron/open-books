@@ -67,6 +67,6 @@ export function sumBy(list: object[], key: string) {
   return list.reduce((acc, cur) => acc + cur[key], 0);
 }
 
-export function pathFromString(s: string) {
-  return s?.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
+export function stepsFromString(s: string) {
+  return s.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
 }

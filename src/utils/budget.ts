@@ -181,6 +181,11 @@ export enum BudgetType {
   CREDIT = 'obnetcre',
 }
 
+export const typeToLabel = {
+  [BudgetType.DEBIT]: 'Dépenses',
+  [BudgetType.CREDIT]: 'Recettes',
+};
+
 export function fonctionFromTree(
   code: string,
   tree: FonctionTree | FonctionTreeValue,
