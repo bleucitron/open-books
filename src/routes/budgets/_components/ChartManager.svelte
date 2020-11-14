@@ -4,7 +4,7 @@
     les opérations sans fonction n'apparaissent pas dans ce détail
   */
 
-  import Charts from './Charts.svelte';
+  import Chart from './Chart.svelte';
   import type {
     Budget,
     FonctionTree,
@@ -24,16 +24,18 @@
   $: fonction = code && fonctionFromTree(code, aggTree);
   $: fonctions = Object.values(fonction ? fonction.subTree : aggTree);
 
-  $: values = fonctions?.map((f: FonctionTreeValue) => ({
-    code: f.code,
-    label: f.label,
-    value: f[type as BudgetType],
-    clickable: !!f.subTree,
-  }));
+  $: values = fonctions
+    ?.map((f: FonctionTreeValue) => ({
+      code: f.code,
+      label: f.label,
+      value: f[type as BudgetType],
+      clickable: !!f.subTree,
+    }))
+    .sort((a, b) => b.value - a.value);
 </script>
 
 <div class="chart-manager">
-  <Charts {selectCode} {values} />
+  <Chart {selectCode} {values} />
 </div>
 
 <style>
