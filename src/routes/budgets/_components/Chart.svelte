@@ -7,6 +7,7 @@
   export let selectCode: (f: Code) => void;
 
   $: total = sumBy(values, 'value');
+  $: max = Math.max(...values.map(({ value }) => value));
 </script>
 
 <div class="chart">
@@ -15,6 +16,7 @@
       {label}
       {value}
       percentage={value / total}
+      width={value / max}
       handleClick={clickable ? () => selectCode(code) : undefined}
     />
   {/each}
@@ -22,7 +24,10 @@
 
 <style lang="scss">
   .chart {
+    display: flex;
+    flex-direction: column;
     margin-left: 2rem;
     width: 70%;
+    height: 80%;
   }
 </style>

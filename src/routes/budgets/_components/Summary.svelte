@@ -8,6 +8,7 @@
     makeFonctionTree as _makeFonctionTree,
     stepsFromString,
     fonctionFromTree,
+    BudgetType,
   } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
@@ -19,8 +20,8 @@
 
   export let budgetP: Promise<Budget | null>;
   export let year: number;
-  let type: Type;
-  let code: Code;
+  let type: Type = BudgetType.DEBIT;
+  let code: Code = '3';
   let tree: FonctionTree;
   let steps: { label: string; select: () => void }[];
 
