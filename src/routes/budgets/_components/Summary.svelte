@@ -4,8 +4,6 @@
   import city from '../../../stores/city';
   import { getNomen } from '../../../api';
   import {
-    BudgetType,
-    formatValue,
     typeToLabel,
     makeFonctionTree as _makeFonctionTree,
     stepsFromString,
@@ -16,6 +14,7 @@
   import type { Type, Code, Budget, FonctionTree } from '../../../interfaces';
 
   import Path from './Path.svelte';
+  import DebitOrCredit from './DebitOrCredit.svelte';
   import ChartManager from './ChartManager.svelte';
 
   export let budgetP: Promise<Budget | null>;
@@ -112,19 +111,11 @@
     {#if !budget}
       <div class="values none">Aucun budget</div>
     {:else if !type}
-      <div class="values">
-        <div
-          class="value credit"
-          on:click={() => selectType(BudgetType.CREDIT)}
-        >
-          <h4>Recettes</h4>
-          {formatValue(budget.credit)}
-        </div>
-        <div class="value debit" on:click={() => selectType(BudgetType.DEBIT)}>
-          <h4>Dépenses</h4>
-          {formatValue(budget.debit)}
-        </div>
-      </div>
+      <DebitOrCredit
+        credit={budget.credit}
+        debit={budget.debit}
+        select={selectType}
+      />
     {:else if tree}
       <Path {steps} {reset} />
       <ChartManager {budget} {type} {tree} {code} {selectCode} />
@@ -141,26 +132,6 @@
     align-items: stretch;
     width: 100%;
     background: white;
-  }
-
-  .values {
-    flex: 1 0;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-  }
-
-  .value {
-    text-align: center;
-    width: 40%;
-    margin: 0 1rem;
-    font-size: 4rem;
-  }
-
-  h4 {
-    font-size: 1.5rem;
   }
 
   h3 {
