@@ -243,7 +243,6 @@
   header {
     padding: 0 0.5rem;
     height: 3rem;
-    box-sizing: border-box;
     background: #151515;
     color: white;
 
