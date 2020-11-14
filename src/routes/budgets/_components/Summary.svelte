@@ -22,6 +22,7 @@
   let type: Type;
   let code: Code;
   let tree: FonctionTree;
+  let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
   const fonctionTreeByCode = {};
@@ -80,13 +81,9 @@
           };
         })
       : [];
-  $: {
-    if (type)
-      steps = [
-        { label: typeToLabel[type], select: () => selectType(type) },
-        ...steps,
-      ];
-  }
+  $: steps = type
+    ? [{ label: typeToLabel[type], select: () => selectType(type) }, ...steps]
+    : [];
 </script>
 
 <div class="Summary">
