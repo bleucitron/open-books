@@ -59,7 +59,6 @@
 
   .value {
     display: flex;
-    box-sizing: border-box;
     padding: 3px;
     height: 1.5rem;
     flex-flow: column;

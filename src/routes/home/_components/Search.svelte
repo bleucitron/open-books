@@ -86,7 +86,7 @@
 
   i {
     width: 2rem;
-    padding: 0 1rem;
+    padding: 0 2rem;
     font-size: 1.5rem;
 
     &.fa-times:hover {

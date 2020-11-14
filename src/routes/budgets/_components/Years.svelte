@@ -37,7 +37,7 @@
     padding: 1rem 2rem;
     margin: 0;
     background: #333;
-    height: 10rem;
+    height: 11rem;
     width: fit-content;
   }
 </style>
