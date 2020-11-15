@@ -1,29 +1,39 @@
 <script lang="ts">
   export let steps: { label: string; select: () => void }[];
-  export let reset: () => void;
+
+  $: current = steps.pop()?.label;
 </script>
 
 <div class="path">
-  <i on:click={reset} class="fas fa-times-circle reset" />
-  {#each steps as { label, select }}
-    <div class="step" on:click={select}>
-      {label}
-      <i class="fas fa-caret-right next" />
-    </div>
-  {/each}
+  {#if current}
+    <div class="current">{current}</div>
+  {/if}
+  <div class="steps">
+    {#each steps as { label, select }}
+      <div class="step" on:click={select}>
+        {label}
+        <i class="fas fa-caret-right next" />
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style lang="scss">
   .path {
+    flex: 1 0;
     display: flex;
-    align-items: baseline;
+    flex-flow: column-reverse;
+  }
+
+  .steps {
+    display: flex;
+    font-size: 0.9rem;
   }
 
   .next {
     margin: 0 0.5rem;
   }
 
-  .reset,
   .step {
     &:hover {
       color: coral;
@@ -31,22 +41,8 @@
     }
   }
 
-  .step {
-    &:first-of-type {
-      margin-left: 0.5rem;
-    }
-
-    &:last-of-type {
-      font-size: 1.5rem;
-
-      &:hover {
-        color: unset;
-        cursor: unset;
-      }
-
-      i {
-        display: none;
-      }
-    }
+  .current {
+    font-size: 2rem;
+    line-height: 1.8rem;
   }
 </style>
