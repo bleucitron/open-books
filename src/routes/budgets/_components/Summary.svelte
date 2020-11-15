@@ -21,7 +21,7 @@
   export let budgetP: Promise<Budget | null>;
   export let year: number;
   let type: Type = BudgetType.DEBIT;
-  let code: Code = '3';
+  let code: Code = undefined;
   let tree: FonctionTree;
   let steps: { label: string; select: () => void }[];
 
@@ -131,6 +131,7 @@
     padding: 0.5rem;
     width: 100%;
     background: white;
+    overflow: hidden;
   }
 
   :global(.summary .path) {
