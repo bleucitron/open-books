@@ -8,11 +8,18 @@
   export let label: string;
   export let handleClick: () => void = () => null;
   // export let color: string;
+
+  $: clickable = !!handleClick;
 </script>
 
-<div class="bar" class:clickable={!!handleClick} on:click={handleClick}>
+<div class="bar" class:clickable on:click={handleClick}>
   <div class="labels">
-    <h3>{label}</h3>
+    <h3>
+      {label}
+      {#if clickable}
+        <i class="fas fa-ellipsis-h" />
+      {/if}
+    </h3>
     <div class="values">
       <span class="value">{`${formatValue(value)}`}</span>
       <span class="percentage">{`${format('.0%')(percentage)}`}</span>
@@ -30,14 +37,15 @@
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     height: 5rem;
-    /* color: white; */
   }
 
-  .clickable:hover {
-    cursor: pointer;
+  .clickable {
+    &:hover {
+      cursor: pointer;
 
-    .background {
-      background: coral;
+      .background {
+        background: coral;
+      }
     }
   }
 
