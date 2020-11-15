@@ -261,6 +261,14 @@
       display: flex;
       align-items: center;
       height: 100%;
+      font-size: 1.5rem;
+      margin-right: 1.5rem;
+      color: #444;
+      transition: color 0.3s ease-in-out;
+
+      &:hover {
+        color: coral;
+      }
     }
 
     .labels {
@@ -306,16 +314,5 @@
     flex-flow: column;
     align-items: center;
     background: #333;
-  }
-
-  .home {
-    font-size: 1.5rem;
-    margin-right: 1.5rem;
-    color: #444;
-    transition: color 0.3s ease-in-out;
-
-    &:hover {
-      color: coral;
-    }
   }
 </style>

@@ -87,7 +87,7 @@
     : [];
 </script>
 
-<div class="Summary">
+<div class="summary">
   <header>
     <h3>
       {year}
@@ -122,18 +122,22 @@
 </div>
 
 <style lang="scss">
-  .Summary {
+  .summary {
     flex: 1 0;
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: stretch;
+    padding: 0.5rem;
     width: 100%;
     background: white;
   }
 
+  :global(.summary .path) {
+    margin-left: 0.5rem;
+  }
+
   h3 {
-    margin: 0.5rem;
     margin-bottom: 0;
     font-size: 2.5rem;
     text-align: center;
