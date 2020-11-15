@@ -15,6 +15,7 @@
   .container {
     display: flex;
     flex: 1 0;
+    overflow: hidden;
 
     padding: 1rem;
   }
