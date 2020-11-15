@@ -21,12 +21,12 @@
   export let budgetP: Promise<Budget | null>;
   export let year: number;
   let type: Type = BudgetType.DEBIT;
-  let code: Code = undefined;
+  let code: Code = '3';
   let tree: FonctionTree;
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
-  const fonctionTreeByCode = {};
+  const fonctionTreeByNomen = {};
 
   onMount(async () => {
     makeFonctionTree = _makeFonctionTree; // to make sure _makeFonctionTree is not called for ssr
@@ -50,12 +50,12 @@
     code: string,
     population?: number,
   ) {
-    let tree = fonctionTreeByCode[code];
+    let tree = fonctionTreeByNomen[code];
 
     if (!tree) {
       const nomen = await getNomen(year, code, population);
       tree = makeFonctionTree?.(nomen);
-      fonctionTreeByCode[code] = tree;
+      fonctionTreeByNomen[code] = tree;
     }
 
     return tree;
@@ -89,17 +89,13 @@
 
 <div class="summary">
   <header>
-    <h3>
-      {year}
-      {#await budgetP then budget}
-        {#if budget}
-          <Csv data={budget} />
-        {/if}
-      {/await}
-    </h3>
+    <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
+    {#if tree}
+      <Path {steps} />
+    {/if}
     {#await budgetP then budget}
       {#if budget}
-        <div class="nomen">{budget.nomen}</div>
+        <Csv data={budget} />
       {/if}
     {/await}
   </header>
@@ -115,8 +111,12 @@
         select={selectType}
       />
     {:else if tree}
-      <Path {steps} {reset} />
       <ChartManager {budget} {type} {tree} {code} {selectCode} />
+    {/if}
+  {/await}
+  {#await budgetP then budget}
+    {#if budget}
+      <div class="nomen">{budget.nomen}</div>
     {/if}
   {/await}
 </div>
@@ -138,15 +138,31 @@
     margin-left: 0.5rem;
   }
 
-  h3 {
-    margin-bottom: 0;
-    font-size: 2.5rem;
-    text-align: center;
+  header {
     position: relative;
+    display: flex;
+    align-items: baseline;
+  }
+
+  h3 {
+    margin-left: 0.5rem;
+    font-size: 3.5rem;
+
+    &.clickable:hover {
+      cursor: pointer;
+      color: coral;
+    }
   }
 
   .nomen {
-    text-align: center;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.2rem;
+    background: grey;
+    color: white;
+    border-radius: 4px;
   }
 
   .none {
