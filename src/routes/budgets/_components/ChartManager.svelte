@@ -43,7 +43,6 @@
     flex: 1 0;
     display: flex;
     width: 100%;
-    align-items: center;
     justify-content: center;
   }
 </style>
