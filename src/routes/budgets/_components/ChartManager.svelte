@@ -43,7 +43,7 @@
     flex: 1 0;
     display: flex;
     width: 100%;
-    align-items: center;
+    margin-top: 1rem;
     justify-content: center;
     overflow-y: scroll;
   }
