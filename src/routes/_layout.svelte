@@ -4,8 +4,19 @@
   export let segment: string;
 </script>
 
-{#if segment !== 'budgets'}
-  <Nav path={segment || 'home'} />
-{/if}
+<div class="page">
+  {#if segment !== 'budgets'}
+    <Nav path={segment || 'home'} />
+  {/if}
 
-<slot />
+  <slot />
+</div>
+
+<style class="scss">
+  .page {
+    flex: 1 0;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+  }
+</style>

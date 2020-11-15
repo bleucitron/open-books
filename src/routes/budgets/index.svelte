@@ -306,6 +306,7 @@
     flex: 1 0;
     display: flex;
     flex-flow: row;
+    overflow: hidden;
   }
 
   .dataviz {
