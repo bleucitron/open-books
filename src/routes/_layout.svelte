@@ -1,9 +1,11 @@
 <script lang="ts">
   import Nav from './_components/Nav.svelte';
+  import GoogleAnalytics from './_components/GoogleAnalytics.svelte';
 
   export let segment: string;
 </script>
 
+<GoogleAnalytics />
 <div class="page">
   {#if segment !== 'budgets'}
     <Nav path={segment || 'home'} />
