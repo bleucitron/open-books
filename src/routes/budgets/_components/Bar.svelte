@@ -6,8 +6,7 @@
   export let percentage: number;
   export let width: number;
   export let label: string;
-  export let handleClick: () => void = () => null;
-  // export let color: string;
+  export let handleClick: () => void;
 
   $: clickable = !!handleClick;
 </script>
