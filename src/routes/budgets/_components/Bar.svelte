@@ -11,7 +11,7 @@
   $: clickable = !!handleClick;
 </script>
 
-<div class="bar" class:clickable on:click={handleClick}>
+<div class="bar" class:clickable on:click={() => handleClick?.()}>
   <div class="labels">
     <h3>
       {label}
