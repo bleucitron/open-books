@@ -83,7 +83,7 @@ export interface FonctionTreeValue {
   code: string;
   label: string;
   short?: string;
-  subTree?: FonctionTree;
+  subTree: FonctionTree;
 }
 
 export interface FonctionTree {
@@ -108,4 +108,10 @@ export interface UrlData {
   siret: string;
   sirens: string[];
   year: number;
+}
+
+export interface BarChartValue {
+  label: string;
+  value: number;
+  handleClick?: () => void;
 }

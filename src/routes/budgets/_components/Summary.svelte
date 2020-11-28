@@ -1,28 +1,40 @@
 <script lang="ts">
+  /*
+    Le code se basant uniquement sur la notion de fonction,
+    les opérations sans fonction n'apparaissent pas dans ce détail.
+
+    Voir la fonction aggregateData
+  */
+
   import { onMount } from 'svelte';
 
-  import city from '../../../stores/city';
+  import { city, tree, code, budget, fonction } from '../../../stores';
   import { getNomen } from '../../../api';
   import {
     typeToLabel,
     makeFonctionTree as _makeFonctionTree,
     stepsFromString,
     fonctionFromTree,
+    aggregateData,
     BudgetType,
   } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
-  import type { Type, Code, Budget, FonctionTree } from '../../../interfaces';
+  import type {
+    Type,
+    Code,
+    Budget,
+    FonctionTree,
+    FonctionTreeValue,
+  } from '../../../interfaces';
 
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
-  import ChartManager from './ChartManager.svelte';
+  import Chart from './Chart.svelte';
 
   export let budgetP: Promise<Budget | null>;
   export let year: number;
   let type: Type = BudgetType.DEBIT;
-  let code: Code = '3';
-  let tree: FonctionTree;
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
@@ -34,15 +46,15 @@
 
   function selectType(t: Type) {
     type = t;
-    code = undefined;
+    code.set(undefined);
   }
-  function selectCode(f: Code) {
-    code = f;
+  function selectCode(c: Code) {
+    code.set(c);
   }
 
   function reset() {
     type = undefined;
-    code = undefined;
+    code.set(undefined);
   }
 
   async function getFonctionTree(
@@ -61,19 +73,22 @@
     return tree;
   }
 
-  $: treeP = budgetP.then(async budget => {
-    if (budget) {
-      const { year, nomen: code } = budget;
+  $: budgetP.then(async b => {
+    if (b) {
+      const { year, nomen: code } = b;
+      budget.set(b);
+
       const _tree = await getFonctionTree(year, code, $city?.population);
-      tree = _tree;
-      return _tree;
+
+      const aggTree = _tree && aggregateData(b.records, _tree);
+      tree.set(aggTree);
     }
   });
 
   $: steps =
-    code && tree
-      ? stepsFromString(code).map(code => {
-          const fonction = fonctionFromTree(code, tree);
+    $code && $tree
+      ? stepsFromString($code as string).map(code => {
+          const fonction = fonctionFromTree(code, $tree as FonctionTree);
           const { short, label } = fonction;
 
           return {
@@ -85,12 +100,26 @@
   $: steps = type
     ? [{ label: typeToLabel[type], select: () => selectType(type) }, ...steps]
     : [];
+
+  $: fonctions =
+    $tree &&
+    (Object.values(
+      $fonction ? $fonction.subTree : $tree,
+    ) as FonctionTreeValue[]);
+
+  $: values = fonctions
+    ?.map((f: FonctionTreeValue) => ({
+      label: f.label,
+      value: f[type as BudgetType],
+      handleClick: f.subTree && (() => selectCode(f.code)),
+    }))
+    .sort((a, b) => b.value - a.value);
 </script>
 
 <div class="summary">
   <header>
     <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
-    {#if tree}
+    {#if $tree}
       <Path {steps} />
     {/if}
     {#await budgetP then budget}
@@ -102,17 +131,19 @@
   {#await budgetP}
     <Spinner color={'#333'} size={'3'} />
   {:then budget}
-    {#if !budget}
-      <div class="values none">Aucun budget</div>
-    {:else if !type}
-      <DebitOrCredit
-        credit={budget.credit}
-        debit={budget.debit}
-        select={selectType}
-      />
-    {:else if tree}
-      <ChartManager {budget} {type} {tree} {code} {selectCode} />
-    {/if}
+    <div class="values">
+      {#if !budget}
+        <div class="none">Aucun budget</div>
+      {:else if !type}
+        <DebitOrCredit
+          credit={budget.credit}
+          debit={budget.debit}
+          select={selectType}
+        />
+      {:else if $tree}
+        <Chart {values} />
+      {/if}
+    </div>
   {/await}
   {#await budgetP then budget}
     {#if budget}
@@ -166,7 +197,19 @@
   }
 
   .none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.5rem;
     text-align: center;
+  }
+
+  .values {
+    flex: 1 0;
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+    overflow-y: scroll;
   }
 </style>

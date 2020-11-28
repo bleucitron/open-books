@@ -139,7 +139,7 @@ export function extractFonctions(e: Element) {
     const label = element.getAttribute('Libelle') as string;
     const short = element.getAttribute('Lib_court') as string;
 
-    const value: FonctionTreeValue = {
+    const value: Partial<FonctionTreeValue> = {
       code,
       label,
     };

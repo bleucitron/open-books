@@ -1,23 +1,22 @@
 <script lang="ts">
   import Bar from './Bar.svelte';
   import { sumBy } from '../../../utils';
-  import type { Code } from '../../../interfaces';
+  import type { BarChartValue } from '../../../interfaces';
 
-  export let values: any[];
-  export let selectCode: (f: Code) => void;
+  export let values: BarChartValue[];
 
   $: total = sumBy(values, 'value');
   $: max = Math.max(...values.map(({ value }) => value));
 </script>
 
 <div class="chart">
-  {#each values as { label, value, code, clickable }}
+  {#each values as { label, value, handleClick }}
     <Bar
       {label}
       {value}
       percentage={value / total}
       width={value / max}
-      handleClick={clickable ? () => selectCode(code) : undefined}
+      {handleClick}
     />
   {/each}
 </div>
