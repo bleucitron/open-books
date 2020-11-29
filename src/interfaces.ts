@@ -42,8 +42,8 @@ export interface Budget {
   nomen: string;
   etabl: string;
   year: number;
-  credit: number;
-  debit: number;
+  obnetcre: number;
+  obnetdeb: number;
   length: number;
   records: Record[];
 }

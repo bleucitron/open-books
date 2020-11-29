@@ -180,7 +180,7 @@
     .filter(l => l) as Budget[];
 
   $: valuePs = budgetPs.map(budgetP =>
-    budgetP.then(budget => budget && budget.credit),
+    budgetP.then(budget => budget && budget.obnetcre),
   );
 
   $: yearIndex = years.findIndex(y => y === currentYear);
