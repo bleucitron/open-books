@@ -17,6 +17,7 @@
     fonctionFromTree,
     aggregateData,
     BudgetType,
+    formatValue,
   } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
   import Csv from '../_components/Csv.svelte';
@@ -114,6 +115,19 @@
       handleClick: f.subTree && (() => selectCode(f.code)),
     }))
     .sort((a, b) => b.value - a.value);
+
+  $: infosP = budgetP.then(budget => {
+    if (budget) {
+      const main = type && ($fonction ? $fonction[type] : budget[type]);
+
+      return {
+        debit: budget.obnetdeb,
+        credit: budget.obnetcre,
+        nomen: budget.nomen,
+        main,
+      };
+    }
+  });
 </script>
 
 <div class="summary">
@@ -128,28 +142,27 @@
       {/if}
     {/await}
   </header>
-  {#await budgetP}
-    <Spinner color={'#333'} size={'3'} />
-  {:then budget}
-    <div class="values">
-      {#if !budget}
+  <div class="values">
+    {#await infosP}
+      <Spinner color={'#333'} size={'3'} />
+    {:then infos}
+      {#if !infos}
         <div class="none">Aucun budget</div>
       {:else if !type}
         <DebitOrCredit
-          credit={budget.credit}
-          debit={budget.debit}
+          credit={infos.credit}
+          debit={infos.debit}
           select={selectType}
         />
-      {:else if $tree}
+      {:else if values}
+        <div class="main">{formatValue(infos.main)}</div>
         <Chart {values} />
       {/if}
-    </div>
-  {/await}
-  {#await budgetP then budget}
-    {#if budget}
-      <div class="nomen">{budget.nomen}</div>
-    {/if}
-  {/await}
+      {#if infos}
+        <div class="nomen">{infos.nomen}</div>
+      {/if}
+    {/await}
+  </div>
 </div>
 
 <style lang="scss">
@@ -159,57 +172,61 @@
     flex-flow: column;
     justify-content: center;
     align-items: stretch;
-    padding: 0.5rem;
+    padding: 1rem;
     width: 100%;
     background: white;
     overflow: hidden;
   }
 
   :global(.summary .path) {
-    margin-left: 0.5rem;
+    margin-left: 1rem;
   }
 
   header {
     position: relative;
     display: flex;
     align-items: baseline;
-  }
 
-  h3 {
-    margin-left: 0.5rem;
-    font-size: 3.5rem;
+    h3 {
+      margin-left: 0.5rem;
+      font-size: 3.5rem;
 
-    &.clickable:hover {
-      cursor: pointer;
-      color: coral;
+      &.clickable:hover {
+        cursor: pointer;
+        color: coral;
+      }
     }
-  }
-
-  .nomen {
-    position: absolute;
-    bottom: 0.5rem;
-    right: 0.5rem;
-    font-size: 0.9rem;
-    padding: 0.2rem;
-    background: grey;
-    color: white;
-    border-radius: 4px;
-  }
-
-  .none {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    text-align: center;
   }
 
   .values {
     flex: 1 0;
     display: flex;
+    flex-flow: column;
+    align-items: center;
     width: 100%;
-    margin-top: 1rem;
-    justify-content: center;
-    overflow-y: scroll;
+    overflow-y: hidden;
+
+    .none {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .main {
+      font-size: 3rem;
+    }
+
+    .nomen {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      background: grey;
+      color: white;
+      border-radius: 4px;
+    }
   }
 </style>

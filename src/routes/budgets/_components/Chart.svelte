@@ -23,10 +23,12 @@
 
 <style lang="scss">
   .chart {
+    flex: 1 0;
     display: flex;
     flex-direction: column;
     margin-left: 2rem;
     width: 70%;
-    height: 80%;
+    max-width: 40rem;
+    overflow-y: scroll;
   }
 </style>

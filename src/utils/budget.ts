@@ -81,8 +81,8 @@ export function makeBudget(data: BudgetRaw): Budget | null {
 
   // const debit = sumBy(records, 'sd');
   // const credit = sumBy(records, 'sc');
-  const debit = sumBy(records, BudgetCode.OBNETDEB);
-  const credit = sumBy(records, BudgetCode.OBNETCRE);
+  const obnetdeb = sumBy(records, BudgetCode.OBNETDEB);
+  const obnetcre = sumBy(records, BudgetCode.OBNETCRE);
   const labels = [
     ...new Set(records.map(record => record.lbudg.toLowerCase())),
   ];
@@ -106,8 +106,8 @@ export function makeBudget(data: BudgetRaw): Budget | null {
     year,
     nomen,
     length,
-    debit,
-    credit,
+    obnetdeb,
+    obnetcre,
     label,
     records,
   };
