@@ -18,7 +18,7 @@
     "compression": "^1.7.1",
     "d3-format": "^2.0.0",
     "json-2-csv": "^3.7.6",
-    "marked": "^1.1.1",
+    "marked": "^2.0.0",
     "polka": "next",
     "sirv": "^1.0.0"
   },
