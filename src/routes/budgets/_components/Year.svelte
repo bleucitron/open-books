@@ -34,7 +34,7 @@
     {#if pending}
       <Spinner size="1.5" />
     {:else if unavailable}
-      <i class="fas fa-times" />
+      <i class="fas fa-times icon" />
     {:else if value}
       <div class="value" style={`height: ${height};`}>
         {formatValue(value, 3)}
@@ -127,7 +127,7 @@
     justify-content: center;
   }
 
-  i {
+  .icon {
     color: transparent;
   }
 
