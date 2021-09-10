@@ -37,7 +37,7 @@
 
 <div class="Search">
   <div class="searchbar" class:focus>
-    <i class="fas fa-search" />
+    <i class="fas fa-search icon" />
     <input
       {value}
       on:input={handleInput}
@@ -46,7 +46,7 @@
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
-      <i class="fas fa-times" on:click={reset} />
+      <i class="fas fa-times icon" on:click={reset} />
     {/if}
   </div>
   <slot />
@@ -54,7 +54,6 @@
 
 <style lang="scss">
   * {
-    background: #444;
     color: white;
   }
 
@@ -69,7 +68,14 @@
 
   .searchbar {
     display: flex;
+    background: #444;
+    color: white;
+    align-items: center;
     border-color: white;
+
+    &:focus-within {
+      background: #333;
+    }
 
     * {
       display: flex;
@@ -77,20 +83,13 @@
       align-items: center;
     }
 
-    &.focus {
-      * {
-        background: #333;
+    .icon {
+      margin: 0 1rem;
+      font-size: 1.3rem;
+
+      &.fa-times:hover {
+        cursor: pointer;
       }
-    }
-  }
-
-  i {
-    width: 2rem;
-    padding: 0 2rem;
-    font-size: 1.5rem;
-
-    &.fa-times:hover {
-      cursor: pointer;
     }
   }
 
@@ -100,6 +99,7 @@
     padding-left: 0;
     outline: none;
     font-size: 2rem;
+    background: transparent;
     border: none;
     border-bottom: 1px solid transparent;
 
