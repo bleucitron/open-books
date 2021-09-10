@@ -46,7 +46,9 @@
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
-      <i class="fas fa-times icon" on:click={reset} />
+      <span class="icon" on:click={reset}>
+        <i class="fas fa-times" />
+      </span>
     {/if}
   </div>
   <slot />
@@ -86,10 +88,10 @@
     .icon {
       margin: 0 1rem;
       font-size: 1.3rem;
+    }
 
-      &.fa-times:hover {
-        cursor: pointer;
-      }
+    span.icon {
+      cursor: pointer;
     }
   }
 
