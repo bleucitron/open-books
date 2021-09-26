@@ -1,6 +1,6 @@
 <script lang="ts">
   import marked from 'marked';
-  import md from '../../docs/about.md';
+  import md from '../docs/about.md';
 
   const content = marked(md);
 </script>

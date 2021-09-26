@@ -1,6 +1,6 @@
 <script>
-  import { stores } from '@sapper/app';
-  const { page } = stores();
+  import { page } from '$app/stores';
+
   $: {
     if (typeof gtag !== 'undefined') {
       gtag('config', 'G-ZPGFWYWMHX', {

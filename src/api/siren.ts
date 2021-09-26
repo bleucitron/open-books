@@ -8,7 +8,7 @@ import {
 import type { Etablissement } from '../interfaces';
 
 const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
-const baseURL = 'https://api.insee.fr/entreprises/sirene/V3';
+const baseUrl = 'https://api.insee.fr/entreprises/sirene/V3';
 
 const headers = {
   Accept: 'application/json',
@@ -16,14 +16,15 @@ const headers = {
 };
 
 const options = {
-  baseURL,
   headers,
 };
 
 export function getSiret(siret: string): Promise<Etablissement> {
   const endpoint = makeGetSiretEndpoint(siret);
 
-  return get(endpoint, options).then(({ etablissement }) => etablissement);
+  return get(`${baseUrl}/${endpoint}`, options).then(
+    ({ etablissement }) => etablissement,
+  );
 }
 
 export function getSiretsFromInsee(
@@ -33,5 +34,5 @@ export function getSiretsFromInsee(
   const codes = checkCodes(code);
   const endpoint = makeSearchSiretEndpoint(text, codes);
 
-  return get(endpoint, options).then(r => r.etablissements);
+  return get(`${baseUrl}/${endpoint}`, options).then(r => r.etablissements);
 }

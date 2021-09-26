@@ -1,5 +1,4 @@
 <script lang="ts">
-  import classnames from 'classnames';
   import Spinner from '../../_components/Spinner.svelte';
 
   import type { Budget } from '../../../interfaces';
@@ -25,11 +24,9 @@
       <ul>
         {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
           <li
-            class={classnames({
-              siret: true,
-              selected: selected === siret,
-              main: i === 0,
-            })}
+            class="siret"
+            class:selected={selected === siret}
+            class:main={i === 0}
           >
             <div on:click={() => select(siret)}>
               <div class="info">

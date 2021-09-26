@@ -1,4 +1,4 @@
-import { json2csvAsync as toCSV } from 'json-2-csv';
+import json2csv from 'json-2-csv';
 
 import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 import type {
@@ -10,6 +10,8 @@ import type {
   FonctionTree,
   FonctionTreeValue,
 } from '../interfaces';
+
+const { json2csvAsync: toCSV } = json2csv;
 
 const keys = [
   'EXER',

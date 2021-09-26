@@ -13,7 +13,7 @@ const byYear = {
   '2017': '-',
 };
 
-const base = '/api/records/1.0/search';
+const base = 'api/records/1.0/search';
 
 function buildParamString(paramByKey: BudgetParams): string {
   return Object.entries(paramByKey)

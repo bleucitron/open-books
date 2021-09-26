@@ -1,5 +1,4 @@
 <script lang="ts">
-  import classnames from 'classnames';
   import { formatValue } from '../../../utils';
   import Spinner from '../../_components/Spinner.svelte';
 
@@ -22,14 +21,19 @@
       }
     });
 
-  $: classes = classnames('Year', { pending, unavailable, ready, selected });
-
   function _select() {
     if (ready) select?.();
   }
 </script>
 
-<li class={classes} on:click={_select}>
+<li
+  class="Year"
+  class:pending
+  class:unavailable
+  class:ready
+  class:selected
+  on:click={_select}
+>
   <div class="info">
     {#if pending}
       <Spinner size="1.5" />

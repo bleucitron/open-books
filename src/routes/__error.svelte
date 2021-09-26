@@ -1,14 +1,21 @@
-<script lang="ts">
-  interface Error {
-    message: string;
-    stack: string;
+<script context="module">
+  export function load({ error, status }) {
+    return {
+      props: {
+        status,
+        message: error.message,
+      },
+    };
   }
-
-  export let status: string;
-  export let error: Error;
-
-  const dev = process.env.NODE_ENV === 'development';
 </script>
+
+<script>
+  export let message;
+  export let status;
+  $: title = `${status}: ${message}`;
+</script>
+
+<h1>{title}</h1>
 
 <svelte:head>
   <title>{status}</title>
@@ -16,11 +23,7 @@
 
 <h1>{status}</h1>
 
-<p>{error.message}</p>
-
-{#if dev && error.stack}
-  <pre>{error.stack}</pre>
-{/if}
+<p>{message}</p>
 
 <style lang="scss">
   h1,

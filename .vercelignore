@@ -1,4 +1,3 @@
-__sapper__
-cypress
+.svelte-kit
 data
 node_modules

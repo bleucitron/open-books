@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import Nav from './_components/Nav.svelte';
   import GoogleAnalytics from './_components/GoogleAnalytics.svelte';
 
-  export let segment: string;
+  $: segment = $page.path.split('/')[1];
 </script>
 
 <GoogleAnalytics />

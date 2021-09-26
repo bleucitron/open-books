@@ -2,21 +2,17 @@
   import { getSiretsFromInsee, getCity } from '../../api';
   import { extractSirens } from '../../api/utils/siren';
 
-  interface Query {
-    name: string;
-    insee: string;
-    siret: string;
-    sirens: string;
-    year: string;
-  }
-
   const start = 2012;
   const end = new Date().getFullYear();
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export async function preload(page: { query: Query }) {
-    let { name, insee, siret, sirens: sirenString, year: y } = page.query;
+  export async function load({ page: { query } }) {
+    let name = query.get('name');
+    let insee = query.get('insee');
+    let siret = query.get('siret');
+    let sirenString = query.get('sirens');
+    let y = query.get('year');
 
     let sirens = sirenString?.split(',');
     let year = parseInt(y) || defaultYear;
@@ -35,17 +31,19 @@
     }
 
     return {
-      sirens,
-      currentSiret: siret,
-      currentYear: year,
-      insee,
-      name,
+      props: {
+        sirens,
+        currentSiret: siret,
+        currentYear: year,
+        insee,
+        name,
+      },
     };
   }
 </script>
 
 <script lang="ts">
-  import { goto } from '@sapper/app';
+  import { goto } from '$app/navigation';
 
   import city from '../../stores/city';
   import { getRecords } from '../../api';
@@ -205,7 +203,6 @@
     <i class="fas fa-book-open" />
   </a>
   <div class="info">
-
     <div class="labels">
       <h1>{name}</h1>
 
@@ -224,7 +221,6 @@
       {:catch error}
         <div style="color: red">{error}</div>
       {/await}
-
     </div>
   </div>
 </header>

@@ -57,11 +57,11 @@ export function checkCodes(code: string): number[] {
 }
 
 export function makeGetSiretEndpoint(siret: string): string {
-  return `/siret/${siret}`;
+  return `siret/${siret}`;
 }
 
 export function makeGetSiretsEndpoint(sirens: string[]): string {
-  const base = '/siret';
+  const base = 'siret';
 
   const param = sirens.map(s => `siren:"${s}"`).join(' OR ');
 
@@ -74,7 +74,7 @@ export function makeGetSiretsEndpoint(sirens: string[]): string {
 }
 
 export function makeSearchSiretEndpoint(text: string, codes: number[]): string {
-  const base = '/siret';
+  const base = 'siret';
 
   const params = buildParamString({
     denominationUniteLegale: normalizeText(text),
