@@ -1,8 +1,8 @@
 <script lang="ts">
   import marked from 'marked';
-  import md from '../docs/about.md';
+  import { html } from '../docs/about.md';
 
-  const content = marked(md);
+  const content = marked(html);
 </script>
 
 <svelte:head>
