@@ -1,7 +1,7 @@
 {
   "name": "open-books",
   "description": "French cities budgets explorer",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
