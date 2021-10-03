@@ -16,7 +16,7 @@
 <ul class="Labels">
   {#await loadingP}
     <div class="loading">
-      <Spinner color={'#999'} />
+      <Spinner color="#999" />
     </div>
   {/await}
   {#each sirens as siren}

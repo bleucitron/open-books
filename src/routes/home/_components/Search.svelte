@@ -5,7 +5,7 @@
 
   export let search: (s: string) => void;
   export let clear: () => void;
-  export let selected: City | null = null;
+  export let selected: City = undefined;
 
   let value = '';
   let focus = false;

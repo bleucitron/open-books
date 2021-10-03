@@ -33,7 +33,7 @@
   import DebitOrCredit from './DebitOrCredit.svelte';
   import Chart from './Chart.svelte';
 
-  export let budgetP: Promise<Budget | null>;
+  export let budgetP: Promise<Budget>;
   export let year: number;
   let type: Type = BudgetType.DEBIT;
   let steps: { label: string; select: () => void }[];
@@ -144,7 +144,7 @@
   </header>
   <div class="values">
     {#await infosP}
-      <Spinner color={'#333'} size={'3'} />
+      <Spinner color="#333" size={3} />
     {:then infos}
       {#if !infos}
         <div class="none">Aucun budget</div>

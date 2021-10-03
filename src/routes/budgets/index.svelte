@@ -65,8 +65,8 @@
   export let currentYear: number;
   export let insee: string;
   export let name: string;
-  let type: string;
-  let fonction: string;
+  // let type: string;
+  // let fonction: string;
 
   let budgetById: BudgetMap = {};
 

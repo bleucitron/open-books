@@ -4,9 +4,9 @@
 
   export let year: number;
   export let pending: boolean = false;
-  export let value: number | null = null;
+  export let value: number = undefined;
   export let maxP: Promise<number>;
-  export let select: (() => void) | null = null;
+  export let select: () => void = undefined;
   export let selected: boolean = false;
 
   let height: string;
@@ -36,12 +36,12 @@
 >
   <div class="info">
     {#if pending}
-      <Spinner size="1.5" />
+      <Spinner size={1.5} />
     {:else if unavailable}
       <i class="fas fa-times icon" />
     {:else if value}
       <div class="value" style={`height: ${height};`}>
-        {formatValue(value, 3)}
+        {formatValue(value)}
       </div>
     {/if}
   </div>

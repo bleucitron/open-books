@@ -14,7 +14,7 @@
     select(null);
   });
 
-  let citiesP: Promise<City[]> | undefined;
+  let citiesP: Promise<City[]>;
   let previousCities: City[];
 
   function search(text: string): void {
@@ -26,7 +26,7 @@
     citiesP = undefined;
   }
 
-  function select(c: City | null): void {
+  function select(c: City): void {
     city.set(c);
   }
 

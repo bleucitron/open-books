@@ -11,7 +11,7 @@
     </div>
   </a>
   <nav class="Nav">
-    <a href="/about" class:current={path === 'about'}> À propos </a>
+    <a href="/about" class:current={path === 'about'}>À propos</a>
     <a href="https://github.com/iOiurson/open-books">
       <i class="fab fa-github" />
     </a>

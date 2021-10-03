@@ -71,7 +71,7 @@ export async function makeCSV(data: Budget): Promise<CSV> {
   };
 }
 
-export function makeBudget(data: BudgetRaw): Budget | null {
+export function makeBudget(data: BudgetRaw): Budget {
   const { city, siret, year, records } = data;
 
   const length = records.length;

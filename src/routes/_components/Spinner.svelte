@@ -2,7 +2,7 @@
   import { Circle } from 'svelte-loading-spinners';
 
   export let color = 'white';
-  export let size = '1';
+  export let size = 1;
   export let unit = 'rem';
 </script>
 

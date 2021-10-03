@@ -10,7 +10,13 @@ export function makeId(siret: string, year: number): string {
   return `${siret}_${year}`;
 }
 
-export function makeBudgetUrl({ name, insee, siret, sirens, year }: UrlData) {
+export function makeBudgetUrl({
+  name,
+  insee,
+  siret,
+  sirens,
+  year,
+}: UrlData): string {
   const sirensAsString = sirens.join(',');
 
   return `/budgets?name=${name}&insee=${insee}&siret=${siret}&sirens=${sirensAsString}&year=${year}`;
@@ -20,7 +26,7 @@ export function normalizeText(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-export function formatFullValue(value: number) {
+export function formatFullValue(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
     currency: 'EUR',
@@ -67,6 +73,6 @@ export function sumBy(list: object[], key: string) {
   return list.reduce((acc, cur) => acc + cur[key], 0);
 }
 
-export function stepsFromString(s: string) {
+export function stepsFromString(s: string): string[] {
   return s.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
 }

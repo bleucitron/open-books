@@ -49,7 +49,7 @@ export interface Budget {
 }
 
 export interface BudgetMap {
-  [k: string]: Budget | null;
+  [k: string]: Budget;
 }
 
 export interface BudgetRaw {
@@ -65,8 +65,8 @@ export interface BudgetParams {
   year: number;
 }
 
-export type Type = BudgetType | undefined;
-export type Code = string | undefined;
+export type Type = BudgetType;
+export type Code = string;
 
 interface InseeEntity {
   code: string;

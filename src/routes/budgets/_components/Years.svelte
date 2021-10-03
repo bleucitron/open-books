@@ -1,7 +1,7 @@
 <script lang="ts">
   import Year from './Year.svelte';
 
-  export let valuePs: Promise<number | null>[];
+  export let valuePs: Promise<number>[];
   export let years: number[];
   export let select: (y: number) => void;
   export let selected: number;

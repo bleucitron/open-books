@@ -54,7 +54,9 @@
       </div>
       {#if subTree}
         <svelte:self
-          records={records.filter(d => d.fonction && d.fonction.startsWith(code))}
+          records={records.filter(
+            d => d.fonction && d.fonction.startsWith(code),
+          )}
           tree={subTree}
           {selectedCode}
         />
@@ -78,14 +80,12 @@
 
   h3 {
     margin-top: 1rem;
-    /* margin-left: 1rem; */
   }
   span {
     font-weight: bold;
   }
 
   .value {
-    /* margin: 0.5rem; */
     margin-left: 2rem;
   }
 </style>
