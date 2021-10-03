@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { makeCSV } from '../../../utils';
+  import { makeCSV } from '@utils';
 
-  import type { Budget } from '../../../interfaces';
+  import type { Budget } from '@interfaces';
 
   export let data: Budget;
 

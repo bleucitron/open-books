@@ -1,7 +1,7 @@
 <script lang="ts">
   import Bar from './Bar.svelte';
-  import { sumBy } from '../../../utils';
-  import type { BarChartValue } from '../../../interfaces';
+  import { sumBy } from '@utils';
+  import type { BarChartValue } from '@interfaces';
 
   export let values: BarChartValue[];
 

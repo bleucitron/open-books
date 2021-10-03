@@ -8,8 +8,8 @@
 
   import { onMount } from 'svelte';
 
-  import { city, tree, code, budget, fonction } from '../../../stores';
-  import { getNomen } from '../../../api';
+  import { city, tree, code, budget, fonction } from '@stores';
+  import { getNomen } from '@api';
   import {
     typeToLabel,
     makeFonctionTree as _makeFonctionTree,
@@ -18,17 +18,17 @@
     aggregateData,
     BudgetType,
     formatValue,
-  } from '../../../utils';
-  import Spinner from '../../_components/Spinner.svelte';
-  import Csv from '../_components/Csv.svelte';
+  } from '@utils';
   import type {
     Type,
     Code,
     Budget,
     FonctionTree,
     FonctionTreeValue,
-  } from '../../../interfaces';
+  } from '@interfaces';
 
+  import Spinner from '../../_components/Spinner.svelte';
+  import Csv from '../_components/Csv.svelte';
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
   import Chart from './Chart.svelte';

@@ -1,4 +1,4 @@
-import type { BudgetParams } from '../../interfaces';
+import type { BudgetParams } from '@interfaces';
 
 const nbResults = 10000;
 

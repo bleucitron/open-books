@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { City } from '../../../interfaces';
+  import type { City } from '@interfaces';
   import Spinner from '../../_components/Spinner.svelte';
 
   export let suggestions: City[] = [];

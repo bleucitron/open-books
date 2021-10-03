@@ -1,7 +1,7 @@
 import { get } from './utils/verbs';
 import { makeGetCitiesEndpoint, makeGetCityEndpoint } from './utils/geo';
 
-import type { City } from '../interfaces';
+import type { City } from '@interfaces';
 
 const baseUrl = 'https://geo.api.gouv.fr';
 

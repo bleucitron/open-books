@@ -1,13 +1,8 @@
 <script lang="ts">
   import { format } from 'd3-format';
 
-  import type { BudgetRecord, FonctionTree } from '../../../interfaces';
-  import {
-    aggregateData,
-    formatFullValue,
-    sumBy,
-    BudgetCode,
-  } from '../../../utils/index';
+  import type { BudgetRecord, FonctionTree } from '@interfaces';
+  import { aggregateData, formatFullValue, sumBy, BudgetCode } from '@utils';
   export let records: BudgetRecord[];
   export let tree: FonctionTree;
   export let selectedCode: string;

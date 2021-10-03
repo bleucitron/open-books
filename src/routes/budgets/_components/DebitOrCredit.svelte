@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { Type } from '../../../interfaces';
+  import type { Type } from '@interfaces';
 
-  import { formatValue, BudgetType } from '../../../utils';
+  import { formatValue, BudgetType } from '@utils';
+
   export let credit: number;
   export let debit: number;
   export let select: (t: BudgetType) => void;

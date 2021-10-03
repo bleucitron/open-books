@@ -1,11 +1,11 @@
+import type { Etablissement, SiretFromAPI, SiretsFromAPI } from '@interfaces';
+
 import { get } from './utils/verbs';
 import {
   checkCodes,
   makeGetSiretEndpoint,
   makeSearchSiretEndpoint,
 } from './utils/siren';
-
-import type { Etablissement, SiretFromAPI, SiretsFromAPI } from '../interfaces';
 
 const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
 const baseUrl = 'https://api.insee.fr/entreprises/sirene/V3';

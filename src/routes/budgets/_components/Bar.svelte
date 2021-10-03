@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format } from 'd3-format';
-  import { formatValue } from '../../../utils';
+  import { formatValue } from '@utils';
 
   export let value: number;
   export let percentage: number;
@@ -23,7 +23,6 @@
       <span class="value">{`${formatValue(value)}`}</span>
       <span class="percentage">{`${format('.0%')(percentage)}`}</span>
     </div>
-
   </div>
   <div class="background" style={`width: ${width * 100}%`} />
 </div>

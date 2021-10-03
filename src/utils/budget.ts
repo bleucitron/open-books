@@ -1,6 +1,5 @@
 import json2csv from 'json-2-csv';
 
-import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 import type {
   CSV,
   Budget,
@@ -9,7 +8,9 @@ import type {
   RecordsWithSiret,
   FonctionTree,
   FonctionTreeValue,
-} from '../interfaces';
+} from '@interfaces';
+
+import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 
 const { json2csvAsync: toCSV } = json2csv;
 

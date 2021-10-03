@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatValue } from '../../../utils';
+  import { formatValue } from '@utils';
   import Spinner from '../../_components/Spinner.svelte';
 
   export let year: number;

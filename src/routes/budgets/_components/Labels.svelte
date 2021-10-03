@@ -1,7 +1,7 @@
 <script lang="ts">
   import Spinner from '../../_components/Spinner.svelte';
 
-  import type { Budget } from '../../../interfaces';
+  import type { Budget } from '@interfaces';
 
   export let labels: Budget[];
   export let select: (y: string) => void;

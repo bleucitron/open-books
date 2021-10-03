@@ -1,7 +1,7 @@
 import { get } from './utils/verbs';
 import { makeBudgetCroiseEndpoint, makeNomenEndpoint } from './utils/budget';
 
-import type { BudgetRecord, BudgetParams, BudgetFromAPI } from '../interfaces';
+import type { BudgetRecord, BudgetParams, BudgetFromAPI } from '@interfaces';
 
 const recordsUrl = 'https://data.economie.gouv.fr';
 

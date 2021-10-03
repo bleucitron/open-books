@@ -1,14 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import city from '../../stores/city';
+  import city from '@stores/city';
 
-  import { getCities } from '../../api';
+  import { getCities } from '@api';
 
   import Search from './_components/Search.svelte';
   import Suggestions from './_components/Suggestions.svelte';
 
-  import type { City } from '../../interfaces';
+  import type { City } from '@interfaces';
 
   onMount(async () => {
     select(null);

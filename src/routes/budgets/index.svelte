@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-  import { getSiretsFromInsee, getCity } from '../../api';
-  import { extractSirens } from '../../api/utils/siren';
+  import { getSiretsFromInsee, getCity } from '@api';
+  import { extractSirens } from '@api/utils/siren';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -48,20 +48,21 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
 
-  import city from '../../stores/city';
-  import { getRecords } from '../../api';
+  import city from '@stores/city';
+  import { getRecords } from '@api';
   import {
     makeBudget,
     makeId,
     makeBudgetUrl,
     orderRecordsBySiret,
-  } from '../../utils';
+  } from '@utils';
+
+  import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
+
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
   import Spinner from '../_components/Spinner.svelte';
-
-  import type { Budget, BudgetMap, City, BudgetRecord } from '../../interfaces';
 
   export let sirens: string[];
   export let currentSiret: string;

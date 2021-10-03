@@ -1,6 +1,6 @@
-import { normalizeText } from '../../utils';
+import { normalizeText } from '@utils';
 
-import type { Etablissement } from '../../interfaces';
+import type { Etablissement } from '@interfaces';
 
 const nbResults = 1000;
 const category = '7210';

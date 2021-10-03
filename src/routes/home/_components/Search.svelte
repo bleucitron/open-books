@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import type { City } from '../../../interfaces';
+  import type { City } from '@interfaces';
 
   export let search: (s: string) => void;
   export let clear: () => void;

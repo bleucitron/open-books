@@ -1,4 +1,4 @@
-import type { UrlData } from '../interfaces';
+import type { UrlData } from '@interfaces';
 
 export function displayLabel(label: string): string {
   if (!label) return '';
