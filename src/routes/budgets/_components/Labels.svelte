@@ -6,7 +6,7 @@
   export let labels: Budget[];
   export let select: (y: string) => void;
   export let selected: string;
-  export let loadingP: Promise<any>;
+  export let loadingP: Promise<unknown>;
 
   const defaultLabel = 'commune';
 

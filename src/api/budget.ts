@@ -1,14 +1,14 @@
 import { get } from './utils/verbs';
 import { makeBudgetCroiseEndpoint, makeNomenEndpoint } from './utils/budget';
 
-import type { Record, BudgetParams } from '../interfaces';
+import type { BudgetRecord, BudgetParams, BudgetFromAPI } from '../interfaces';
 
 const recordsUrl = 'https://data.economie.gouv.fr';
 
-export function getRecords(params: BudgetParams): Promise<Record[]> {
+export function getRecords(params: BudgetParams): Promise<BudgetRecord[]> {
   const endpoint = makeBudgetCroiseEndpoint(params);
 
-  return get(`${recordsUrl}/${endpoint}`).then(({ records }) =>
+  return get<BudgetFromAPI>(`${recordsUrl}/${endpoint}`).then(({ records }) =>
     records.map(record => record.fields),
   );
 }
@@ -16,8 +16,12 @@ export function getRecords(params: BudgetParams): Promise<Record[]> {
 const nomenUrl =
   'https://raw.githubusercontent.com/iOiurson/plans-de-compte/main';
 
-export function getNomen(year: number, code: string, population?: number) {
+export function getNomen(
+  year: number,
+  code: string,
+  population?: number,
+): Promise<string> {
   const endpoint = makeNomenEndpoint(year, code, population);
 
-  return get(`${nomenUrl}/${endpoint}`);
+  return get<string>(`${nomenUrl}/${endpoint}`);
 }

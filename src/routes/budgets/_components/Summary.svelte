@@ -39,21 +39,21 @@
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
-  const fonctionTreeByNomen = {};
+  const fonctionTreeByNomen: Record<string, FonctionTree> = {};
 
-  onMount(async () => {
+  onMount(() => {
     makeFonctionTree = _makeFonctionTree; // to make sure _makeFonctionTree is not called for ssr
   });
 
-  function selectType(t: Type) {
+  function selectType(t: Type): void {
     type = t;
     code.set(undefined);
   }
-  function selectCode(c: Code) {
+  function selectCode(c: Code): void {
     code.set(c);
   }
 
-  function reset() {
+  function reset(): void {
     type = undefined;
     code.set(undefined);
   }
@@ -62,7 +62,7 @@
     year: number,
     code: string,
     population?: number,
-  ) {
+  ): Promise<FonctionTree> {
     let tree = fonctionTreeByNomen[code];
 
     if (!tree) {
@@ -111,14 +111,14 @@
   $: values = fonctions
     ?.map((f: FonctionTreeValue) => ({
       label: f.label,
-      value: f[type as BudgetType],
+      value: f.value[type],
       handleClick: f.subTree && (() => selectCode(f.code)),
     }))
     .sort((a, b) => b.value - a.value);
 
   $: infosP = budgetP.then(budget => {
     if (budget) {
-      const main = type && ($fonction ? $fonction[type] : budget[type]);
+      const main = type && ($fonction ? $fonction.value[type] : budget[type]);
 
       return {
         debit: budget.obnetdeb,

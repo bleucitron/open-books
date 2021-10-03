@@ -1,6 +1,6 @@
 import type { BudgetType } from './utils/budget';
 
-export interface Record {
+export interface BudgetRecord {
   bal: string;
   becre: number;
   bedeb: number;
@@ -31,7 +31,21 @@ export interface Record {
 
 export interface RecordsWithSiret {
   siret: string;
-  records: Record[];
+  records: BudgetRecord[];
+}
+
+export interface BudgetFromAPI {
+  records: {
+    fields: BudgetRecord;
+  }[];
+}
+
+export interface SiretFromAPI {
+  etablissement: Etablissement;
+}
+
+export interface SiretsFromAPI {
+  etablissements: Etablissement[];
 }
 
 export interface Budget {
@@ -45,7 +59,7 @@ export interface Budget {
   obnetcre: number;
   obnetdeb: number;
   length: number;
-  records: Record[];
+  records: BudgetRecord[];
 }
 
 export interface BudgetMap {
@@ -56,7 +70,7 @@ export interface BudgetRaw {
   city: string;
   siret: string;
   year: number;
-  records: Record[];
+  records: BudgetRecord[];
 }
 
 export interface BudgetParams {
@@ -82,6 +96,7 @@ export interface City extends InseeEntity {
 export interface FonctionTreeValue {
   code: string;
   label: string;
+  value?: Partial<Record<BudgetType, number>>;
   short?: string;
   subTree: FonctionTree;
 }

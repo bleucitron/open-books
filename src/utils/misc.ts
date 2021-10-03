@@ -36,7 +36,6 @@ export function formatFullValue(value: number): string {
 export function formatValue(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
-    // @ts-ignore
     notation: 'compact',
     // maximumSignificantDigits: order,
     currency: 'EUR',
@@ -69,7 +68,8 @@ export function formatLabel(label: string, name: string): string {
   return formatted;
 }
 
-export function sumBy(list: object[], key: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sumBy(list: any[], key: string): number {
   return list.reduce((acc, cur) => acc + cur[key], 0);
 }
 

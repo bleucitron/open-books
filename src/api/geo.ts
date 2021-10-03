@@ -8,11 +8,11 @@ const baseUrl = 'https://geo.api.gouv.fr';
 export function getCities(text: string): Promise<City[]> {
   const endpoint = makeGetCitiesEndpoint(text);
 
-  return get(`${baseUrl}/${endpoint}`);
+  return get<City[]>(`${baseUrl}/${endpoint}`);
 }
 
 export function getCity(insee: string): Promise<City> {
   const endpoint = makeGetCityEndpoint(insee);
 
-  return get(`${baseUrl}/${endpoint}`);
+  return get<City>(`${baseUrl}/${endpoint}`);
 }

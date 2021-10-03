@@ -1,27 +1,29 @@
-<script context="module">
-  export function load({ error, status }) {
+<script context="module" lang="ts">
+  import type { ErrorLoadInput, LoadOutput } from '@sveltejs/kit';
+
+  export function load({ error, status }: ErrorLoadInput): LoadOutput {
     return {
       props: {
-        status,
+        code: status,
         message: error.message,
       },
     };
   }
 </script>
 
-<script>
-  export let message;
-  export let status;
-  $: title = `${status}: ${message}`;
+<script lang="ts">
+  export let message: string;
+  export let code: number;
+  $: title = `${code}: ${message}`;
 </script>
 
 <h1>{title}</h1>
 
 <svelte:head>
-  <title>{status}</title>
+  <title>{code}</title>
 </svelte:head>
 
-<h1>{status}</h1>
+<h1>{code}</h1>
 
 <p>{message}</p>
 

@@ -5,7 +5,9 @@ module.exports = {
     es6: true,
     node: true,
   },
-  globals: {},
+  globals: {
+    gtag: 'readonly',
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'lastest',
@@ -17,9 +19,10 @@ module.exports = {
     eqeqeq: ['error', 'always', { null: 'ignore' }],
     'no-alert': 'error',
     'no-var': 'error',
-    'prefer-const': 'error',
+    'prefer-const': ['error', { ignoreReadBeforeAssign: true }],
     'prefer-arrow-callback': 'error',
     'id-length': ['error', { min: 1, max: 40 }],
+    'no-redeclare': ['error', { builtinGlobals: false }],
     /**
      * This crashes, see: https://github.com/eslint/eslint/issues/14760.
      * The equivalent ts rule works fine though.
@@ -36,7 +39,7 @@ module.exports = {
       { allowExpressions: true },
     ],
     '@typescript-eslint/explicit-module-boundary-types': [
-      'error',
+      'off', // should be handled by explicit-function-return-type
       { allowArgumentsExplicitlyTypedAsAny: true },
     ],
     '@typescript-eslint/no-inferrable-types': [
@@ -53,6 +56,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
   },
   overrides: [

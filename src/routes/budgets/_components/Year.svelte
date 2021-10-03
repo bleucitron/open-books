@@ -3,11 +3,11 @@
   import Spinner from '../../_components/Spinner.svelte';
 
   export let year: number;
-  export let pending: boolean = false;
+  export let pending = false;
   export let value: number = undefined;
   export let maxP: Promise<number>;
   export let select: () => void = undefined;
-  export let selected: boolean = false;
+  export let selected = false;
 
   let height: string;
 
@@ -21,7 +21,7 @@
       }
     });
 
-  function _select() {
+  function _select(): void {
     if (ready) select?.();
   }
 </script>

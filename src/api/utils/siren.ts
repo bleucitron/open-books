@@ -25,7 +25,13 @@ function buildParamString(paramByKey: Params): string {
     .join(' AND ');
 }
 
-const codesByMain = {
+interface CityCode {
+  name: string;
+  nb: number;
+  base: number;
+}
+
+const codesByMain: Record<string, CityCode> = {
   // Codes for Arrondissements
   '69123': {
     name: 'Lyon',

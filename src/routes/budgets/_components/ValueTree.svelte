@@ -1,14 +1,14 @@
 <script lang="ts">
   import { format } from 'd3-format';
 
-  import type { Record, FonctionTree } from '../../../interfaces';
+  import type { BudgetRecord, FonctionTree } from '../../../interfaces';
   import {
     aggregateData,
     formatFullValue,
     sumBy,
     BudgetCode,
   } from '../../../utils/index';
-  export let records: Record[];
+  export let records: BudgetRecord[];
   export let tree: FonctionTree;
   export let selectedCode: string;
 
@@ -18,13 +18,13 @@
   $: debitTotal = sumBy(records, BudgetCode.OBNETDEB);
   $: creditTotal = sumBy(records, BudgetCode.OBNETCRE);
 
-  function select(c: string) {
+  function select(c: string): void {
     selectedCode = c;
   }
 
-  $: checkVisible = code => {
+  $: checkVisible = (code: string): boolean => {
     const noSelection = !selectedCode && code.length === 1;
-    const isSelected = selectedCode == code;
+    const isSelected = selectedCode === code;
 
     const isDirectChild =
       code.startsWith(selectedCode) && code.length === selectedCode.length + 1;
@@ -35,7 +35,7 @@
 </script>
 
 <div class="chart">
-  {#each fonctions as { code, label, obnetdeb: debit, obnetcre: credit, subTree }}
+  {#each fonctions as { code, label, value: { obnetdeb: debit, obnetcre: credit }, subTree }}
     <div
       class="fonction"
       class:visible={checkVisible(code)}

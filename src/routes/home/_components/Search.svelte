@@ -8,8 +8,6 @@
   export let selected: City = undefined;
 
   let value = '';
-  let focus = false;
-
   $: if (selected) {
     value = selected.nom;
   }
@@ -23,10 +21,6 @@
     clear();
   }
 
-  function setFocus(v: boolean): void {
-    focus = v;
-  }
-
   function handleInput(e: Event): void {
     const target = e.target as HTMLInputElement;
     const text = target.value;
@@ -36,13 +30,11 @@
 </script>
 
 <div class="Search">
-  <div class="searchbar" class:focus>
+  <div class="searchbar">
     <i class="fas fa-search icon" />
     <input
       {value}
       on:input={handleInput}
-      on:focus={() => setFocus(true)}
-      on:blur={() => setFocus(false)}
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}

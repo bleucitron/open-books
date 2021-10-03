@@ -5,7 +5,7 @@ import type {
   CSV,
   Budget,
   BudgetRaw,
-  Record,
+  BudgetRecord,
   RecordsWithSiret,
   FonctionTree,
   FonctionTreeValue,
@@ -115,7 +115,9 @@ export function makeBudget(data: BudgetRaw): Budget {
   };
 }
 
-export function orderRecordsBySiret(records: Record[]): RecordsWithSiret[] {
+export function orderRecordsBySiret(
+  records: BudgetRecord[],
+): RecordsWithSiret[] {
   const sirets = [...new Set(records.map(({ ident }) => ident))];
 
   return sirets
@@ -132,7 +134,7 @@ export function orderRecordsBySiret(records: Record[]): RecordsWithSiret[] {
     );
 }
 
-export function extractFonctions(e: Element) {
+export function extractFonctions(e: Element): FonctionTree {
   if (e.tagName !== 'RefFonc' && e.tagName !== 'RefFonctionnelles')
     throw `${e.tagName} Not a <RefFonc> or a <RefFonctionnelle>`;
 
@@ -160,9 +162,9 @@ export function extractFonctions(e: Element) {
   return Object.fromEntries(data);
 }
 
-export function makeFonctionTree(txt: string) {
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(txt, 'application/xml');
+export function makeFonctionTree(txt: string): FonctionTree {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(txt, 'application/xml');
 
   const refFonc = doc.querySelector('RefFonctionnelles');
 
@@ -190,22 +192,29 @@ export const typeToLabel = {
 
 export function fonctionFromTree(
   code: string,
-  tree: FonctionTree | FonctionTreeValue,
-) {
-  if (!(code in tree)) return fonctionFromTree(code, tree[code[0]].subTree);
+  tree: FonctionTree,
+): FonctionTreeValue {
+  if (!(code in tree)) {
+    return fonctionFromTree(code, tree[code[0]].subTree);
+  }
 
-  return tree[code];
+  return tree[code] as FonctionTreeValue;
 }
 
-export function aggregateData(records: Record[], tree: FonctionTree) {
+export function aggregateData(
+  records: BudgetRecord[],
+  tree: FonctionTree,
+): FonctionTree {
   const aggregate = Object.values(tree).map(fonction => {
-    let { code, subTree } = fonction;
+    const { code, subTree } = fonction;
 
     let obnetdeb;
     let obnetcre;
     let oobdeb;
     let oobcre;
-    let subAgg;
+
+    const output: FonctionTreeValue = { ...fonction };
+
     const filteredRecords = records.filter(r => r.fonction?.startsWith(code));
 
     if (!subTree) {
@@ -214,23 +223,25 @@ export function aggregateData(records: Record[], tree: FonctionTree) {
       oobdeb = sumBy(filteredRecords, BudgetCode.OOBDEB);
       oobcre = sumBy(filteredRecords, BudgetCode.OOBCRE);
     } else {
-      subAgg = aggregateData(filteredRecords, subTree);
-      const values = Object.values(subAgg) as FonctionTreeValue[];
+      const subAgg = aggregateData(filteredRecords, subTree);
+      const values = Object.values(subAgg).map(agg => agg.value);
       obnetdeb = sumBy(values, BudgetCode.OBNETDEB);
       obnetcre = sumBy(values, BudgetCode.OBNETCRE);
       oobdeb = sumBy(values, BudgetCode.OOBDEB);
       oobcre = sumBy(values, BudgetCode.OOBCRE);
+      output.subTree = subAgg;
     }
 
     return [
       code,
       {
-        ...fonction,
-        obnetdeb,
-        obnetcre,
-        oobdeb,
-        oobcre,
-        subTree: subAgg,
+        ...output,
+        value: {
+          obnetdeb,
+          obnetcre,
+          oobdeb,
+          oobcre,
+        },
       },
     ];
   });

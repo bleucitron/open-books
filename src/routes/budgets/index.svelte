@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '../../api';
   import { extractSirens } from '../../api/utils/siren';
 
@@ -7,15 +8,17 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export async function load({ page: { query } }) {
-    let name = query.get('name');
-    let insee = query.get('insee');
+  export async function load({
+    page: { query },
+  }: LoadInput): Promise<LoadOutput> {
+    const name = query.get('name');
+    const insee = query.get('insee');
+    const sirenString = query.get('sirens');
+    const y = query.get('year');
     let siret = query.get('siret');
-    let sirenString = query.get('sirens');
-    let y = query.get('year');
 
+    const year = parseInt(y) || defaultYear;
     let sirens = sirenString?.split(',');
-    let year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
       const siretsFromInsee = await getSiretsFromInsee(name, insee);
@@ -58,7 +61,7 @@
   import Summary from './_components/Summary.svelte';
   import Spinner from '../_components/Spinner.svelte';
 
-  import type { Budget, BudgetMap, City, Record } from '../../interfaces';
+  import type { Budget, BudgetMap, City, BudgetRecord } from '../../interfaces';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -68,9 +71,9 @@
   // let type: string;
   // let fonction: string;
 
-  let budgetById: BudgetMap = {};
+  const budgetById: BudgetMap = {};
 
-  function selectSiret(s: string) {
+  function selectSiret(s: string): void {
     const url = makeBudgetUrl({
       name,
       insee,
@@ -87,7 +90,7 @@
     });
   }
 
-  function selectYear(y: number) {
+  function selectYear(y: number): void {
     const url = makeBudgetUrl({
       name,
       insee,
@@ -121,7 +124,7 @@
   let budgetPs = years.map(year =>
     getRecords({ ident: [currentSiret], year })
       .catch(() => [])
-      .then((records: Record[]) => {
+      .then((records: BudgetRecord[]) => {
         const b = makeBudget({
           city: name,
           siret: currentSiret,
@@ -139,7 +142,7 @@
   const otherBudgetPs = [...years].reverse().map(year =>
     getRecords({ siren: sirens, year })
       .catch(() => [])
-      .then((records: Record[]) =>
+      .then((records: BudgetRecord[]) =>
         orderRecordsBySiret(records).map(({ siret, records }) => {
           const b = makeBudget({
             city: name,
@@ -156,7 +159,7 @@
       ),
   );
 
-  const allPs = [...budgetPs, ...otherBudgetPs] as Promise<any>[];
+  const allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
 
   const loadingP = Promise.all(allPs);
 

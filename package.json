@@ -19,6 +19,8 @@
     "@commitlint/config-conventional": "^13.2.0",
     "@sveltejs/adapter-vercel": "^1.0.0-next.29",
     "@sveltejs/kit": "next",
+    "@types/d3-format": "^3.0.1",
+    "@types/marked": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "autoprefixer": "^10.3.6",

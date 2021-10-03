@@ -2,23 +2,23 @@ import type { BudgetParams } from '../../interfaces';
 
 const nbResults = 10000;
 
-const byYear = {
-  '2018': '0',
-  '2016': '1',
-  '2015': '2',
-  '2014': '3',
-  '2013': '4',
-  '2012': '5',
-  '2019': '6',
-  '2020': '7',
-  '2017': '-',
+const byYear: Record<number, string> = {
+  2018: '0',
+  2016: '1',
+  2015: '2',
+  2014: '3',
+  2013: '4',
+  2012: '5',
+  2019: '6',
+  2020: '7',
+  2017: '-',
 };
 
 const base = 'api/records/1.0/search';
 
 function buildParamString(paramByKey: BudgetParams): string {
   return Object.entries(paramByKey)
-    .filter(([key, _]) => key !== 'year')
+    .filter(([key]) => key !== 'year')
     .map(([key, value]) => {
       const valueString = Array.isArray(value) ? value.join(' OR ') : value;
 
@@ -59,7 +59,7 @@ export function makeNomenEndpoint(
   year: number,
   code: string,
   population?: number,
-) {
+): string {
   let suffix = '';
   const extension = 'xml';
 
@@ -69,7 +69,7 @@ export function makeNomenEndpoint(
     else if (population < 500) suffix = `_COM_INF500`;
   }
 
-  let fileName = `${code}${suffix}.${extension}`;
+  const fileName = `${code}${suffix}.${extension}`;
 
   return [year, code, fileName].join('/');
 }
