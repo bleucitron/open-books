@@ -18,6 +18,9 @@
     aggregateData,
     BudgetType,
     formatValue,
+    buildNomen as _buildNomen,
+    nomenByDecl,
+    Nomen,
   } from '@utils';
   import type {
     Type,
@@ -39,10 +42,12 @@
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
+  let buildNomen: (s: string) => Nomen;
   const fonctionTreeByNomen: Record<string, FonctionTree> = {};
 
   onMount(() => {
     makeFonctionTree = _makeFonctionTree; // to make sure _makeFonctionTree is not called for ssr
+    buildNomen = _buildNomen; // to make sure _buildNomen is not called for ssr
   });
 
   function selectType(t: Type): void {
@@ -66,8 +71,14 @@
     let tree = fonctionTreeByNomen[code];
 
     if (!tree) {
-      const nomen = await getNomen(year, code, population);
-      tree = makeFonctionTree?.(nomen);
+      const nomenString = await getNomen(year, code, population);
+
+      const nomen = buildNomen?.(nomenString);
+      if (nomen) {
+        nomenByDecl.set(nomen.declinaison, nomen);
+      }
+
+      tree = makeFonctionTree?.(nomenString);
       fonctionTreeByNomen[code] = tree;
     }
 
