@@ -1,3 +1,5 @@
 .gitignore
 data
 node_modules
+stories
+.storybook
