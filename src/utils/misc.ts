@@ -1,6 +1,8 @@
 import type { UrlData } from '@interfaces';
 
-export function displayLabel(label: string): string {
+const DEFAULT_LABEL = 'commune';
+
+export function displayLabel(label?: string): string {
   if (!label) return '';
 
   return label === DEFAULT_LABEL ? '' : label;
@@ -42,9 +44,6 @@ export function formatValue(value: number): string {
   }).format(value);
 }
 
-const DEFAULT_LABEL = 'commune';
-const toRemove = ['-', ' de'];
-
 export function extractSiren(siret: string): string {
   return siret.substring(0, 9);
 }
@@ -53,6 +52,7 @@ export function extractEtabl(siret: string): string {
   return siret.substring(9);
 }
 
+const toRemove = ['-', ' de'];
 export function formatLabel(label: string, name: string): string {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
