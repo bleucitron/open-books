@@ -2,7 +2,7 @@
 
 You can visit the app [here](https://livres-ouverts.fr).
 
-Data exploration for [french cities's budgets](https://data.economie.gouv.fr/explore/dataset/.balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec0/table/)
+Data exploration for [french cities's budgets](https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec0/table/)
 
 With a little from my friends [BAN API](https://geo.api.gouv.fr/decoupage-administratif/communes) and [Sirene API](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findBySiret).
 
