@@ -16,7 +16,6 @@
     stepsFromString,
     fonctionFromTree,
     aggregateData,
-    BudgetType,
     formatValue,
     buildNomen as _buildNomen,
     nomenByDecl,
@@ -38,7 +37,7 @@
 
   export let budgetP: Promise<Budget>;
   export let year: number;
-  let type: Type = BudgetType.DEBIT;
+  let type: Type = undefined;
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;
