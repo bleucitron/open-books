@@ -3,7 +3,7 @@
 
   import type { City } from '@interfaces';
 
-  import Icon from '../../_components/Icon.svelte';
+  import Icon from '$lib/Icon.svelte';
 
   export let search: (s: string) => void;
   export let clear: () => void;

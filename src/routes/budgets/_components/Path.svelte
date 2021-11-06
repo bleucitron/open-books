@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Icon from '../../_components/Icon.svelte';
+  import Icon from '$lib/Icon.svelte';
 
   export let steps: { label: string; select: () => void }[];
 

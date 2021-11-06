@@ -2,7 +2,7 @@
   import { format } from 'd3-format';
   import { formatValue } from '@utils';
 
-  import Icon from '../../_components/Icon.svelte';
+  import Icon from '$lib/Icon.svelte';
 
   export let value: number;
   export let percentage: number;

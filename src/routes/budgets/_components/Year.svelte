@@ -1,8 +1,8 @@
 <script lang="ts">
   import { formatValue } from '@utils';
 
-  import Icon from '../../_components/Icon.svelte';
-  import Spinner from '../../_components/Spinner.svelte';
+  import Icon from '$lib/Icon.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let year: number;
   export let pending = false;

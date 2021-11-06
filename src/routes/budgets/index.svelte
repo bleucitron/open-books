@@ -59,11 +59,11 @@
 
   import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
 
+  import Icon from '$lib/Icon.svelte';
+  import Spinner from '$lib/Spinner.svelte';
   import Labels from './_components/Labels.svelte';
-  import Icon from '../_components/Icon.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Spinner from '../_components/Spinner.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;

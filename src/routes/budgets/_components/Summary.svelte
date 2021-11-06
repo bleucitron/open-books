@@ -29,8 +29,8 @@
     FonctionTreeValue,
   } from '@interfaces';
 
-  import Spinner from '../../_components/Spinner.svelte';
-  import Csv from '../_components/Csv.svelte';
+  import Spinner from '$lib/Spinner.svelte';
+  import Csv from './Csv.svelte';
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
   import Chart from './Chart.svelte';

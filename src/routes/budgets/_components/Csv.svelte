@@ -3,7 +3,7 @@
 
   import type { Budget } from '@interfaces';
 
-  import Icon from '../../_components/Icon.svelte';
+  import Icon from '$lib/Icon.svelte';
 
   export let data: Budget;
 
