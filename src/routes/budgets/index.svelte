@@ -60,6 +60,7 @@
   import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
 
   import Labels from './_components/Labels.svelte';
+  import Icon from '../_components/Icon.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
   import Spinner from '../_components/Spinner.svelte';
@@ -204,7 +205,7 @@
 
 <header>
   <a class="home" href="/">
-    <i class="fas fa-book-open" />
+    <Icon id="book-open" />
   </a>
   <div class="info">
     <div class="labels">

@@ -2,6 +2,8 @@
   import { format } from 'd3-format';
   import { formatValue } from '@utils';
 
+  import Icon from '../../_components/Icon.svelte';
+
   export let value: number;
   export let percentage: number;
   export let width: number;
@@ -16,7 +18,7 @@
     <h3>
       {label}
       {#if clickable}
-        <i class="fas fa-ellipsis-h" />
+        <Icon id="more-horizontal" />
       {/if}
     </h3>
     <div class="values">
@@ -53,6 +55,11 @@
     justify-content: space-between;
     width: 100%;
     z-index: 1;
+
+    :global(.Icon) {
+      font-size: 1.3rem;
+      vertical-align: middle;
+    }
   }
 
   h3 {

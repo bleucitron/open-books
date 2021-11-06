@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Icon from '../../_components/Icon.svelte';
+
   export let steps: { label: string; select: () => void }[];
 
   $: current = steps.pop()?.label;
@@ -12,7 +14,7 @@
     {#each steps as { label, select }}
       <div class="step" on:click={select}>
         {label}
-        <i class="fas fa-caret-right next" />
+        <Icon id="chevron-right" />
       </div>
     {/each}
   </div>
@@ -38,6 +40,11 @@
     &:hover {
       color: coral;
       cursor: pointer;
+    }
+
+    :global(.Icon) {
+      font-size: 1.2em;
+      vertical-align: text-bottom;
     }
   }
 

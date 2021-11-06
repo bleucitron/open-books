@@ -1,11 +1,13 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
+
   export let path: string;
 </script>
 
 <header>
   <a href="/" class="home" class:current={path === 'home'}>
     <div>
-      <i class="fas fa-book-open" />
+      <Icon id="book-open" />
       <h1>Livres ouverts</h1>
       <h2>Les données budgétaires des communes</h2>
     </div>
@@ -13,7 +15,7 @@
   <nav class="Nav">
     <a href="/about" class:current={path === 'about'}>À propos</a>
     <a href="https://github.com/iOiurson/open-books">
-      <i class="fab fa-github" />
+      <Icon id="github" />
     </a>
   </nav>
 </header>
@@ -34,6 +36,10 @@
 
   .home {
     font-size: 1.5rem;
+
+    :global(.Icon) {
+      align-self: center;
+    }
 
     > div {
       display: flex;
