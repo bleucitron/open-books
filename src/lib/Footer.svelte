@@ -8,6 +8,7 @@
     <a
       href="https://github.com/iOiurson/open-books/blob/develop/LICENSE.txt"
       target="_blank"
+      rel="noopener noreferer"
       ><i class="fas fa-balance-scale" />
       MIT License</a
     >
