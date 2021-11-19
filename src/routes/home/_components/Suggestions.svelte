@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { City } from '@interfaces';
-  import Spinner from '../../_components/Spinner.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let suggestions: City[] = [];
   export let select: (c: City) => void;

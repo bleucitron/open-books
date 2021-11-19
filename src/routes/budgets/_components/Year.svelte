@@ -1,6 +1,8 @@
 <script lang="ts">
   import { formatValue } from '@utils';
-  import Spinner from '../../_components/Spinner.svelte';
+
+  import Icon from '$lib/Icon.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let year: number;
   export let pending = false;
@@ -38,7 +40,7 @@
     {#if pending}
       <Spinner size={1.5} />
     {:else if unavailable}
-      <i class="fas fa-times icon" />
+      <Icon id="x" />
     {:else if value}
       <div class="value" style={`height: ${height};`}>
         {formatValue(value)}
@@ -59,6 +61,10 @@
     margin: 0 0.5rem;
     font-size: 0.8rem;
     color: white;
+
+    :global(.Icon) {
+      font-size: 2em;
+    }
   }
 
   .value {
@@ -129,10 +135,6 @@
   .unavailable .info {
     align-items: center;
     justify-content: center;
-  }
-
-  .icon {
-    color: transparent;
   }
 
   .spinner {
