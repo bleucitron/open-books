@@ -56,7 +56,7 @@
   </div>
   <div class="popup {isOpen ? 'open' : ''}">
     <div class="close-popup" on:click={closePopup}>
-      <Icon id="x-circle" color="red" size="1.3em" />
+      <Icon id="x-circle" color="white" size="1.3em" />
     </div>
     <ul class="favorite-list">
       {#each Object.entries(favorites) as [key, favorite]}
@@ -97,7 +97,7 @@
       position: absolute;
       top: calc(100% + 0px);
       right: -10px;
-      background-color: white;
+      background-color: #666;
       width: 200px;
       min-height: 200px;
       border: 1px solid black;
@@ -120,14 +120,13 @@
       }
 
       .favorite-list {
-        padding-left: 20px;
+        margin: 0;
 
         .favorite-item {
-          color: black;
           font-size: 1.2em;
 
           &:hover {
-            color: cornflowerblue;
+            color: coral;
           }
         }
       }
