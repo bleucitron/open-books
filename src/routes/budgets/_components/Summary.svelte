@@ -245,11 +245,8 @@
       position: absolute;
       bottom: 1rem;
       left: 1rem;
-      font-size: 0.9rem;
+      font-size: 0.7rem;
       padding: 0.2rem;
-      background: grey;
-      color: white;
-      border-radius: 4px;
     }
   }
 </style>
