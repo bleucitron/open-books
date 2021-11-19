@@ -3,6 +3,7 @@
 
   import Nav from '$lib/Nav.svelte';
   import GoogleAnalytics from '$lib/GoogleAnalytics.svelte';
+  import Footer from '$lib/Footer.svelte';
 
   $: segment = $page.path.split('/')[1];
 </script>
@@ -14,6 +15,10 @@
   {/if}
 
   <slot />
+
+  {#if segment !== 'budgets'}
+    <Footer />
+  {/if}
 </div>
 
 <style class="scss">

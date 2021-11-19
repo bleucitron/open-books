@@ -7,6 +7,7 @@
   */
 
   import { onMount } from 'svelte';
+  import * as pack from '../../../../package.json';
 
   import { city, tree, code, budget, fonction } from '@stores';
   import { getNomen } from '@api';
@@ -172,6 +173,7 @@
         <div class="nomen">{infos.nomen}</div>
       {/if}
     {/await}
+    <div class="version">v{pack.version}</div>
   </div>
 </div>
 
@@ -186,6 +188,7 @@
     width: 100%;
     background: white;
     overflow: hidden;
+    position: relative;
   }
 
   :global(.summary .path) {
@@ -231,7 +234,17 @@
     .nomen {
       position: absolute;
       bottom: 1rem;
-      right: 1rem;
+      right: 1.1rem;
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      background: grey;
+      color: white;
+      border-radius: 4px;
+    }
+    .version {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
       font-size: 0.9rem;
       padding: 0.2rem;
       background: grey;

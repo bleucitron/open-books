@@ -14,7 +14,7 @@
   </a>
   <nav class="Nav">
     <a href="/about" class:current={path === 'about'}>À propos</a>
-    <a href="https://github.com/iOiurson/open-books">
+    <a href="https://github.com/iOiurson/open-books" target="_blank">
       <Icon id="github" />
     </a>
   </nav>
