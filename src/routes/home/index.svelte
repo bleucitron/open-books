@@ -6,6 +6,7 @@
   import { getCities } from '@api';
 
   import Search from './_components/Search.svelte';
+
   import Suggestions from './_components/Suggestions.svelte';
 
   import type { City } from '@interfaces';
@@ -16,6 +17,7 @@
 
   let citiesP: Promise<City[]>;
   let previousCities: City[];
+  let numberCity: number;
 
   function search(text: string): void {
     // console.log('TEXT', text);
@@ -34,6 +36,7 @@
     return await getCities(text).then(cities => {
       // console.log('Villes', cities);
       const currentCities = cities.slice(0, 5);
+      numberCity = currentCities.length;
       previousCities = currentCities;
       return currentCities;
     });
@@ -45,12 +48,12 @@
 </svelte:head>
 
 <main>
-  <Search {search} {clear} selected={$city}>
+  <Search {numberCity} let:current {search} {clear} selected={$city}>
     {#if citiesP}
       {#await citiesP}
-        <Suggestions suggestions={previousCities} {select} />
+        <Suggestions {current} suggestions={previousCities} {select} />
       {:then cities}
-        <Suggestions suggestions={cities} {select} city={$city} />
+        <Suggestions {current} suggestions={cities} {select} city={$city} />
       {/await}
     {/if}
   </Search>
