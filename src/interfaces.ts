@@ -130,3 +130,9 @@ export interface BarChartValue {
   value: number;
   handleClick?: () => void;
 }
+
+export interface Favorite {
+  name: string;
+  insee: string;
+  sirens: string[];
+}

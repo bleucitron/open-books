@@ -60,6 +60,7 @@
   import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
+  import Favorites from '$lib/Favorites.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
@@ -189,11 +190,6 @@
   $: yearIndex = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[yearIndex];
   $: label = findSimilarLabel();
-
-  let isFav = false;
-  function toggleFav(): void {
-    isFav = !isFav;
-  }
 </script>
 
 <svelte:head>
@@ -219,22 +215,22 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
-
-      <div class="toggle-fav" on:click={toggleFav}>
-        <Icon id="heart" filled={isFav} color="white" />
-      </div>
     </div>
 
-    <div class="departement">
-      {#await cityP}
-        <Spinner />
-      {:then city}
-        {#if city}
-          <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
-        {/if}
-      {:catch error}
-        <div style="color: red">{error}</div>
-      {/await}
+    <div class="right">
+      <Favorites params={{ insee, name, sirens }} />
+
+      <div class="departement">
+        {#await cityP}
+          <Spinner />
+        {:then city}
+          {#if city}
+            <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+          {/if}
+        {:catch error}
+          <div style="color: red">{error}</div>
+        {/await}
+      </div>
     </div>
   </div>
 </header>
@@ -327,8 +323,12 @@
     background: #333;
   }
 
-  .toggle-fav {
-    margin-left: 10px;
-    cursor: pointer;
+  .right {
+    display: flex;
+    align-items: center;
+
+    :global(.fav-wrapper) {
+      margin-right: 30px;
+    }
   }
 </style>
