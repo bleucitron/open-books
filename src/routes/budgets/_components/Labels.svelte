@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Spinner from '../../_components/Spinner.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   import type { Budget } from '@interfaces';
 

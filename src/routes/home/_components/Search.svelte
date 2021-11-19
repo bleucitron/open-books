@@ -3,6 +3,8 @@
 
   import type { City } from '@interfaces';
 
+  import Icon from '$lib/Icon.svelte';
+
   export let search: (s: string) => void;
   export let clear: () => void;
   export let selected: City = undefined;
@@ -31,15 +33,16 @@
 
 <div class="Search">
   <div class="searchbar">
-    <i class="fas fa-search icon" />
+    <Icon id="search" />
+
     <input
       {value}
       on:input={handleInput}
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
-      <span class="icon" on:click={reset}>
-        <i class="fas fa-times" />
+      <span class="reset" on:click={reset}>
+        <Icon id="x" />
       </span>
     {/if}
   </div>
@@ -67,6 +70,11 @@
     align-items: center;
     border-color: white;
 
+    :global(.Icon) {
+      margin: 0 1rem;
+      font-size: 1.3rem;
+    }
+
     &:focus-within {
       background: #333;
     }
@@ -77,12 +85,7 @@
       align-items: center;
     }
 
-    .icon {
-      margin: 0 1rem;
-      font-size: 1.3rem;
-    }
-
-    span.icon {
+    .reset :global(.Icon) {
       cursor: pointer;
     }
   }

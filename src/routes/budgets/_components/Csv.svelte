@@ -3,6 +3,8 @@
 
   import type { Budget } from '@interfaces';
 
+  import Icon from '$lib/Icon.svelte';
+
   export let data: Budget;
 
   $: csvP = makeCSV(data);
@@ -11,7 +13,7 @@
 <div class="Csv">
   {#await csvP then csv}
     <a href={csv.url} download={csv.file}>
-      <i class="fas fa-file-download" />
+      <Icon id="download" />
     </a>
   {/await}
 </div>
@@ -20,7 +22,7 @@
   .Csv {
     position: absolute;
     right: 0;
-    font-size: 1.3rem;
+    font-size: 1.7rem;
     top: 0;
     display: flex;
     align-items: center;
@@ -35,16 +37,16 @@
     border-radius: 50%;
     cursor: pointer;
 
-    i {
-      color: #ddd;
-    }
-
     &:hover {
       background: coral;
-      i {
-        background: coral;
+
+      :global(.Icon) {
         color: white;
       }
+    }
+
+    :global(.Icon) {
+      color: #999;
     }
   }
 </style>

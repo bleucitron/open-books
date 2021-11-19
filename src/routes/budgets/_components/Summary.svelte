@@ -16,7 +16,6 @@
     stepsFromString,
     fonctionFromTree,
     aggregateData,
-    BudgetType,
     formatValue,
     buildNomen as _buildNomen,
     nomenByDecl,
@@ -30,15 +29,15 @@
     FonctionTreeValue,
   } from '@interfaces';
 
-  import Spinner from '../../_components/Spinner.svelte';
-  import Csv from '../_components/Csv.svelte';
+  import Spinner from '$lib/Spinner.svelte';
+  import Csv from './Csv.svelte';
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
   import Chart from './Chart.svelte';
 
   export let budgetP: Promise<Budget>;
   export let year: number;
-  let type: Type = BudgetType.DEBIT;
+  let type: Type = undefined;
   let steps: { label: string; select: () => void }[];
 
   let makeFonctionTree: (s: string) => FonctionTree;

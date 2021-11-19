@@ -13,8 +13,8 @@
     "lint-staged": "lint-staged --allow-empty",
     "format": "prettier --write",
     "release": "release-it",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook": "start-storybook -s ./static -p 6006",
+    "build-storybook": "build-storybook -s ./static",
     "test": "uvu -r module-alias/register -r tsm src test"
   },
   "devDependencies": {

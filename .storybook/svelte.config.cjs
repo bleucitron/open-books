@@ -5,11 +5,12 @@ const md = require('vite-plugin-markdown');
 const markdown = md.default;
 
 const alias = {
-  '@api': `${__dirname}/src/api`,
-  '@utils': `${__dirname}/src/utils`,
-  '@stores': `${__dirname}/src/stores`,
-  '@interfaces': `${__dirname}/src/interfaces`,
-  '@docs': `${__dirname}/src/docs`,
+  $lib: `${__dirname}/../src/lib`,
+  '@api': `${__dirname}/../src/api`,
+  '@utils': `${__dirname}/../src/utils`,
+  '@stores': `${__dirname}/../src/stores`,
+  '@interfaces': `${__dirname}/../src/interfaces`,
+  '@docs': `${__dirname}/../src/docs`,
 };
 
 /** @type {import('@sveltejs/kit').Config} */
