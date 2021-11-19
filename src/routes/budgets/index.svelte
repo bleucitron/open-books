@@ -189,6 +189,11 @@
   $: yearIndex = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[yearIndex];
   $: label = findSimilarLabel();
+
+  let isFav = false;
+  function toggleFav(): void {
+    isFav = !isFav;
+  }
 </script>
 
 <svelte:head>
@@ -214,6 +219,10 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
+
+      <div class="toggle-fav" on:click={toggleFav}>
+        <Icon id="heart" filled={isFav} color="white" />
+      </div>
     </div>
 
     <div class="departement">
@@ -316,5 +325,10 @@
     flex-flow: column;
     align-items: center;
     background: #333;
+  }
+
+  .toggle-fav {
+    margin-left: 10px;
+    cursor: pointer;
   }
 </style>
