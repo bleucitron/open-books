@@ -6,16 +6,16 @@ import { makeGetCitiesEndpoint, makeGetCityEndpoint } from './geo';
 const _citiesEndpoint = suite('citiesEndpoint');
 
 _citiesEndpoint(
-  'makeGetCitiesEndpoint should return error if no parameters',
+  'makeGetCitiesEndpoint should return error if given nothing',
   () => {
-    assert.throws(() => makeGetCitiesEndpoint(), 'No text provided');
+    assert.throws(() => makeGetCitiesEndpoint(null), 'No text provided');
   },
 );
 
 _citiesEndpoint(
-  'makeGetCityEndpoint should return error if no parameters',
+  'makeGetCityEndpoint should return error if given nothing',
   () => {
-    assert.throws(() => makeGetCityEndpoint(), 'No code provided');
+    assert.throws(() => makeGetCityEndpoint(null), 'No code provided');
   },
 );
 
