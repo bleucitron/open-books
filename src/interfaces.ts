@@ -1,5 +1,4 @@
 import type { BudgetType } from '@utils/budget';
-
 export interface BudgetRecord {
   bal: string;
   becre: number;
