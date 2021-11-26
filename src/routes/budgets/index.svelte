@@ -163,7 +163,7 @@
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
 
-  const loadingP = Promise.all(allPs);
+  $: loadingP = Promise.all(allPs);
 
   $: sirets = [
     ...new Set(
