@@ -1,5 +1,26 @@
 import type { BudgetType } from '@utils/budget';
 
+export interface PieCoordinates {
+  data: number;
+  percent: number;
+  isOuterRing: boolean;
+  xStartAngle: number;
+  yStartAngle: number;
+  xEndAngle: number;
+  yEndAngle: number;
+}
+export interface PieData {
+  label: string;
+  color?: string;
+  value: number;
+}
+export interface PieEventData {
+  label: string;
+  color?: string;
+  value: number;
+  percent: number;
+}
+
 export interface BudgetRecord {
   bal: string;
   becre: number;
