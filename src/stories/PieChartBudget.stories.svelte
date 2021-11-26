@@ -1,11 +1,8 @@
 <script>
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
-  import { loop_guard } from 'svelte/internal';
+  import { Meta, Story } from '@storybook/addon-svelte-csf';
   import PieChartBudget from '../routes/budgets/_components/PieChartBudget.svelte';
 </script>
 
-<!-- More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export -->
-<!-- More on argTypes: https://storybook.js.org/docs/svelte/api/argtypes -->
 <Meta title="Chart/Pie" component={PieChartBudget} argTypes={{}} />
 
 <Story name="Pie Chart">

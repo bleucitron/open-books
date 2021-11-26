@@ -1,6 +1,28 @@
+<script lang="ts" context="module">
+  export interface PieCoordinates {
+    data: number;
+    percent: number;
+    isOuterRing: boolean;
+    xStartAngle: number;
+    yStartAngle: number;
+    xEndAngle: number;
+    yEndAngle: number;
+  }
+  export interface PieData {
+    label: string;
+    color?: string;
+    value: number;
+  }
+  export interface PieEventData {
+    label: string;
+    color?: string;
+    value: number;
+    percent: number;
+  }
+</script>
+
 <script lang="ts">
   import { pie } from 'd3-shape';
-  import type { PieCoordinates, PieData, PieEventData } from '@interfaces';
   import { createEventDispatcher } from 'svelte';
   import randomColor from 'randomcolor';
 
@@ -22,8 +44,6 @@
   const totalAngle: number = data.reduce((acc, pieData) => {
     return acc + pieData.value;
   }, 0);
-
-  console.log(dataForD3Pie);
 
   const dataAngles = pie()(dataForD3Pie);
   const coordinatesArray: PieCoordinates[] = [];
@@ -58,10 +78,10 @@
 </script>
 
 <svg
+  id="svg"
   width={2 * radius}
   height={2 * radius}
   xmlns="http://www.w3.org/2000/svg"
-  style="background-color: white;"
 >
   {#each coordinatesArray as coordinates, index}
     <path
@@ -93,11 +113,13 @@
 </svg>
 
 <style lang="scss">
-  .pie-part {
-    outline: none;
-    transition: 0.4s ease-out;
-    &:hover {
-      opacity: 0.5;
+  #svg {
+    .pie-part {
+      outline: none;
+      transition: 0.4s ease-out;
+      &:hover {
+        opacity: 0.5;
+      }
     }
   }
 </style>
