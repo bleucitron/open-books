@@ -1,36 +1,61 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   import type { City } from '@interfaces';
   import Spinner from '../../_components/Spinner.svelte';
 
   export let suggestions: City[] = [];
   export let select: (c: City) => void;
   export let city: City = undefined;
-  export let current: number;
+
+  let current = 0;
   let key;
-  let bool: boolean;
-  function enter(event): Event {
-    key = event.key;
-    return key;
+  let numberCity: number;
+  function mousseInGestion(id): void {
+    current = id + 1;
   }
-  function hover(): boolean {
-    console.log(current);
-    if (current === 0) {
-      bool = true;
-    } else {
-      bool = false;
+  function mousseOutGestion(): void {
+    current = 0;
+  }
+  function keyboardGestion(event): void {
+    numberCity = suggestions.length;
+    key = event.key;
+    switch (key) {
+      case 'ArrowUp': {
+        if (current === 1 || current === 0) {
+          current = numberCity;
+        } else {
+          current = current - 1;
+        }
+        break;
+      }
+
+      case 'ArrowDown': {
+        current = current === numberCity ? 1 : current + 1;
+        break;
+      }
+
+      case 'Enter': {
+        const url = document.getElementById(current.toString()).href;
+        select(suggestions[current - 1]);
+        goto(url);
+        break;
+      }
     }
   }
 </script>
 
+<svelte:window on:keyup={keyboardGestion} />
 <ul>
   {#each suggestions as suggestion, index (index)}
     <li class="Suggestion" on:click={() => select(suggestion)}>
       <a
-        on:keyup={enter}
-        on:mouseenter={hover}
+        on:mouseenter={mousseInGestion(index)}
+        on:mouseleave={mousseOutGestion()}
         href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
         rel="prefetch"
-        class:keyboard={current === index + 1 || bool}
+        id={index + 1}
+        class:keyboard={current === index + 1}
         class:keyboard-black={(current = !0)}
       >
         <div class="infos">
@@ -60,12 +85,8 @@
     display: flex;
     padding: 0.5rem 1rem;
   }
+
   .keyboard {
-    background: coral !important;
-    color: white;
-    cursor: pointer;
-  }
-  .keyboard-enter {
     background: coral !important;
     color: white;
     cursor: pointer;
@@ -75,6 +96,12 @@
     display: flex;
     padding: 0.5rem 1rem;
   }
+  .keyboard-enter {
+    background: coral !important;
+    color: white;
+    cursor: pointer;
+  }
+
   .no-hover {
     pointer-events: none;
   }

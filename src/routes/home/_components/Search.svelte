@@ -6,11 +6,8 @@
   export let search: (s: string) => void;
   export let clear: () => void;
   export let selected: City = undefined;
-  export let numberCity: number;
-  let value = '';
-  let key;
-  let nb = 0;
 
+  let value = '';
   $: if (selected) {
     value = selected.nom;
   }
@@ -30,26 +27,8 @@
     search(text);
     value = text;
   }
-  function test(event): number {
-    //récupération de la clef
-    key = event.key;
-    console.log(key);
-    switch (key) {
-      case 'ArrowUp':
-        nb = nb === 1 ? numberCity : nb - 1;
-
-        break;
-      case 'ArrowDown':
-        nb = nb === numberCity ? 1 : nb + 1;
-        break;
-    }
-  }
-  function mouve(): number {
-    return (nb = 0);
-  }
 </script>
 
-<svelte:window on:keyup={test} on:mousemove={mouve} />
 <div class="Search">
   <div class="searchbar">
     <i class="fas fa-search icon" />
@@ -64,7 +43,7 @@
       </span>
     {/if}
   </div>
-  <slot current={nb} />
+  <slot />
 </div>
 
 <style lang="scss">

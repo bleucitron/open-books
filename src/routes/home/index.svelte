@@ -17,7 +17,6 @@
 
   let citiesP: Promise<City[]>;
   let previousCities: City[];
-  let numberCity: number;
 
   function search(text: string): void {
     // console.log('TEXT', text);
@@ -34,9 +33,7 @@
 
   async function fetchCities(text: string): Promise<City[]> {
     return await getCities(text).then(cities => {
-      // console.log('Villes', cities);
       const currentCities = cities.slice(0, 5);
-      numberCity = currentCities.length;
       previousCities = currentCities;
       return currentCities;
     });
@@ -48,12 +45,12 @@
 </svelte:head>
 
 <main>
-  <Search {numberCity} let:current {search} {clear} selected={$city}>
+  <Search {search} {clear} selected={$city}>
     {#if citiesP}
       {#await citiesP}
-        <Suggestions {current} suggestions={previousCities} {select} />
+        <Suggestions suggestions={previousCities} {select} />
       {:then cities}
-        <Suggestions {current} suggestions={cities} {select} city={$city} />
+        <Suggestions suggestions={cities} {select} city={$city} />
       {/await}
     {/if}
   </Search>
