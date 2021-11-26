@@ -218,7 +218,7 @@
     </div>
 
     <div class="right">
-      <Favorites params={{ insee, name, sirens }} />
+      <Favorites params={{ insee, name, sirens }} dropdown={true} />
 
       <div class="departement">
         {#await cityP}

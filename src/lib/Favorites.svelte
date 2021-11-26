@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
 
   export let params: Favorite;
+  export let dropdown: boolean;
 
   let isOpen = false;
   let isFav = false;
@@ -51,21 +52,24 @@
   <div class="toggle-fav" on:click={toggleFav}>
     <Icon id="heart" filled={isFav} color="white" size="1.8em" />
   </div>
-  <div class="toggle-popup {isOpen ? 'open' : ''}" on:click={togglePopup}>
-    <Icon id="triangle" filled color="white" size=".8em" />
-  </div>
-  <div class="popup {isOpen ? 'open' : ''}">
-    <div class="close-popup" on:click={closePopup}>
-      <Icon id="x-circle" color="white" size="1.3em" />
+  {#if dropdown}
+    <div class="toggle-popup {isOpen ? 'open' : ''}" on:click={togglePopup}>
+      <Icon id="triangle" filled color="white" size=".8em" />
     </div>
-    <ul class="favorite-list">
-      {#each Object.entries(favorites) as [key, favorite]}
-        <li class="favorite-item">
-          <a href={createUrl(favorite)}>{favorite.name}</a>
-        </li>
-      {/each}
-    </ul>
-  </div>
+    <div class="popup {isOpen ? 'open' : ''}">
+      <div class="close-popup" on:click={closePopup}>
+        <Icon id="x-circle" color="white" size="1.3em" />
+      </div>
+      <h2 class="favorite-title">Mes favoris :</h2>
+      <ul class="favorite-list">
+        {#each Object.entries(favorites) as [key, favorite]}
+          <li class="favorite-item">
+            <a href={createUrl(favorite)}>{favorite.name}</a>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
@@ -117,6 +121,10 @@
         right: 5px;
         top: 5px;
         cursor: pointer;
+      }
+
+      .favorite-title {
+        margin-bottom: 10px;
       }
 
       .favorite-list {
