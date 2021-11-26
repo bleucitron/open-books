@@ -6,6 +6,7 @@
   import { getCities } from '@api';
 
   import Search from './_components/Search.svelte';
+
   import Suggestions from './_components/Suggestions.svelte';
 
   import type { City } from '@interfaces';
