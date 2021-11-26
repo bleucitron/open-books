@@ -36,6 +36,7 @@
   import Chart from './Chart.svelte';
 
   export let budgetP: Promise<Budget>;
+
   export let year: number;
   let type: Type = undefined;
   let steps: { label: string; select: () => void }[];
@@ -84,7 +85,7 @@
     return tree;
   }
 
-  $: budgetP.then(async b => {
+  $: budgetP?.then(async b => {
     if (b) {
       const { year, nomen: code } = b;
       budget.set(b);
@@ -126,7 +127,7 @@
     }))
     .sort((a, b) => b.value - a.value);
 
-  $: infosP = budgetP.then(budget => {
+  $: infosP = budgetP?.then(budget => {
     if (budget) {
       const main = type && ($fonction ? $fonction.value[type] : budget[type]);
 
