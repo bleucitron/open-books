@@ -116,14 +116,14 @@
     return budget?.label;
   };
 
-  const cityP = $city
+  $: cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then((result: City) => {
         city.set(result);
         return result;
       });
 
-  let budgetPs = years.map(year =>
+  $: budgetPs = years.map(year =>
     getRecords({ ident: [currentSiret], year })
       .catch(() => [])
       .then((records: BudgetRecord[]) => {
@@ -141,7 +141,7 @@
       }),
   );
 
-  const otherBudgetPs = [...years].reverse().map(year =>
+  $: otherBudgetPs = [...years].reverse().map(year =>
     getRecords({ siren: sirens, year })
       .catch(() => [])
       .then((records: BudgetRecord[]) =>
@@ -161,9 +161,9 @@
       ),
   );
 
-  const allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
+  $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
 
-  const loadingP = Promise.all(allPs);
+  $: loadingP = Promise.all(allPs);
 
   $: sirets = [
     ...new Set(
