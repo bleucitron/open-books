@@ -48,6 +48,7 @@ export interface SiretsFromAPI {
 }
 
 export interface Budget {
+  id: string;
   city: string;
   siren: string;
   siret: string;

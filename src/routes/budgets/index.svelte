@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
@@ -54,23 +55,15 @@
       },
     };
   }
-
-  const budgetCache: BudgetMap = {};
 </script>
 
 <script lang="ts">
   import { goto } from '$app/navigation';
 
   import city from '@stores/city';
-  import { getRecords } from '@api';
-  import {
-    makeBudget,
-    makeId,
-    makeBudgetUrl,
-    orderRecordsBySiret,
-  } from '@utils';
+  import { makeId, makeBudgetUrl } from '@utils';
 
-  import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
+  import type { Budget, BudgetMap, City } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Spinner from '$lib/Spinner.svelte';
@@ -89,96 +82,15 @@
   let budgetById: BudgetMap = {};
 
   // TODO: remove after check
-  $: if (name !== $city?.nom) $city = { nom: name, code: insee };
+  $: if (name !== $city?.nom)
+    $city = {
+      nom: name,
+      code: insee,
+      departement: { code: '12', nom: 'Jean' },
+      region: { code: '12', nom: 'Jean' },
+      population: 2000,
+    };
   $: if ($city) budgetById = {};
-
-  function fillBudgetBySiret(
-    siret: string,
-    years: number[],
-  ): Promise<Budget>[] {
-    const budgets: Promise<Budget>[] = [];
-
-    years.forEach(currYear => {
-      const id = makeId(siret, currYear);
-
-      const p =
-        id in budgetCache
-          ? Promise.resolve(budgetCache[id])
-          : getRecords({
-              ident: [siret],
-              year: currYear,
-            })
-              .catch(() => [])
-              .then((records: BudgetRecord[]) => {
-                const b = makeBudget({
-                  city: name,
-                  siret,
-                  year: currYear,
-                  records,
-                });
-
-                budgetCache[id] = b;
-                budgetById[id] = b;
-
-                return b;
-              });
-
-      budgets.push(p);
-    });
-
-    return budgets;
-  }
-
-  function fillBudgetBySirens(
-    sirens: string[],
-    years: number[],
-  ): Promise<Budget[]>[] {
-    const sirensToFetch: string[] = [];
-    let siretsInCache: string[] = [];
-
-    sirens.forEach(siren => {
-      const sirets = Object.keys(budgetCache).filter(s => s.startsWith(siren));
-
-      if (sirets.length) {
-        siretsInCache = [...siretsInCache, ...sirets];
-      } else {
-        sirensToFetch.push(siren);
-      }
-    });
-
-    const needToFetch = sirensToFetch.length > 0;
-
-    return [...years].reverse().map(year => {
-      const cached = siretsInCache
-        .map(s => makeId(s, year))
-        .map(id => budgetCache[id]);
-
-      return needToFetch
-        ? Promise.all([
-            Promise.resolve(cached),
-            getRecords({ siren: sirensToFetch, year })
-              .catch(() => [])
-              .then((records: BudgetRecord[]) =>
-                orderRecordsBySiret(records).map(({ siret, records }) => {
-                  const b = makeBudget({
-                    city: name,
-                    siret,
-                    year,
-                    records,
-                  });
-                  const id = makeId(siret, year);
-                  if (siret !== currentSiret && !(id in budgetCache)) {
-                    budgetCache[id] = b;
-                    budgetById[id] = b;
-                  }
-
-                  return b;
-                }),
-              ),
-          ]).then(budgets => budgets.flat())
-        : Promise.resolve(cached);
-    });
-  }
 
   function selectSiret(s: string): void {
     const url = makeBudgetUrl({
@@ -223,8 +135,12 @@
         return result;
       });
 
-  $: budgetPs = fillBudgetBySiret(currentSiret, years);
-  $: otherBudgetPs = fillBudgetBySirens(sirens, [...years].reverse());
+  $: budgetPs = fillBudgetBySiret(currentSiret, years, name).map(p =>
+    p.then(b => b && (budgetById[b.id] = b)),
+  );
+  $: otherBudgetPs = fillBudgetBySirens(sirens, [...years].reverse(), name).map(
+    p => p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
+  );
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
 
@@ -253,7 +169,6 @@
 
   $: yearIndex = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[yearIndex];
-  // $: console.log(budgetP);
   $: label = findSimilarLabel();
 </script>
 
