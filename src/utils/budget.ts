@@ -249,3 +249,16 @@ export function aggregateData(
 
   return Object.fromEntries(aggregate);
 }
+
+export function makeNomenId(code: string, population: number): string {
+  let suffix = '';
+  if (code) {
+    if (!population || population >= 3500) suffix = `_COM_SUP3500`;
+    else if (population < 500) suffix = `_COM_INF500`;
+    else suffix = `_COM_500_3500`;
+  } else {
+    throw Error('No code provided');
+  }
+
+  return code + suffix;
+}
