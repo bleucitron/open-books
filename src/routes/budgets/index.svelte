@@ -207,21 +207,22 @@
   <a class="home" href="/">
     <Icon id="book-open" />
   </a>
-  <div class="info">
-    <div class="labels">
+  <div class="info-container">
+    <div class="titles">
       <h1>{name}</h1>
 
       {#if label}
         <h2>{label}</h2>
       {/if}
     </div>
-
-    <div class="departement">
+    <div class="info">
       {#await cityP}
         <Spinner />
       {:then city}
         {#if city}
-          <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+          <span>{`Population : ${city.population}`}</span>
+          |
+          <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
         {/if}
       {:catch error}
         <div style="color: red">{error}</div>
@@ -243,7 +244,7 @@
 <style lang="scss">
   header {
     padding: 0 0.5rem;
-    height: 3rem;
+    min-height: 3rem;
     background: #151515;
     color: white;
 
@@ -252,10 +253,10 @@
     align-items: center;
     justify-content: space-between;
 
-    .info {
+    .info-container {
       flex: 1 0;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
     }
 
     .home {
@@ -272,7 +273,7 @@
       }
     }
 
-    .labels {
+    .titles {
       display: flex;
       align-items: baseline;
     }
@@ -287,10 +288,19 @@
       text-transform: capitalize;
     }
 
-    .departement {
+    .info {
+      margin: 0;
       display: flex;
       align-items: flex-end;
       opacity: 0.3;
+
+      span:first-child {
+        margin-right: 3px;
+      }
+
+      span:last-child {
+        margin-left: 3px;
+      }
     }
   }
 
