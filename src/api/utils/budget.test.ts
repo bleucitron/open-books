@@ -40,7 +40,7 @@ _budgetsEndpoint(
   () => {
     assert.is(
       makeNomenEndpoint(2020, 'M14', 10),
-      '2020/M14/M14_COM_500_3500.xml',
+      '2020/M14/M14_COM_INF500.xml',
     );
   },
 );

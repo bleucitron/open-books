@@ -1,4 +1,5 @@
 import type { BudgetParams } from '@interfaces';
+import { makeNomenId } from './../../utils/budget';
 
 const nbResults = 10000;
 
@@ -60,16 +61,10 @@ export function makeNomenEndpoint(
   code: string,
   population?: number,
 ): string {
-  let suffix = '';
   const extension = 'xml';
 
-  if (code === 'M14') {
-    if (!population || population >= 3500) suffix = `_COM_SUP3500`;
-    else if (population < 3500) suffix = `_COM_500_3500`;
-    else if (population < 500) suffix = `_COM_INF500`;
-  }
-
-  const fileName = `${code}${suffix}.${extension}`;
+  const codeSuffix = makeNomenId(code, population);
+  const fileName = `${codeSuffix}.${extension}`;
 
   return [year, code, fileName].join('/');
 }
