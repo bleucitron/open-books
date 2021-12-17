@@ -50,7 +50,7 @@
         on:mouseenter={() => (current = index)}
         on:mouseleave={() => (current = 0)}
         href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
-        rel="prefetch"
+        sveltekit:prefetch
         class:active={current === index}
       >
         <div class="infos">

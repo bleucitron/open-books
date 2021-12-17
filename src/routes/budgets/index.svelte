@@ -45,6 +45,8 @@
       };
     }
 
+    await Promise.all(fillBudgetBySiret(siret, [year], name));
+
     return {
       props: {
         sirens,
