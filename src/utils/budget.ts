@@ -1,4 +1,5 @@
 import json2csv from 'json-2-csv';
+import { makeId } from '@utils';
 
 import type {
   CSV,
@@ -75,6 +76,8 @@ export async function makeCSV(data: Budget): Promise<CSV> {
 export function makeBudget(data: BudgetRaw): Budget {
   const { city, siret, year, records } = data;
 
+  const id = makeId(siret, year);
+
   const length = records.length;
 
   if (length === 0) return null;
@@ -102,6 +105,7 @@ export function makeBudget(data: BudgetRaw): Budget {
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
   return {
+    id,
     siret,
     siren,
     etabl,

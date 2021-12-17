@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
@@ -13,16 +14,16 @@
   }: LoadInput): Promise<LoadOutput> {
     const name = query.get('name');
     const insee = query.get('insee');
-    const sirenString = query.get('sirens');
     const y = query.get('year');
+    const sirenString = query.get('sirens');
     let siret = query.get('siret');
 
-    const year = parseInt(y) || defaultYear;
     let sirens = sirenString?.split(',');
+
+    const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
       const siretsFromInsee = await getSiretsFromInsee(name, insee);
-
       sirens = extractSirens(siretsFromInsee);
 
       const sirets = siretsFromInsee
@@ -31,6 +32,17 @@
         .sort();
 
       siret = sirets[0];
+
+      return {
+        redirect: makeBudgetUrl({
+          name,
+          insee,
+          siret,
+          sirens,
+          year,
+        }),
+        status: 301,
+      };
     }
 
     return {
@@ -49,15 +61,9 @@
   import { goto } from '$app/navigation';
 
   import city from '@stores/city';
-  import { getRecords } from '@api';
-  import {
-    makeBudget,
-    makeId,
-    makeBudgetUrl,
-    orderRecordsBySiret,
-  } from '@utils';
+  import { makeId, makeBudgetUrl } from '@utils';
 
-  import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
+  import type { Budget, BudgetMap, City } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Spinner from '$lib/Spinner.svelte';
@@ -73,7 +79,9 @@
   // let type: string;
   // let fonction: string;
 
-  const budgetById: BudgetMap = {};
+  let budgetById: BudgetMap = {};
+
+  $: if ($city) budgetById = {};
 
   function selectSiret(s: string): void {
     const url = makeBudgetUrl({
@@ -85,11 +93,6 @@
     });
 
     goto(url);
-
-    budgetPs = years.map(y => {
-      const id = makeId(s, y);
-      return Promise.resolve(budgetById[id]);
-    });
   }
 
   function selectYear(y: number): void {
@@ -123,42 +126,11 @@
         return result;
       });
 
-  $: budgetPs = years.map(year =>
-    getRecords({ ident: [currentSiret], year })
-      .catch(() => [])
-      .then((records: BudgetRecord[]) => {
-        const b = makeBudget({
-          city: name,
-          siret: currentSiret,
-          year,
-          records,
-        });
-
-        const id = makeId(currentSiret, year);
-        budgetById[id] = b;
-
-        return b;
-      }),
+  $: budgetPs = fillBudgetBySiret(currentSiret, years, name).map(p =>
+    p.then(b => b && (budgetById[b.id] = b)),
   );
-
-  $: otherBudgetPs = [...years].reverse().map(year =>
-    getRecords({ siren: sirens, year })
-      .catch(() => [])
-      .then((records: BudgetRecord[]) =>
-        orderRecordsBySiret(records).map(({ siret, records }) => {
-          const b = makeBudget({
-            city: name,
-            siret,
-            year,
-            records,
-          });
-
-          const id = makeId(siret, year);
-          if (siret !== currentSiret) budgetById[id] = b;
-
-          return b;
-        }),
-      ),
+  $: otherBudgetPs = fillBudgetBySirens(sirens, [...years].reverse(), name).map(
+    p => p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
   );
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
