@@ -13,13 +13,13 @@
 
   let height: string;
 
-  const unavailable = !pending && !value;
+  $: unavailable = !pending && value !==null;
   const ready = !!value;
-
   if (maxP)
     maxP.then(max => {
       if (!unavailable) {
-        setTimeout(() => (height = (value! / max) * 100 + '%'), 50);
+        const h = value!? value/max : 100
+        setTimeout(() => (height = (h) * 100 + '%'), 50);
       }
     });
 
@@ -41,9 +41,11 @@
       <Spinner size={1.5} />
     {:else if unavailable}
       <Icon id="x" />
-    {:else if value}
+    {:else}
       <div class="value" style={`height: ${height};`}>
+        {#if value !==null}
         {formatValue(value)}
+        {/if}
       </div>
     {/if}
   </div>
