@@ -28,7 +28,7 @@
             class:selected={selected === siret}
             class:main={i === 0}
           >
-            <div>
+            <div on:click={() => select(siret)}>
               <div class="info">
                 <span class="siren">{siren}</span>
                 <span class="etabl">{etabl}</span>
@@ -43,6 +43,10 @@
 </ul>
 
 <style lang="scss">
+  li.siret.selected{
+    pointer-events: none;
+    cursor: default;
+  }
   .Labels {
     position: relative;
     display: flex;
@@ -50,10 +54,6 @@
     width: 15rem;
     margin: 0;
   }
-  .label{
-    cursor: default;
-  }
-
   li.siren {
     border-top: 1px solid rgba(white, 0.1);
     margin-bottom: 0.5rem;
@@ -64,7 +64,6 @@
   }
 
   .siret {
-    cursor: default;
     text-transform: capitalize;
     font-size: 1rem;
     text-align: right;
@@ -94,7 +93,6 @@
 
       .info {
         opacity: 0.4;
-        cursor: default;
       }
       .siren {
         opacity: 1;
