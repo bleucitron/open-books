@@ -43,6 +43,10 @@
 </ul>
 
 <style lang="scss">
+  li.siret.selected{
+    pointer-events: none;
+    cursor: default;
+  }
   .Labels {
     position: relative;
     display: flex;
@@ -50,7 +54,6 @@
     width: 15rem;
     margin: 0;
   }
-
   li.siren {
     border-top: 1px solid rgba(white, 0.1);
     margin-bottom: 0.5rem;
@@ -75,6 +78,7 @@
 
         .info {
           opacity: 0.4;
+   
         }
 
         .siren {
@@ -90,7 +94,6 @@
       .info {
         opacity: 0.4;
       }
-
       .siren {
         opacity: 1;
       }
