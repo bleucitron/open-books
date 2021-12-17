@@ -81,15 +81,6 @@
 
   let budgetById: BudgetMap = {};
 
-  // TODO: remove after check
-  $: if (name !== $city?.nom)
-    $city = {
-      nom: name,
-      code: insee,
-      departement: { code: '12', nom: 'Jean' },
-      region: { code: '12', nom: 'Jean' },
-      population: 2000,
-    };
   $: if ($city) budgetById = {};
 
   function selectSiret(s: string): void {
@@ -195,9 +186,6 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
-
-      <!-- TODO: remove after check -->
-      <a href="/budgets?name=Annecy&insee=74010">Annecy</a>
     </div>
 
     <div class="departement">
