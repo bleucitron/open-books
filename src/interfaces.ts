@@ -130,3 +130,9 @@ export interface BarChartValue {
   value: number;
   handleClick?: () => void;
 }
+
+export interface HistorySearch {
+  name: string;
+  insee: string;
+  sirens: string[];
+}

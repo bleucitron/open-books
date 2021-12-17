@@ -58,18 +58,22 @@
 </script>
 
 <script lang="ts">
+  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { browser } from '$app/env';
 
   import city from '@stores/city';
+  import { historyStorage } from '@stores/historyStorage';
   import { makeId, makeBudgetUrl } from '@utils';
 
-  import type { Budget, BudgetMap, City } from '@interfaces';
+  import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import History from '$lib/History.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -82,6 +86,17 @@
   let budgetById: BudgetMap = {};
 
   $: if ($city) budgetById = {};
+
+  $: if (browser) {
+    const sirensList = $page.query.get('sirens').split(',');
+    const newHistoryItem: HistorySearch = {
+      name: $page.query.get('name'),
+      insee: $page.query.get('insee'),
+      sirens: sirensList,
+    };
+
+    $historyStorage.push(newHistoryItem);
+  }
 
   function selectSiret(s: string): void {
     const url = makeBudgetUrl({
@@ -186,6 +201,8 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
+
+      <a href="/budgets?name=Annecy&insee=74010">Annecy</a>
     </div>
     <div class="info">
       {#await cityP}
@@ -201,6 +218,7 @@
       {/await}
     </div>
   </div>
+  <History />
 </header>
 
 <div class="content">
