@@ -85,7 +85,9 @@
 
   let budgetById: BudgetMap = {};
 
-  $: if ($city) budgetById = {};
+  $: if (name) {
+    budgetById = {};
+  }
 
   function selectSiret(s: string): void {
     const url = makeBudgetUrl({
