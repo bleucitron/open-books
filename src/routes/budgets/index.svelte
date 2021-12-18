@@ -3,6 +3,7 @@
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
+  import { extractSiren } from '@utils/misc';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -45,7 +46,8 @@
       };
     }
 
-    await Promise.all(fillBudgetBySiret(siret, [year], name));
+    const mainSiren = extractSiren(siret);
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], name));
 
     return {
       props: {
