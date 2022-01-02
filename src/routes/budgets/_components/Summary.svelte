@@ -178,6 +178,7 @@
 
 <style lang="scss">
   .summary {
+    position: relative;
     flex: 1 0;
     display: flex;
     flex-flow: column;

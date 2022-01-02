@@ -214,8 +214,8 @@
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
     <Summary year={currentYear} {budgetP} />
+    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
   </div>
 </div>
 
@@ -303,6 +303,5 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    background: #333;
   }
 </style>

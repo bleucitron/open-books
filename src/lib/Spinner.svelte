@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Circle } from 'svelte-loading-spinners';
 
-  export let color = 'white';
+  export let color = '#333';
   export let size = 1;
   export let unit = 'rem';
+  export let inline = false;
 </script>
 
-<div class="Spinner">
+<div class="Spinner" class:inline>
   <Circle {color} {size} {unit} />
 </div>
 
@@ -16,5 +17,9 @@
     justify-content: center;
     align-items: center;
     flex: 1 0;
+  }
+
+  .inline {
+    display: inline-flex;
   }
 </style>
