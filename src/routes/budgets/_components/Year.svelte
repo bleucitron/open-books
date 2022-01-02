@@ -5,47 +5,46 @@
   import Spinner from '$lib/Spinner.svelte';
 
   export let year: number;
-  export let pending = false;
-  export let value: number = undefined;
+  export let valueP: Promise<number> = undefined;
   export let maxP: Promise<number>;
   export let select: () => void = undefined;
   export let selected = false;
 
   let height: string;
+  let pending = true;
+  let unavailable = false;
 
-  const unavailable = !pending && !value;
-  const ready = !!value;
+  $: valueP.then(v => {
+    pending = false;
+    unavailable = !v;
+  });
 
-  if (maxP)
-    maxP.then(max => {
-      if (!unavailable) {
-        setTimeout(() => (height = (value! / max) * 100 + '%'), 50);
-      }
-    });
-
-  function _select(): void {
-    if (ready) select?.();
-  }
+  $: Promise.all([valueP, maxP]).then(([v, max]) => {
+    if (v) {
+      setTimeout(() => (height = (v / max) * 100 + '%'), 50);
+    }
+  });
 </script>
 
 <li
   class="Year"
   class:pending
   class:unavailable
-  class:ready
   class:selected
-  on:click={_select}
+  on:click={!unavailable ? select : undefined}
 >
   <div class="info">
-    {#if pending}
+    {#await valueP}
       <Spinner size={1.5} />
-    {:else if unavailable}
-      <Icon id="x" />
-    {:else if value}
-      <div class="value" style={`height: ${height};`}>
-        {formatValue(value)}
-      </div>
-    {/if}
+    {:then value}
+      {#if value}
+        <div class="value" style={`height: ${height};`}>
+          {formatValue(value)}
+        </div>
+      {:else}
+        <Icon id="x" />
+      {/if}
+    {/await}
   </div>
   <h3>{year}</h3>
 </li>
@@ -61,9 +60,30 @@
     margin: 0 0.5rem;
     font-size: 0.8rem;
     color: white;
+    cursor: pointer;
 
     :global(.Icon) {
       font-size: 2em;
+    }
+
+    &:hover {
+      .value {
+        background: coral;
+      }
+    }
+
+    &.selected {
+      .value {
+        background: cornflowerblue;
+      }
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
     }
   }
 
@@ -76,33 +96,6 @@
     background: #666;
     border-radius: 8px;
     transition: height 0.5s ease-in-out;
-  }
-
-  .Year.ready {
-    cursor: pointer;
-  }
-
-  .Year.ready:hover {
-    .value {
-      background: coral;
-    }
-  }
-
-  .Year.selected {
-    .value {
-      background: cornflowerblue;
-    }
-  }
-
-  // .Year.selected:hover {
-  // }
-
-  .Year:first-child {
-    margin-left: 0;
-  }
-
-  .Year:last-child {
-    margin-right: 0;
   }
 
   h3 {
@@ -121,6 +114,7 @@
 
   .unavailable {
     opacity: 0.1;
+    cursor: default;
   }
 
   .pending {
@@ -135,11 +129,5 @@
   .unavailable .info {
     align-items: center;
     justify-content: center;
-  }
-
-  .spinner {
-    display: flex;
-    align-items: center;
-    flex: 1 0;
   }
 </style>

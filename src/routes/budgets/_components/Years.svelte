@@ -15,17 +15,13 @@
 
 <ul class="Years">
   {#each years as year, i}
-    {#await valuePs[i]}
-      <Year {year} pending={true} {maxP} />
-    {:then value}
-      <Year
-        {year}
-        {value}
-        {maxP}
-        selected={year === selected}
-        select={() => select(year)}
-      />
-    {/await}
+    <Year
+      {year}
+      valueP={valuePs[i]}
+      {maxP}
+      selected={year === selected}
+      select={() => select(year)}
+    />
   {/each}
 </ul>
 
