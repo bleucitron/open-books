@@ -42,12 +42,22 @@ export function buildNomen(s: string): Nomen {
   function assignFI(n: Element): void {
     const code = n.getAttribute('Code');
     const nodes = [...n.children] as Element[];
-    const fi = findFI(n);
+    let fi = findFI(n);
+    if (!fi) {
+      const compte =
+        n.getAttribute('DR') ||
+        n.getAttribute('DOES') ||
+        n.getAttribute('RR') ||
+        n.getAttribute('ROES') ||
+        n.getAttribute('ROIS');
+      fi = fiByChapitre.get(compte);
+    }
     fiByCompte.set(code, fi);
     nodes.forEach(n => {
       [...n.children].forEach(assignFI);
     });
   }
+
   books.forEach(assignFI);
 
   const n = doc.querySelector('Nomenclature');

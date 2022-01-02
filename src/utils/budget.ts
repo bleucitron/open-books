@@ -11,6 +11,7 @@ import type {
   FonctionTreeValue,
 } from '@interfaces';
 
+import { nomenByDecl } from './nomen';
 import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 import { getNomen } from '@api';
 
@@ -192,7 +193,11 @@ export enum BudgetCode {
 
 export enum BudgetType {
   DEBIT = 'obnetdeb',
+  DEBIT_I = 'obnetdeb_i',
+  DEBIT_F = 'obnetdeb_f',
   CREDIT = 'obnetcre',
+  CREDIT_I = 'obnetcre_i',
+  CREDIT_F = 'obnetcre_f',
 }
 
 export const typeToLabel = {
@@ -220,6 +225,11 @@ export function aggregateData(
 
     let obnetdeb;
     let obnetcre;
+    let obnetdeb_i;
+    let obnetcre_i;
+    let obnetdeb_f;
+    let obnetcre_f;
+
     let oobdeb;
     let oobcre;
 
@@ -227,16 +237,36 @@ export function aggregateData(
 
     const filteredRecords = records.filter(r => r.fonction?.startsWith(code));
 
+    const nomen = nomenByDecl.get('M14_COM_SUP3500');
+
     if (!subTree) {
-      obnetdeb = sumBy(filteredRecords, BudgetCode.OBNETDEB);
-      obnetcre = sumBy(filteredRecords, BudgetCode.OBNETCRE);
+      const records_f = filteredRecords.filter(r => {
+        return nomen.fiByCompte.get(r.compte) === 'F';
+      });
+      const records_i = filteredRecords.filter(r => {
+        return nomen.fiByCompte.get(r.compte) === 'I';
+      });
+      obnetdeb = sumBy(filteredRecords, BudgetType.DEBIT);
+      obnetcre = sumBy(filteredRecords, BudgetType.CREDIT);
+
+      obnetdeb_i = sumBy(records_i, BudgetType.DEBIT);
+      obnetdeb_f = sumBy(records_f, BudgetType.DEBIT);
+      obnetcre_i = sumBy(records_i, BudgetType.CREDIT);
+      obnetcre_f = sumBy(records_f, BudgetType.CREDIT);
+
       oobdeb = sumBy(filteredRecords, BudgetCode.OOBDEB);
       oobcre = sumBy(filteredRecords, BudgetCode.OOBCRE);
     } else {
       const subAgg = aggregateData(filteredRecords, subTree);
       const values = Object.values(subAgg).map(agg => agg.value);
-      obnetdeb = sumBy(values, BudgetCode.OBNETDEB);
-      obnetcre = sumBy(values, BudgetCode.OBNETCRE);
+      obnetdeb = sumBy(values, BudgetType.DEBIT);
+      obnetcre = sumBy(values, BudgetType.CREDIT);
+
+      obnetdeb_i = sumBy(values, BudgetType.DEBIT_I);
+      obnetcre_i = sumBy(values, BudgetType.CREDIT_I);
+      obnetdeb_f = sumBy(values, BudgetType.DEBIT_F);
+      obnetcre_f = sumBy(values, BudgetType.CREDIT_F);
+
       oobdeb = sumBy(values, BudgetCode.OOBDEB);
       oobcre = sumBy(values, BudgetCode.OOBCRE);
       output.subTree = subAgg;
@@ -249,6 +279,10 @@ export function aggregateData(
         value: {
           obnetdeb,
           obnetcre,
+          obnetdeb_i,
+          obnetcre_i,
+          obnetdeb_f,
+          obnetcre_f,
           oobdeb,
           oobcre,
         },
