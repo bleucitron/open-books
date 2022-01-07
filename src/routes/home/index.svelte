@@ -6,6 +6,7 @@
   import { getCities } from '@api';
 
   import Search from './_components/Search.svelte';
+
   import Suggestions from './_components/Suggestions.svelte';
 
   import type { City } from '@interfaces';
@@ -32,7 +33,6 @@
 
   async function fetchCities(text: string): Promise<City[]> {
     return await getCities(text).then(cities => {
-      // console.log('Villes', cities);
       const currentCities = cities.slice(0, 5);
       previousCities = currentCities;
       return currentCities;

@@ -1,4 +1,5 @@
 import json2csv from 'json-2-csv';
+import { makeId } from '@utils';
 
 import type {
   CSV,
@@ -75,6 +76,8 @@ export async function makeCSV(data: Budget): Promise<CSV> {
 export function makeBudget(data: BudgetRaw): Budget {
   const { city, siret, year, records } = data;
 
+  const id = makeId(siret, year);
+
   const length = records.length;
 
   if (length === 0) return null;
@@ -102,6 +105,7 @@ export function makeBudget(data: BudgetRaw): Budget {
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
   return {
+    id,
     siret,
     siren,
     etabl,
@@ -248,4 +252,17 @@ export function aggregateData(
   });
 
   return Object.fromEntries(aggregate);
+}
+
+export function makeNomenId(code: string, population: number): string {
+  let suffix = '';
+  if (code) {
+    if (!population || population >= 3500) suffix = `_COM_SUP3500`;
+    else if (population < 500) suffix = `_COM_INF500`;
+    else suffix = `_COM_500_3500`;
+  } else {
+    throw Error('No code provided');
+  }
+
+  return code + suffix;
 }

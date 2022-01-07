@@ -1,5 +1,4 @@
 import type { BudgetType } from '@utils/budget';
-
 export interface BudgetRecord {
   bal: string;
   becre: number;
@@ -49,6 +48,7 @@ export interface SiretsFromAPI {
 }
 
 export interface Budget {
+  id: string;
   city: string;
   siren: string;
   siret: string;
@@ -132,6 +132,12 @@ export interface BarChartValue {
 }
 
 export interface Favorite {
+  name: string;
+  insee: string;
+  sirens: string[];
+}
+
+export interface HistorySearch {
   name: string;
   insee: string;
   sirens: string[];

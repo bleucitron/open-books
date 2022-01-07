@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
+  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
+  import { extractSiren } from '@utils/misc';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -13,16 +15,16 @@
   }: LoadInput): Promise<LoadOutput> {
     const name = query.get('name');
     const insee = query.get('insee');
-    const sirenString = query.get('sirens');
     const y = query.get('year');
+    const sirenString = query.get('sirens');
     let siret = query.get('siret');
 
-    const year = parseInt(y) || defaultYear;
     let sirens = sirenString?.split(',');
+
+    const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
       const siretsFromInsee = await getSiretsFromInsee(name, insee);
-
       sirens = extractSirens(siretsFromInsee);
 
       const sirets = siretsFromInsee
@@ -31,7 +33,21 @@
         .sort();
 
       siret = sirets[0];
+
+      return {
+        redirect: makeBudgetUrl({
+          name,
+          insee,
+          siret,
+          sirens,
+          year,
+        }),
+        status: 301,
+      };
     }
+
+    const mainSiren = extractSiren(siret);
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], name));
 
     return {
       props: {
@@ -46,22 +62,19 @@
 </script>
 
 <script lang="ts">
+  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import city from '@stores/city';
-  import { getRecords } from '@api';
-  import {
-    makeBudget,
-    makeId,
-    makeBudgetUrl,
-    orderRecordsBySiret,
-  } from '@utils';
+  import { history } from '@stores/history';
+  import { makeId, makeBudgetUrl } from '@utils';
 
-  import type { Budget, BudgetMap, City, BudgetRecord } from '@interfaces';
+  import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Favorites from '$lib/Favorites.svelte';
   import Spinner from '$lib/Spinner.svelte';
+  import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
@@ -74,7 +87,23 @@
   // let type: string;
   // let fonction: string;
 
-  const budgetById: BudgetMap = {};
+  let budgetById: BudgetMap = {};
+
+  $: if (name) {
+    budgetById = {};
+  }
+
+  $: if ($page) {
+    const query = $page.query;
+    const sirensList = query.get('sirens').split(',');
+    const newHistoryItem: HistorySearch = {
+      name: query.get('name'),
+      insee: query.get('insee'),
+      sirens: sirensList,
+    };
+
+    history.addItem(newHistoryItem);
+  }
 
   function selectSiret(s: string): void {
     const url = makeBudgetUrl({
@@ -86,11 +115,6 @@
     });
 
     goto(url);
-
-    budgetPs = years.map(y => {
-      const id = makeId(s, y);
-      return Promise.resolve(budgetById[id]);
-    });
   }
 
   function selectYear(y: number): void {
@@ -117,54 +141,23 @@
     return budget?.label;
   };
 
-  const cityP = $city
+  $: cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then((result: City) => {
         city.set(result);
         return result;
       });
 
-  let budgetPs = years.map(year =>
-    getRecords({ ident: [currentSiret], year })
-      .catch(() => [])
-      .then((records: BudgetRecord[]) => {
-        const b = makeBudget({
-          city: name,
-          siret: currentSiret,
-          year,
-          records,
-        });
-
-        const id = makeId(currentSiret, year);
-        budgetById[id] = b;
-
-        return b;
-      }),
+  $: budgetPs = fillBudgetBySiret(currentSiret, years, name).map(p =>
+    p.then(b => b && (budgetById[b.id] = b)),
+  );
+  $: otherBudgetPs = fillBudgetBySirens(sirens, [...years].reverse(), name).map(
+    p => p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
   );
 
-  const otherBudgetPs = [...years].reverse().map(year =>
-    getRecords({ siren: sirens, year })
-      .catch(() => [])
-      .then((records: BudgetRecord[]) =>
-        orderRecordsBySiret(records).map(({ siret, records }) => {
-          const b = makeBudget({
-            city: name,
-            siret,
-            year,
-            records,
-          });
+  $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
 
-          const id = makeId(siret, year);
-          if (siret !== currentSiret) budgetById[id] = b;
-
-          return b;
-        }),
-      ),
-  );
-
-  const allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
-
-  const loadingP = Promise.all(allPs);
+  $: loadingP = Promise.all(allPs);
 
   $: sirets = [
     ...new Set(
@@ -208,8 +201,8 @@
   <a class="home" href="/">
     <Icon id="book-open" />
   </a>
-  <div class="info">
-    <div class="labels">
+  <div class="info-container">
+    <div class="titles">
       <h1>{name}</h1>
 
       {#if label}
@@ -219,13 +212,15 @@
 
     <div class="right">
       <Favorites params={{ insee, name, sirens }} dropdown={true} />
-
-      <div class="departement">
+      <History />
+      <div class="info">
         {#await cityP}
           <Spinner />
         {:then city}
           {#if city}
-            <div>{`${city.departement.code} - ${city.departement.nom}`}</div>
+            <span>{`Population : ${city.population}`}</span>
+            |
+            <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
           {/if}
         {:catch error}
           <div style="color: red">{error}</div>
@@ -240,15 +235,15 @@
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
     <Summary year={currentYear} {budgetP} />
+    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
   </div>
 </div>
 
 <style lang="scss">
   header {
     padding: 0 0.5rem;
-    height: 3rem;
+    min-height: 3rem;
     background: #151515;
     color: white;
 
@@ -257,10 +252,10 @@
     align-items: center;
     justify-content: space-between;
 
-    .info {
+    .info-container {
       flex: 1 0;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
     }
 
     .home {
@@ -277,7 +272,7 @@
       }
     }
 
-    .labels {
+    .titles {
       display: flex;
       align-items: baseline;
     }
@@ -292,10 +287,19 @@
       text-transform: capitalize;
     }
 
-    .departement {
+    .info {
+      margin: 0;
       display: flex;
       align-items: flex-end;
       opacity: 0.3;
+
+      span:first-child {
+        margin-right: 3px;
+      }
+
+      span:last-child {
+        margin-left: 3px;
+      }
     }
   }
 
@@ -320,7 +324,6 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    background: #333;
   }
 
   .right {

@@ -1,18 +1,57 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import type { City } from '@interfaces';
   import Spinner from '$lib/Spinner.svelte';
 
   export let suggestions: City[] = [];
   export let select: (c: City) => void;
   export let city: City = undefined;
+
+  let current: number = undefined;
+
+  function keyboardGestion(e: KeyboardEvent): number {
+    switch (e.key) {
+      case 'ArrowUp': {
+        if (current === 0 || current === undefined) {
+          current = number;
+        } else {
+          current = current - 1;
+        }
+        break;
+      }
+
+      case 'ArrowDown': {
+        if (current === number || current === undefined) {
+          current = 0;
+        } else {
+          current = current + 1;
+        }
+        break;
+      }
+
+      case 'Enter': {
+        const suggest = suggestions[current];
+        select(suggest);
+        goto(`/budgets?name=${suggest.nom}&insee=${suggest.code}`);
+        break;
+      }
+    }
+    return current;
+  }
+
+  $: number = suggestions.length - 1;
 </script>
 
+<svelte:window on:keyup={keyboardGestion} />
 <ul>
-  {#each suggestions as suggestion}
+  {#each suggestions as suggestion, index (index)}
     <li class="Suggestion" on:click={() => select(suggestion)}>
       <a
+        on:mouseenter={() => (current = index)}
+        on:mouseleave={() => (current = 0)}
         href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
-        rel="prefetch"
+        sveltekit:prefetch
+        class:active={current === index}
       >
         <div class="infos">
           <div class="name">{suggestion.nom}</div>
@@ -42,12 +81,11 @@
     padding: 0.5rem 1rem;
   }
 
-  a:hover {
-    background: coral;
+  .active {
+    background: coral !important;
     color: white;
     cursor: pointer;
   }
-
   .infos {
     display: flex;
   }
