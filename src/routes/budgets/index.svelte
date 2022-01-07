@@ -62,15 +62,18 @@
 </script>
 
 <script lang="ts">
+  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import city from '@stores/city';
+  import { history } from '@stores/history';
   import { makeId, makeBudgetUrl } from '@utils';
 
-  import type { Budget, BudgetMap, City } from '@interfaces';
+  import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Spinner from '$lib/Spinner.svelte';
+  import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
@@ -87,6 +90,18 @@
 
   $: if (name) {
     budgetById = {};
+  }
+
+  $: if ($page) {
+    const query = $page.query;
+    const sirensList = query.get('sirens').split(',');
+    const newHistoryItem: HistorySearch = {
+      name: query.get('name'),
+      insee: query.get('insee'),
+      sirens: sirensList,
+    };
+
+    history.addItem(newHistoryItem);
   }
 
   function selectSiret(s: string): void {
@@ -207,6 +222,7 @@
       {/await}
     </div>
   </div>
+  <History />
 </header>
 
 <div class="content">

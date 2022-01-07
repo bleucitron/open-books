@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from './Icon.svelte';
+  import History from './History.svelte';
 
   export let path: string;
 </script>
@@ -14,6 +15,7 @@
   </a>
   <nav class="Nav">
     <a href="/about" class:current={path === 'about'}>À propos</a>
+    <History />
     <a href="https://github.com/iOiurson/open-books">
       <Icon id="github" />
     </a>
