@@ -24,11 +24,6 @@ export const favorite = {
       }
       return favoriteList;
     }),
-  /*
-    [
-      newFavoriteItem,
-      ...favoriteList.filter(item => item.name !== newFavoriteItem.name),
-    ]),*/
 };
 
 favorite.subscribe(value => {
