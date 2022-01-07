@@ -8,6 +8,7 @@
 
   export let search: (s: string) => Promise<City[]>;
   export let selected: City = undefined;
+  export let select: (c: City) => void = undefined;
 
   let citiesP: Promise<City[]>;
   let previousCities: City[];
@@ -19,10 +20,6 @@
   onMount(async () => {
     search(value);
   });
-
-  function select(c: City): void {
-    city.set(c);
-  }
 
   function reset(): void {
     value = '';
