@@ -1,3 +1,6 @@
+import type { FonctionTree } from '@interfaces';
+import { makeFonctionTree } from '@utils';
+
 export const nomenByDecl = new Map();
 
 export interface Nomen {
@@ -6,6 +9,7 @@ export interface Nomen {
   declinaison: string;
   fiByChapitre: Map<string, string>;
   fiByCompte: Map<string, string>;
+  tree: FonctionTree;
 }
 
 export function buildNomen(s: string): Nomen {
@@ -47,12 +51,13 @@ export function buildNomen(s: string): Nomen {
   books.forEach(assignFI);
 
   const n = doc.querySelector('Nomenclature');
-
+  const tree = makeFonctionTree(s);
   return {
     norme: n.getAttribute('Norme'),
     exer: n.getAttribute('Exer'),
     declinaison: n.getAttribute('Declinaison'),
     fiByChapitre,
     fiByCompte,
+    tree,
   };
 }
