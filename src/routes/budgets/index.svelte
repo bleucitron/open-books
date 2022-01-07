@@ -60,10 +60,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { browser } from '$app/env';
 
   import city from '@stores/city';
-  import { historyStorage } from '@stores/historyStorage';
+  import { history } from '@stores/history';
   import { makeId, makeBudgetUrl } from '@utils';
 
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
@@ -74,6 +73,7 @@
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
   import History from '$lib/History.svelte';
+  import { browser } from '$app/env';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -95,7 +95,7 @@
       sirens: sirensList,
     };
 
-    $historyStorage.push(newHistoryItem);
+    history.addItem(newHistoryItem);
   }
 
   function selectSiret(s: string): void {
@@ -201,8 +201,6 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
-
-      <a href="/budgets?name=Annecy&insee=74010">Annecy</a>
     </div>
     <div class="info">
       {#await cityP}

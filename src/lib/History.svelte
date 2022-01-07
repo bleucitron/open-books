@@ -1,8 +1,7 @@
 <script lang="ts">
   import Icon from '$lib/Icon.svelte';
   import type { HistorySearch } from '@interfaces';
-  import { browser } from '$app/env';
-  import { historyStorage } from '@stores/historyStorage';
+  import { history } from '@stores/history';
 
   let isOpen = false;
 
@@ -11,7 +10,7 @@
   }
 
   function deleteHistory(): void {
-    $historyStorage = [];
+    history.clear();
   }
 
   function createUrl(settings: HistorySearch): string {
@@ -29,24 +28,20 @@
     <Icon id="clock" />
   </div>
   <div class="popup {isOpen ? 'open' : ''}">
-    {#if browser}
-      {#if $historyStorage.length === 0}
-        <p class="history-empty">Historique vide</p>
-      {:else}
-        <div class="delete-history" on:click={deleteHistory}>
-          <Icon id="trash-2" />
-        </div>
-        <h2 class="history-title">Mon historique de recherche :</h2>
-        <ul class="history-list">
-          {#each Object.entries($historyStorage) as [key, historyItem]}
-            <li class="history-item">
-              <a href={createUrl(historyItem)}>{historyItem.name}</a>
-            </li>
-          {/each}
-        </ul>
-      {/if}
-    {:else}
+    {#if $history.length === 0}
       <p class="history-empty">Historique vide</p>
+    {:else}
+      <div class="delete-history" on:click={deleteHistory}>
+        <Icon id="trash-2" />
+      </div>
+      <h2 class="history-title">Mon historique de recherche :</h2>
+      <ul class="history-list">
+        {#each Object.entries($history) as [key, historyItem]}
+          <li class="history-item">
+            <a href={createUrl(historyItem)}>{historyItem.name}</a>
+          </li>
+        {/each}
+      </ul>
     {/if}
   </div>
 </div>
