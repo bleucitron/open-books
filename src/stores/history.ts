@@ -8,7 +8,7 @@ const { subscribe, set, update } = writable<HistorySearch[]>(
   () => {
     if (browser) {
       const parsedHistory = JSON.parse(localStorage.getItem('history'));
-      return parsedHistory === null ? [] : parsedHistory;
+      return parsedHistory || [];
     }
     return [];
   },
@@ -16,16 +16,11 @@ const { subscribe, set, update } = writable<HistorySearch[]>(
 
 export const history = {
   subscribe,
-  addItem: (newHistoryItem: HistorySearch) => {
-    update((historyList: HistorySearch[]) => {
-      return [
-        newHistoryItem,
-        ...historyList.filter(item => {
-          return item.name !== newHistoryItem.name;
-        }),
-      ];
-    });
-  },
+  addItem: (newHistoryItem: HistorySearch) =>
+    update((historyList: HistorySearch[]) => [
+      newHistoryItem,
+      ...historyList.filter(item => item.name !== newHistoryItem.name),
+    ]),
   clear: () => {
     set([]);
     localStorage.removeItem('history');

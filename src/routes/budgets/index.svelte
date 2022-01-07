@@ -69,11 +69,10 @@
 
   import Icon from '$lib/Icon.svelte';
   import Spinner from '$lib/Spinner.svelte';
+  import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import History from '$lib/History.svelte';
-  import { browser } from '$app/env';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -87,11 +86,12 @@
 
   $: if ($city) budgetById = {};
 
-  $: if (browser) {
-    const sirensList = $page.query.get('sirens').split(',');
+  $: if ($page) {
+    const query = $page.query;
+    const sirensList = query.get('sirens').split(',');
     const newHistoryItem: HistorySearch = {
-      name: $page.query.get('name'),
-      insee: $page.query.get('insee'),
+      name: query.get('name'),
+      insee: query.get('insee'),
       sirens: sirensList,
     };
 
