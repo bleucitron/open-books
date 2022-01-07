@@ -6,7 +6,7 @@
   export let suggestions: City[] = [];
   export let select: (c: City) => void;
   export let city: City = undefined;
-  export let visit: (s: string) => void;
+  export let visit: (s: string) => void = undefined;
 
   let current: number = undefined;
 

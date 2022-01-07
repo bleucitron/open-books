@@ -2,31 +2,30 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf';
   import Search from '../routes/home/_components/Search.svelte';
   import { getCities } from '@api';
-  import Suggestions from '../routes/home/_components/Suggestions.svelte';
 
   let citiesP;
   let previousCities;
 
-  const city = [
-    {
-      population: 252040,
-      departement: {
-        code: '33',
-        nom: 'Gironde',
-      },
-      region: {
-        code: '75',
-        nom: 'Nouvelle-Aquitaine',
-      },
+  const city = {
+    population: 252040,
+    departement: {
+      code: '33',
+      nom: 'Gironde',
     },
-  ];
+    region: {
+      code: '75',
+      nom: 'Nouvelle-Aquitaine',
+    },
+    code: '22',
+    nom: '',
+  };
 
   function search(text) {
-    citiesP = fetchCities(text);
+    return fetchCities(text);
   }
 
   function clear() {
-    citiesP = undefined;
+    return fetchCities('');
   }
 
   function select(c) {
@@ -50,22 +49,5 @@
     layout: 'centered',
   }}
 >
-  <Search {search} {clear} selected={city}>
-    {#if citiesP}
-      {#await citiesP}
-        <Suggestions
-          suggestions={previousCities}
-          {select}
-          visit={url => console.log(url)}
-        />
-      {:then cities}
-        <Suggestions
-          suggestions={cities}
-          {select}
-          {city}
-          visit={url => console.log(url)}
-        />
-      {/await}
-    {/if}
-  </Search>
+  <Search {search} {clear} selected={city} />
 </Story>
