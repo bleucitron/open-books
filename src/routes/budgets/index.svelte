@@ -255,7 +255,7 @@
     .info-container {
       flex: 1 0;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
     }
 
     .home {
@@ -330,8 +330,9 @@
     display: flex;
     align-items: center;
 
-    :global(.fav-wrapper) {
-      margin-right: 30px;
+    :global(.fav-wrapper),
+    :global(.history-wrapper) {
+      margin-right: 15px;
     }
   }
 </style>

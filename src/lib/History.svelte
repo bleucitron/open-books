@@ -25,7 +25,7 @@
 
 <div class="history-wrapper">
   <div class="toggle-history" on:click={togglePopup}>
-    <Icon id="clock" />
+    <Icon id="clock" size="1.3em" />
   </div>
   <div class="popup {isOpen ? 'open' : ''}">
     {#if $history.length === 0}

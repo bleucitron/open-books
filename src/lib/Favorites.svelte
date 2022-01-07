@@ -1,20 +1,18 @@
 <script lang="ts">
   import Icon from '$lib/Icon.svelte';
   import type { Favorite } from '@interfaces';
-  import { onMount } from 'svelte';
+  import { favorite } from '@stores/favorite';
+  import { browser } from '$app/env';
 
   export let params: Favorite;
   export let dropdown: boolean;
 
   let isOpen = false;
   let isFav = false;
-  let favorites: Record<string, Favorite> = {};
 
-  onMount(() => {
-    const storage = localStorage.getItem('favorites');
-    if (storage !== null) favorites = JSON.parse(storage);
-    if (params.insee in favorites) isFav = true;
-  });
+  $: if (browser) {
+    if (params.insee in $favorite) isFav = true;
+  }
 
   function createUrl(settings: Favorite): string {
     const q = [];
@@ -35,22 +33,13 @@
 
   function toggleFav(): void {
     isFav = !isFav;
-
-    if (params.name) {
-      if (isFav) {
-        favorites[params.insee] = params;
-      } else {
-        delete favorites[params.insee];
-      }
-      favorites = favorites;
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
+    favorite.toggleItem(params, isFav);
   }
 </script>
 
 <div class="fav-wrapper">
   <div class="toggle-fav" on:click={toggleFav}>
-    <Icon id="heart" filled={isFav} color="white" size="1.8em" />
+    <Icon id="heart" filled={isFav} color="white" size="1.3em" />
   </div>
   {#if dropdown}
     <div class="toggle-popup {isOpen ? 'open' : ''}" on:click={togglePopup}>
@@ -62,9 +51,9 @@
       </div>
       <h2 class="favorite-title">Mes favoris :</h2>
       <ul class="favorite-list">
-        {#each Object.entries(favorites) as [key, favorite]}
+        {#each Object.entries($favorite) as [key, favoriteItem]}
           <li class="favorite-item">
-            <a href={createUrl(favorite)}>{favorite.name}</a>
+            <a href={createUrl(favoriteItem)}>{favoriteItem.name}</a>
           </li>
         {/each}
       </ul>
@@ -86,7 +75,7 @@
 
     .toggle-popup {
       position: absolute;
-      bottom: -10px;
+      bottom: -8px;
       right: -5px;
       transition: all 0.3s;
       transform: rotate(180deg);
