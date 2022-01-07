@@ -18,7 +18,6 @@
     aggregateData,
     formatValue,
     buildNomen as _buildNomen,
-    nomenByDecl,
     Nomen,
   } from '@utils';
   import type {
@@ -43,7 +42,6 @@
 
   let makeFonctionTree: (s: string) => FonctionTree;
   let buildNomen: (s: string) => Nomen;
-  const fonctionTreeByNomen: Record<string, FonctionTree> = {};
 
   onMount(() => {
     makeFonctionTree = _makeFonctionTree; // to make sure _makeFonctionTree is not called for ssr
@@ -68,21 +66,9 @@
     code: string,
     population?: number,
   ): Promise<FonctionTree> {
-    let tree = fonctionTreeByNomen[code];
+    const nomen = await getNomen(year, code, population);
 
-    if (!tree) {
-      const nomenString = await getNomen(year, code, population);
-
-      const nomen = buildNomen?.(nomenString);
-      if (nomen) {
-        nomenByDecl.set(nomen.declinaison, nomen);
-      }
-
-      tree = makeFonctionTree?.(nomenString);
-      fonctionTreeByNomen[code] = tree;
-    }
-
-    return tree;
+    return nomen?.tree;
   }
 
   $: budgetP?.then(async b => {
