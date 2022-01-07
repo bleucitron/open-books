@@ -24,10 +24,6 @@
     return fetchCities(text);
   }
 
-  function clear() {
-    return fetchCities('');
-  }
-
   function select(c) {
     city.set(c);
   }
@@ -49,5 +45,5 @@
     layout: 'centered',
   }}
 >
-  <Search {search} {clear} selected={city} />
+  <Search {search} selected={city} />
 </Story>
