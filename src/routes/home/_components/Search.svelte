@@ -7,7 +7,6 @@
   import Suggestions from './Suggestions.svelte';
 
   export let search: (s: string) => Promise<City[]>;
-  export let clear: () => undefined;
   export let selected: City = undefined;
 
   let citiesP: Promise<City[]>;
@@ -27,7 +26,7 @@
 
   function reset(): void {
     value = '';
-    citiesP = clear();
+    citiesP = null;
   }
 
   function handleInput(e: Event): void {
