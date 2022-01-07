@@ -1,14 +1,17 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  import city from '@stores/city';
   import type { City } from '@interfaces';
-
   import Icon from '$lib/Icon.svelte';
+  import Suggestions from './Suggestions.svelte';
 
-  export let search: (s: string) => void;
-  export let clear: () => void;
+  export let search: (s: string) => Promise<City[]>;
+  export let clear: () => undefined;
   export let selected: City = undefined;
 
+  let citiesP: Promise<City[]>;
+  let previousCities: City[];
   let value = '';
   $: if (selected) {
     value = selected.nom;
@@ -18,15 +21,19 @@
     search(value);
   });
 
+  function select(c: City): void {
+    city.set(c);
+  }
+
   function reset(): void {
     value = '';
-    clear();
+    citiesP = clear();
   }
 
   function handleInput(e: Event): void {
     const target = e.target as HTMLInputElement;
     const text = target.value;
-    search(text);
+    citiesP = search(text);
     value = text;
   }
 </script>
@@ -46,7 +53,13 @@
       </span>
     {/if}
   </div>
-  <slot />
+  {#if citiesP}
+    {#await citiesP}
+      <Suggestions suggestions={previousCities} {select} />
+    {:then cities}
+      <Suggestions suggestions={cities} {select} city={$city} />
+    {/await}
+  {/if}
 </div>
 
 <style lang="scss">
