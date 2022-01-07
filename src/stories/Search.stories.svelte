@@ -25,7 +25,7 @@
   }
 
   function select(c) {
-    city.set(c);
+    console.log(c);
   }
 
   async function fetchCities(text) {
@@ -45,5 +45,5 @@
     layout: 'centered',
   }}
 >
-  <Search {search} selected={city} />
+  <Search {search} selected={city} {select} />
 </Story>

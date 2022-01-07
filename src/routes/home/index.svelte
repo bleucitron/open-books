@@ -5,8 +5,9 @@
   import { getCities } from '@api';
   import type { City } from '@interfaces';
 
+  import { goto } from '$app/navigation';
+  
   import Search from './_components/Search.svelte';
-  import Suggestions from './_components/Suggestions.svelte';
 
   onMount(async () => {
     select(null);
@@ -26,6 +27,7 @@
 
   function select(c: City): void {
     city.set(c);
+    goto(`/budgets?name=${c.nom}&insee=${c.code}`);
   }
 
   async function fetchCities(text: string): Promise<City[]> {
@@ -42,15 +44,7 @@
 </svelte:head>
 
 <main>
-  <Search {search} {clear} selected={$city}>
-    {#if citiesP}
-      {#await citiesP}
-        <Suggestions suggestions={previousCities} {select} />
-      {:then cities}
-        <Suggestions suggestions={cities} {select} city={$city} />
-      {/await}
-    {/if}
-  </Search>
+  <Search {search} {clear} selected={$city} {select} />
 </main>
 
 <style lang="scss">

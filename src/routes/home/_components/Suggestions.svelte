@@ -6,7 +6,6 @@
   export let suggestions: City[] = [];
   export let select: (c: City) => void;
   export let city: City = undefined;
-  export let visit: (s: string) => void = undefined;
 
   let current: number = undefined;
 
@@ -33,7 +32,6 @@
       case 'Enter': {
         const suggest = suggestions[current];
         select(suggest);
-        visit(`/budgets?name=${suggest.nom}&insee=${suggest.code}`);
         break;
       }
     }
