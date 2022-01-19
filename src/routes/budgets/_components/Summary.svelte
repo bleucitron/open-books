@@ -7,6 +7,7 @@
   */
 
   import { onMount } from 'svelte';
+  import { browser } from '$app/env';
 
   import { city, tree, code, budget, fonction } from '@stores';
   import { getNomen } from '@api';
@@ -66,7 +67,7 @@
     code: string,
     population?: number,
   ): Promise<FonctionTree> {
-    const nomen = await getNomen(year, code, population);
+    const nomen = browser ? await getNomen(year, code, population) : null;
 
     return nomen?.tree;
   }
