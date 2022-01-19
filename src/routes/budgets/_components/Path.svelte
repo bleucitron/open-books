@@ -32,10 +32,6 @@
     font-size: 0.9rem;
   }
 
-  .next {
-    margin: 0 0.5rem;
-  }
-
   .step {
     &:hover {
       color: coral;
