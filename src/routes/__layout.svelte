@@ -4,7 +4,7 @@
   import Nav from '$lib/Nav.svelte';
   import GoogleAnalytics from '$lib/GoogleAnalytics.svelte';
 
-  $: segment = $page.path.split('/')[1];
+  $: segment = $page.url.pathname.split('/')[1];
 </script>
 
 <GoogleAnalytics />

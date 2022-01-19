@@ -4,7 +4,7 @@
   $: {
     if (typeof gtag !== 'undefined') {
       gtag('config', 'G-ZPGFWYWMHX', {
-        page_path: $page.path,
+        page_path: $page.url.pathname,
       });
     }
   }

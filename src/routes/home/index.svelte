@@ -2,14 +2,11 @@
   import { onMount } from 'svelte';
 
   import city from '@stores/city';
-
   import { getCities } from '@api';
+  import type { City } from '@interfaces';
 
   import Search from './_components/Search.svelte';
-
   import Suggestions from './_components/Suggestions.svelte';
-
-  import type { City } from '@interfaces';
 
   onMount(async () => {
     select(null);

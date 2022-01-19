@@ -11,13 +11,13 @@
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
   export async function load({
-    page: { query },
+    url: { searchParams },
   }: LoadInput): Promise<LoadOutput> {
-    const name = query.get('name');
-    const insee = query.get('insee');
-    const y = query.get('year');
-    const sirenString = query.get('sirens');
-    let siret = query.get('siret');
+    const name = searchParams.get('name');
+    const insee = searchParams.get('insee');
+    const y = searchParams.get('year');
+    const sirenString = searchParams.get('sirens');
+    let siret = searchParams.get('siret');
 
     let sirens = sirenString?.split(',');
 
@@ -93,11 +93,11 @@
   }
 
   $: if ($page) {
-    const query = $page.query;
-    const sirensList = query.get('sirens').split(',');
+    const { searchParams } = $page.url;
+    const sirensList = searchParams.get('sirens').split(',');
     const newHistoryItem: HistorySearch = {
-      name: query.get('name'),
-      insee: query.get('insee'),
+      name: searchParams.get('name'),
+      insee: searchParams.get('insee'),
       sirens: sirensList,
     };
 
