@@ -27,7 +27,7 @@
     "@storybook/addon-svelte-csf": "^1.1.0",
     "@storybook/svelte": "^6.4.0-beta.12",
     "@sveltejs/adapter-vercel": "^1.0.0-next.39",
-    "@sveltejs/kit": "^1.0.0-next.224",
+    "@sveltejs/kit": "^1.0.0-next.235",
     "@types/d3-format": "^3.0.1",
     "@types/d3-shape": "^3.0.2",
     "@types/marked": "^4.0.1",
