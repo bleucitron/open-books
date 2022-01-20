@@ -30,7 +30,7 @@
     "@sveltejs/kit": "^1.0.0-next.224",
     "@types/d3-format": "^3.0.1",
     "@types/d3-shape": "^3.0.2",
-    "@types/marked": "^3.0.1",
+    "@types/marked": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "autoprefixer": "^10.3.6",
@@ -64,7 +64,7 @@
     "d3-pie": "^1.1.0",
     "d3-shape": "^3.0.1",
     "json-2-csv": "^3.14.4",
-    "marked": "^3.0.4",
+    "marked": "^4.0.10",
     "randomcolor": "^0.6.2",
     "svelte-loading-spinners": "^0.1.7"
   }
