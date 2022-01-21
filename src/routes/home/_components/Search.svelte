@@ -1,45 +1,45 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
   import city from '@stores/city';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from './Suggestions.svelte';
+  import { getCities } from '@api';
+  import { createEventDispatcher } from 'svelte';
 
-  export let search: (s: string) => Promise<City[]>;
-  export let selected: City = undefined;
-  export let select: (c: City) => void = undefined;
+  const dispatch = createEventDispatcher();
 
-  let citiesP: Promise<City[]>;
+  const selected: City = undefined;
+
+  let citiesPromise: Promise<City[]> = null;
   let previousCities: City[];
   let value = '';
   $: if (selected) {
     value = selected.nom;
   }
 
-  onMount(async () => {
-    search(value);
-  });
+  function select(event): void {
+    dispatch('select', {
+      city: event.detail.city || city,
+    });
+  }
 
   function reset(): void {
     value = '';
-    citiesP = null;
+    citiesPromise = null;
   }
 
-  function handleInput(e: Event): void {
+  async function handleInput(e: Event): Promise<void> {
     const target = e.target as HTMLInputElement;
     const text = target.value;
-    citiesP = search(text);
-    value = text;
+    citiesPromise = getCities(text);
   }
 </script>
 
 <div class="Search">
   <div class="searchbar">
     <Icon id="search" />
-
     <input
-      {value}
+      bind:value
       on:input={handleInput}
       placeholder="Entrez le nom d'une commune"
     />
@@ -49,11 +49,19 @@
       </span>
     {/if}
   </div>
-  {#if citiesP}
-    {#await citiesP}
-      <Suggestions suggestions={previousCities} {select} />
+  {#if citiesPromise}
+    {#await citiesPromise}
+      <Suggestions
+        suggestions={previousCities}
+        on:enterPress={select}
+        on:click={select}
+      />
     {:then cities}
-      <Suggestions suggestions={cities} {select} city={$city} />
+      <Suggestions
+        suggestions={cities}
+        on:enterPress={select}
+        on:click={select}
+      />
     {/await}
   {/if}
 </div>
