@@ -107,7 +107,6 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
 
   const nomenFilled = await getNomen(year, nomen, city?.population);
   const tree = aggregateData(records, nomenFilled?.tree);
-  console.log('Nomen filled', tree);
 
   return {
     id,
@@ -216,6 +215,8 @@ export function aggregateData(
   records: BudgetRecord[],
   tree: FonctionTree,
 ): FonctionTree {
+  tree = tree ?? {};
+
   const aggregate = Object.values(tree).map(fonction => {
     const { code, subTree } = fonction;
 

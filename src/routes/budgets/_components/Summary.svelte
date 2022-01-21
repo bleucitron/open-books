@@ -155,6 +155,8 @@
       {:else if values}
         <div class="main">{formatValue(infos.main)}</div>
         <Chart {values} />
+      {:else}
+        <p>No values to be displayed</p>
       {/if}
       {#if infos}
         <div class="nomen">{infos.nomen}</div>
