@@ -60,6 +60,7 @@ export interface Budget {
   obnetdeb: number;
   length: number;
   records: BudgetRecord[];
+  tree: FonctionTree;
 }
 
 export interface BudgetMap {
@@ -67,7 +68,7 @@ export interface BudgetMap {
 }
 
 export interface BudgetRaw {
-  city: string;
+  city: City;
   siret: string;
   year: number;
   records: BudgetRecord[];

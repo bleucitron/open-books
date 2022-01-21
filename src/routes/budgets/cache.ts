@@ -1,13 +1,13 @@
 import { getRecords } from '@api';
 import { makeBudget, makeId, orderRecordsBySiret } from '@utils';
-import type { Budget, BudgetMap, BudgetRecord } from '@interfaces';
+import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
 
 export function fillBudgetBySiret(
   siret: string,
   years: number[],
-  name: string,
+  city: City,
 ): Promise<Budget>[] {
   const budgets: Promise<Budget>[] = [];
   years.forEach(currYear => {
@@ -21,9 +21,9 @@ export function fillBudgetBySiret(
             year: currYear,
           })
             .catch(() => [])
-            .then((records: BudgetRecord[]) => {
-              const b = makeBudget({
-                city: name,
+            .then(async (records: BudgetRecord[]) => {
+              const b = await makeBudget({
+                city: city,
                 siret,
                 year: currYear,
                 records,
@@ -42,7 +42,7 @@ export function fillBudgetBySiret(
 export function fillBudgetBySirens(
   sirens: string[],
   years: number[],
-  name: string,
+  city: City,
 ): Promise<Budget[]>[] {
   const sirensToFetch: string[] = [];
   let siretsInCache: string[] = [];
@@ -69,20 +69,22 @@ export function fillBudgetBySirens(
           getRecords({ siren: sirensToFetch, year })
             .catch(() => [])
             .then((records: BudgetRecord[]) =>
-              orderRecordsBySiret(records).map(({ siret, records }) => {
-                const b = makeBudget({
-                  city: name,
-                  siret,
-                  year,
-                  records,
-                });
-                const id = makeId(siret, year);
-                if (!(id in budgetCache)) {
-                  budgetCache[id] = b;
-                }
+              Promise.all(
+                orderRecordsBySiret(records).map(async ({ siret, records }) => {
+                  const b = await makeBudget({
+                    city: city,
+                    siret,
+                    year,
+                    records,
+                  });
+                  const id = makeId(siret, year);
+                  if (!(id in budgetCache)) {
+                    budgetCache[id] = b;
+                  }
 
-                return b;
-              }),
+                  return b;
+                }),
+              ),
             ),
         ]).then(budgets => budgets.flat());
   });

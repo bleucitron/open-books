@@ -27,7 +27,8 @@ export async function getNomen(
   const nomen: Nomen = nomenByDecl.has(endpoint)
     ? nomenByDecl.get(endpoint)
     : await get<string>(`${nomenUrl}/${endpoint}`).then(buildNomen);
-  nomenByDecl.set(nomen.declinaison, nomen);
+
+  nomenByDecl.set(nomen?.declinaison, nomen);
 
   return nomen;
 }
