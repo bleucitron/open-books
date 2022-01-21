@@ -4,7 +4,8 @@
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
-  import AddFavory from '$lib/addFavory.svelte';
+  import AddFavorite from '$lib/addFavorite.svelte';
+  import Favorite from '$lib/Favorite.svelte';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -209,7 +210,7 @@
         <h2>{label}</h2>
       {/if}
 
-      <AddFavory {name} {insee} {sirens} />
+      <AddFavorite {name} {insee} {sirens} />
     </div>
     <div class="info">
       {#await cityP}
@@ -226,6 +227,7 @@
     </div>
   </div>
   <History />
+  <Favorite />
 </header>
 
 <div class="content">

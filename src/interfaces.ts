@@ -137,7 +137,7 @@ export interface HistorySearch {
   sirens: string[];
 }
 
-export interface FavoritesSearch {
+export interface FavoriteSearch {
   name: string;
   insee: string;
   sirens: string[];
