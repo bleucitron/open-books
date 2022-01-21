@@ -4,6 +4,7 @@
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
+  import AddFavory from '$lib/addFavory.svelte';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -207,6 +208,8 @@
       {#if label}
         <h2>{label}</h2>
       {/if}
+
+      <AddFavory {name} {insee} {sirens} />
     </div>
     <div class="info">
       {#await cityP}
