@@ -1,22 +1,29 @@
 <script lang="ts">
-  import { Circle } from 'svelte-loading-spinners';
-
-  export let color = '#333';
-  export let size = 1;
-  export let unit = 'rem';
+  import Icon from './Icon.svelte';
   export let inline = false;
 </script>
 
 <div class="Spinner" class:inline>
-  <Circle {color} {size} {unit} />
+  <Icon id="loader" />
 </div>
 
 <style lang="scss">
+  @keyframes rotate-loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
   .Spinner {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1 0;
+    &:first-child {
+      animation: rotate-loader 1s linear infinite;
+    }
   }
 
   .inline {

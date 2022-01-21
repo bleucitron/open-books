@@ -49,13 +49,6 @@
     color: #333;
     opacity: 0.5;
     cursor: pointer;
-
-    :global {
-      .Icon {
-        font-size: 2em;
-      }
-    }
-
     &:hover:not(.unavailable) {
       h3 {
         color: cornflowerblue;
