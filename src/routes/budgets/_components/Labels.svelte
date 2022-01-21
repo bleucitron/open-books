@@ -16,7 +16,7 @@
 <ul class="Labels">
   {#await loadingP}
     <div class="loading">
-      <Spinner color="#999" />
+      <Spinner />
     </div>
   {/await}
   {#each sirens as siren}
@@ -43,7 +43,7 @@
 </ul>
 
 <style lang="scss">
-  li.siret.selected{
+  li.siret.selected {
     pointer-events: none;
     cursor: default;
   }
@@ -78,7 +78,6 @@
 
         .info {
           opacity: 0.4;
-   
         }
 
         .siren {

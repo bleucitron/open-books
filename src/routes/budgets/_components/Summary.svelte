@@ -142,7 +142,7 @@
   </header>
   <div class="values">
     {#await infosP}
-      <Spinner color="#333" size={3} />
+      <Spinner />
     {:then infos}
       {#if !infos}
         <div class="none">Aucun budget</div>
