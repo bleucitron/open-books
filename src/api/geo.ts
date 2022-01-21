@@ -5,10 +5,10 @@ import type { City } from '@interfaces';
 
 const baseUrl = 'https://geo.api.gouv.fr';
 
-export function getCities(text: string): Promise<City[]> {
+export async function getCities(text: string): Promise<City[]> {
   const endpoint = makeGetCitiesEndpoint(text);
 
-  return get<City[]>(`${baseUrl}/${endpoint}`);
+  return await get<City[]>(`${baseUrl}/${endpoint}&limit=5`);
 }
 
 export function getCity(insee: string): Promise<City> {

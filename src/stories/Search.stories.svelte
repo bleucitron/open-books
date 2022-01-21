@@ -1,49 +1,29 @@
 <script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf';
+  import { Meta, Story, Template } from '@storybook/addon-svelte-csf';
   import Search from '../routes/home/_components/Search.svelte';
-  import { getCities } from '@api';
 
-  let citiesP;
-  let previousCities;
-
-  const city = {
-    population: 252040,
-    departement: {
-      code: '33',
-      nom: 'Gironde',
-    },
-    region: {
-      code: '75',
-      nom: 'Nouvelle-Aquitaine',
-    },
-    code: '22',
-    nom: '',
-  };
-
-  function search(text) {
-    return fetchCities(text);
-  }
-
-  function select(c) {
-    console.log(c);
-  }
-
-  async function fetchCities(text) {
-    return await getCities(text).then(cities => {
-      const currentCities = cities.slice(0, 5);
-      previousCities = currentCities;
-      return currentCities;
-    });
+  function handleSearch(event) {
+    console.log(event.detail.city);
   }
 </script>
 
-<Meta title="Search" component={Search} />
+<Meta
+  title="Search"
+  argTypes={{ select: { action: 'clicked' } }}
+  parameters={{
+    actions: {
+      handles: ['search'],
+    },
+  }}
+/>
+
+<Template let:args>
+  <Search on:select={handleSearch} {...args} />
+</Template>
 
 <Story
   name="Basic"
   parameters={{
     layout: 'centered',
   }}
->
-  <Search {search} selected={city} {select} />
-</Story>
+/>
