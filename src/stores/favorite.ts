@@ -10,7 +10,6 @@ const { subscribe, set, update } = writable<FavoriteSearch[]>([], () => {
     }
     return parsedFavorites || [];
   }
-  console.log('ici');
   return [];
 });
 
