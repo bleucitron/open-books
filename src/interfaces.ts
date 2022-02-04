@@ -124,6 +124,11 @@ export interface UrlData {
   sirens: string[];
   year: number;
 }
+export interface UrlDataCompare {
+  id1: string;
+  id2: string;
+  year: number;
+}
 
 export interface BarChartValue {
   label: string;

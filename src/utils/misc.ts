@@ -1,4 +1,4 @@
-import type { UrlData } from '@interfaces';
+import type { UrlData, UrlDataCompare } from '@interfaces';
 
 const DEFAULT_LABEL = 'commune';
 
@@ -26,6 +26,10 @@ export function makeBudgetUrl({
 
   const sirensAsString = sirens.join(',');
   return `/budgets?name=${name}&insee=${insee}&siret=${siret}&sirens=${sirensAsString}&year=${year}`;
+}
+export function makeCompareUrl({ id1, id2, year }: UrlDataCompare): string {
+  if (!id1 || !id2 || year == null) throw Error('Missing parameter');
+  return `budgets/compare?sirets=${id1},${id2}&year=${year}`;
 }
 
 export function normalizeText(text: string): string {
