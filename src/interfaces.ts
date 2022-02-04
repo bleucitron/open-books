@@ -56,8 +56,12 @@ export interface Budget {
   nomen: string;
   etabl: string;
   year: number;
-  obnetcre: number;
   obnetdeb: number;
+  obnetcre: number;
+  obnetcre_i: number;
+  obnetcre_f: number;
+  obnetdeb_i: number;
+  obnetdeb_f: number;
   length: number;
   records: BudgetRecord[];
   tree: FonctionTree;

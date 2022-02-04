@@ -87,10 +87,6 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const siren = extractSiren(siret);
   const etabl = extractEtabl(siret);
 
-  // const debit = sumBy(records, 'sd');
-  // const credit = sumBy(records, 'sc');
-  const obnetdeb = sumBy(records, BudgetCode.OBNETDEB);
-  const obnetcre = sumBy(records, BudgetCode.OBNETCRE);
   const labels = [
     ...new Set(records.map(record => record.lbudg.toLowerCase())),
   ];
@@ -107,7 +103,16 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
   const nomenFilled = await getNomen(year, nomen, city?.population);
-  const tree = aggregateData(records, nomenFilled?.tree);
+  const tree = nomenFilled ? aggregateData(records, nomenFilled?.tree) : {};
+
+  const treeValues = Object.values(tree);
+
+  const obnetcre = sumBy(records, BudgetCode.OBNETCRE);
+  const obnetdeb = sumBy(records, BudgetCode.OBNETDEB);
+  const obnetdeb_i = treeValues.reduce((sum, v) => sum + v.value.obnetdeb_i, 0);
+  const obnetdeb_f = treeValues.reduce((sum, v) => sum + v.value.obnetdeb_f, 0);
+  const obnetcre_i = treeValues.reduce((sum, v) => sum + v.value.obnetcre_i, 0);
+  const obnetcre_f = treeValues.reduce((sum, v) => sum + v.value.obnetcre_f, 0);
 
   return {
     id,
@@ -120,6 +125,10 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
     length,
     obnetdeb,
     obnetcre,
+    obnetdeb_i,
+    obnetdeb_f,
+    obnetcre_i,
+    obnetcre_f,
     label,
     records,
     tree,
@@ -202,7 +211,11 @@ export enum BudgetType {
 
 export const typeToLabel = {
   [BudgetType.DEBIT]: 'Dépenses',
+  [BudgetType.DEBIT_I]: "Dépenses d'investissement",
+  [BudgetType.DEBIT_F]: 'Dépenses de fonctionnement',
   [BudgetType.CREDIT]: 'Recettes',
+  [BudgetType.CREDIT_I]: "Recettes d'investissement",
+  [BudgetType.CREDIT_F]: 'Recettes de fonctionnement',
 };
 
 export function fonctionFromTree(

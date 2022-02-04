@@ -57,7 +57,7 @@ export function extractEtabl(siret: string): string {
 }
 
 const toRemove = ['-', ' de'];
-export function formatLabel(label: string, name: string): string {
+export function formatLabel(label: string, name: string = ''): string {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
 
