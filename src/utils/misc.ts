@@ -29,7 +29,7 @@ export function makeBudgetUrl({
 }
 
 export function normalizeText(text: string): string {
-  return text?.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 export function formatFullValue(value: number): string {
@@ -59,7 +59,7 @@ export function extractEtabl(siret: string): string {
 const toRemove = ['-', ' de'];
 export function formatLabel(label: string, name: string): string {
   const l = normalizeText(label);
-  const n = normalizeText(name?.toLowerCase());
+  const n = normalizeText(name.toLowerCase());
 
   if (l === n) return DEFAULT_LABEL;
 

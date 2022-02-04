@@ -215,8 +215,6 @@ export function aggregateData(
   records: BudgetRecord[],
   tree: FonctionTree,
 ): FonctionTree {
-  tree = tree ?? {};
-
   const aggregate = Object.values(tree).map(fonction => {
     const { code, subTree } = fonction;
 

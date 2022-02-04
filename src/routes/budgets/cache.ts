@@ -23,7 +23,7 @@ export function fillBudgetBySiret(
             .catch(() => [])
             .then(async (records: BudgetRecord[]) => {
               const b = await makeBudget({
-                city: city,
+                city,
                 siret,
                 year: currYear,
                 records,
@@ -72,7 +72,7 @@ export function fillBudgetBySirens(
               Promise.all(
                 orderRecordsBySiret(records).map(async ({ siret, records }) => {
                   const b = await makeBudget({
-                    city: city,
+                    city,
                     siret,
                     year,
                     records,

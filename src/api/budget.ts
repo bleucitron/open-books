@@ -30,11 +30,13 @@ export async function getNomen(
         .then(buildNomen)
         .catch(() =>
           console.warn(
-            `${endpoint} does not contain data to be readed, should have errors next`,
+            `${endpoint} does not contain data to be readed, budget details won't be aggregated`,
           ),
         );
 
-  nomenByDecl.set(nomen?.declinaison, nomen);
+  if (nomen) {
+    nomenByDecl.set(nomen.declinaison, nomen);
+  }
 
   return nomen;
 }

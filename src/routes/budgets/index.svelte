@@ -67,7 +67,6 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  //import city from '@stores/city';
   import { history } from '@stores/history';
   import { makeId, makeBudgetUrl } from '@utils';
 

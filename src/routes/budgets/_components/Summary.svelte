@@ -78,9 +78,10 @@
       budget.set(b);
 
       const _tree = await getFonctionTree(year, code, $city?.population);
-
-      const aggTree = _tree && aggregateData(b.records, _tree);
-      tree.set(aggTree);
+      if (_tree) {
+        const aggTree = _tree && aggregateData(b.records, _tree);
+        tree.set(aggTree);
+      }
     }
   });
 
@@ -156,7 +157,7 @@
         <div class="main">{formatValue(infos.main)}</div>
         <Chart {values} />
       {:else}
-        <p>No values to be displayed</p>
+        <p>Pas de plan de compte disponible</p>
       {/if}
       {#if infos}
         <div class="nomen">{infos.nomen}</div>
