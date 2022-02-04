@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  // import { goto } from '$app/navigation';
   import type { City } from '@interfaces';
-  import Spinner from '$lib/Spinner.svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let suggestions: City[] = [];
-  export let select: (c: City) => void;
-  export let city: City = undefined;
 
   let current: number = undefined;
+
+  const dispatch = createEventDispatcher();
 
   function keyboardGestion(e: KeyboardEvent): number {
     switch (e.key) {
@@ -31,8 +31,7 @@
 
       case 'Enter': {
         const suggest = suggestions[current];
-        select(suggest);
-        goto(`/budgets?name=${suggest.nom}&insee=${suggest.code}`);
+        dispatch('enterPress', { city: suggest });
         break;
       }
     }
@@ -44,27 +43,29 @@
 
 <svelte:window on:keyup={keyboardGestion} />
 <ul>
-  {#each suggestions as suggestion, index (index)}
-    <li class="Suggestion" on:click={() => select(suggestion)}>
+  {#each suggestions as { nom, code, departement }, index (index)}
+    <li class="Suggestion">
       <a
+        on:click
+        on:keypress
         on:mouseenter={() => (current = index)}
         on:mouseleave={() => (current = 0)}
-        href={`/budgets?name=${suggestion.nom}&insee=${suggestion.code}`}
+        href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
         class:active={current === index}
       >
         <div class="infos">
-          <div class="name">{suggestion.nom}</div>
-          {#if suggestion.departement}
+          <div class="name">{nom}</div>
+          {#if departement}
             <div class="other">
-              {`${suggestion.departement.code} - ${suggestion.departement.nom}`}
+              {`${departement.code} - ${departement.nom}`}
             </div>
           {/if}
         </div>
 
-        {#if city && city.code === suggestion.code}
+        <!-- {#if city && city.code === code}
           <Spinner />
-        {/if}
+        {/if} -->
       </a>
     </li>
   {/each}

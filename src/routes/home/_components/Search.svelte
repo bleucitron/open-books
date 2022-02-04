@@ -1,42 +1,44 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
+  import city from '@stores/city';
   import type { City } from '@interfaces';
-
   import Icon from '$lib/Icon.svelte';
+  import Suggestions from './Suggestions.svelte';
+  import { getCities } from '@api';
+  import { createEventDispatcher } from 'svelte';
 
-  export let search: (s: string) => void;
-  export let clear: () => void;
-  export let selected: City = undefined;
+  const dispatch = createEventDispatcher();
 
+  const selected: City = undefined;
+
+  let cities: City[] = null;
   let value = '';
   $: if (selected) {
     value = selected.nom;
   }
 
-  onMount(async () => {
-    search(value);
-  });
+  function select(event: CustomEvent): void {
+    dispatch('select', {
+      city: event.detail.city || city,
+    });
+  }
 
   function reset(): void {
     value = '';
-    clear();
+    cities = null;
   }
 
-  function handleInput(e: Event): void {
+  async function handleInput(e: Event): Promise<void> {
     const target = e.target as HTMLInputElement;
     const text = target.value;
-    search(text);
-    value = text;
+    cities = await getCities(text);
   }
 </script>
 
 <div class="Search">
   <div class="searchbar">
     <Icon id="search" />
-
     <input
-      {value}
+      bind:value
       on:input={handleInput}
       placeholder="Entrez le nom d'une commune"
     />
@@ -46,7 +48,13 @@
       </span>
     {/if}
   </div>
-  <slot />
+  {#if cities}
+    <Suggestions
+      suggestions={cities}
+      on:enterPress={select}
+      on:click={() => select}
+    />
+  {/if}
 </div>
 
 <style lang="scss">
