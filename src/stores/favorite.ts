@@ -2,17 +2,16 @@ import { writable } from 'svelte/store';
 import { browser } from '$app/env';
 import type { FavoriteSearch } from '@interfaces';
 
-const favoriteList: string | [] = [];
-const { subscribe, set, update } = writable<FavoriteSearch[]>(
-  favoriteList,
-  () => {
-    if (browser) {
-      const parsedHistory = JSON.parse(localStorage.getItem('favorite'));
-      return parsedHistory || [];
+const { subscribe, set, update } = writable<FavoriteSearch[]>([], () => {
+  if (browser) {
+    const parsedFavorites = JSON.parse(localStorage.getItem('favorite'));
+    if (parsedFavorites) {
+      set(parsedFavorites);
     }
-    return [];
-  },
-);
+    return parsedFavorites || [];
+  }
+  return [];
+});
 
 export const favorite = {
   subscribe,
@@ -25,8 +24,27 @@ export const favorite = {
     set([]);
     localStorage.removeItem('favorite');
   },
+  removeItem: (name: string) => {
+    const favoritesArray = JSON.parse(localStorage.getItem('favorite'));
+    const newFavoritesArray = favoritesArray.filter(
+      (t: FavoriteSearch) => t.name !== name,
+    );
+    localStorage.setItem('favorite', JSON.stringify(newFavoritesArray));
+  },
+  checkItem: (name: string) => {
+    const favorites = JSON.parse(localStorage.getItem('favorite'));
+    const isFavorite = favorites.map((favorite: FavoriteSearch) => {
+      if (favorite.name === name) {
+        return false;
+      }
+      return true;
+    });
+    return isFavorite.includes(false);
+  },
 };
 
 favorite.subscribe(value => {
-  if (browser) localStorage.setItem('favorite', JSON.stringify(value));
+  if (browser) {
+    localStorage.setItem('favorite', JSON.stringify(value));
+  }
 });
