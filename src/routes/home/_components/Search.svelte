@@ -17,7 +17,7 @@
     value = selected.nom;
   }
 
-  function select(event): void {
+  function select(event: CustomEvent): void {
     dispatch('select', {
       city: event.detail.city || city,
     });
