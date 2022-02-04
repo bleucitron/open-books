@@ -5,9 +5,7 @@
   import Search from './_components/Search.svelte';
 
   function handleSearch(event: CustomEvent): void {
-    $city = event.detail.city;
-    const { nom, code } = $city;
-
+    const { nom, code } = event.detail.city;
     goto(`/budgets?name=${nom}&insee=${code}`);
   }
 </script>

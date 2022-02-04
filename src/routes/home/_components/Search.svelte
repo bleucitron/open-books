@@ -40,6 +40,7 @@
     <input
       bind:value
       on:input={handleInput}
+      class="search-input"
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}

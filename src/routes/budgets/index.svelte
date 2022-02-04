@@ -80,6 +80,7 @@
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import Search from '../home/_components/Search.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -129,6 +130,11 @@
     });
 
     goto(url);
+  }
+
+  function handleSearch(event: CustomEvent): void {
+    const { nom, code } = event.detail.city;
+    goto(`/budgets?name=${nom}&insee=${code}`);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -215,7 +221,6 @@
   <div class="info-container">
     <div class="titles">
       <h1>{name}</h1>
-
       {#if label}
         <h2>{label}</h2>
       {/if}
@@ -236,6 +241,7 @@
       {/await}
     </div>
   </div>
+  <Search on:select={handleSearch} />
   <History />
   <Favorite />
 </header>
@@ -260,12 +266,26 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 
     .info-container {
-      flex: 1 0;
       display: flex;
       flex-direction: column;
+    }
+
+    :global(.Search) {
+      flex: 1;
+      margin: 10px 20px !important;
+      max-width: 600px !important;
+    }
+
+    :global(svg.Icon) {
+      margin: 0 0.5rem !important;
+    }
+
+    :global(.search-input) {
+      font-size: 1.2rem;
+      padding: 0.8rem 0.5rem;
+      padding-left: 0;
     }
 
     .home {
