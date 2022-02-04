@@ -66,5 +66,12 @@
     "json-2-csv": "^3.14.4",
     "marked": "^4.0.10",
     "randomcolor": "^0.6.2"
+  },
+  "_moduleAliases": {
+    "@api": "src/api",
+    "@utils": "src/utils",
+    "@stores": "src/stores",
+    "@interfaces": "src/interfaces",
+    "@docs": "src/docs"
   }
 }
