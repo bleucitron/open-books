@@ -12,10 +12,22 @@
 </script>
 
 <div class="add-favorite-wrapper">
+  Ajouter au favori
   <div class="toggle-history" on:click={() => addFavorite(name, insee, sirens)}>
     <Icon id="star" />
   </div>
 </div>
 
 <style lang="scss">
+  .add-favorite-wrapper {
+    display: flex;
+    margin-left: 20px;
+  }
+  .toggle-history {
+    margin-left: 20px;
+    &:hover {
+      color: coral;
+      cursor: pointer;
+    }
+  }
 </style>

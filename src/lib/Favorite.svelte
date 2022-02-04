@@ -34,7 +34,7 @@
       <div class="delete-favorite" on:click={deleteFavorite}>
         <Icon id="trash-2" />
       </div>
-      <h2 class="favorite-title">Ma liste de favoris :</h2>
+      <h2 class="favorite-title">Mes favoris :</h2>
       <ul class="favorite-list">
         {#each Object.entries($favorite) as [key, favoriteItem]}
           <li class="favorite-item">
@@ -51,6 +51,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    margin-right: 20px;
     .toggle-favorite {
       display: flex;
       align-items: center;
@@ -67,12 +68,12 @@
       right: -10px;
       color: black;
       width: 200px;
-      border: 2px solid black;
-      border-radius: 5px;
+      border: 1px solid black;
+      border-radius: 12px;
       transition: all 0.3s;
       opacity: 0;
       visibility: hidden;
-      padding: 20px;
+      padding: 15px;
       z-index: 1000;
       background-color: white;
       &.open {
@@ -81,8 +82,8 @@
       }
       .delete-favorite {
         position: absolute;
-        right: 5px;
-        top: 5px;
+        right: 15px;
+        top: 15px;
         cursor: pointer;
         transition: color 0.3s ease-in-out;
         &:hover {
@@ -98,6 +99,7 @@
         font-size: 0.9em;
         list-style-type: disc;
         .favorite-item {
+          list-style: none;
           &:hover {
             color: coral;
           }
