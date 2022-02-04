@@ -24,6 +24,23 @@ export const favorite = {
     set([]);
     localStorage.removeItem('favorite');
   },
+  removeItem: (name: string) => {
+    const favoritesArray = JSON.parse(localStorage.getItem('favorite'));
+    const newFavoritesArray = favoritesArray.filter(
+      (t: FavoriteSearch) => t.name !== name,
+    );
+    localStorage.setItem('favorite', JSON.stringify(newFavoritesArray));
+  },
+  checkItem: (name: string) => {
+    const favorites = JSON.parse(localStorage.getItem('favorite'));
+    const isFavorite = favorites.map((favorite: FavoriteSearch) => {
+      if (favorite.name === name) {
+        return false;
+      }
+      return true;
+    });
+    return isFavorite.includes(false);
+  },
 };
 
 favorite.subscribe(value => {
