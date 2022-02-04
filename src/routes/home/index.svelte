@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  
+
   import Search from './_components/Search.svelte';
 
-  function handleSearch(event): void {
+  function handleSearch(event: CustomEvent): void {
     const { nom, code } = event.detail.city;
     goto(`/budgets?name=${nom}&insee=${code}`);
   }
