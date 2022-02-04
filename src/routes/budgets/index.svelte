@@ -274,7 +274,7 @@
 
     .titles {
       display: flex;
-      align-items: baseline;
+      align-items: center;
     }
 
     h1 {

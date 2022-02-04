@@ -29,7 +29,6 @@
 </script>
 
 <div class="add-favorite-wrapper">
-  Ajouter au favori
   <div class="toggle-history" on:click={() => addFavorite(name, insee, sirens)}>
     <Icon id="star" filled={isFavoriteTest} color="yellow" />
   </div>
@@ -38,10 +37,14 @@
 <style lang="scss">
   .add-favorite-wrapper {
     display: flex;
-    margin-left: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
   }
   .toggle-history {
-    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover {
       color: coral;
       cursor: pointer;

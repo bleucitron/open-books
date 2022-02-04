@@ -51,7 +51,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin-right: 30px;
+    margin-right: 12px;
     .toggle-history {
       display: flex;
       align-items: center;
