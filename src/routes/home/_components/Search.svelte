@@ -10,7 +10,7 @@
 
   const selected: City = undefined;
 
-  let citiesPromise: Promise<City[]> = null;
+  let citiesPromise: City[] = null;
   let previousCities: City[];
   let value = '';
   $: if (selected) {
@@ -31,7 +31,8 @@
   async function handleInput(e: Event): Promise<void> {
     const target = e.target as HTMLInputElement;
     const text = target.value;
-    citiesPromise = getCities(text);
+    citiesPromise = await getCities(text);
+    previousCities = citiesPromise;
   }
 </script>
 
@@ -50,19 +51,11 @@
     {/if}
   </div>
   {#if citiesPromise}
-    {#await citiesPromise}
-      <Suggestions
-        suggestions={previousCities}
-        on:enterPress={select}
-        on:click={select}
-      />
-    {:then cities}
-      <Suggestions
-        suggestions={cities}
-        on:enterPress={select}
-        on:click={select}
-      />
-    {/await}
+    <Suggestions
+      suggestions={previousCities}
+      on:enterPress={select}
+      on:click={() => select}
+    />
   {/if}
 </div>
 
