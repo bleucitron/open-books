@@ -12,6 +12,7 @@ import type {
 } from '@interfaces';
 
 import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
+import { getNomen } from '@api';
 
 const { json2csvAsync: toCSV } = json2csv;
 
@@ -73,7 +74,7 @@ export async function makeCSV(data: Budget): Promise<CSV> {
   };
 }
 
-export function makeBudget(data: BudgetRaw): Budget {
+export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const { city, siret, year, records } = data;
 
   const id = makeId(siret, year);
@@ -101,15 +102,18 @@ export function makeBudget(data: BudgetRaw): Budget {
     console.log('More than 1 nomen for', siret, year);
   }
 
-  const label = labels.length > 0 ? formatLabel(labels[0], city) : '';
+  const label = labels.length > 0 ? formatLabel(labels[0], city?.nom) : '';
   const nomen = nomens.length > 0 ? nomens[0] : '';
+
+  const nomenFilled = await getNomen(year, nomen, city?.population);
+  const tree = aggregateData(records, nomenFilled?.tree);
 
   return {
     id,
     siret,
     siren,
     etabl,
-    city,
+    city: city?.nom,
     year,
     nomen,
     length,
@@ -117,6 +121,7 @@ export function makeBudget(data: BudgetRaw): Budget {
     obnetcre,
     label,
     records,
+    tree,
   };
 }
 

@@ -26,8 +26,17 @@ export async function getNomen(
   const endpoint = makeNomenEndpoint(year, code, population);
   const nomen: Nomen = nomenByDecl.has(endpoint)
     ? nomenByDecl.get(endpoint)
-    : await get<string>(`${nomenUrl}/${endpoint}`).then(buildNomen);
-  nomenByDecl.set(nomen.declinaison, nomen);
+    : await get<string>(`${nomenUrl}/${endpoint}`)
+        .then(buildNomen)
+        .catch(() =>
+          console.warn(
+            `${endpoint} does not contain data to be readed, budget details won't be aggregated`,
+          ),
+        );
+
+  if (nomen) {
+    nomenByDecl.set(nomen.declinaison, nomen);
+  }
 
   return nomen;
 }

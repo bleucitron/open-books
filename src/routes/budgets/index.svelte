@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
   import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
+  import city from '@stores/city';
+  import { get } from 'svelte/store';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
@@ -47,7 +49,7 @@
     }
 
     const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], name));
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], get(city)));
 
     return {
       props: {
@@ -65,7 +67,6 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  import city from '@stores/city';
   import { history } from '@stores/history';
   import { makeId, makeBudgetUrl } from '@utils';
 
@@ -147,11 +148,20 @@
         return result;
       });
 
-  $: budgetPs = fillBudgetBySiret(currentSiret, years, name).map(p =>
+  $: budgetPs = fillBudgetBySiret(currentSiret, years, $city).map(p =>
     p.then(b => b && (budgetById[b.id] = b)),
   );
-  $: otherBudgetPs = fillBudgetBySirens(sirens, [...years].reverse(), name).map(
-    p => p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
+  $: otherBudgetPs = fillBudgetBySirens(
+    sirens,
+    [...years].reverse(),
+    $city,
+  ).map(p =>
+    p.then(budgets =>
+      budgets.map(async _b => {
+        const b = await _b;
+        return b && (budgetById[b.id] = b);
+      }),
+    ),
   );
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
