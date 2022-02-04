@@ -21,6 +21,8 @@
     justify-content: center;
     align-items: center;
     flex: 1 0;
+    font-size: var(--size, 1rem);
+
     &:first-child {
       animation: rotate-loader 1s linear infinite;
     }

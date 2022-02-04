@@ -147,7 +147,7 @@
   </header>
   <div class="values">
     {#await infosP}
-      <Spinner />
+      <Spinner --size="2rem" />
     {:then infos}
       {#if !infos}
         <div class="none">Aucun budget</div>
