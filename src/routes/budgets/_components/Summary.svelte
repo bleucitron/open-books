@@ -79,7 +79,7 @@
 
       const _tree = await getFonctionTree(year, code, $city?.population);
       if (_tree) {
-        const aggTree = _tree && aggregateData(b.records, _tree);
+        const aggTree = aggregateData(b.records, _tree);
         tree.set(aggTree);
       }
     }
@@ -122,6 +122,10 @@
       return {
         debit: budget.obnetdeb,
         credit: budget.obnetcre,
+        debit_i: budget.obnetdeb_i,
+        debit_f: budget.obnetdeb_f,
+        credit_i: budget.obnetcre_i,
+        credit_f: budget.obnetcre_f,
         nomen: budget.nomen,
         main,
       };
