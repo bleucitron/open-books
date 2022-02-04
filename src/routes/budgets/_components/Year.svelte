@@ -1,6 +1,6 @@
 <script lang="ts">
   // import { formatValue } from '@utils';
-  import LoadingText from '../../home/_components/LoadingText.svelte';
+  import LoadingText from '../../../lib/LoadingText.svelte';
 
   export let year: number;
   export let valueP: Promise<number> = undefined;
@@ -31,7 +31,7 @@
   class:selected
   on:click={!unavailable ? select : undefined}
 >
-  <LoadingText text={year.toString()} isLoading={pending} />
+  <LoadingText text={year.toString()} loading={pending} />
 </li>
 
 <style lang="scss">
