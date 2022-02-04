@@ -1,7 +1,11 @@
 import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
-
 import { displayLabel } from './misc';
+import { makeId } from './misc';
+import { makeBudgetUrl } from './misc';
+import { normalizeText } from './misc';
+import { extractSiren } from './misc';
+import { extractEtabl } from './misc';
 
 const _displayLabel = suite('displayLabel');
 
@@ -22,7 +26,6 @@ _displayLabel('should return label when given other strings', () => {
 
 _displayLabel.run();
 
-import { makeId } from './misc';
 const _makeId = suite('makeId');
 
 _makeId('should return id when given siret and year', () => {
@@ -39,7 +42,6 @@ _makeId('should return error when year is missing', () => {
 
 _makeId.run();
 
-import { makeBudgetUrl } from './misc';
 const _makeBudgetUrl = suite('makeBudgetUrl');
 
 _makeBudgetUrl('should return url', () => {
@@ -85,7 +87,6 @@ _makeBudgetUrl('should return error when empty sirens', () => {
 
 _makeBudgetUrl.run();
 
-import { normalizeText } from './misc';
 const _normalizeText = suite('normalizeText');
 
 _normalizeText('should return text without accents', () => {
@@ -93,3 +94,18 @@ _normalizeText('should return text without accents', () => {
 });
 
 _normalizeText.run();
+
+const _extractSiren = suite('exetractSiren');
+
+_extractSiren('should return siren', () => {
+  assert.is(extractSiren('124'), '124');
+});
+
+_extractSiren.run();
+const _extractEtabl = suite('exetractEtabl');
+
+_extractEtabl('should return etabl', () => {
+  assert.is(extractEtabl('9'), '');
+});
+
+_extractEtabl.run();
