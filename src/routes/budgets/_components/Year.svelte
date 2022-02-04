@@ -1,8 +1,6 @@
 <script lang="ts">
   // import { formatValue } from '@utils';
-
-  // import Icon from '$lib/Icon.svelte';
-  import Spinner from '$lib/Spinner.svelte';
+  import LoadingText from '../../home/_components/LoadingText.svelte';
 
   export let year: number;
   export let valueP: Promise<number> = undefined;
@@ -33,7 +31,7 @@
   class:selected
   on:click={!unavailable ? select : undefined}
 >
-  <h3>{year}{#await valueP}<Spinner inline />{/await}</h3>
+  <LoadingText text={year.toString()} isLoading={pending} />
 </li>
 
 <style lang="scss">
