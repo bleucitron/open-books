@@ -8,6 +8,9 @@ const { subscribe, set, update } = writable<HistorySearch[]>(
   () => {
     if (browser) {
       const parsedHistory = JSON.parse(localStorage.getItem('history'));
+      if (parsedHistory) {
+        set(parsedHistory);
+      }
       return parsedHistory || [];
     }
     return [];
