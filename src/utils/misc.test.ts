@@ -29,12 +29,12 @@ _makeId('should return id when given siret and year', () => {
   assert.is(makeId('98373', 2018), '98373_2018');
 });
 
-_makeId('should return error when siret is missing', () => {
-  assert.throws(() => makeId('98373', null), /Missing siret/);
+_makeId('should return error when year is missing', () => {
+  assert.throws(() => makeId('98373', null), /Missing year/);
 });
 
-_makeId('should return error when year is missing', () => {
-  assert.throws(() => makeId(null, 2019), /Missing year/);
+_makeId('should return error when siret is missing', () => {
+  assert.throws(() => makeId(null, 2019), /Missing siret/);
 });
 
 _makeId.run();
