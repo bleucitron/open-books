@@ -57,7 +57,7 @@
     <Suggestions
       suggestions={cities}
       on:enterPress={select}
-      on:click={() => select}
+      on:click={select}
     />
   {/if}
 </div>
