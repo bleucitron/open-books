@@ -5,7 +5,9 @@
   import Search from './_components/Search.svelte';
 
   function handleSearch(event: CustomEvent): void {
-    const { nom, code } = event.detail.city;
+    $city = event.detail.city;
+    const { nom, code } = $city;
+
     goto(`/budgets?name=${nom}&insee=${code}`);
   }
 </script>
@@ -23,12 +25,5 @@
     flex: 1 0;
     display: flex;
     padding-top: 10%;
-  }
-
-  :global {
-    .searchbar > input.search-input {
-      padding: 1rem;
-      padding-left: 0;
-    }
   }
 </style>

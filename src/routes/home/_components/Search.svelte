@@ -57,7 +57,7 @@
     <Suggestions
       suggestions={cities}
       on:enterPress={select}
-      on:click={e => select(e)}
+      on:click={() => select}
     />
   {/if}
 </div>
@@ -69,10 +69,8 @@
 
   .Search {
     position: relative;
-    border-radius: 1rem;
-    margin: 2rem auto;
-    max-width: 75%;
-    width: 50rem;
+    max-width: 40rem;
+    width: 100%;
     height: fit-content;
   }
 
@@ -83,7 +81,7 @@
     align-items: center;
     border-color: white;
 
-    border-radius: 12px;
+    border-radius: 1rem;
 
     &.open {
       border-bottom-left-radius: 0;
@@ -112,10 +110,10 @@
 
   input {
     flex: 1 0;
-    padding: 0.5rem;
+    padding: 0.8rem;
     padding-left: 0;
     outline: none;
-    font-size: 2rem;
+    font-size: 1.3rem;
     background: transparent;
     border: none;
     border-bottom: 1px solid transparent;

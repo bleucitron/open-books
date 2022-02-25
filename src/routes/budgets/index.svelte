@@ -273,25 +273,38 @@
     > div {
       display: flex;
       align-items: center;
+
+      &:first-child {
+        flex: 1;
+      }
+
+      :global {
+        .Search {
+          margin-left: 1rem;
+          max-width: 30rem;
+
+          :global(.Icon) {
+            font-size: 1rem;
+            margin: 0.8rem;
+          }
+
+          input {
+            padding: 0.5rem;
+            padding-left: 0;
+          }
+        }
+        .search-input {
+          font-size: 1.2rem;
+          padding: 0.8rem 0.5rem;
+          padding-left: 0;
+        }
+      }
     }
 
     .info-container {
       display: flex;
       flex-direction: column;
     }
-
-    :global(.Search) {
-      flex: 1;
-      margin: 10px 20px !important;
-      max-width: 600px !important;
-    }
-
-    :global(.search-input) {
-      font-size: 1.2rem;
-      padding: 0.8rem 0.5rem;
-      padding-left: 0;
-    }
-
     .home {
       display: flex;
       align-items: center;
