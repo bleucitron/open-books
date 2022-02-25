@@ -1,6 +1,6 @@
 <script lang="ts">
   // import { formatValue } from '@utils';
-  import LoadingText from '../../../lib/LoadingText.svelte';
+  import LoadingText from '$lib/LoadingText.svelte';
 
   export let year: number;
   export let valueP: Promise<number> = undefined;
