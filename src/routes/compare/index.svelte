@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { makeCompareUrl } from '@utils';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-  // import { getSiret } from '@api';
+  import { getSiret } from '@api';
   export async function load({
     url: { searchParams },
   }: LoadInput): Promise<LoadOutput> {
@@ -13,7 +13,9 @@
     const [id1, id2] = sirets.split(',');
     const [city1, city2] = cities.split(',');
     const year = parseInt(y) || defaultYear;
-    // const siren = await getSiret(sirets);
+
+    //Mettre un vrai siret dans les params url
+    const siren = await getSiret(id1);
 
     if (!sirets) {
       return {
@@ -35,7 +37,7 @@
         currentYear: year,
         firstCity: city1,
         secondCity: city2,
-        // siren,
+        siren,
       },
     };
   }
@@ -47,8 +49,8 @@
   export let currentYear: number;
   export let firstCity: string;
   export let secondCity: string;
-  // export let siren;
-  // console.log(siren);
+  export let siren;
+  console.log(siren);
 </script>
 
 <p>{firstId}, {secondId}, {currentYear}, {firstCity}, {secondCity}</p>
