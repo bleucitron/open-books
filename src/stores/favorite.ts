@@ -4,13 +4,11 @@ import type { FavoriteSearch } from '@interfaces';
 
 const { subscribe, set, update } = writable<FavoriteSearch[]>([], () => {
   if (browser) {
-    const parsedFavorites = JSON.parse(localStorage.getItem('favorite'));
+    const parsedFavorites = JSON.parse(localStorage.getItem('favorites'));
     if (parsedFavorites) {
       set(parsedFavorites);
     }
-    return parsedFavorites || [];
   }
-  return [];
 });
 
 export const favorite = {
@@ -22,17 +20,16 @@ export const favorite = {
     ]),
   clear: () => {
     set([]);
-    localStorage.removeItem('favorite');
   },
   removeItem: (name: string) => {
-    const favoritesArray = JSON.parse(localStorage.getItem('favorite'));
+    const favoritesArray = JSON.parse(localStorage.getItem('favorites'));
     const newFavoritesArray = favoritesArray.filter(
       (t: FavoriteSearch) => t.name !== name,
     );
     localStorage.setItem('favorite', JSON.stringify(newFavoritesArray));
   },
   checkItem: (name: string) => {
-    const favorites = JSON.parse(localStorage.getItem('favorite'));
+    const favorites = JSON.parse(localStorage.getItem('favorites'));
     const isFavorite = favorites.map((favorite: FavoriteSearch) => {
       if (favorite.name === name) {
         return false;
@@ -45,6 +42,6 @@ export const favorite = {
 
 favorite.subscribe(value => {
   if (browser) {
-    localStorage.setItem('favorite', JSON.stringify(value));
+    localStorage.setItem('favorites', JSON.stringify(value));
   }
 });

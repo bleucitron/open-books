@@ -11,9 +11,7 @@ const { subscribe, set, update } = writable<HistorySearch[]>(
       if (parsedHistory) {
         set(parsedHistory);
       }
-      return parsedHistory || [];
     }
-    return [];
   },
 );
 
@@ -26,7 +24,6 @@ export const history = {
     ]),
   clear: () => {
     set([]);
-    localStorage.removeItem('history');
   },
 };
 

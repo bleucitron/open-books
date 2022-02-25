@@ -15,8 +15,7 @@
     </div>
   </a>
   <nav class="Nav">
-    <a class="propos" href="/about" class:current={path === 'about'}>À propos</a
-    >
+    <a class="about" href="/about" class:current={path === 'about'}>À propos</a>
     <History />
     <Favorite />
     <a href="https://github.com/iOiurson/open-books">
@@ -91,7 +90,7 @@
     color: black;
     background: white;
     z-index: 1;
-    .propos {
+    .about {
       margin-right: 30px;
     }
 

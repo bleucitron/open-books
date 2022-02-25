@@ -7,7 +7,6 @@
   export let insee: string;
   export let sirens: string[];
   let isFavorite: boolean;
-  $: isFavoriteTest = isFavorite;
 
   function addFavorite(name: string, insee: string, sirens: string[]): void {
     if (!isFavorite) {
@@ -30,7 +29,7 @@
 
 <div class="add-favorite-wrapper">
   <div class="toggle-history" on:click={() => addFavorite(name, insee, sirens)}>
-    <Icon id="star" filled={isFavoriteTest} color="yellow" />
+    <Icon id="star" filled={isFavorite} color="yellow" />
   </div>
 </div>
 
