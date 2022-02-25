@@ -24,4 +24,11 @@
     display: flex;
     padding-top: 10%;
   }
+
+  :global {
+    .searchbar > input.search-input {
+      padding: 1rem;
+      padding-left: 0;
+    }
+  }
 </style>

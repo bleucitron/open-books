@@ -1,5 +1,4 @@
 <script lang="ts">
-  import city from '@stores/city';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from './Suggestions.svelte';
@@ -16,15 +15,20 @@
     value = selected.nom;
   }
 
-  function select(event: CustomEvent): void {
-    dispatch('select', {
-      city: event.detail.city || city,
-    });
-  }
-
   function reset(): void {
     value = '';
     cities = null;
+  }
+
+  function select(event: CustomEvent): void {
+    let city = event.detail.city;
+    if (!city) {
+      city = cities[0];
+    }
+    dispatch('select', {
+      city,
+    });
+    reset();
   }
 
   async function handleInput(e: Event): Promise<void> {
@@ -35,7 +39,7 @@
 </script>
 
 <div class="Search">
-  <div class="searchbar">
+  <div class="searchbar" class:open={cities}>
     <Icon id="search" />
     <input
       bind:value
@@ -53,7 +57,7 @@
     <Suggestions
       suggestions={cities}
       on:enterPress={select}
-      on:click={() => select}
+      on:click={e => select(e)}
     />
   {/if}
 </div>
@@ -64,8 +68,8 @@
   }
 
   .Search {
+    position: relative;
     border-radius: 1rem;
-    overflow: hidden;
     margin: 2rem auto;
     max-width: 75%;
     width: 50rem;
@@ -78,6 +82,13 @@
     color: white;
     align-items: center;
     border-color: white;
+
+    border-radius: 12px;
+
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
 
     :global(.Icon) {
       margin: 0 1rem;
@@ -101,7 +112,7 @@
 
   input {
     flex: 1 0;
-    padding: 1rem;
+    padding: 0.5rem;
     padding-left: 0;
     outline: none;
     font-size: 2rem;
