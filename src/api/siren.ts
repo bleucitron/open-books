@@ -21,7 +21,6 @@ const options = {
 
 export function getSiret(siret: string): Promise<Etablissement> {
   const endpoint = makeGetSiretEndpoint(siret);
-
   return get<SiretFromAPI>(`${baseUrl}/${endpoint}`, options).then(
     r => r.etablissement,
   );

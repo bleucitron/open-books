@@ -133,6 +133,8 @@ export interface UrlDataCompare {
   id1: string;
   id2: string;
   year: number;
+  city1: string;
+  city2: string;
 }
 
 export interface BarChartValue {
