@@ -215,35 +215,37 @@
 </svelte:head>
 
 <header>
-  <a class="home" href="/">
-    <Icon id="book-open" />
-  </a>
-  <div class="info-container">
-    <div class="titles">
-      <h1>{name}</h1>
-      {#if label}
-        <h2>{label}</h2>
-      {/if}
-
-      <AddFavorite {name} {insee} {sirens} />
-    </div>
-    <div class="info">
-      {#await cityP}
-        <Spinner />
-      {:then city}
-        {#if city}
-          <span>{`Population : ${city.population}`}</span>
-          |
-          <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
+  <div>
+    <a class="home" href="/">
+      <Icon id="book-open" />
+    </a>
+    <div class="info-container">
+      <div class="titles">
+        <h1>{name}</h1>
+        {#if label}
+          <h2>{label}</h2>
         {/if}
-      {:catch error}
-        <div style="color: red">{error}</div>
-      {/await}
+      </div>
+      <div class="info">
+        {#await cityP}
+          <Spinner />
+        {:then city}
+          {#if city}
+            <span>{`Population : ${city.population}`}</span>
+            |
+            <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
+          {/if}
+        {:catch error}
+          <div style="color: red">{error}</div>
+        {/await}
+      </div>
     </div>
+    <Search on:select={handleSearch} />
   </div>
-  <Search on:select={handleSearch} />
-  <History />
-  <Favorite />
+  <div>
+    <History />
+    <Favorite />
+  </div>
 </header>
 
 <div class="content">
@@ -265,7 +267,13 @@
 
     position: relative;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
 
     .info-container {
       display: flex;
@@ -276,10 +284,6 @@
       flex: 1;
       margin: 10px 20px !important;
       max-width: 600px !important;
-    }
-
-    :global(svg.Icon) {
-      margin: 0 0.5rem !important;
     }
 
     :global(.search-input) {
