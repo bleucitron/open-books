@@ -90,8 +90,9 @@
     color: black;
     background: white;
     z-index: 1;
+
     .about {
-      margin-right: 30px;
+      margin-right: 1.2rem;
     }
 
     a {
@@ -121,7 +122,7 @@
     }
 
     Favorite {
-      margin-left: 10px;
+      margin-left: 0.8rem;
     }
   }
 </style>

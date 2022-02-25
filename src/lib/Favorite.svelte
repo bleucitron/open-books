@@ -3,23 +3,19 @@
   import type { FavoriteSearch } from '@interfaces';
   import { favorite } from '@stores/favorite';
 
-  let isOpen = false;
+  let open = false;
 
   function togglePopup(): void {
-    isOpen = !isOpen;
+    open = !open;
   }
 
   function deleteFavorite(): void {
     favorite.clear();
   }
 
-  function createUrl(settings: FavoriteSearch): string {
-    const q = [];
-    if (settings.name) q.push('name=' + settings.name);
-    if (settings.insee) q.push('insee=' + settings.insee);
-    if (settings.sirens && settings.sirens.length)
-      q.push('sirens=' + settings.sirens.join(','));
-    return '/budgets?' + q.join('&');
+  function createUrl({ name, insee, sirens }: FavoriteSearch): string {
+    const params = `name=${name}&insee=${insee}&sirens=${sirens.join(',')}`;
+    return '/budgets?' + params;
   }
 </script>
 
@@ -27,7 +23,7 @@
   <div class="toggle-favorite" on:click={togglePopup}>
     <Icon id="star" />
   </div>
-  <div class="popup {isOpen ? 'open' : ''}">
+  <div class="popup" class:open>
     {#if $favorite.length === 0}
       <p class="favorite-empty">Vous n'avez pas encore de favori</p>
     {:else}
@@ -51,17 +47,20 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin-right: 20px;
+    margin-right: 1rem;
+
     .toggle-favorite {
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: color 0.3s ease-in-out;
+
       &:hover {
         color: coral;
       }
     }
+
     .popup {
       position: absolute;
       top: calc(100% + 2px);
@@ -76,28 +75,34 @@
       padding: 15px;
       z-index: 1000;
       background-color: white;
+
       &.open {
         opacity: 1;
         visibility: visible;
       }
+
       .delete-favorite {
         position: absolute;
         right: 15px;
         top: 15px;
         cursor: pointer;
         transition: color 0.3s ease-in-out;
+
         &:hover {
           color: coral;
         }
       }
+
       .favorite-title {
         margin-bottom: 10px;
         font-size: 1.1em;
       }
+
       .favorite-list {
         margin: 0;
         font-size: 0.9em;
         list-style-type: disc;
+
         .favorite-item {
           list-style: none;
           &:hover {
@@ -105,6 +110,7 @@
           }
         }
       }
+
       .favorite-empty {
         text-align: center;
       }
