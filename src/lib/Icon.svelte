@@ -7,7 +7,7 @@
 
 <svg
   class="Icon"
-  fill={filled ? color : ' none'}
+  fill={filled ? color : 'none'}
   stroke={color ?? 'currentColor'}
   stroke-width="2"
   stroke-linecap="round"

@@ -141,3 +141,9 @@ export interface HistorySearch {
   insee: string;
   sirens: string[];
 }
+
+export interface FavoriteSearch {
+  name: string;
+  insee: string;
+  sirens: string[];
+}

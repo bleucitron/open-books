@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from '$lib/Icon.svelte';
-  import type { HistorySearch } from '@interfaces';
-  import { history } from '@stores/history';
+  import type { FavoriteSearch } from '@interfaces';
+  import { favorite } from '@stores/favorite';
 
   let open = false;
 
@@ -9,32 +9,32 @@
     open = !open;
   }
 
-  function deleteHistory(): void {
-    history.clear();
+  function deleteFavorite(): void {
+    favorite.clear();
   }
 
-  function createUrl({ name, insee, sirens }: HistorySearch): string {
+  function createUrl({ name, insee, sirens }: FavoriteSearch): string {
     const params = `name=${name}&insee=${insee}&sirens=${sirens.join(',')}`;
     return '/budgets?' + params;
   }
 </script>
 
-<div class="history-wrapper">
-  <div class="toggle-history" on:click={togglePopup}>
-    <Icon id="clock" />
+<div class="favorite-wrapper">
+  <div class="toggle-favorite" on:click={togglePopup}>
+    <Icon id="star" />
   </div>
   <div class="popup" class:open>
-    {#if $history.length === 0}
-      <p class="history-empty">Historique vide</p>
+    {#if $favorite.length === 0}
+      <p class="favorite-empty">Vous n'avez pas encore de favori</p>
     {:else}
-      <div class="delete-history" on:click={deleteHistory}>
+      <div class="delete-favorite" on:click={deleteFavorite}>
         <Icon id="trash-2" />
       </div>
-      <h2 class="history-title">Mon historique :</h2>
-      <ul class="history-list">
-        {#each Object.entries($history) as [key, historyItem]}
-          <li class="history-item">
-            <a href={createUrl(historyItem)}>{historyItem.name}</a>
+      <h2 class="favorite-title">Mes favoris :</h2>
+      <ul class="favorite-list">
+        {#each Object.entries($favorite) as [key, favoriteItem]}
+          <li class="favorite-item">
+            <a href={createUrl(favoriteItem)}>{favoriteItem.name}</a>
           </li>
         {/each}
       </ul>
@@ -43,13 +43,13 @@
 </div>
 
 <style lang="scss">
-  .history-wrapper {
+  .favorite-wrapper {
     display: flex;
     align-items: center;
     position: relative;
     margin-right: 1rem;
 
-    .toggle-history {
+    .toggle-favorite {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -66,13 +66,13 @@
       top: calc(100% + 2px);
       right: -10px;
       color: black;
-      width: 15rem;
+      width: 200px;
       border: 1px solid black;
       border-radius: 12px;
       transition: all 0.3s;
       opacity: 0;
       visibility: hidden;
-      padding: 1.2rem;
+      padding: 15px;
       z-index: 1000;
       background-color: white;
 
@@ -81,10 +81,10 @@
         visibility: visible;
       }
 
-      .delete-history {
+      .delete-favorite {
         position: absolute;
-        right: 1rem;
-        top: 1rem;
+        right: 15px;
+        top: 15px;
         cursor: pointer;
         transition: color 0.3s ease-in-out;
 
@@ -93,17 +93,17 @@
         }
       }
 
-      .history-title {
+      .favorite-title {
         margin-bottom: 10px;
         font-size: 1.1em;
       }
 
-      .history-list {
+      .favorite-list {
         margin: 0;
         font-size: 0.9em;
         list-style-type: disc;
 
-        .history-item {
+        .favorite-item {
           list-style: none;
           &:hover {
             color: coral;
@@ -111,7 +111,7 @@
         }
       }
 
-      .history-empty {
+      .favorite-empty {
         text-align: center;
       }
     }
