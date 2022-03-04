@@ -31,11 +31,15 @@
 
       case 'Enter': {
         const suggest = suggestions[current];
-        dispatch('enterPress', { city: suggest });
+        dispatch('select', { city: suggest });
         break;
       }
     }
     return current;
+  }
+
+  function handleClick(suggestions: City): void {
+    dispatch('select', { city: suggestions });
   }
 
   $: number = suggestions.length - 1;
@@ -43,10 +47,11 @@
 
 <svelte:window on:keyup={keyboardGestion} />
 <ul>
-  {#each suggestions as { nom, code, departement }, index (index)}
+  {#each suggestions as suggestion, index (index)}
+    {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
       <a
-        on:click
+        on:click={() => handleClick(suggestion)}
         on:keypress
         on:mouseenter={() => (current = index)}
         on:mouseleave={() => (current = 0)}
