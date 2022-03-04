@@ -6,9 +6,9 @@
 
   let value = '';
   let cities: City[] = [];
-  const chosenCity: Array<string> = [];
+  let chosenCity: Array<string> = [];
 
-  $: console.log('pouet', chosenCity.length);
+  $: console.log('pouet', chosenCity);
   $: console.log('cities', cities);
 
   $: if (chosenCity.length === 2) {
@@ -18,8 +18,9 @@
   }
 
   const handleCityClick = (city: string): void => {
-    chosenCity.push(city);
+    chosenCity = [city, ...chosenCity];
   };
+
   const handleInput = async (e: Event): Promise<void> => {
     const target = e.target as HTMLInputElement;
     value = target.value;
