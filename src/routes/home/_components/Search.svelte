@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
 
   const selected: City = undefined;
+  let showSuggestions = false;
 
   let cities: City[] = null;
   let value = '';
@@ -31,32 +32,37 @@
     reset();
   }
 
-  async function handleInput(e: Event): Promise<void> {
-    const target = e.target as HTMLInputElement;
-    const text = target.value;
-    if (text === '') {
-      cities = null;
-    }
-    cities = await getCities(text);
-  }
-
-  function handleKey(e: KeyboardEvent): void {
-    const keyPressed = e.key;
-    if (keyPressed !== 'Escape') {
+  async function handleInput({ target }: Event): Promise<void> {
+    const { value } = target as HTMLInputElement;
+    if (value === '') {
+      showSuggestions = false;
       return;
     }
+    showSuggestions = true;
+    cities = await getCities(value);
+  }
 
-    cities = null;
+  function handleKey({ key }: KeyboardEvent): void {
+    if (key !== 'Escape') {
+      return;
+    }
+    showSuggestions = false;
   }
 </script>
 
 <div class="Search">
-  <div class="searchbar" class:open={cities}>
+  <div class="searchbar" class:open={showSuggestions && cities}>
     <Icon id="search" />
     <input
       bind:value
+      on:focus={() => {
+        showSuggestions = true;
+      }}
       on:input={handleInput}
       on:keydown={handleKey}
+      on:blur={() => {
+        showSuggestions = false;
+      }}
       class="search-input"
       placeholder="Entrez le nom d'une commune"
     />
@@ -66,7 +72,7 @@
       </span>
     {/if}
   </div>
-  {#if cities}
+  {#if cities && showSuggestions}
     <Suggestions
       suggestions={cities}
       on:enterPress={select}
