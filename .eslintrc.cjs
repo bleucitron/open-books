@@ -7,6 +7,7 @@ module.exports = {
   },
   globals: {
     gtag: 'readonly',
+    __VERSION__: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
