@@ -2,7 +2,7 @@
   import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import city from '@stores/city';
   import { get } from 'svelte/store';
-  import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+  import type { Load } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity, getCities } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
@@ -14,9 +14,7 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export async function load({
-    url: { searchParams },
-  }: LoadInput): Promise<LoadOutput> {
+  export const load: Load = async ({ url: { searchParams } }) => {
     const name = searchParams.get('name');
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
@@ -69,7 +67,7 @@
         name,
       },
     };
-  }
+  };
 </script>
 
 <script lang="ts">

@@ -26,7 +26,6 @@ const config = {
   }),
 
   kit: {
-    target: '#svelte',
     vite: { resolve: { alias }, plugins: [markdown({ mode: 'html' })] },
     adapter: vercel(),
   },
