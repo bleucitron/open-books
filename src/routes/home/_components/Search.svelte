@@ -73,12 +73,8 @@
       </span>
     {/if}
   </div>
-  {#if cities && showSuggestions}
-    <Suggestions
-      suggestions={cities}
-      on:enterPress={select}
-      on:click={select}
-    />
+  {#if cities}
+    <Suggestions suggestions={cities} on:select={select} />
   {/if}
 </div>
 

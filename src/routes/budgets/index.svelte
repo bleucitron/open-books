@@ -3,7 +3,7 @@
   import city from '@stores/city';
   import { get } from 'svelte/store';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-  import { getSiretsFromInsee, getCity } from '@api';
+  import { getSiretsFromInsee, getCity, getCities } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
   import AddFavorite from '$lib/addFavorite.svelte';
@@ -24,6 +24,13 @@
     let siret = searchParams.get('siret');
 
     let sirens = sirenString?.split(',');
+
+    const getCity = get(city);
+
+    if (getCity === undefined) {
+      const cities = await getCities(name);
+      city.set(cities[0]);
+    }
 
     const year = parseInt(y) || defaultYear;
 
@@ -51,7 +58,7 @@
     }
 
     const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], get(city)));
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], getCity));
 
     return {
       props: {
