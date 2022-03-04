@@ -43,10 +43,9 @@
   }
 
   function handleKey({ key }: KeyboardEvent): void {
-    if (key !== 'Escape') {
-      return;
+    if (key === 'Escape') {
+      showSuggestions = false;
     }
-    showSuggestions = false;
   }
 </script>
 
@@ -56,7 +55,9 @@
     <input
       bind:value
       on:focus={() => {
-        showSuggestions = true;
+        if (cities.length > 0) {
+          showSuggestions = true;
+        }
       }}
       on:input={handleInput}
       on:keydown={handleKey}
