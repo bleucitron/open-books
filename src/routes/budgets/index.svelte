@@ -2,7 +2,7 @@
   import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import city from '@stores/city';
   import { get } from 'svelte/store';
-  import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+  import type { Load } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity, getCities } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
@@ -14,9 +14,7 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export async function load({
-    url: { searchParams },
-  }: LoadInput): Promise<LoadOutput> {
+  export const load: Load = async ({ url: { searchParams } }) => {
     const name = searchParams.get('name');
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
@@ -69,7 +67,7 @@
         name,
       },
     };
-  }
+  };
 </script>
 
 <script lang="ts">
@@ -232,6 +230,7 @@
         {#if label}
           <h2>{label}</h2>
         {/if}
+        <AddFavorite {name} {insee} {sirens} />
       </div>
       <div class="info">
         {#await cityP}
@@ -294,16 +293,17 @@
             font-size: 1rem;
             margin: 0.8rem;
           }
-
-          input {
-            padding: 0.5rem;
-            padding-left: 0;
-          }
         }
         .search-input {
           font-size: 1.2rem;
-          padding: 0.8rem 0.5rem;
-          padding-left: 0;
+        }
+
+        .searchbar {
+          background: #333;
+          border-radius: 0.5em;
+        }
+        .searchbar:focus-within {
+          background: #444;
         }
       }
     }
@@ -328,7 +328,7 @@
 
     .titles {
       display: flex;
-      align-items: center;
+      align-items: baseline;
     }
 
     h1 {

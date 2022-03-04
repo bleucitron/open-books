@@ -1,9 +1,14 @@
+import { readFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import preprocess from 'svelte-preprocess';
 import autoprefixer from 'autoprefixer';
 import vercel from '@sveltejs/adapter-vercel';
 import md from 'vite-plugin-markdown';
+
+const file = fileURLToPath(new URL('package.json', import.meta.url));
+const json = readFileSync(file, 'utf8');
+const pkg = JSON.parse(json);
 
 const markdown = md.default;
 
@@ -26,8 +31,13 @@ const config = {
   }),
 
   kit: {
-    target: '#svelte',
-    vite: { resolve: { alias }, plugins: [markdown({ mode: 'html' })] },
+    vite: {
+      resolve: { alias },
+      plugins: [markdown({ mode: 'html' })],
+      define: {
+        __VERSION__: JSON.stringify(pkg.version),
+      },
+    },
     adapter: vercel(),
   },
 };

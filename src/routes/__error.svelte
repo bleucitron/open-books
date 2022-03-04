@@ -1,14 +1,14 @@
 <script context="module" lang="ts">
-  import type { ErrorLoadInput, LoadOutput } from '@sveltejs/kit';
+  import type { ErrorLoad } from '@sveltejs/kit';
 
-  export function load({ error, status }: ErrorLoadInput): LoadOutput {
+  export const load: ErrorLoad = ({ error, status }) => {
     return {
       props: {
         code: status,
         message: error.message,
       },
     };
-  }
+  };
 </script>
 
 <script lang="ts">
