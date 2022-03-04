@@ -74,6 +74,14 @@
 <style lang="scss">
   ul {
     margin: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 260;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    overflow: hidden;
   }
 
   a {

@@ -24,6 +24,8 @@
   main {
     flex: 1 0;
     display: flex;
-    padding-top: 10%;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10%;
   }
 </style>

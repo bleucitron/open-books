@@ -80,6 +80,7 @@
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import Search from '../home/_components/Search.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -129,6 +130,11 @@
     });
 
     goto(url);
+  }
+
+  function handleSearch(event: CustomEvent): void {
+    const { nom, code } = event.detail.city;
+    goto(`/budgets?name=${nom}&insee=${code}`);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -209,35 +215,37 @@
 </svelte:head>
 
 <header>
-  <a class="home" href="/">
-    <Icon id="book-open" />
-  </a>
-  <div class="info-container">
-    <div class="titles">
-      <h1>{name}</h1>
-
-      {#if label}
-        <h2>{label}</h2>
-      {/if}
-
-      <AddFavorite {name} {insee} {sirens} />
-    </div>
-    <div class="info">
-      {#await cityP}
-        <Spinner />
-      {:then city}
-        {#if city}
-          <span>{`Population : ${city.population}`}</span>
-          |
-          <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
+  <div>
+    <a class="home" href="/">
+      <Icon id="book-open" />
+    </a>
+    <div class="info-container">
+      <div class="titles">
+        <h1>{name}</h1>
+        {#if label}
+          <h2>{label}</h2>
         {/if}
-      {:catch error}
-        <div style="color: red">{error}</div>
-      {/await}
+      </div>
+      <div class="info">
+        {#await cityP}
+          <Spinner />
+        {:then city}
+          {#if city}
+            <span>{`Population : ${city.population}`}</span>
+            |
+            <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
+          {/if}
+        {:catch error}
+          <div style="color: red">{error}</div>
+        {/await}
+      </div>
     </div>
+    <Search on:select={handleSearch} />
   </div>
-  <History />
-  <Favorite />
+  <div>
+    <History />
+    <Favorite />
+  </div>
 </header>
 
 <div class="content">
@@ -259,15 +267,44 @@
 
     position: relative;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+
+    > div {
+      display: flex;
+      align-items: center;
+
+      &:first-child {
+        flex: 1;
+      }
+
+      :global {
+        .Search {
+          margin-left: 1rem;
+          max-width: 30rem;
+
+          :global(.Icon) {
+            font-size: 1rem;
+            margin: 0.8rem;
+          }
+
+          input {
+            padding: 0.5rem;
+            padding-left: 0;
+          }
+        }
+        .search-input {
+          font-size: 1.2rem;
+          padding: 0.8rem 0.5rem;
+          padding-left: 0;
+        }
+      }
+    }
 
     .info-container {
-      flex: 1 0;
       display: flex;
       flex-direction: column;
     }
-
     .home {
       display: flex;
       align-items: center;

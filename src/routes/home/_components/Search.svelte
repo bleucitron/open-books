@@ -1,5 +1,4 @@
 <script lang="ts">
-  import city from '@stores/city';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from './Suggestions.svelte';
@@ -9,6 +8,7 @@
   const dispatch = createEventDispatcher();
 
   const selected: City = undefined;
+  let showSuggestions = false;
 
   let cities: City[] = null;
   let value = '';
@@ -16,30 +16,55 @@
     value = selected.nom;
   }
 
-  function select(event: CustomEvent): void {
-    dispatch('select', {
-      city: event.detail.city || city,
-    });
-  }
-
   function reset(): void {
     value = '';
     cities = null;
   }
 
-  async function handleInput(e: Event): Promise<void> {
-    const target = e.target as HTMLInputElement;
-    const text = target.value;
-    cities = await getCities(text);
+  function select(event: CustomEvent): void {
+    let city = event.detail.city;
+    if (!city) {
+      city = cities[0];
+    }
+    dispatch('select', {
+      city,
+    });
+    reset();
+  }
+
+  async function handleInput({ target }: Event): Promise<void> {
+    const { value } = target as HTMLInputElement;
+    if (value === '') {
+      showSuggestions = false;
+      return;
+    }
+    showSuggestions = true;
+    cities = await getCities(value);
+  }
+
+  function handleKey({ key }: KeyboardEvent): void {
+    if (key === 'Escape') {
+      showSuggestions = false;
+    }
   }
 </script>
 
 <div class="Search">
-  <div class="searchbar">
+  <div class="searchbar" class:open={showSuggestions && cities}>
     <Icon id="search" />
     <input
       bind:value
+      on:focus={() => {
+        if (cities.length > 0) {
+          showSuggestions = true;
+        }
+      }}
       on:input={handleInput}
+      on:keydown={handleKey}
+      on:blur={() => {
+        showSuggestions = false;
+      }}
+      class="search-input"
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
@@ -48,11 +73,11 @@
       </span>
     {/if}
   </div>
-  {#if cities}
+  {#if cities && showSuggestions}
     <Suggestions
       suggestions={cities}
       on:enterPress={select}
-      on:click={() => select}
+      on:click={select}
     />
   {/if}
 </div>
@@ -63,11 +88,9 @@
   }
 
   .Search {
-    border-radius: 1rem;
-    overflow: hidden;
-    margin: 2rem auto;
-    max-width: 75%;
-    width: 50rem;
+    position: relative;
+    max-width: 40rem;
+    width: 100%;
     height: fit-content;
   }
 
@@ -77,6 +100,13 @@
     color: white;
     align-items: center;
     border-color: white;
+
+    border-radius: 1rem;
+
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
 
     :global(.Icon) {
       margin: 0 1rem;
@@ -100,10 +130,10 @@
 
   input {
     flex: 1 0;
-    padding: 1rem;
+    padding: 0.8rem;
     padding-left: 0;
     outline: none;
-    font-size: 2rem;
+    font-size: 1.3rem;
     background: transparent;
     border: none;
     border-bottom: 1px solid transparent;
