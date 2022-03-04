@@ -7,18 +7,23 @@
   let value = '';
   let cities: City[] = [];
   let chosenCity: Array<City> = [];
-
+  const siretsFromChosenCities: Array<string> = [];
   $: console.log('pouet', chosenCity);
   $: console.log('cities', cities);
 
   $: if (chosenCity.length === 2) {
-    chosenCity.forEach(city => {
-      getSiretsFromInsee(city.nom, city.code).then(r => {
-        console.log(r);
-        goto(
-          `compare-result?sirets=21330063500017,21690123100011&year=2019&cities=${chosenCity[0]},${chosenCity[1]}`,
-        );
-      });
+    chosenCity.forEach(async city => {
+      const sirets = await getSiretsFromInsee(city.nom, city.code);
+      const siretsFromSearchedCities = sirets
+        .filter(e => e.etablissementSiege)
+        .map(e => e.siret)
+        .sort()[0];
+      siretsFromChosenCities.push(siretsFromSearchedCities);
+      console.log(chosenCity);
+
+      goto(
+        `compare-result?sirets=${siretsFromChosenCities[0]},${siretsFromChosenCities[1]}&year=2019&cities=${chosenCity[0].nom},${chosenCity[1].nom}`,
+      );
     });
   }
 
