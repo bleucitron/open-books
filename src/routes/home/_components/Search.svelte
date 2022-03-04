@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from './Suggestions.svelte';
   import { getCities } from '@api';
-  import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 

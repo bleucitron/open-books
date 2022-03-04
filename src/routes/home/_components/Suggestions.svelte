@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { City } from '@interfaces';
   import { createEventDispatcher } from 'svelte';
+  import { slide } from 'svelte/transition';
+  import type { City } from '@interfaces';
 
   export let suggestions: City[] = [];
 
@@ -45,7 +46,7 @@
 </script>
 
 <svelte:window on:keyup={keyboardGestion} />
-<ul>
+<ul in:slide={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
     {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
