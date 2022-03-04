@@ -34,7 +34,19 @@
   async function handleInput(e: Event): Promise<void> {
     const target = e.target as HTMLInputElement;
     const text = target.value;
+    if (text === '') {
+      cities = null;
+    }
     cities = await getCities(text);
+  }
+
+  function handleKey(e: KeyboardEvent): void {
+    const keyPressed = e.key;
+    if (keyPressed !== 'Escape') {
+      return;
+    }
+
+    cities = null;
   }
 </script>
 
@@ -44,6 +56,7 @@
     <input
       bind:value
       on:input={handleInput}
+      on:keydown={handleKey}
       class="search-input"
       placeholder="Entrez le nom d'une commune"
     />
