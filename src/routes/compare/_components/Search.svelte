@@ -28,7 +28,7 @@
   }
 
   const handleCityClick = (city: City): void => {
-    chosenCity = [city, ...chosenCity];
+    chosenCity = [...chosenCity, city];
   };
 
   const handleInput = async (e: Event): Promise<void> => {

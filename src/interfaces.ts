@@ -130,8 +130,8 @@ export interface UrlData {
   year: number;
 }
 export interface UrlDataCompare {
-  id1: string;
-  id2: string;
+  siret1: string;
+  siret2: string;
   year: number;
   city1: string;
   city2: string;

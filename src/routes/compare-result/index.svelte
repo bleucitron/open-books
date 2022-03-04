@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
   import { makeCompareUrl } from '@utils';
   import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-  import { getSiret } from '@api';
+  import { getCities } from '@api';
+  import { fillBudgetBySiret } from '../budgets/cache';
+  import type { Budget } from '@interfaces';
   export async function load({
     url: { searchParams },
   }: LoadInput): Promise<LoadOutput> {
@@ -10,19 +12,15 @@
     const y = searchParams.get('year');
     const end = new Date().getFullYear();
     const defaultYear = end - 1;
-    const [id1, id2] = sirets.split(',');
+    const [siret1, siret2] = sirets.split(',');
     const [city1, city2] = cities.split(',');
     const year = parseInt(y) || defaultYear;
-
-    //Mettre un vrai siret dans les params url
-    const siren1 = await getSiret(id1);
-    const siren2 = await getSiret(id2);
 
     if (!sirets) {
       return {
         redirect: makeCompareUrl({
-          id1,
-          id2,
+          siret1,
+          siret2,
           year,
           city1,
           city2,
@@ -30,16 +28,25 @@
         status: 301,
       };
     }
+    const cityObject1 = (await getCities(city1.toLowerCase()))[0];
+    const cityObject2 = (await getCities(city2.toLowerCase()))[0];
+
+    const budget1 = (
+      await Promise.all(fillBudgetBySiret(siret1, [year], cityObject1))
+    )[0];
+    const budget2 = (
+      await Promise.all(fillBudgetBySiret(siret2, [year], cityObject2))
+    )[0];
 
     return {
       props: {
-        firstId: parseInt(id1),
-        secondId: parseInt(id2),
+        firstId: parseInt(siret1),
+        secondId: parseInt(siret2),
         currentYear: year,
         firstCity: city1,
         secondCity: city2,
-        siren1,
-        siren2,
+        budget1,
+        budget2,
       },
     };
   }
@@ -51,10 +58,10 @@
   export let currentYear: number;
   export let firstCity: string;
   export let secondCity: string;
-  export let siren1;
-  export let siren2;
-  console.log('Siren 1', siren1);
-  console.log('Siren 2', siren2);
+  export let budget1: Budget;
+  export let budget2: Budget;
+  console.log('Siren 1', budget1);
+  console.log('Siren 2', budget2);
 </script>
 
 <p>{firstId}, {secondId}, {currentYear}, {firstCity}, {secondCity}</p>
