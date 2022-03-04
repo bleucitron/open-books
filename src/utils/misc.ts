@@ -28,15 +28,15 @@ export function makeBudgetUrl({
   return `/budgets?name=${name}&insee=${insee}&siret=${siret}&sirens=${sirensAsString}&year=${year}`;
 }
 export function makeCompareUrl({
-  id1,
-  id2,
+  siret1,
+  siret2,
   year,
   city1,
   city2,
 }: UrlDataCompare): string {
-  if (!id1 || !id2 || year === null! || city1 || !city2)
+  if (!siret1 || !siret2 || year === null! || city1 || !city2)
     throw Error('Missing parameter');
-  return `budgets/compare-result?sirets=${id1},${id2}&year=${year}&cities=${city1},${city2}`;
+  return `budgets/compare-result?sirets=${siret1},${siret2}&year=${year}&cities=${city1},${city2}`;
 }
 
 export function normalizeText(text: string): string {
