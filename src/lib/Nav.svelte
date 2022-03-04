@@ -34,7 +34,7 @@
   a {
     display: flex;
     align-items: center;
-    margin: 0 0.5rem;
+    margin: 0 0.7rem;
     cursor: pointer;
   }
 

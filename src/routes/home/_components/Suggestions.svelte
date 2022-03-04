@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import { goto } from '$app/navigation';
   import type { City } from '@interfaces';
   import { createEventDispatcher } from 'svelte';
 
@@ -51,7 +50,7 @@
     {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
       <a
-        on:click={() => handleClick(suggestion)}
+        on:click|stopPropagation={() => handleClick(suggestion)}
         on:keypress
         on:mouseenter={() => (current = index)}
         on:mouseleave={() => (current = 0)}
@@ -87,6 +86,7 @@
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     overflow: hidden;
+    font-size: 0.9em;
   }
 
   a {

@@ -230,6 +230,7 @@
         {#if label}
           <h2>{label}</h2>
         {/if}
+        <AddFavorite {name} {insee} {sirens} />
       </div>
       <div class="info">
         {#await cityP}
@@ -292,16 +293,17 @@
             font-size: 1rem;
             margin: 0.8rem;
           }
-
-          input {
-            padding: 0.5rem;
-            padding-left: 0;
-          }
         }
         .search-input {
           font-size: 1.2rem;
-          padding: 0.8rem 0.5rem;
-          padding-left: 0;
+        }
+
+        .searchbar {
+          background: #333;
+          border-radius: 0.5em;
+        }
+        .searchbar:focus-within {
+          background: #444;
         }
       }
     }
@@ -326,7 +328,7 @@
 
     .titles {
       display: flex;
-      align-items: center;
+      align-items: baseline;
     }
 
     h1 {
