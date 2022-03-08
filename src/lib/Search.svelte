@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
-  import Suggestions from './Suggestions.svelte';
+  import Suggestions from '$lib/Suggestions.svelte';
   import { getCities } from '@api';
-  import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -12,9 +12,7 @@
 
   let cities: City[] = null;
   let value = '';
-  $: if (selected) {
-    value = selected.nom;
-  }
+  let input: HTMLInputElement;
 
   function reset(): void {
     value = '';
@@ -26,18 +24,12 @@
     if (!city) {
       city = cities[0];
     }
-    dispatch('select', {
-      city,
-    });
+    dispatch('select', city);
     reset();
   }
 
   async function handleInput({ target }: Event): Promise<void> {
     const { value } = target as HTMLInputElement;
-    if (value === '') {
-      showSuggestions = false;
-      return;
-    }
     showSuggestions = true;
     cities = await getCities(value);
   }
@@ -45,7 +37,15 @@
   function handleKey({ key }: KeyboardEvent): void {
     if (key === 'Escape') {
       showSuggestions = false;
+      input.blur();
     }
+  }
+
+  $: if (selected) {
+    value = selected.nom;
+  }
+  $: if (!value) {
+    cities = null;
   }
 </script>
 
@@ -54,6 +54,7 @@
     <Icon id="search" />
     <input
       bind:value
+      bind:this={input}
       on:focus={() => {
         if (cities?.length > 0) {
           showSuggestions = true;
@@ -124,7 +125,7 @@
 
   input {
     flex: 1 0;
-    padding: 0.7em;
+    padding: 0.6em;
     padding-left: 0;
     outline: none;
     font-size: 1.3em;

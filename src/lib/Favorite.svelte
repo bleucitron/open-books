@@ -47,7 +47,6 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin-right: 1rem;
 
     .toggle-favorite {
       display: flex;

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { City } from '@interfaces';
   import { createEventDispatcher } from 'svelte';
+  import { slide } from 'svelte/transition';
+  import type { City } from '@interfaces';
 
   export let suggestions: City[] = [];
 
@@ -29,31 +30,31 @@
       }
 
       case 'Enter': {
-        const suggest = suggestions[current];
-        dispatch('select', { city: suggest });
+        const suggestion = suggestions[current];
+        dispatch('select', suggestion);
         break;
       }
     }
     return current;
   }
 
-  function handleClick(suggestions: City): void {
-    dispatch('select', { city: suggestions });
+  function handleClick(suggestion: City): void {
+    dispatch('select', suggestion);
   }
 
   $: number = suggestions.length - 1;
 </script>
 
 <svelte:window on:keyup={keyboardGestion} />
-<ul>
+<ul in:slide={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
     {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
       <a
         on:click|stopPropagation={() => handleClick(suggestion)}
         on:keypress
+        on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
-        on:mouseleave={() => (current = 0)}
         href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
         class:active={current === index}
@@ -95,7 +96,9 @@
     padding: 0.5rem 1rem;
   }
 
-  .active {
+  .active,
+  a:focus {
+    outline: none;
     background: coral !important;
     color: white;
     cursor: pointer;

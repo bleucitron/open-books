@@ -80,12 +80,12 @@
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
+  import Search from '$lib/Search.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Search from '../home/_components/Search.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -226,29 +226,30 @@
     </a>
     <div class="info-container">
       <div class="titles">
+        <AddFavorite {name} {insee} {sirens} />
         <h1>{name}</h1>
+        <div class="info">
+          {#await cityP}
+            <Spinner />
+          {:then { population, departement: { code, nom } }}
+            {#if city}
+              <span>{population} habitants</span>
+              <span>
+                ({nom} - {code})
+              </span>
+            {/if}
+          {:catch error}
+            <div style="color: red">{error}</div>
+          {/await}
+        </div>
         {#if label}
           <h2>{label}</h2>
         {/if}
-        <AddFavorite {name} {insee} {sirens} />
-      </div>
-      <div class="info">
-        {#await cityP}
-          <Spinner />
-        {:then city}
-          {#if city}
-            <span>{`Population : ${city.population}`}</span>
-            |
-            <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
-          {/if}
-        {:catch error}
-          <div style="color: red">{error}</div>
-        {/await}
       </div>
     </div>
-    <Search on:select={handleSearch} />
   </div>
-  <div>
+  <div class="actions">
+    <Search on:select={handleSearch} />
     <History />
     <Favorite />
   </div>
@@ -266,7 +267,7 @@
 
 <style lang="scss">
   header {
-    padding: 0 0.5rem;
+    padding: 0 0.7rem;
     min-height: 3rem;
     background: #151515;
     color: white;
@@ -274,7 +275,6 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     > div {
       display: flex;
@@ -286,8 +286,9 @@
 
       :global {
         .Search {
-          margin-left: 1rem;
-          max-width: 30rem;
+          width: 30rem;
+          height: 100%;
+          font-size: 1rem;
 
           :global(.Icon) {
             font-size: 1rem;
@@ -295,17 +296,36 @@
           }
         }
         .search-input {
-          font-size: 1.2rem;
+          font-size: 1rem;
+          height: 100%;
+
+          &::placeholder {
+            color: #666;
+          }
+
+          &:focus::placeholder {
+            color: #888;
+          }
         }
 
         .searchbar {
-          background: #333;
-          border-radius: 0.5em;
+          height: 100%;
+          background: #252525;
+          border-radius: 0;
+          font-size: 1.1rem;
         }
         .searchbar:focus-within {
-          background: #444;
+          background: #454545;
+        }
+
+        .Suggestion {
+          font-size: 1em;
         }
       }
+    }
+
+    .actions {
+      gap: 1rem;
     }
 
     .info-container {
@@ -317,7 +337,7 @@
       align-items: center;
       height: 100%;
       font-size: 1.5rem;
-      margin-right: 1.5rem;
+      margin-right: 1.2rem;
       color: #444;
       transition: color 0.3s ease-in-out;
 
@@ -329,6 +349,7 @@
     .titles {
       display: flex;
       align-items: baseline;
+      gap: 0.5rem;
     }
 
     h1 {
@@ -337,7 +358,6 @@
 
     h2 {
       font-size: 1.2rem;
-      margin-left: 1rem;
       text-transform: capitalize;
     }
 
