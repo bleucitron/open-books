@@ -30,16 +30,16 @@
       }
 
       case 'Enter': {
-        const suggest = suggestions[current];
-        dispatch('select', { city: suggest });
+        const suggestion = suggestions[current];
+        dispatch('select', suggestion);
         break;
       }
     }
     return current;
   }
 
-  function handleClick(suggestions: City): void {
-    dispatch('select', { city: suggestions });
+  function handleClick(suggestion: City): void {
+    dispatch('select', suggestion);
   }
 
   $: number = suggestions.length - 1;

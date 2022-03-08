@@ -26,9 +26,7 @@
     if (!city) {
       city = cities[0];
     }
-    dispatch('select', {
-      city,
-    });
+    dispatch('select', city);
     reset();
   }
 
@@ -124,7 +122,7 @@
 
   input {
     flex: 1 0;
-    padding: 0.7em;
+    padding: 0.6em;
     padding-left: 0;
     outline: none;
     font-size: 1.3em;

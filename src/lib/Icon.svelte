@@ -14,6 +14,7 @@
   stroke-linejoin="round"
   width={size}
   height={size}
+  on:click
 >
   <use href={`feather-sprite.svg#${id}`} />
 </svg>
