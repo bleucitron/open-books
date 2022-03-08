@@ -1,8 +1,13 @@
 // Refer for better typescript usage to
 // https://stackoverflow.com/questions/41103360/how-to-use-fetch-in-typescript
 
-export function get<T>(url: string, options?: unknown): Promise<T> {
-  return fetch(encodeURI(url), options).then(resp => {
+import type { RequestOptions } from '@interfaces';
+
+export function get<T>(url: string, opts?: RequestOptions): Promise<T> {
+  const { fetch: altFetch, ...options } = opts;
+
+  const fetcher = altFetch ?? fetch;
+  return fetcher(encodeURI(url), options).then(resp => {
     if (!resp.ok) {
       throw new Error(resp.statusText);
     }

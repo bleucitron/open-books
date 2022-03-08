@@ -1,4 +1,9 @@
-import type { Etablissement, SiretFromAPI, SiretsFromAPI } from '@interfaces';
+import type {
+  Etablissement,
+  Fetch,
+  SiretFromAPI,
+  SiretsFromAPI,
+} from '@interfaces';
 
 import { get } from './utils/verbs';
 import {
@@ -19,22 +24,28 @@ const options = {
   headers,
 };
 
-export function getSiret(siret: string): Promise<Etablissement> {
+export function getSiret(
+  siret: string,
+  altFetch?: Fetch,
+): Promise<Etablissement> {
   const endpoint = makeGetSiretEndpoint(siret);
 
-  return get<SiretFromAPI>(`${baseUrl}/${endpoint}`, options).then(
-    r => r.etablissement,
-  );
+  return get<SiretFromAPI>(`${baseUrl}/${endpoint}`, {
+    ...options,
+    fetch: altFetch,
+  }).then(r => r.etablissement);
 }
 
 export function getSiretsFromInsee(
   text: string,
   code: string,
+  altFetch?: Fetch,
 ): Promise<Etablissement[]> {
   const codes = checkCodes(code);
   const endpoint = makeSearchSiretEndpoint(text, codes);
 
-  return get<SiretsFromAPI>(`${baseUrl}/${endpoint}`, options).then(
-    r => r.etablissements,
-  );
+  return get<SiretsFromAPI>(`${baseUrl}/${endpoint}`, {
+    ...options,
+    fetch: altFetch,
+  }).then(r => r.etablissements);
 }

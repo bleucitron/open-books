@@ -14,7 +14,7 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export const load: Load = async ({ url: { searchParams } }) => {
+  export const load: Load = async ({ url: { searchParams }, fetch }) => {
     const name = searchParams.get('name');
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
@@ -26,14 +26,14 @@
     const getCity = get(city);
 
     if (getCity === undefined) {
-      const cities = await getCities(name);
+      const cities = await getCities(name, fetch);
       city.set(cities[0]);
     }
 
     const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
-      const siretsFromInsee = await getSiretsFromInsee(name, insee);
+      const siretsFromInsee = await getSiretsFromInsee(name, insee, fetch);
       sirens = extractSirens(siretsFromInsee);
 
       const sirets = siretsFromInsee

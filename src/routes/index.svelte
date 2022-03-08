@@ -2,8 +2,8 @@
   import type { Load } from '@sveltejs/kit';
   import { getRandomCities } from '@api/geo';
 
-  export const load: Load = async () => {
-    const examples = await getRandomCities();
+  export const load: Load = async ({ fetch }) => {
+    const examples = await getRandomCities(fetch);
 
     return {
       props: {
