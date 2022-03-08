@@ -53,6 +53,7 @@
       <a
         on:click|stopPropagation={() => handleClick(suggestion)}
         on:keypress
+        on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
         href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
@@ -95,7 +96,9 @@
     padding: 0.5rem 1rem;
   }
 
-  .active {
+  .active,
+  a:focus {
+    outline: none;
     background: coral !important;
     color: white;
     cursor: pointer;
