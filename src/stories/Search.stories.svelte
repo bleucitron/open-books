@@ -1,6 +1,6 @@
 <script>
   import { Meta, Story, Template } from '@storybook/addon-svelte-csf';
-  import Search from '../routes/home/_components/Search.svelte';
+  import Search from '$lib/Search.svelte';
 
   function handleSearch(event) {
     console.log(event.detail.city);

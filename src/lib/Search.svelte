@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
-  import Suggestions from './Suggestions.svelte';
+  import Suggestions from '$lib/Suggestions.svelte';
   import { getCities } from '@api';
 
   const dispatch = createEventDispatcher();

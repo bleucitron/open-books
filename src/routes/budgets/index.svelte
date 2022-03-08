@@ -80,12 +80,12 @@
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
+  import Search from '$lib/Search.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import Search from '../home/_components/Search.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
