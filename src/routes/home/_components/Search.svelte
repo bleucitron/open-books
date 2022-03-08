@@ -12,9 +12,7 @@
 
   let cities: City[] = null;
   let value = '';
-  $: if (selected) {
-    value = selected.nom;
-  }
+  let input: HTMLInputElement;
 
   function reset(): void {
     value = '';
@@ -32,10 +30,6 @@
 
   async function handleInput({ target }: Event): Promise<void> {
     const { value } = target as HTMLInputElement;
-    if (value === '') {
-      showSuggestions = false;
-      return;
-    }
     showSuggestions = true;
     cities = await getCities(value);
   }
@@ -43,7 +37,15 @@
   function handleKey({ key }: KeyboardEvent): void {
     if (key === 'Escape') {
       showSuggestions = false;
+      input.blur();
     }
+  }
+
+  $: if (selected) {
+    value = selected.nom;
+  }
+  $: if (!value) {
+    cities = null;
   }
 </script>
 
@@ -52,6 +54,7 @@
     <Icon id="search" />
     <input
       bind:value
+      bind:this={input}
       on:focus={() => {
         if (cities?.length > 0) {
           showSuggestions = true;
