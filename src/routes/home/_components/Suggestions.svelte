@@ -54,7 +54,6 @@
         on:click|stopPropagation={() => handleClick(suggestion)}
         on:keypress
         on:mouseenter={() => (current = index)}
-        on:mouseleave={() => (current = 0)}
         href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
         class:active={current === index}
