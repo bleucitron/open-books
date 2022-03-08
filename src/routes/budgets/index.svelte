@@ -248,7 +248,7 @@
     </div>
     <Search on:select={handleSearch} />
   </div>
-  <div>
+  <div class="actions">
     <History />
     <Favorite />
   </div>
@@ -266,7 +266,7 @@
 
 <style lang="scss">
   header {
-    padding: 0 0.5rem;
+    padding: 0 0.7rem;
     min-height: 3rem;
     background: #151515;
     color: white;
@@ -306,6 +306,10 @@
           background: #444;
         }
       }
+    }
+
+    .actions {
+      gap: 1rem;
     }
 
     .info-container {

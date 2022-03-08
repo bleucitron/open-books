@@ -29,12 +29,12 @@
     display: flex;
     justify-content: space-between;
     height: 3rem;
+    padding: 0.7rem;
   }
 
   a {
     display: flex;
     align-items: center;
-    margin: 0 0.7rem;
     cursor: pointer;
   }
 
@@ -85,15 +85,11 @@
   nav {
     display: flex;
     justify-content: flex-end;
-    align-items: stretch;
+    gap: 1rem;
     padding: 0.5rem;
     color: black;
     background: white;
     z-index: 1;
-
-    .about {
-      margin-right: 1.2rem;
-    }
 
     a {
       transition: color 0.3s ease-in-out;
