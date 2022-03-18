@@ -32,8 +32,7 @@
   async function getCityFromSiren(siren: string): Promise<void> {
     const { periodesUniteLegale } = await getSiren(siren);
     const denominationUniteLegale =
-      periodesUniteLegale[periodesUniteLegale.length - 1]
-        .denominationUniteLegale;
+      periodesUniteLegale[0].denominationUniteLegale;
     const cityName = denominationUniteLegale.substring(10).trim().toLowerCase();
     const city = (await getCities(cityName))[0];
     dispatch('select', { city });

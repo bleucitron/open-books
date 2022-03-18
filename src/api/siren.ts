@@ -4,7 +4,7 @@ import type {
   SiretFromAPI,
   SiretsFromAPI,
   SirenFromAPI,
-  uniteLegale,
+  UniteLegale,
 } from '@interfaces';
 
 import { get } from './utils/verbs';
@@ -53,13 +53,10 @@ export function getSiretsFromInsee(
   }).then(r => r.etablissements);
 }
 
-export function getSiren(siren: string): Promise<uniteLegale> {
+export function getSiren(siren: string): Promise<UniteLegale> {
   const endpoint = makeGetSirenEndpoint(siren);
 
-  return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options)
-    .then(r => {
-      console.log('SIREN from api', r);
-      return r.uniteLegale;
-    })
-    .catch(e => console.log('E', e));
+  return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options).then(
+    r => r.uniteLegale,
+  );
 }

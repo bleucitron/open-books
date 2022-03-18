@@ -58,7 +58,7 @@ export interface SiretsFromAPI {
 }
 
 export interface SirenFromAPI {
-  uniteLegale: uniteLegale;
+  uniteLegale: UniteLegale;
 }
 
 export interface Budget {
@@ -133,20 +133,7 @@ export interface Etablissement {
 }
 
 export interface AdresseEtablissement {
-  codeCedexEtablissement: string;
   codeCommuneEtablissement: string;
-  codePaysEtrangerEtablissement: number | null;
-  codePostalEtablissement: string;
-  complementAdresseEtablissement: null;
-  distributionSpecialeEtablissement: null;
-  indiceRepetitionEtablissement: null;
-  libelleCedexEtablissement: string;
-  libelleCommuneEtablissement: string;
-  libelleCommuneEtrangerEtablissement: null;
-  libellePaysEtrangerEtablissement: null;
-  libelleVoieEtablissement: string;
-  numeroVoieEtablissement: null;
-  typeVoieEtablissement: string;
 }
 
 export interface CSV {
@@ -180,24 +167,7 @@ export interface FavoriteSearch {
   sirens: string[];
 }
 
-export interface uniteLegale {
-  anneeCategorieEntreprise: string;
-  anneeEffectifsUniteLegale: string;
-  categorieEntreprise: string;
-  dateCreationUniteLegale: string;
-  dateDernierTraitementUniteLegale: string;
-  identifiantAssociationUniteLegale: null;
-  nombrePeriodesUniteLegale: number;
-  periodesUniteLegale: null;
-  prenom1UniteLegale: null;
-  prenom2UniteLegale: null;
-  prenom3UniteLegale: null;
-  prenom4UniteLegale: null;
-  prenomUsuelUniteLegale: null;
-  pseudonymeUniteLegale: null;
-  sexeUniteLegale: null;
-  sigleUniteLegale: string;
+export interface UniteLegale {
+  periodesUniteLegale: { denominationUniteLegale: string }[];
   siren: string;
-  statutDiffusionUniteLegale: string;
-  trancheEffectifsUniteLegale: string;
 }
