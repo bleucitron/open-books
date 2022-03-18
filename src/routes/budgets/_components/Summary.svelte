@@ -118,10 +118,7 @@
   $: infosP = budgetP?.then(budget => {
     if (budget) {
       const main = type && ($fonction ? $fonction.value[type] : budget[type]);
-
       return {
-        debit: budget.obnetdeb,
-        credit: budget.obnetcre,
         debit_i: budget.obnetdeb_i,
         debit_f: budget.obnetdeb_f,
         credit_i: budget.obnetcre_i,
@@ -153,8 +150,10 @@
         <div class="none">Aucun budget</div>
       {:else if !type}
         <DebitOrCredit
-          credit={infos.credit}
-          debit={infos.debit}
+          credit_i={infos.credit_i}
+          credit_f={infos.credit_f}
+          debit_i={infos.debit_i}
+          debit_f={infos.debit_f}
           select={selectType}
         />
       {:else if values}
