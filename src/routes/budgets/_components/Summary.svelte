@@ -118,7 +118,6 @@
   $: infosP = budgetP?.then(budget => {
     if (budget) {
       const main = type && ($fonction ? $fonction.value[type] : budget[type]);
-      console.log('budget', budget);
       return {
         debit_i: budget.obnetdeb_i,
         debit_f: budget.obnetdeb_f,

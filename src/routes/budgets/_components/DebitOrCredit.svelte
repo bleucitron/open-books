@@ -13,18 +13,18 @@
   <PieChartBudget
     radius={100}
     data={[
-      { label: 'credit 1', value: credit_i, color: 'coral' },
-      { label: 'crédit 2', value: credit_f, color: '#333333' },
+      { label: BudgetType.CREDIT_I, value: credit_i, color: 'coral' },
+      { label: BudgetType.CREDIT_F, value: credit_f, color: '#333333' },
     ]}
-    on:slice-click={() => select(BudgetType.CREDIT_I)}
+    on:slice-click={data => select(data.detail.label)}
   />
   <PieChartBudget
     radius={100}
     data={[
-      { label: 'debit 1', value: debit_i, color: 'cornflowerblue' },
-      { label: 'debit 2', value: debit_f, color: 'black' },
+      { label: BudgetType.DEBIT_I, value: debit_i, color: 'cornflowerblue' },
+      { label: BudgetType.DEBIT_F, value: debit_f, color: 'black' },
     ]}
-    on:slice-click={() => select(BudgetType.DEBIT_I)}
+    on:slice-click={data => select(data.detail.label)}
   />
 </div>
 
