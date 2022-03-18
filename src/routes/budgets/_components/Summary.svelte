@@ -20,20 +20,15 @@
     formatValue,
     buildNomen as _buildNomen,
     Nomen,
+    BudgetType,
   } from '@utils';
-  import type {
-    Type,
-    Code,
-    Budget,
-    FonctionTree,
-    FonctionTreeValue,
-  } from '@interfaces';
+  import type { Type, Code, Budget, FonctionTree } from '@interfaces';
 
   import Spinner from '$lib/Spinner.svelte';
   import Csv from './Csv.svelte';
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
-  import Chart from './Chart.svelte';
+  import BudgetHisto from './BudgetHisto.svelte';
 
   export let budgetP: Promise<Budget>;
 
@@ -101,20 +96,6 @@
     ? [{ label: typeToLabel[type], select: () => selectType(type) }, ...steps]
     : [];
 
-  $: fonctions =
-    $tree &&
-    (Object.values(
-      $fonction ? $fonction.subTree : $tree,
-    ) as FonctionTreeValue[]);
-
-  $: values = fonctions
-    ?.map((f: FonctionTreeValue) => ({
-      label: f.label,
-      value: f.value[type],
-      handleClick: f.subTree && (() => selectCode(f.code)),
-    }))
-    .sort((a, b) => b.value - a.value);
-
   $: infosP = budgetP?.then(budget => {
     if (budget) {
       const main = type && ($fonction ? $fonction.value[type] : budget[type]);
@@ -127,10 +108,13 @@
         credit_i: budget.obnetcre_i,
         credit_f: budget.obnetcre_f,
         nomen: budget.nomen,
+        tree: Object.values(budget.tree),
         main,
       };
     }
   });
+
+  console.log($tree, $code, steps);
 </script>
 
 <div class="summary">
@@ -157,9 +141,9 @@
           debit={infos.debit}
           select={selectType}
         />
-      {:else if values}
+      {:else if infos.tree}
         <div class="main">{formatValue(infos.main)}</div>
-        <Chart {values} />
+        <BudgetHisto currentTree={infos.tree} type={BudgetType.DEBIT_F} />
       {:else}
         <p>Pas de plan de compte disponible</p>
       {/if}
