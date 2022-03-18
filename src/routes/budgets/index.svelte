@@ -23,9 +23,9 @@
 
     let sirens = sirenString?.split(',');
 
-    const getCity = get(city);
+    const $city = get(city);
 
-    if (getCity === undefined) {
+    if ($city === undefined) {
       const cities = await getCities(name, fetch);
       city.set(cities[0]);
     }
@@ -56,7 +56,7 @@
     }
 
     const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], getCity));
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], $city));
 
     return {
       props: {
