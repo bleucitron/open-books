@@ -3,7 +3,8 @@
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
-  import { getCities } from '@api';
+  import { getCities, getSiret, getSiren } from '@api';
+  import { isSiren, isSiret } from '@utils/siren';
 
   const dispatch = createEventDispatcher();
 
@@ -28,16 +29,62 @@
     reset();
   }
 
+  async function selectSiren(siren: string): Promise<void> {
+    const { periodesUniteLegale } = await getSiren(siren);
+    const denominationUniteLegale =
+      periodesUniteLegale[periodesUniteLegale.length - 1]
+        .denominationUniteLegale;
+    const cityName = denominationUniteLegale.substring(10).trim().toLowerCase();
+    const city = (await getCities(cityName))[0];
+    dispatch('select', {
+      city,
+    });
+    reset();
+  }
+
+  async function selectSiret(siret: string): Promise<void> {
+    const { adresseEtablissement } = await getSiret(siret);
+    const city = (
+      await getCities(adresseEtablissement.libelleCommuneEtablissement)
+    )[0];
+    dispatch('select', {
+      city,
+    });
+    reset();
+  }
+
   async function handleInput({ target }: Event): Promise<void> {
     const { value } = target as HTMLInputElement;
+
+    if (isSiren(value) || isSiret(value)) {
+      showSuggestions = false;
+      return;
+    }
+
     showSuggestions = true;
     cities = await getCities(value);
   }
 
-  function handleKey({ key }: KeyboardEvent): void {
+  function handleKey({ key, target }: KeyboardEvent): void {
     if (key === 'Escape') {
       showSuggestions = false;
       input.blur();
+      return;
+    }
+
+    if (key === 'Enter') {
+      const { value } = target as HTMLInputElement;
+      const valueWithoutSpace = value.replace(/ /g, '');
+
+      if (isSiren(valueWithoutSpace)) {
+        selectSiren(valueWithoutSpace);
+        return;
+      }
+
+      if (isSiret(valueWithoutSpace)) {
+        selectSiret(valueWithoutSpace);
+        return;
+      }
     }
   }
 

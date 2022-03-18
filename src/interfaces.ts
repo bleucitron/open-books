@@ -57,6 +57,10 @@ export interface SiretsFromAPI {
   etablissements: Etablissement[];
 }
 
+export interface SirenFromAPI {
+  uniteLegale: uniteLegale;
+}
+
 export interface Budget {
   id: string;
   city: string;
@@ -125,6 +129,24 @@ export interface Etablissement {
   nic: string;
   siret: string;
   etablissementSiege: boolean;
+  adresseEtablissement: AdresseEtablissement;
+}
+
+export interface AdresseEtablissement {
+  codeCedexEtablissement: string;
+  codeCommuneEtablissement: string;
+  codePaysEtrangerEtablissement: number | null;
+  codePostalEtablissement: string;
+  complementAdresseEtablissement: null;
+  distributionSpecialeEtablissement: null;
+  indiceRepetitionEtablissement: null;
+  libelleCedexEtablissement: string;
+  libelleCommuneEtablissement: string;
+  libelleCommuneEtrangerEtablissement: null;
+  libellePaysEtrangerEtablissement: null;
+  libelleVoieEtablissement: string;
+  numeroVoieEtablissement: null;
+  typeVoieEtablissement: string;
 }
 
 export interface CSV {
@@ -156,4 +178,26 @@ export interface FavoriteSearch {
   name: string;
   insee: string;
   sirens: string[];
+}
+
+export interface uniteLegale {
+  anneeCategorieEntreprise: string;
+  anneeEffectifsUniteLegale: string;
+  categorieEntreprise: string;
+  dateCreationUniteLegale: string;
+  dateDernierTraitementUniteLegale: string;
+  identifiantAssociationUniteLegale: null;
+  nombrePeriodesUniteLegale: number;
+  periodesUniteLegale: null;
+  prenom1UniteLegale: null;
+  prenom2UniteLegale: null;
+  prenom3UniteLegale: null;
+  prenom4UniteLegale: null;
+  prenomUsuelUniteLegale: null;
+  pseudonymeUniteLegale: null;
+  sexeUniteLegale: null;
+  sigleUniteLegale: string;
+  siren: string;
+  statutDiffusionUniteLegale: string;
+  trancheEffectifsUniteLegale: string;
 }

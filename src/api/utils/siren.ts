@@ -66,6 +66,10 @@ export function makeGetSiretEndpoint(siret: string): string {
   return `siret/${siret}`;
 }
 
+export function makeGetSirenEndpoint(siren: string): string {
+  return `siren/${siren}`;
+}
+
 export function makeGetSiretsEndpoint(sirens: string[]): string {
   const base = 'siret';
 
