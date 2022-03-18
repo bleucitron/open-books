@@ -20,7 +20,7 @@ function buildParamString(paramByKey: Params): string {
         return `(${s})`;
       }
 
-      return `${key}:${value}`;
+      return `${key}:"${value}"`;
     })
     .join(' AND ');
 }

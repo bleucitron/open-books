@@ -7,13 +7,14 @@
 
 <svg
   class="Icon"
-  fill={filled ? color : ' none'}
+  fill={filled ? color : 'none'}
   stroke={color ?? 'currentColor'}
   stroke-width="2"
   stroke-linecap="round"
   stroke-linejoin="round"
   width={size}
   height={size}
+  on:click
 >
   <use href={`feather-sprite.svg#${id}`} />
 </svg>

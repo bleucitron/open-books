@@ -1,4 +1,14 @@
 import type { BudgetType } from '@utils/budget';
+
+export type Fetch = (
+  info: RequestInfo,
+  init?: RequestInit,
+) => Promise<Response>;
+
+export interface RequestOptions extends RequestInit {
+  fetch?: Fetch;
+}
+
 export interface BudgetRecord {
   bal: string;
   becre: number;
@@ -144,6 +154,12 @@ export interface BarChartValue {
 }
 
 export interface HistorySearch {
+  name: string;
+  insee: string;
+  sirens: string[];
+}
+
+export interface FavoriteSearch {
   name: string;
   insee: string;
   sirens: string[];

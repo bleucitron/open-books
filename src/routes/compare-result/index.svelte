@@ -4,6 +4,7 @@
   import { getCities } from '@api';
   import { fillBudgetBySiret } from '../budgets/cache';
   import type { Budget } from '@interfaces';
+  import { compareCities } from '@stores/compare_cities';
   export async function load({
     url: { searchParams },
   }: LoadInput): Promise<LoadOutput> {
@@ -53,6 +54,8 @@
 </script>
 
 <script lang="ts">
+  import City from '@stores/city';
+
   export let firstId: number;
   export let secondId: number;
   export let currentYear: number;
@@ -60,8 +63,22 @@
   export let secondCity: string;
   export let budget1: Budget;
   export let budget2: Budget;
+  let citiesChoosen: Array<City> = [];
+
+  compareCities.subscribe(value => (citiesChoosen = value));
   console.log('Siren 1', budget1);
   console.log('Siren 2', budget2);
+  console.log(citiesChoosen);
+  const formatBudget = (budgetValue: number): string => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(budgetValue);
+  };
 </script>
 
-<p>{firstId}, {secondId}, {currentYear}, {firstCity}, {secondCity}</p>
+<p>Budget de {budget1.city}: {formatBudget(budget1.obnetcre)}</p>
+<p>Budget de {budget2.city}: {formatBudget(budget2.obnetcre)}</p>
+<p>
+  Difference : {formatBudget(Math.abs(budget1.obnetcre - budget2.obnetcre))}
+</p>

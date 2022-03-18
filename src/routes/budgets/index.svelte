@@ -2,19 +2,19 @@
   import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
   import city from '@stores/city';
   import { get } from 'svelte/store';
-  import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-  import { getSiretsFromInsee, getCity } from '@api';
+  import type { Load } from '@sveltejs/kit';
+  import { getSiretsFromInsee, getCity, getCities } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
+  import AddFavorite from '$lib/addFavorite.svelte';
+  import Favorite from '$lib/Favorite.svelte';
 
   const start = 2012;
   const end = new Date().getFullYear();
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export async function load({
-    url: { searchParams },
-  }: LoadInput): Promise<LoadOutput> {
+  export const load: Load = async ({ url: { searchParams }, fetch }) => {
     const name = searchParams.get('name');
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
@@ -23,10 +23,17 @@
 
     let sirens = sirenString?.split(',');
 
+    const getCity = get(city);
+
+    if (getCity === undefined) {
+      const cities = await getCities(name, fetch);
+      city.set(cities[0]);
+    }
+
     const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
-      const siretsFromInsee = await getSiretsFromInsee(name, insee);
+      const siretsFromInsee = await getSiretsFromInsee(name, insee, fetch);
       sirens = extractSirens(siretsFromInsee);
 
       const sirets = siretsFromInsee
@@ -49,7 +56,7 @@
     }
 
     const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], get(city)));
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], getCity));
 
     return {
       props: {
@@ -60,7 +67,7 @@
         name,
       },
     };
-  }
+  };
 </script>
 
 <script lang="ts">
@@ -73,6 +80,7 @@
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
+  import Search from '$lib/Search.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import History from '$lib/History.svelte';
   import Labels from './_components/Labels.svelte';
@@ -127,6 +135,11 @@
     });
 
     goto(url);
+  }
+
+  function handleSearch(event: CustomEvent): void {
+    const { nom, code } = event.detail.city;
+    goto(`/budgets?name=${nom}&insee=${code}`);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -207,32 +220,39 @@
 </svelte:head>
 
 <header>
-  <a class="home" href="/">
-    <Icon id="book-open" />
-  </a>
-  <div class="info-container">
-    <div class="titles">
-      <h1>{name}</h1>
-
-      {#if label}
-        <h2>{label}</h2>
-      {/if}
-    </div>
-    <div class="info">
-      {#await cityP}
-        <Spinner />
-      {:then city}
-        {#if city}
-          <span>{`Population : ${city.population}`}</span>
-          |
-          <span>{`${city.departement.code} - ${city.departement.nom}`}</span>
+  <div>
+    <a class="home" href="/">
+      <Icon id="book-open" />
+    </a>
+    <div class="info-container">
+      <div class="titles">
+        <AddFavorite {name} {insee} {sirens} />
+        <h1>{name}</h1>
+        <div class="info">
+          {#await cityP}
+            <Spinner />
+          {:then { population, departement: { code, nom } }}
+            {#if city}
+              <span>{population} habitants</span>
+              <span>
+                ({nom} - {code})
+              </span>
+            {/if}
+          {:catch error}
+            <div style="color: red">{error}</div>
+          {/await}
+        </div>
+        {#if label}
+          <h2>{label}</h2>
         {/if}
-      {:catch error}
-        <div style="color: red">{error}</div>
-      {/await}
+      </div>
     </div>
   </div>
-  <History />
+  <div class="actions">
+    <Search on:select={handleSearch} />
+    <History />
+    <Favorite />
+  </div>
 </header>
 
 <div class="content">
@@ -247,28 +267,77 @@
 
 <style lang="scss">
   header {
-    padding: 0 0.5rem;
+    padding: 0 0.7rem;
     min-height: 3rem;
     background: #151515;
     color: white;
 
     position: relative;
     display: flex;
-    align-items: center;
     justify-content: space-between;
 
+    > div {
+      display: flex;
+      align-items: center;
+
+      &:first-child {
+        flex: 1;
+      }
+
+      :global {
+        .Search {
+          width: 30rem;
+          height: 100%;
+          font-size: 1rem;
+
+          :global(.Icon) {
+            font-size: 1rem;
+            margin: 0.8rem;
+          }
+        }
+        .search-input {
+          font-size: 1rem;
+          height: 100%;
+
+          &::placeholder {
+            color: #666;
+          }
+
+          &:focus::placeholder {
+            color: #888;
+          }
+        }
+
+        .searchbar {
+          height: 100%;
+          background: #252525;
+          border-radius: 0;
+          font-size: 1.1rem;
+        }
+        .searchbar:focus-within {
+          background: #454545;
+        }
+
+        .Suggestion {
+          font-size: 1em;
+        }
+      }
+    }
+
+    .actions {
+      gap: 1rem;
+    }
+
     .info-container {
-      flex: 1 0;
       display: flex;
       flex-direction: column;
     }
-
     .home {
       display: flex;
       align-items: center;
       height: 100%;
       font-size: 1.5rem;
-      margin-right: 1.5rem;
+      margin-right: 1.2rem;
       color: #444;
       transition: color 0.3s ease-in-out;
 
@@ -280,6 +349,7 @@
     .titles {
       display: flex;
       align-items: baseline;
+      gap: 0.5rem;
     }
 
     h1 {
@@ -288,7 +358,6 @@
 
     h2 {
       font-size: 1.2rem;
-      margin-left: 1rem;
       text-transform: capitalize;
     }
 

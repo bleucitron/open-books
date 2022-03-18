@@ -3,6 +3,7 @@
 
   import { getCities, getSiretsFromInsee } from '@api';
   import type { City } from '@interfaces';
+  import { compareCities } from '@stores/compare_cities';
 
   const startingYear = 1990;
   const years = [...Array(new Date().getFullYear() - startingYear)].map(
@@ -13,7 +14,7 @@
 
   console.log(years);
 
-  let yearSelected: number;
+  let yearSelected: number = new Date().getFullYear() - 4;
   let value = '';
   let cities: City[] = [];
   let chosenCity: Array<City> = [];
@@ -28,6 +29,8 @@
         .sort()[0];
       siretsFromChosenCities.push(siretsFromSearchedCities);
       console.log(chosenCity);
+
+      compareCities.set(chosenCity);
 
       goto(
         `compare-result?sirets=${siretsFromChosenCities[0]},${siretsFromChosenCities[1]}&year=${yearSelected}&cities=${chosenCity[0].nom},${chosenCity[1].nom}`,
@@ -47,11 +50,13 @@
   };
 </script>
 
-<input type="text" bind:value on:input={handleInput} />
+<input class="input-compare" type="text" bind:value on:input={handleInput} />
 
 {#if cities.length > 0}
   {#each cities as city}
-    <div on:click={() => handleCityClick(city)}>{city.nom}</div>
+    <div class="autocomplete" on:click={() => handleCityClick(city)}>
+      {city.nom}
+    </div>
   {/each}
 {/if}
 
@@ -60,3 +65,18 @@
     <option value={year}>{year}</option>
   {/each}
 </select>
+
+<style lang="scss">
+  .autocomplete {
+    padding: 1em;
+    background-color: aliceblue;
+    &:hover {
+      background-color: white;
+    }
+  }
+
+  .input-compare {
+    padding: 1em 0.5em;
+    font-size: 16px;
+  }
+</style>

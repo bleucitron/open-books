@@ -7,6 +7,8 @@ module.exports = {
   },
   globals: {
     gtag: 'readonly',
+    __VERSION__: 'readonly',
+    NodeJS: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -23,6 +25,7 @@ module.exports = {
     'prefer-arrow-callback': 'error',
     'id-length': ['error', { min: 1, max: 40 }],
     'no-redeclare': ['error', { builtinGlobals: false }],
+    'no-global-assign': ['error', { exceptions: ['open'] }],
     /**
      * This crashes, see: https://github.com/eslint/eslint/issues/14760.
      * The equivalent ts rule works fine though.

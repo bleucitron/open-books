@@ -1,7 +1,7 @@
 <script lang="ts">
-  // import { goto } from '$app/navigation';
-  import type { City } from '@interfaces';
   import { createEventDispatcher } from 'svelte';
+  import { slide } from 'svelte/transition';
+  import type { City } from '@interfaces';
 
   export let suggestions: City[] = [];
 
@@ -30,26 +30,31 @@
       }
 
       case 'Enter': {
-        const suggest = suggestions[current];
-        dispatch('enterPress', { city: suggest });
+        const suggestion = suggestions[current];
+        dispatch('select', suggestion);
         break;
       }
     }
     return current;
   }
 
+  function handleClick(suggestion: City): void {
+    dispatch('select', suggestion);
+  }
+
   $: number = suggestions.length - 1;
 </script>
 
 <svelte:window on:keyup={keyboardGestion} />
-<ul>
-  {#each suggestions as { nom, code, departement }, index (index)}
+<ul in:slide={{ duration: 200 }}>
+  {#each suggestions as suggestion, index (index)}
+    {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
       <a
-        on:click
+        on:click|stopPropagation={() => handleClick(suggestion)}
         on:keypress
+        on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
-        on:mouseleave={() => (current = 0)}
         href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
         class:active={current === index}
@@ -74,6 +79,15 @@
 <style lang="scss">
   ul {
     margin: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 260;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    overflow: hidden;
+    font-size: 0.9em;
   }
 
   a {
@@ -82,7 +96,9 @@
     padding: 0.5rem 1rem;
   }
 
-  .active {
+  .active,
+  a:focus {
+    outline: none;
     background: coral !important;
     color: white;
     cursor: pointer;

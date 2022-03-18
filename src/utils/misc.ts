@@ -91,3 +91,7 @@ export function sumBy(list: any[], key: string): number {
 export function stepsFromString(s: string): string[] {
   return s.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
 }
+
+export function randomNb(n: number): number {
+  return Math.floor(Math.random() * n);
+}

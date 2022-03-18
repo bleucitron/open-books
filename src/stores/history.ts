@@ -8,9 +8,10 @@ const { subscribe, set, update } = writable<HistorySearch[]>(
   () => {
     if (browser) {
       const parsedHistory = JSON.parse(localStorage.getItem('history'));
-      return parsedHistory || [];
+      if (parsedHistory) {
+        set(parsedHistory);
+      }
     }
-    return [];
   },
 );
 
@@ -23,7 +24,6 @@ export const history = {
     ]),
   clear: () => {
     set([]);
-    localStorage.removeItem('history');
   },
 };
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from './Icon.svelte';
   import History from './History.svelte';
+  import Favorite from './Favorite.svelte';
 
   export let path: string;
 </script>
@@ -14,8 +15,9 @@
     </div>
   </a>
   <nav class="Nav">
-    <a href="/about" class:current={path === 'about'}>À propos</a>
+    <a class="about" href="/about" class:current={path === 'about'}>À propos</a>
     <History />
+    <Favorite />
     <a href="https://github.com/iOiurson/open-books">
       <Icon id="github" />
     </a>
@@ -27,12 +29,12 @@
     display: flex;
     justify-content: space-between;
     height: 3rem;
+    padding: 0.7rem;
   }
 
   a {
     display: flex;
     align-items: center;
-    margin: 0 0.5rem;
     cursor: pointer;
   }
 
@@ -83,7 +85,7 @@
   nav {
     display: flex;
     justify-content: flex-end;
-    align-items: stretch;
+    gap: 1rem;
     padding: 0.5rem;
     color: black;
     background: white;
@@ -113,6 +115,10 @@
         align-items: center;
         border-radius: 50%;
       }
+    }
+
+    Favorite {
+      margin-left: 0.8rem;
     }
   }
 </style>
