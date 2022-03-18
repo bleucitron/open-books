@@ -113,8 +113,6 @@
       };
     }
   });
-
-  console.log($tree, $code, steps);
 </script>
 
 <div class="summary">
