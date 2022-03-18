@@ -139,6 +139,13 @@ export interface UrlData {
   sirens: string[];
   year: number;
 }
+export interface UrlDataCompare {
+  siret1: string;
+  siret2: string;
+  year: number;
+  city1: string;
+  city2: string;
+}
 
 export interface BarChartValue {
   label: string;
