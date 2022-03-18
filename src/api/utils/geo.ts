@@ -27,7 +27,7 @@ export function makeGetCityEndpoint(code: string): string {
 
   const fieldsString = `fields=${fields.join(',')}`;
 
-  return `${base}?nom=${code}&${fieldsString}`;
+  return `${base}/${code}?${fieldsString}`;
 }
 
 const dptCodes = [

@@ -137,9 +137,14 @@
     goto(url);
   }
 
-  function handleSearch(event: CustomEvent): void {
-    const { nom, code } = event.detail.city;
-    goto(`/budgets?name=${nom}&insee=${code}`);
+  function handleSearch({ detail }: CustomEvent): void {
+    const { nom, code } = detail.city;
+    const { siret } = detail;
+
+    let url = `/budgets?name=${nom}&insee=${code}`;
+    if (siret) url += `&siret=${siret}`;
+
+    goto(url);
   }
 
   $: findSimilarBudget = function (siret: string) {

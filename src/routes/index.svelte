@@ -11,6 +11,11 @@
 
   export let examples: City[] = [];
 
+  interface RedirectData {
+    city: City;
+    siret?: string;
+  }
+
   let timeout: NodeJS.Timeout;
   let retryTimeout: NodeJS.Timeout;
   let allowedToRetry = false;
@@ -18,11 +23,14 @@
   const delay = 30 * 1000; // 30 seconds
   const retryDelay = 5 * 1000; // 3 seconds
 
-  function storeCity(c: City): void {
+  function redirect({ city: c, siret }: RedirectData): void {
     $city = c;
     const { nom, code } = $city;
 
-    goto(`/budgets?name=${nom}&insee=${code}`);
+    let url = `/budgets?name=${nom}&insee=${code}`;
+    if (siret) url += `&siret=${siret}`;
+
+    goto(url);
   }
 
   function allowRetry(): void {
@@ -56,7 +64,7 @@
 </svelte:head>
 
 <main>
-  <Search on:select={({ detail }) => storeCity(detail)} />
+  <Search on:select={({ detail }) => redirect(detail)} />
 
   {#if examples.length}
     <div class="examples" in:fade={{ duration: 2000 }}>
@@ -79,7 +87,7 @@
             <li in:fade={{ duration: 2000, delay: i * 1000 }}>
               <a
                 href={`/budgets?name=${nom}&insee=${code}`}
-                on:click={() => storeCity(city)}
+                on:click={() => redirect({ city })}
               >
                 <div class="city">{nom}</div>
                 <div class="dpt">({dpt} - {dptCode})</div>

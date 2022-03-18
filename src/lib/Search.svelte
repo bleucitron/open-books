@@ -3,7 +3,7 @@
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
-  import { getCities, getSiret, getSiren } from '@api';
+  import { getCity, getCities, getSiret, getSiren } from '@api';
   import { isSiren, isSiret } from '@utils/siren';
 
   const dispatch = createEventDispatcher();
@@ -25,31 +25,29 @@
     if (!city) {
       city = cities[0];
     }
-    dispatch('select', city);
+    dispatch('select', { city });
     reset();
   }
 
-  async function selectSiren(siren: string): Promise<void> {
+  async function getCityFromSiren(siren: string): Promise<void> {
     const { periodesUniteLegale } = await getSiren(siren);
     const denominationUniteLegale =
       periodesUniteLegale[periodesUniteLegale.length - 1]
         .denominationUniteLegale;
     const cityName = denominationUniteLegale.substring(10).trim().toLowerCase();
     const city = (await getCities(cityName))[0];
-    dispatch('select', {
-      city,
-    });
+    dispatch('select', { city });
     reset();
   }
 
-  async function selectSiret(siret: string): Promise<void> {
-    const { adresseEtablissement } = await getSiret(siret);
-    const city = (
-      await getCities(adresseEtablissement.libelleCommuneEtablissement)
-    )[0];
-    dispatch('select', {
-      city,
-    });
+  async function getCityFromSiret(siret: string): Promise<void> {
+    const {
+      adresseEtablissement: { codeCommuneEtablissement: codeInsee },
+    } = await getSiret(siret);
+
+    const city = await getCity(codeInsee);
+
+    dispatch('select', { city, siret });
     reset();
   }
 
@@ -77,12 +75,12 @@
       const valueWithoutSpace = value.replace(/ /g, '');
 
       if (isSiren(valueWithoutSpace)) {
-        selectSiren(valueWithoutSpace);
+        getCityFromSiren(valueWithoutSpace);
         return;
       }
 
       if (isSiret(valueWithoutSpace)) {
-        selectSiret(valueWithoutSpace);
+        getCityFromSiret(valueWithoutSpace);
         return;
       }
     }

@@ -56,7 +56,10 @@ export function getSiretsFromInsee(
 export function getSiren(siren: string): Promise<uniteLegale> {
   const endpoint = makeGetSirenEndpoint(siren);
 
-  return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options).then(
-    r => r.uniteLegale,
-  );
+  return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options)
+    .then(r => {
+      console.log('SIREN from api', r);
+      return r.uniteLegale;
+    })
+    .catch(e => console.log('E', e));
 }
