@@ -3,7 +3,9 @@
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
-  import { getCities } from '@api';
+  import Spinner from '$lib/Spinner.svelte';
+  import { getCity, getCities, getSiret, getSiren } from '@api';
+  import { isSiren, isSiret } from '@utils/siren';
 
   const dispatch = createEventDispatcher();
 
@@ -12,7 +14,9 @@
 
   let cities: City[] = null;
   let value = '';
+  let loading = false;
   let input: HTMLInputElement;
+  let error = false;
 
   function reset(): void {
     value = '';
@@ -24,20 +28,97 @@
     if (!city) {
       city = cities[0];
     }
-    dispatch('select', city);
+    dispatch('select', { city });
     reset();
   }
 
-  async function handleInput({ target }: Event): Promise<void> {
-    const { value } = target as HTMLInputElement;
-    showSuggestions = true;
-    cities = await getCities(value);
+  function getCityFromSiren(siren: string): void {
+    loading = true;
+
+    getSiren(siren)
+      .then(c => {
+        const { periodesUniteLegale } = c;
+
+        const denominationUniteLegale =
+          periodesUniteLegale[0].denominationUniteLegale;
+        const cityName = denominationUniteLegale
+          .substring(10)
+          .trim()
+          .toLowerCase();
+
+        return getCities(cityName);
+      })
+      .then(cities => {
+        if (loading) {
+          const city = cities[0];
+          dispatch('select', { city });
+        }
+        cities[0];
+      })
+      .catch(() => {
+        error = true;
+        console.error('No such siren found', siren);
+      })
+      .finally(() => (loading = false));
   }
 
-  function handleKey({ key }: KeyboardEvent): void {
+  function getCityFromSiret(siret: string): void {
+    loading = true;
+
+    getSiret(siret)
+      .then(etabl => {
+        const {
+          adresseEtablissement: { codeCommuneEtablissement: codeInsee },
+        } = etabl;
+
+        return getCity(codeInsee);
+      })
+      .then(city => {
+        if (loading) dispatch('select', { city, siret });
+      })
+      .catch(() => {
+        error = true;
+        console.error('No such siret found', siret);
+      })
+      .finally(() => (loading = false));
+  }
+
+  async function handleInput({ target }: Event): Promise<void> {
+    loading = false;
+    error = false;
+
+    const { value } = target as HTMLInputElement;
+
+    if (isSiren(value) || isSiret(value)) {
+      showSuggestions = false;
+      return;
+    }
+
+    cities = await getCities(value);
+
+    if (cities?.length) showSuggestions = true;
+  }
+
+  function handleKey({ key, target }: KeyboardEvent): void {
     if (key === 'Escape') {
       showSuggestions = false;
       input.blur();
+      return;
+    }
+
+    if (key === 'Enter') {
+      const { value } = target as HTMLInputElement;
+      const valueWithoutSpace = value.replace(/ /g, '');
+
+      if (isSiren(valueWithoutSpace)) {
+        getCityFromSiren(valueWithoutSpace);
+        return;
+      }
+
+      if (isSiret(valueWithoutSpace)) {
+        getCityFromSiret(valueWithoutSpace);
+        return;
+      }
     }
   }
 
@@ -66,12 +147,20 @@
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
-      <span class="reset" on:click={reset}>
-        <Icon id="x" />
-      </span>
+      {#if loading}
+        <span on:click={() => (loading = false)}>
+          <Spinner inline />
+        </span>
+      {:else}
+        <span class="reset" on:click={reset}>
+          <Icon id="x" />
+        </span>
+      {/if}
     {/if}
   </div>
-  {#if cities && showSuggestions}
+  {#if error}
+    <div class="error">Introuvable</div>
+  {:else if cities && showSuggestions}
     <Suggestions suggestions={cities} on:select={select} />
   {/if}
 </div>
@@ -104,7 +193,7 @@
     }
 
     :global(.Icon) {
-      margin: 0 0.7em 0 0.9em;
+      margin: 0 0.7em;
       font-size: 1.3em;
     }
 
@@ -136,6 +225,15 @@
     &::placeholder {
       color: #777;
     }
+  }
+
+  .error {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    font-size: 0.7em;
+    color: #e73737;
+    text-align: center;
   }
 
   @media (max-width: 480px) {

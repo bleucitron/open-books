@@ -57,6 +57,10 @@ export interface SiretsFromAPI {
   etablissements: Etablissement[];
 }
 
+export interface SirenFromAPI {
+  uniteLegale: UniteLegale;
+}
+
 export interface Budget {
   id: string;
   city: string;
@@ -125,6 +129,11 @@ export interface Etablissement {
   nic: string;
   siret: string;
   etablissementSiege: boolean;
+  adresseEtablissement: AdresseEtablissement;
+}
+
+export interface AdresseEtablissement {
+  codeCommuneEtablissement: string;
 }
 
 export interface CSV {
@@ -156,4 +165,9 @@ export interface FavoriteSearch {
   name: string;
   insee: string;
   sirens: string[];
+}
+
+export interface UniteLegale {
+  periodesUniteLegale: { denominationUniteLegale: string }[];
+  siren: string;
 }

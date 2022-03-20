@@ -3,6 +3,8 @@ import type {
   Fetch,
   SiretFromAPI,
   SiretsFromAPI,
+  SirenFromAPI,
+  UniteLegale,
 } from '@interfaces';
 
 import { get } from './utils/verbs';
@@ -10,6 +12,7 @@ import {
   checkCodes,
   makeGetSiretEndpoint,
   makeSearchSiretEndpoint,
+  makeGetSirenEndpoint,
 } from './utils/siren';
 
 const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
@@ -48,4 +51,12 @@ export function getSiretsFromInsee(
     ...options,
     fetch: altFetch,
   }).then(r => r.etablissements);
+}
+
+export function getSiren(siren: string): Promise<UniteLegale> {
+  const endpoint = makeGetSirenEndpoint(siren);
+
+  return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options).then(
+    r => r.uniteLegale,
+  );
 }

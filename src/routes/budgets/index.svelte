@@ -23,9 +23,9 @@
 
     let sirens = sirenString?.split(',');
 
-    const getCity = get(city);
+    const $city = get(city);
 
-    if (getCity === undefined) {
+    if ($city === undefined) {
       const cities = await getCities(name, fetch);
       city.set(cities[0]);
     }
@@ -56,7 +56,7 @@
     }
 
     const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], getCity));
+    await Promise.all(fillBudgetBySirens([mainSiren], [year], $city));
 
     return {
       props: {
@@ -137,9 +137,14 @@
     goto(url);
   }
 
-  function handleSearch(event: CustomEvent): void {
-    const { nom, code } = event.detail.city;
-    goto(`/budgets?name=${nom}&insee=${code}`);
+  function handleSearch({ detail }: CustomEvent): void {
+    const { nom, code } = detail.city;
+    const { siret } = detail;
+
+    let url = `/budgets?name=${nom}&insee=${code}`;
+    if (siret) url += `&siret=${siret}`;
+
+    goto(url);
   }
 
   $: findSimilarBudget = function (siret: string) {
