@@ -1,15 +1,7 @@
-// SIREN
-
 export function isSiren(siren: string): boolean {
-  if (siren.trim().length === 9) {
-    return true;
-  }
+  return siren.trim().length === 9;
 }
 
-// SIRET
-
 export function isSiret(siret: string): boolean {
-  if (siret.trim().length === 14) {
-    return true;
-  }
+  return siret.trim().length === 14;
 }
