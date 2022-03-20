@@ -3,6 +3,7 @@
   import type { City } from '@interfaces';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
+  import Spinner from '$lib/Spinner.svelte';
   import { getCity, getCities, getSiret, getSiren } from '@api';
   import { isSiren, isSiret } from '@utils/siren';
 
@@ -13,6 +14,7 @@
 
   let cities: City[] = null;
   let value = '';
+  let loading = false;
   let input: HTMLInputElement;
 
   function reset(): void {
@@ -29,28 +31,54 @@
     reset();
   }
 
-  async function getCityFromSiren(siren: string): Promise<void> {
-    const { periodesUniteLegale } = await getSiren(siren);
-    const denominationUniteLegale =
-      periodesUniteLegale[0].denominationUniteLegale;
-    const cityName = denominationUniteLegale.substring(10).trim().toLowerCase();
-    const city = (await getCities(cityName))[0];
-    dispatch('select', { city });
-    reset();
+  function getCityFromSiren(siren: string): void {
+    loading = true;
+
+    getSiren(siren)
+      .then(c => {
+        const { periodesUniteLegale } = c;
+
+        const denominationUniteLegale =
+          periodesUniteLegale[0].denominationUniteLegale;
+        const cityName = denominationUniteLegale
+          .substring(10)
+          .trim()
+          .toLowerCase();
+
+        return getCities(cityName);
+      })
+      .then(cities => {
+        if (loading) {
+          const city = cities[0];
+          dispatch('select', { city });
+        }
+        cities[0];
+      })
+      .catch(() => console.error('No such siren found', siren))
+      .finally(() => (loading = false));
   }
 
-  async function getCityFromSiret(siret: string): Promise<void> {
-    const {
-      adresseEtablissement: { codeCommuneEtablissement: codeInsee },
-    } = await getSiret(siret);
+  function getCityFromSiret(siret: string): void {
+    loading = true;
 
-    const city = await getCity(codeInsee);
+    getSiret(siret)
+      .then(etabl => {
+        const {
+          adresseEtablissement: { codeCommuneEtablissement: codeInsee },
+        } = etabl;
 
-    dispatch('select', { city, siret });
-    reset();
+        return getCity(codeInsee);
+      })
+      .then(city => {
+        if (loading) dispatch('select', { city, siret });
+      })
+      .catch(() => console.error('No such siret found', siret))
+      .finally(() => (loading = false));
   }
 
   async function handleInput({ target }: Event): Promise<void> {
+    loading = false;
+
     const { value } = target as HTMLInputElement;
 
     if (isSiren(value) || isSiret(value)) {
@@ -58,8 +86,9 @@
       return;
     }
 
-    showSuggestions = true;
     cities = await getCities(value);
+
+    if (cities?.length) showSuggestions = true;
   }
 
   function handleKey({ key, target }: KeyboardEvent): void {
@@ -110,9 +139,15 @@
       placeholder="Entrez le nom d'une commune"
     />
     {#if value}
-      <span class="reset" on:click={reset}>
-        <Icon id="x" />
-      </span>
+      {#if loading}
+        <span on:click={() => (loading = false)}>
+          <Spinner inline />
+        </span>
+      {:else}
+        <span class="reset" on:click={reset}>
+          <Icon id="x" />
+        </span>
+      {/if}
     {/if}
   </div>
   {#if cities && showSuggestions}
@@ -148,7 +183,7 @@
     }
 
     :global(.Icon) {
-      margin: 0 0.7em 0 0.9em;
+      margin: 0 0.7em;
       font-size: 1.3em;
     }
 
