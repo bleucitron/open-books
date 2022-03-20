@@ -16,6 +16,7 @@
   let value = '';
   let loading = false;
   let input: HTMLInputElement;
+  let error = false;
 
   function reset(): void {
     value = '';
@@ -54,7 +55,10 @@
         }
         cities[0];
       })
-      .catch(() => console.error('No such siren found', siren))
+      .catch(() => {
+        error = true;
+        console.error('No such siren found', siren);
+      })
       .finally(() => (loading = false));
   }
 
@@ -72,12 +76,16 @@
       .then(city => {
         if (loading) dispatch('select', { city, siret });
       })
-      .catch(() => console.error('No such siret found', siret))
+      .catch(() => {
+        error = true;
+        console.error('No such siret found', siret);
+      })
       .finally(() => (loading = false));
   }
 
   async function handleInput({ target }: Event): Promise<void> {
     loading = false;
+    error = false;
 
     const { value } = target as HTMLInputElement;
 
@@ -150,7 +158,9 @@
       {/if}
     {/if}
   </div>
-  {#if cities && showSuggestions}
+  {#if error}
+    <div class="error">Introuvable</div>
+  {:else if cities && showSuggestions}
     <Suggestions suggestions={cities} on:select={select} />
   {/if}
 </div>
@@ -215,6 +225,15 @@
     &::placeholder {
       color: #777;
     }
+  }
+
+  .error {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    font-size: 0.7em;
+    color: #e73737;
+    text-align: center;
   }
 
   @media (max-width: 480px) {
