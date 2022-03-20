@@ -150,9 +150,22 @@ export interface UrlData {
 }
 
 export interface BarChartValue {
+  code: string;
   label: string;
-  value: number;
-  handleClick?: () => void;
+  short: string;
+  subTree?: BarChartValue[];
+  value: ChartBudgetValue;
+}
+
+interface ChartBudgetValue {
+  obnetcre: number;
+  obnetcre_f: number;
+  obnetcre_i: number;
+  obnetdeb: number;
+  obnetdeb_f: number;
+  obnetdeb_i: number;
+  oobcre: number;
+  oobdeb: number;
 }
 
 export interface HistorySearch {
