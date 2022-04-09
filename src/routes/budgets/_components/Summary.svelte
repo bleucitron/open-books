@@ -83,10 +83,8 @@
 <div class="summary">
   <header>
     <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
-    {#if $tree}
-      <Path {steps} on:click={({ detail }) => selectCode(detail)} />
-    {/if}
     {#await budgetP then budget}
+      <Path {steps} on:click={({ detail }) => selectCode(detail)} />
       {#if budget}
         <Csv data={budget} />
       {/if}
