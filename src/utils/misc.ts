@@ -78,6 +78,8 @@ export function sumBy(list: any[], key: string): number {
 }
 
 export function stepsFromString(s: string): string[] {
+  if (!s) return [];
+
   return s.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
 }
 

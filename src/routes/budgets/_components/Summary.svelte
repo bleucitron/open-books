@@ -6,23 +6,14 @@
     Voir la fonction aggregateData
   */
 
-  import { onMount } from 'svelte';
-  import { browser } from '$app/env';
-
-  import { city, tree, code, budget, fonction } from '@stores';
-  import { getNomen } from '@api';
+  import { tree, code, budget } from '@stores';
   import {
     typeToLabel,
-    makeFonctionTree as _makeFonctionTree,
     stepsFromString,
     fonctionFromTree,
-    aggregateData,
     formatValue,
-    buildNomen as _buildNomen,
-    Nomen,
-    BudgetType,
   } from '@utils';
-  import type { Type, Code, Budget, FonctionTree } from '@interfaces';
+  import type { Type, Budget } from '@interfaces';
 
   import Spinner from '$lib/Spinner.svelte';
   import Csv from './Csv.svelte';
@@ -34,89 +25,46 @@
 
   export let year: number;
   let type: Type = undefined;
-  let steps: { label: string; select: () => void }[];
-
-  let makeFonctionTree: (s: string) => FonctionTree;
-  let buildNomen: (s: string) => Nomen;
-
-  onMount(() => {
-    makeFonctionTree = _makeFonctionTree; // to make sure _makeFonctionTree is not called for ssr
-    buildNomen = _buildNomen; // to make sure _buildNomen is not called for ssr
-  });
+  let steps: { id: string; label: string }[];
 
   function selectType(t: Type): void {
     type = t;
-    code.set(undefined);
+    $code = undefined;
   }
-  function selectCode(c: Code): void {
-    code.set(c);
+  function selectCode(c: string): void {
+    $code = c;
   }
 
   function reset(): void {
     type = undefined;
-    code.set(undefined);
+    $code = undefined;
   }
 
-  async function getFonctionTree(
-    year: number,
-    code: string,
-    population?: number,
-  ): Promise<FonctionTree> {
-    const nomen = browser ? await getNomen(year, code, population) : null;
+  $: steps = $budget
+    ? stepsFromString($code).map(code => {
+        const fonction = fonctionFromTree(code, $budget.tree);
+        const { short, label } = fonction;
 
-    return nomen?.tree;
-  }
-
-  $: budgetP?.then(async b => {
-    if (b) {
-      const { year, nomen: code } = b;
-      budget.set(b);
-
-      const _tree = await getFonctionTree(year, code, $city?.population);
-      if (_tree) {
-        const aggTree = aggregateData(b.records, _tree);
-        tree.set(aggTree);
-      }
-    }
-  });
-
-  $: steps =
-    $code && $tree
-      ? stepsFromString($code as string).map(code => {
-          const fonction = fonctionFromTree(code, $tree as FonctionTree);
-          const { short, label } = fonction;
-
-          return {
-            label: short || label,
-            select: () => selectCode(code),
-          };
-        })
-      : [];
-  $: steps = type
-    ? [{ label: typeToLabel[type], select: () => selectType(type) }, ...steps]
+        return {
+          id: code,
+          label: short || label,
+        };
+      })
     : [];
+  $: steps = type ? [{ id: null, label: typeToLabel[type] }, ...steps] : [];
 
-  $: infosP = budgetP?.then(budget => {
-    if (budget) {
-      const main = type && ($fonction ? $fonction.value[type] : budget[type]);
-      return {
-        debit_i: budget.obnetdeb_i,
-        debit_f: budget.obnetdeb_f,
-        credit_i: budget.obnetcre_i,
-        credit_f: budget.obnetcre_f,
-        nomen: budget.nomen,
-        tree: Object.values(budget.tree),
-        main,
-      };
-    }
-  });
+  $: values = ($tree && Object.values($tree.tree)) ?? [];
+  $: total = Object.values(values).reduce(
+    (acc, cur) => acc + cur.value[type],
+    0,
+  );
 </script>
 
 <div class="summary">
   <header>
     <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
     {#if $tree}
-      <Path {steps} />
+      <Path {steps} on:click={({ detail }) => selectCode(detail)} />
     {/if}
     {#await budgetP then budget}
       {#if budget}
@@ -125,27 +73,32 @@
     {/await}
   </header>
   <div class="values">
-    {#await infosP}
+    {#await budgetP}
       <Spinner --size="2rem" />
-    {:then infos}
-      {#if !infos}
+    {:then budget}
+      {#if !budget}
         <div class="none">Aucun budget</div>
       {:else if !type}
         <DebitOrCredit
-          credit_i={infos.credit_i}
-          credit_f={infos.credit_f}
-          debit_i={infos.debit_i}
-          debit_f={infos.debit_f}
+          credit_i={budget.value.obnetcre_i}
+          credit_f={budget.value.obnetcre_f}
+          debit_i={budget.value.obnetdeb_i}
+          debit_f={budget.value.obnetdeb_f}
           select={selectType}
         />
-      {:else if infos.tree}
-        <div class="main">{formatValue(infos.main)}</div>
-        <BudgetHisto currentTree={infos.tree} type={BudgetType.DEBIT_F} />
+      {:else if budget.tree}
+        <div class="main">{formatValue(total)}</div>
+        <BudgetHisto
+          {values}
+          {total}
+          {type}
+          on:click={({ detail }) => selectCode(detail)}
+        />
       {:else}
         <p>Pas de plan de compte disponible</p>
       {/if}
-      {#if infos}
-        <div class="nomen">{infos.nomen}</div>
+      {#if budget}
+        <div class="nomen">{budget.nomen}</div>
       {/if}
     {/await}
   </div>

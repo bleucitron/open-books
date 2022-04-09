@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import Icon from '$lib/Icon.svelte';
 
-  export let steps: { label: string; select: () => void }[];
+  const dispatch = createEventDispatcher();
+
+  export let steps: { id: string; label: string }[];
 
   $: current = steps.pop()?.label;
 </script>
@@ -11,8 +14,8 @@
     <div class="current">{current}</div>
   {/if}
   <div class="steps">
-    {#each steps as { label, select }}
-      <div class="step" on:click={select}>
+    {#each steps as { id, label }}
+      <div class="step" on:click={() => dispatch('click', id)}>
         {label}
         <Icon id="chevron-right" />
       </div>

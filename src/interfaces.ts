@@ -61,7 +61,7 @@ export interface SirenFromAPI {
   uniteLegale: UniteLegale;
 }
 
-export interface Budget {
+export interface Budget extends TreeValue {
   id: string;
   city: string;
   siren: string;
@@ -70,15 +70,8 @@ export interface Budget {
   nomen: string;
   etabl: string;
   year: number;
-  obnetdeb: number;
-  obnetcre: number;
-  obnetcre_i: number;
-  obnetcre_f: number;
-  obnetdeb_i: number;
-  obnetdeb_f: number;
   length: number;
   records: BudgetRecord[];
-  tree: FonctionTree;
 }
 
 export interface BudgetMap {
@@ -99,7 +92,6 @@ export interface BudgetParams {
 }
 
 export type Type = BudgetType;
-export type Code = string;
 
 interface InseeEntity {
   code: string;
@@ -112,12 +104,15 @@ export interface City extends InseeEntity {
   region: InseeEntity;
 }
 
-export interface FonctionTreeValue {
+export interface TreeValue {
+  tree: FonctionTree;
+  value: Partial<Record<BudgetType, number>>;
+}
+
+export interface FonctionTreeValue extends TreeValue {
   code: string;
   label: string;
-  value?: Partial<Record<BudgetType, number>>;
   short?: string;
-  subTree: FonctionTree;
 }
 
 export interface FonctionTree {
@@ -153,7 +148,7 @@ export interface BarChartValue {
   code: string;
   label: string;
   short: string;
-  subTree?: BarChartValue[];
+  tree?: BarChartValue[];
   value: ChartBudgetValue;
 }
 

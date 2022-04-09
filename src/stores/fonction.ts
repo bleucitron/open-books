@@ -1,14 +1,13 @@
 import { derived } from 'svelte/store';
 
-import tree from './tree';
+import budget from './budget';
 import code from './code';
 import { fonctionFromTree } from '@utils';
-import type { FonctionTree } from '@interfaces';
 
-export default derived([code, tree], ([$code, $tree]) => {
-  if (!$code || !$tree) {
+export default derived([code, budget], ([$code, $budget]) => {
+  if (!$code || !$budget) {
     return undefined;
   }
 
-  return fonctionFromTree($code, $tree as FonctionTree);
+  return fonctionFromTree($code, $budget.tree);
 });

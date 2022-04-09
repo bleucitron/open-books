@@ -123,12 +123,14 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
     year,
     nomen,
     length,
-    obnetdeb,
-    obnetcre,
-    obnetdeb_i,
-    obnetdeb_f,
-    obnetcre_i,
-    obnetcre_f,
+    value: {
+      obnetdeb,
+      obnetcre,
+      obnetdeb_i,
+      obnetdeb_f,
+      obnetcre_i,
+      obnetcre_f,
+    },
     label,
     records,
     tree,
@@ -172,7 +174,7 @@ export function extractFonctions(e: Element): FonctionTree {
       value.short = short;
     }
 
-    if (element.children.length > 0) value.subTree = extractFonctions(element);
+    if (element.children.length > 0) value.tree = extractFonctions(element);
 
     return [code, value];
   });
@@ -223,7 +225,7 @@ export function fonctionFromTree(
   tree: FonctionTree,
 ): FonctionTreeValue {
   if (!(code in tree)) {
-    return fonctionFromTree(code, tree[code[0]].subTree);
+    return fonctionFromTree(code, tree[code[0]].tree);
   }
 
   return tree[code] as FonctionTreeValue;
@@ -234,7 +236,7 @@ export function aggregateData(
   tree: FonctionTree,
 ): FonctionTree {
   const aggregate = Object.values(tree).map(fonction => {
-    const { code, subTree } = fonction;
+    const { code, tree } = fonction;
 
     let obnetdeb;
     let obnetcre;
@@ -252,7 +254,7 @@ export function aggregateData(
 
     const nomen = nomenByDecl.get('M14_COM_SUP3500');
 
-    if (!subTree) {
+    if (!tree) {
       const records_f = filteredRecords.filter(r => {
         return nomen.fiByCompte.get(r.compte) === 'F';
       });
@@ -270,7 +272,7 @@ export function aggregateData(
       oobdeb = sumBy(filteredRecords, BudgetCode.OOBDEB);
       oobcre = sumBy(filteredRecords, BudgetCode.OOBCRE);
     } else {
-      const subAgg = aggregateData(filteredRecords, subTree);
+      const subAgg = aggregateData(filteredRecords, tree);
       const values = Object.values(subAgg).map(agg => agg.value);
       obnetdeb = sumBy(values, BudgetType.DEBIT);
       obnetcre = sumBy(values, BudgetType.CREDIT);
@@ -282,7 +284,7 @@ export function aggregateData(
 
       oobdeb = sumBy(values, BudgetCode.OOBDEB);
       oobcre = sumBy(values, BudgetCode.OOBCRE);
-      output.subTree = subAgg;
+      output.tree = subAgg;
     }
 
     return [

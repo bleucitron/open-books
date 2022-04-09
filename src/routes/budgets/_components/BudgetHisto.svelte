@@ -1,35 +1,29 @@
 <script lang="ts">
-  import Bar from './Bar.svelte';
-  import type { BarChartValue } from '@interfaces';
-  import type { BudgetType } from '@utils';
+  import { createEventDispatcher } from 'svelte';
 
-  export let currentTree: BarChartValue[] = [];
+  import Bar from './Bar.svelte';
+
+  const dispatch = createEventDispatcher();
+
+  import type { BudgetType } from '@utils';
+  import type { FonctionTreeValue } from '@interfaces';
+
+  export let values: FonctionTreeValue[];
+  export let total: number;
   export let type: BudgetType;
 
-  currentTree.sort((a, b) => {
-    return b.value[type] - a.value[type];
-  });
-
-  const total = currentTree
-    .map(value => {
-      return value.value[type];
-    })
-    .reduce((partialSum, a) => partialSum + a, 0);
-
-  function handleClick(subTree: BarChartValue[]): void {
-    currentTree = Object.values(subTree);
-  }
+  $: values.sort((v1, v2) => v2.value[type] - v1.value[type]);
 </script>
 
 <div class="budgetHisto">
-  {#each currentTree as { label, value, subTree }}
+  {#each values as { code, label, value, tree }}
     <Bar
       {label}
       value={value[type]}
       percentage={value[type] / total}
       width={value[type] / total}
-      clickable={subTree !== undefined}
-      handleClick={() => handleClick(subTree)}
+      clickable={!!tree}
+      on:click={tree ? () => dispatch('click', code) : null}
     />
   {/each}
 </div>

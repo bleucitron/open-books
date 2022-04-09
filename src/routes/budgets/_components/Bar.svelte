@@ -9,10 +9,9 @@
   export let width: number;
   export let label: string;
   export let clickable = false;
-  export let handleClick: () => void = undefined;
 </script>
 
-<div class="bar" class:clickable on:click={() => handleClick?.()}>
+<div class="bar" class:clickable on:click>
   <div class="labels">
     <h3>
       {label}

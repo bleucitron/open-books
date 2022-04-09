@@ -57,7 +57,6 @@
 
     const mainSiren = extractSiren(siret);
     await Promise.all(fillBudgetBySirens([mainSiren], [year], $city));
-
     return {
       props: {
         sirens,
@@ -75,6 +74,7 @@
   import { goto } from '$app/navigation';
 
   import { history } from '@stores/history';
+  import { budget } from '@stores';
   import { makeId, makeBudgetUrl } from '@utils';
 
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
@@ -204,11 +204,13 @@
     .filter(l => l) as Budget[];
 
   $: valuePs = budgetPs.map(budgetP =>
-    budgetP.then(budget => budget && budget.obnetcre),
+    budgetP.then(budget => budget && budget.value.obnetcre),
   );
 
-  $: yearIndex = years.findIndex(y => y === currentYear);
   $: budgetP = budgetPs[yearIndex];
+  $: budgetP.then(b => ($budget = b));
+
+  $: yearIndex = years.findIndex(y => y === currentYear);
   $: label = findSimilarLabel();
 </script>
 
