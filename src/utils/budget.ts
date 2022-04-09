@@ -226,8 +226,6 @@ export function fonctionFromTree(
 ): FonctionTreeValue {
   if (!tree) return null;
 
-  if (!code) return tree;
-
   if (!(code in tree)) {
     return fonctionFromTree(code, tree[code[0]]?.tree);
   }
