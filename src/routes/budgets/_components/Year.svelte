@@ -16,7 +16,7 @@
 
   $: valueP.then(v => {
     pending = false;
-    unavailable = !v;
+    unavailable = v == null;
   });
 
   $: Promise.all([valueP, maxP]).then(([v, max]) => {

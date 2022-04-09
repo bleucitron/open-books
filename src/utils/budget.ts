@@ -103,9 +103,9 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
   const nomenFilled = await getNomen(year, nomen, city?.population);
-  const tree = nomenFilled ? aggregateData(records, nomenFilled?.tree) : {};
+  const tree = nomenFilled ? aggregateData(records, nomenFilled?.tree) : null;
 
-  const treeValues = Object.values(tree);
+  const treeValues = Object.values(tree ?? {});
 
   const obnetcre = sumBy(records, BudgetCode.OBNETCRE);
   const obnetdeb = sumBy(records, BudgetCode.OBNETDEB);
