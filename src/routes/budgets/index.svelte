@@ -93,8 +93,6 @@
   export let currentYear: number;
   export let insee: string;
   export let name: string;
-  // let type: string;
-  // let fonction: string;
 
   let budgetById: BudgetMap = {};
 
@@ -115,27 +113,19 @@
   }
 
   function selectSiret(s: string): void {
-    const url = makeBudgetUrl({
-      name,
-      insee,
-      siret: s,
-      sirens,
-      year: currentYear,
-    });
+    const url = new URL($page.url);
+    url.searchParams.set('siret', s);
+    url.searchParams.set('year', currentYear.toString());
 
-    goto(url);
+    goto(url.href);
   }
 
   function selectYear(y: number): void {
-    const url = makeBudgetUrl({
-      name,
-      insee,
-      siret: currentSiret,
-      sirens,
-      year: y,
-    });
+    const url = new URL($page.url);
+    url.searchParams.set('siret', currentSiret);
+    url.searchParams.set('year', y.toString());
 
-    goto(url);
+    goto(url.href);
   }
 
   function handleSearch({ detail }: CustomEvent): void {

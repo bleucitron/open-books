@@ -6,6 +6,8 @@
     Voir la fonction aggregateData
   */
 
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
   import { tree, code, budget } from '@stores';
   import {
     typeToLabel,
@@ -22,28 +24,46 @@
   import BudgetHisto from './BudgetHisto.svelte';
 
   export let budgetP: Promise<Budget>;
-
   export let year: number;
-  let type: Type = undefined;
+
   let steps: { id: string; label: string }[];
+
+  function updateUrl(): void {
+    const u = new URL(url);
+
+    if (!$code) u.searchParams.delete('code');
+    else u.searchParams.set('code', $code);
+
+    if (!type) u.searchParams.delete('type');
+    else u.searchParams.set('type', type);
+
+    goto(u.href);
+  }
 
   function selectType(t: Type): void {
     type = t;
     $code = undefined;
+    updateUrl();
   }
   function selectCode(c: string): void {
     $code = c;
+    updateUrl();
   }
 
   function reset(): void {
     type = undefined;
     $code = undefined;
+    updateUrl();
   }
+
+  $: ({ url } = $page);
+  $: $code = url.searchParams.get('code');
+  $: type = url.searchParams.get('type') as Type;
 
   $: steps = $budget
     ? stepsFromString($code).map(code => {
         const fonction = fonctionFromTree(code, $budget.tree);
-        const { short, label } = fonction;
+        const { short, label } = fonction ?? {};
 
         return {
           id: code,

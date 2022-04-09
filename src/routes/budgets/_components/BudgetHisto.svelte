@@ -17,11 +17,13 @@
 
 <div class="budgetHisto">
   {#each values as { code, label, value, tree }}
+    {@const percentage = total ? value[type] / total : 0}
+
     <Bar
       {label}
       value={value[type]}
-      percentage={value[type] / total}
-      width={value[type] / total}
+      {percentage}
+      width={percentage}
       clickable={!!tree}
       on:click={tree ? () => dispatch('click', code) : null}
     />

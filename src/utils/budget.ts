@@ -224,8 +224,10 @@ export function fonctionFromTree(
   code: string,
   tree: FonctionTree,
 ): FonctionTreeValue {
+  if (!tree) return null;
+
   if (!(code in tree)) {
-    return fonctionFromTree(code, tree[code[0]].tree);
+    return fonctionFromTree(code, tree[code[0]]?.tree);
   }
 
   return tree[code] as FonctionTreeValue;
