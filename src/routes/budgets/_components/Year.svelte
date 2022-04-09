@@ -47,12 +47,11 @@
   .Year {
     flex: 1 0;
     height: 10rem;
-    width: 5rem;
+    max-width: 4.5rem;
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
     align-items: stretch;
-    margin: 0 0.5rem;
     font-size: 0.8rem;
     color: #333;
     opacity: 0.5;

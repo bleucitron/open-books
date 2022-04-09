@@ -90,6 +90,11 @@
       {/if}
     {/await}
   </header>
+  {#await budgetP then budget}
+    {#if budget}
+      <div class="nomen" title="Nomenclature M14">{budget.nomen}</div>
+    {/if}
+  {/await}
   <div class="values">
     {#await budgetP}
       <Spinner --size="2rem" />
@@ -115,16 +120,12 @@
       {:else}
         <p>Pas de plan de compte disponible</p>
       {/if}
-      {#if budget}
-        <div class="nomen">{budget.nomen}</div>
-      {/if}
     {/await}
   </div>
 </div>
 
 <style lang="scss">
   .summary {
-    position: relative;
     flex: 1 0;
     display: flex;
     flex-flow: column;
@@ -156,6 +157,19 @@
     }
   }
 
+  .nomen {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: fit-content;
+    font-size: 0.9rem;
+    padding: 0 0.2rem;
+    background: #ddd;
+    color: #777;
+    border-radius: 4px;
+    cursor: default;
+  }
+
   .values {
     flex: 1 0;
     display: flex;
@@ -174,17 +188,6 @@
 
     .main {
       font-size: 3rem;
-    }
-
-    .nomen {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
-      font-size: 0.9rem;
-      padding: 0.2rem;
-      background: grey;
-      color: white;
-      border-radius: 4px;
     }
   }
 </style>
