@@ -57,7 +57,8 @@
     color: #333;
     opacity: 0.5;
     cursor: pointer;
-    &:hover:not(.unavailable) {
+    &:hover:not(.unavailable):not(.selected) {
+      opacity: 0.7;
       :global(h3) {
         color: cornflowerblue;
       }
@@ -117,11 +118,11 @@
   }
 
   .unavailable {
-    opacity: 0.1;
+    opacity: 0.2;
     cursor: default;
   }
 
   .pending {
-    opacity: 0.2;
+    opacity: 0.3;
   }
 </style>
