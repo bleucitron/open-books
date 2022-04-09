@@ -23,11 +23,12 @@
 
     let sirens = sirenString?.split(',');
 
-    const $city = get(city);
+    let $city = get(city);
 
-    if ($city === undefined) {
+    if (!$city) {
       const cities = await getCities(name, fetch);
-      city.set(cities[0]);
+      $city = cities[0];
+      city.set($city);
     }
 
     const year = parseInt(y) || defaultYear;
