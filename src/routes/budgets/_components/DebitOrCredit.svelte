@@ -10,22 +10,32 @@
 </script>
 
 <div class="debit-credit">
-  <PieChartBudget
-    radius={100}
-    data={[
-      { label: BudgetType.CREDIT_I, value: credit_i, color: 'coral' },
-      { label: BudgetType.CREDIT_F, value: credit_f, color: '#333333' },
-    ]}
-    on:slice-click={data => select(data.detail.label)}
-  />
-  <PieChartBudget
-    radius={100}
-    data={[
-      { label: BudgetType.DEBIT_I, value: debit_i, color: 'cornflowerblue' },
-      { label: BudgetType.DEBIT_F, value: debit_f, color: 'black' },
-    ]}
-    on:slice-click={data => select(data.detail.label)}
-  />
+  <div class="container">
+    <PieChartBudget
+      radius={100}
+      data={[
+        {
+          label: BudgetType.CREDIT_I,
+          value: credit_i,
+          color: 'coral',
+        },
+        { label: BudgetType.CREDIT_F, value: credit_f, color: 'coral' },
+      ]}
+      on:slice-click={data => select(data.detail.label)}
+    />
+    <div>Recettes</div>
+  </div>
+  <div class="container">
+    <PieChartBudget
+      radius={100}
+      data={[
+        { label: BudgetType.DEBIT_I, value: debit_i, color: 'cornflowerblue' },
+        { label: BudgetType.DEBIT_F, value: debit_f, color: 'cornflowerblue' },
+      ]}
+      on:slice-click={data => select(data.detail.label)}
+    />
+    <div>Dépenses</div>
+  </div>
 </div>
 
 <style lang="scss">
@@ -36,6 +46,7 @@
     align-items: center;
     justify-content: center;
     gap: 8.5rem;
-    font-size: 3rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
 </style>

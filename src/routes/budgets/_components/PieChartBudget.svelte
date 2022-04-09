@@ -77,12 +77,7 @@
   });
 </script>
 
-<svg
-  id="svg"
-  width={2 * radius}
-  height={2 * radius}
-  xmlns="http://www.w3.org/2000/svg"
->
+<svg width={2 * radius} height={2 * radius} xmlns="http://www.w3.org/2000/svg">
   {#each coordinatesArray as coordinates, index}
     <path
       on:click={() =>
@@ -113,12 +108,16 @@
 </svg>
 
 <style lang="scss">
-  #svg {
+  svg {
+    overflow: inherit;
+
     .pie-part {
+      cursor: pointer;
       outline: none;
       transition: 0.4s ease-out;
-      &:hover {
-        opacity: 0.5;
+
+      &:last-child {
+        opacity: 70%;
       }
     }
   }
