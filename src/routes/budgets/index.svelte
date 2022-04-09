@@ -145,12 +145,6 @@
     );
   };
 
-  $: findSimilarLabel = function () {
-    const id = makeId(currentSiret, currentYear);
-    const budget = budgetById[id] || findSimilarBudget(currentSiret);
-    return budget?.label;
-  };
-
   $: cityP = $city
     ? Promise.resolve($city)
     : getCity(insee).then((result: City) => {
@@ -209,7 +203,6 @@
   $: budgetP.then(b => ($budget = b));
 
   $: yearIndex = years.findIndex(y => y === currentYear);
-  $: label = findSimilarLabel();
 </script>
 
 <svelte:head>
@@ -247,9 +240,6 @@
             <div style="color: red">{error}</div>
           {/await}
         </div>
-        {#if label}
-          <h2>{label}</h2>
-        {/if}
       </div>
     </div>
   </div>
@@ -359,11 +349,6 @@
 
     h1 {
       font-size: 2rem;
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      text-transform: capitalize;
     }
 
     .info {
