@@ -8,7 +8,7 @@
 
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { tree, code, budget } from '@stores';
+  import { budget, tree, type, code } from '@stores';
   import {
     typeToLabel,
     stepsFromString,
@@ -34,15 +34,15 @@
     if (!$code) u.searchParams.delete('code');
     else u.searchParams.set('code', $code);
 
-    if (!type) u.searchParams.delete('type');
-    else u.searchParams.set('type', type);
+    if (!$type) u.searchParams.delete('type');
+    else u.searchParams.set('type', $type);
 
     goto(u.href);
   }
 
   function selectType(t: Type): void {
-    type = t;
-    $code = undefined;
+    $type = t;
+    $code = null;
     updateUrl();
   }
   function selectCode(c: string): void {
@@ -51,14 +51,14 @@
   }
 
   function reset(): void {
-    type = undefined;
-    $code = undefined;
+    $type = null;
+    $code = null;
     updateUrl();
   }
 
   $: ({ url } = $page);
   $: $code = url.searchParams.get('code');
-  $: type = url.searchParams.get('type') as Type;
+  $: $type = url.searchParams.get('type') as Type;
 
   $: steps = $budget
     ? stepsFromString($code).map(code => {
@@ -71,11 +71,11 @@
         };
       })
     : [];
-  $: steps = type ? [{ id: null, label: typeToLabel[type] }, ...steps] : [];
+  $: steps = $type ? [{ id: null, label: typeToLabel[$type] }, ...steps] : [];
 
   $: values = ($tree && Object.values($tree.tree)) ?? [];
   $: total = Object.values(values).reduce(
-    (acc, cur) => acc + cur.value[type],
+    (acc, cur) => acc + cur.value[$type],
     0,
   );
 </script>
@@ -98,7 +98,7 @@
     {:then budget}
       {#if !budget}
         <div class="none">Aucun budget</div>
-      {:else if !type}
+      {:else if !$type}
         <DebitOrCredit
           credit_i={budget.value.obnetcre_i}
           credit_f={budget.value.obnetcre_f}
@@ -111,7 +111,7 @@
         <BudgetHisto
           {values}
           {total}
-          {type}
+          type={$type}
           on:click={({ detail }) => selectCode(detail)}
         />
       {:else}

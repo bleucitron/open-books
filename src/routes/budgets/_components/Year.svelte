@@ -1,5 +1,7 @@
 <script lang="ts">
-  // import { formatValue } from '@utils';
+  import { tweened } from 'svelte/motion';
+  import { quadOut } from 'svelte/easing';
+  import { formatValue } from '@utils';
   import LoadingText from '$lib/LoadingText.svelte';
 
   export let year: number;
@@ -8,7 +10,7 @@
   export let select: () => void = undefined;
   export let selected = false;
 
-  let height: string;
+  let height = tweened(0, { easing: quadOut });
   let pending = true;
   let unavailable = false;
 
@@ -18,9 +20,7 @@
   });
 
   $: Promise.all([valueP, maxP]).then(([v, max]) => {
-    if (v) {
-      setTimeout(() => (height = v / max + '%'), 50);
-    }
+    $height = ((v ?? 0) / max) * 100;
   });
 </script>
 
@@ -31,12 +31,22 @@
   class:selected
   on:click={!unavailable ? select : undefined}
 >
+  {#await valueP then value}
+    {#if value}
+      <div class="container">
+        <div class="value" style:flex-basis={`${$height}%`}>
+          {formatValue(value)}
+        </div>
+      </div>
+    {/if}
+  {/await}
   <LoadingText text={year.toString()} loading={pending} />
 </li>
 
 <style lang="scss">
   .Year {
     flex: 1 0;
+    height: 10rem;
     width: 5rem;
     display: flex;
     flex-flow: column;
@@ -48,15 +58,22 @@
     opacity: 0.5;
     cursor: pointer;
     &:hover:not(.unavailable) {
-      h3 {
+      :global(h3) {
         color: cornflowerblue;
+      }
+      .value {
+        background: cornflowerblue;
       }
     }
 
     &.selected {
       opacity: 1;
-      h3 {
+      :global(h3) {
         color: cornflowerblue;
+      }
+
+      .value {
+        background: cornflowerblue;
       }
     }
 
@@ -67,20 +84,36 @@
     &:last-child {
       margin-right: 0;
     }
-  }
 
-  h3 {
-    position: relative;
-    font-size: 1rem;
-    margin-top: 1rem;
-    text-align: center;
+    :global(h3) {
+      position: relative;
+      font-size: 1rem;
+      margin-top: 1rem;
+      text-align: center;
 
-    :global {
-      .Spinner {
+      :global(.Spinner) {
         position: absolute;
         margin-left: 0.3rem;
       }
     }
+  }
+
+  .container {
+    flex: 1 0;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+  }
+
+  .value {
+    flex: 0 0;
+    display: flex;
+    padding: 3px;
+    flex-flow: column;
+    align-items: center;
+    background: #666;
+    color: #eee;
+    border-radius: 8px;
   }
 
   .unavailable {

@@ -4,6 +4,7 @@
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity, getCities } from '@api';
+  import { type, code } from '@stores';
   import { extractSirens } from '@api/utils/siren';
   import { extractSiren } from '@utils/misc';
   import AddFavorite from '$lib/addFavorite.svelte';
@@ -76,7 +77,7 @@
 
   import { history } from '@stores/history';
   import { budget } from '@stores';
-  import { makeId, makeBudgetUrl } from '@utils';
+  import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
 
   import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
 
@@ -195,7 +196,13 @@
     .filter(l => l) as Budget[];
 
   $: valuePs = budgetPs.map(budgetP =>
-    budgetP.then(budget => budget && budget.value.obnetcre),
+    budgetP.then(budget => {
+      if (!budget) return null;
+
+      const source = $code ? fonctionFromTree($code, budget.tree) : budget;
+
+      return source?.value[$type];
+    }),
   );
 
   $: budgetP = budgetPs[yearIndex];
