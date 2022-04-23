@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Donut from './Donut.svelte';
   import { BudgetType } from '@utils';
+  import Donut from './Donut.svelte';
 
   export let credit_i: number;
   export let credit_f: number;
@@ -22,7 +22,7 @@
         {
           label: BudgetType.CREDIT_I,
           value: credit_i,
-          color: 'red',
+          color: '#E57F84',
         },
         { label: BudgetType.CREDIT_F, value: credit_f, color: 'coral' },
       ]}
@@ -34,7 +34,7 @@
     <Donut
       scale={debit / max}
       data={[
-        { label: BudgetType.DEBIT_I, value: debit_i, color: 'blue' },
+        { label: BudgetType.DEBIT_I, value: debit_i, color: '#4297A0' },
         { label: BudgetType.DEBIT_F, value: debit_f, color: 'cornflowerblue' },
       ]}
       on:click={data => select(data.detail.label)}
