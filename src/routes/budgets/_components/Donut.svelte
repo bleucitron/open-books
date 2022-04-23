@@ -17,7 +17,7 @@
   const dispatch = createEventDispatcher();
 
   const gap = 1;
-  const width = 20;
+  const width = 25;
   const radius = 100;
   const duration = 1000;
   const totalMotion = tweened(0, { duration, easing: expoOut });
