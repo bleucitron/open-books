@@ -15,7 +15,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const gap = 4;
+  const gap = 1;
   const width = 20;
   const radius = 100;
   const duration = 1000;

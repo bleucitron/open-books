@@ -25,10 +25,20 @@ export function describeArc(
   endAngle: number,
   offset = 0,
 ): string {
-  const start = polarToCartesian(x, y, radius, endAngle - offset);
-  const end = polarToCartesian(x, y, radius, startAngle);
+  const full = Math.abs(endAngle - startAngle) === 360;
+  const span = endAngle - startAngle;
+  if (full) {
+    startAngle = 0;
+    endAngle = 359.99; // otherwise the arc won't draw itself
+  }
+  if (full || span < offset) {
+    offset = 0;
+  }
 
-  const largeArcFlag = endAngle - startAngle - offset <= 180 ? '0' : '1';
+  const start = polarToCartesian(x, y, radius, endAngle - offset / 2);
+  const end = polarToCartesian(x, y, radius, startAngle + offset / 2);
+
+  const largeArcFlag = span - offset <= 180 ? 0 : 1;
 
   const d = [
     'M',

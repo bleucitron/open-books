@@ -8,11 +8,30 @@
 <Story name="Donut chart">
   <Donut
     data={[
-      { label: '$', value: 35, color: 'red' },
-      { label: '$', value: 60, color: 'blue' },
-      { label: '$', value: 5, color: 'yellow' },
+      { label: '$', value: 75, color: 'red' },
+      { label: '$', value: 25, color: 'blue' },
       { label: '$', value: 100, color: 'green' },
       { label: '$', value: 50, color: 'orange' },
+    ]}
+    on:click={data => console.log(data.detail)}
+  />
+</Story>
+
+<Story name="Donut chart with large diffs">
+  <Donut
+    data={[
+      { label: '$', value: 3500, color: 'red' },
+      { label: '$', value: 2, color: 'blue' },
+    ]}
+    on:click={data => console.log(data.detail)}
+  />
+</Story>
+
+<Story name="Donut chart with empty value">
+  <Donut
+    data={[
+      { label: '$', value: 3500, color: 'red' },
+      { label: '$', value: 0.0, color: 'blue' },
     ]}
     on:click={data => console.log(data.detail)}
   />
