@@ -211,6 +211,11 @@ export enum BudgetType {
   CREDIT_F = 'obnetcre_f',
 }
 
+export enum FILabel {
+  I = 'Investissement',
+  F = 'Fonctionnement',
+}
+
 export const typeToLabel = {
   [BudgetType.DEBIT]: 'Dépenses',
   [BudgetType.DEBIT_I]: "Dépenses d'investissement",

@@ -1,8 +1,9 @@
 <script lang="ts" context="module">
-  export interface PieData {
-    label: string;
-    color?: string;
+  export interface DonutData {
+    id: string;
     value: number;
+    label?: string;
+    color?: string;
   }
 </script>
 
@@ -21,8 +22,23 @@
   const duration = 1000;
   const totalMotion = tweened(0, { duration, easing: expoOut });
 
+  let displayedValue = 0;
+  let displayedColor = '';
+  let displayedLabel = '';
+
   export let scale = 1;
-  export let data: PieData[] = [];
+  export let data: DonutData[] = [];
+
+  function update({ value, color, label }: DonutData): void {
+    displayedValue = value;
+    displayedColor = color;
+    displayedLabel = label;
+  }
+  function reset(): void {
+    displayedValue = $totalMotion;
+    displayedColor = '';
+    displayedLabel = '';
+  }
 
   $: data.sort((d1, d2) => d2.value - d1.value);
   $: values = data.map(d => d.value);
@@ -32,6 +48,7 @@
 
   $: total = values.reduce((acc, cur) => acc + cur, 0);
   $: $totalMotion = total;
+  $: displayedValue = $totalMotion;
 </script>
 
 <svg
@@ -61,12 +78,32 @@
         duration,
         easing: expoOut,
       }}
+      on:mouseenter={() => update(d)}
+      on:mouseleave={reset}
       on:click={() => dispatch('click', d)}
     />
   {/each}
   <circle cx={radius} cy={radius} r={radius - width} fill="transparent" />
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central">
-    {formatValue($totalMotion)}
+  {#if displayedLabel}
+    <text
+      x="50%"
+      y="37%"
+      text-anchor="middle"
+      dominant-baseline="central"
+      fill={displayedColor}
+      class="label"
+    >
+      {displayedLabel}
+    </text>
+  {/if}
+  <text
+    x="50%"
+    y="50%"
+    text-anchor="middle"
+    dominant-baseline="central"
+    fill={displayedColor}
+  >
+    {formatValue(displayedValue)}
   </text>
 </svg>
 
@@ -88,6 +125,9 @@
 
     text {
       font-size: 1.3em;
+      &.label {
+        font-size: 0.8rem;
+      }
     }
   }
 </style>

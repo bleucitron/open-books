@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { BudgetType } from '@utils';
+  import { formatValue, BudgetType, FILabel } from '@utils';
   import Donut from './Donut.svelte';
+
+  const { CREDIT_I, CREDIT_F, DEBIT_I, DEBIT_F } = BudgetType;
 
   export let credit_i: number;
   export let credit_f: number;
@@ -15,32 +17,74 @@
 </script>
 
 <div class="debit-credit">
-  <div class="container">
+  <figure class="container">
     <Donut
       scale={credit / max}
       data={[
         {
-          label: BudgetType.CREDIT_I,
+          id: BudgetType.CREDIT_I,
+          label: FILabel.I,
           value: credit_i,
-          color: '#E57F84',
+          color: '#4297A0',
         },
-        { label: BudgetType.CREDIT_F, value: credit_f, color: 'coral' },
+        {
+          id: BudgetType.CREDIT_F,
+          label: FILabel.F,
+          value: credit_f,
+          color: 'coral',
+        },
       ]}
-      on:click={data => select(data.detail.label)}
+      on:click={data => select(data.detail.id)}
     />
-    <div>Recettes</div>
-  </div>
-  <div class="container">
+    <figcaption>
+      <div>Recettes</div>
+      <ul class="visually-hidden">
+        <li class="i" style:color="#4297A0" on:click={() => select(CREDIT_I)}>
+          Investissement: {formatValue(credit_i)}
+        </li>
+        <li class="f" style:color="coral" on:click={() => select(CREDIT_F)}>
+          Fonctionnement: {formatValue(credit_f)}
+        </li>
+        <li class="total">Total: {formatValue(credit_i + credit_f)}</li>
+      </ul>
+    </figcaption>
+  </figure>
+  <figure class="container">
     <Donut
       scale={debit / max}
       data={[
-        { label: BudgetType.DEBIT_I, value: debit_i, color: '#4297A0' },
-        { label: BudgetType.DEBIT_F, value: debit_f, color: 'cornflowerblue' },
+        {
+          id: BudgetType.DEBIT_I,
+          label: FILabel.I,
+          value: debit_i,
+          color: 'cornflowerblue',
+        },
+        {
+          id: BudgetType.DEBIT_F,
+          label: FILabel.F,
+          value: debit_f,
+          color: '#E57F84',
+        },
       ]}
-      on:click={data => select(data.detail.label)}
+      on:click={data => select(data.detail.id)}
     />
-    <div>Dépenses</div>
-  </div>
+    <figcaption>
+      <div>Dépenses</div>
+      <ul class="visually-hidden">
+        <li
+          class="i"
+          style:color="cornflowerblue"
+          on:click={() => select(DEBIT_I)}
+        >
+          Investissement: {formatValue(debit_i)}
+        </li>
+        <li class="f" style:color="#E57F84" on:click={() => select(DEBIT_F)}>
+          Fonctionnement: {formatValue(debit_f)}
+        </li>
+        <li>Total: {formatValue(debit_i + debit_f)}</li>
+      </ul>
+    </figcaption>
+  </figure>
 </div>
 
 <style lang="scss">
