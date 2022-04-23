@@ -4,6 +4,8 @@
   import Nav from '$lib/Nav.svelte';
   import GoogleAnalytics from '$lib/GoogleAnalytics.svelte';
 
+  const version = __VERSION__;
+
   $: segment = $page.url.pathname.split('/')[1];
   $: isBudget = segment === 'budgets';
 </script>
@@ -17,7 +19,7 @@
   <slot />
 
   <footer>
-    <div class="version" class:white={isBudget}>v{__VERSION__}</div>
+    <div class="version" class:white={isBudget}>v{version}</div>
   </footer>
 </div>
 
