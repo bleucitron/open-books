@@ -8,9 +8,9 @@
 <Story name="Donut chart">
   <Donut
     data={[
-      { label: '$', value: 65, color: 'red' },
-      { label: '$', value: 35, color: 'blue' },
-      { label: '$', value: 10, color: 'yellow' },
+      { label: '$', value: 35, color: 'red' },
+      { label: '$', value: 60, color: 'blue' },
+      { label: '$', value: 5, color: 'yellow' },
       { label: '$', value: 100, color: 'green' },
       { label: '$', value: 50, color: 'orange' },
     ]}

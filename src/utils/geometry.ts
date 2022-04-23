@@ -25,10 +25,10 @@ export function describeArc(
   endAngle: number,
   offset = 0,
 ): string {
-  const start = polarToCartesian(x, y, radius, endAngle);
-  const end = polarToCartesian(x, y, radius, startAngle - offset);
+  const start = polarToCartesian(x, y, radius, endAngle - offset);
+  const end = polarToCartesian(x, y, radius, startAngle);
 
-  const largeArcFlag = endAngle - startAngle - offset <= 180 ? '1' : '0';
+  const largeArcFlag = endAngle - startAngle - offset <= 180 ? '0' : '1';
 
   const d = [
     'M',
@@ -39,7 +39,7 @@ export function describeArc(
     radius,
     0,
     largeArcFlag,
-    1,
+    0,
     end.x,
     end.y,
   ].join(' ');
