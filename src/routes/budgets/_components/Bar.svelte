@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format } from 'd3-format';
-  import { formatValue } from '@utils';
+  import { formatCurrency } from '@utils';
 
   import Icon from '$lib/Icon.svelte';
 
@@ -20,7 +20,7 @@
       {/if}
     </h3>
     <div class="values">
-      <span class="value">{`${formatValue(value)}`}</span>
+      <span class="value">{`${formatCurrency(value)}`}</span>
       <span class="percentage">{`${format('.0%')(percentage)}`}</span>
     </div>
   </div>

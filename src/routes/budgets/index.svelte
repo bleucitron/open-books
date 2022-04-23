@@ -1,14 +1,14 @@
 <script lang="ts" context="module">
-  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
-  import city from '@stores/city';
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
   import { getSiretsFromInsee, getCity, getCities } from '@api';
-  import { type, code } from '@stores';
   import { extractSirens } from '@api/utils/siren';
-  import { extractSiren } from '@utils/misc';
+  import { type, code } from '@stores';
+  import city from '@stores/city';
+  import { extractSiren, formatValue } from '@utils/misc';
   import AddFavorite from '$lib/addFavorite.svelte';
   import Favorite from '$lib/Favorite.svelte';
+  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
 
   const start = 2012;
   const end = new Date().getFullYear();
@@ -231,7 +231,7 @@
             <Spinner />
           {:then { population, departement: { code, nom } }}
             {#if city}
-              <span>{population} habitants</span>
+              <span>{formatValue(population)} habitants</span>
               <span>
                 ({nom} - {code})
               </span>

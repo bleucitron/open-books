@@ -1,7 +1,7 @@
 <script lang="ts">
   import { tweened } from 'svelte/motion';
   import { quadOut } from 'svelte/easing';
-  import { formatValue } from '@utils';
+  import { formatCurrency } from '@utils';
   import LoadingText from '$lib/LoadingText.svelte';
 
   export let year: number;
@@ -35,7 +35,7 @@
     {#if value}
       <div class="container">
         <div class="value" style:flex-basis={`${$height}%`}>
-          {formatValue(value)}
+          {formatCurrency(value)}
         </div>
       </div>
     {/if}

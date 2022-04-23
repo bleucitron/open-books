@@ -40,6 +40,10 @@ export function formatFullValue(value: number): string {
 }
 
 export function formatValue(value: number): string {
+  return new Intl.NumberFormat('fr').format(value);
+}
+
+export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('fr', {
     style: 'currency',
     notation: 'compact',

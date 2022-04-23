@@ -13,7 +13,7 @@
     typeToLabel,
     stepsFromString,
     fonctionFromTree,
-    formatValue,
+    formatCurrency,
   } from '@utils';
   import type { Type, Budget } from '@interfaces';
 
@@ -110,7 +110,7 @@
           select={selectType}
         />
       {:else if budget.tree}
-        <div class="main">{formatValue(total)}</div>
+        <div class="main">{formatCurrency(total)}</div>
         <BudgetHisto
           {values}
           {total}

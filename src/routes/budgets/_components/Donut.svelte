@@ -12,7 +12,7 @@
   import { expoOut } from 'svelte/easing';
   import { draw } from 'svelte/transition';
   import { tweened } from 'svelte/motion';
-  import { formatValue, describeArc } from '@utils';
+  import { formatCurrency, describeArc } from '@utils';
 
   const dispatch = createEventDispatcher();
 
@@ -103,7 +103,7 @@
     dominant-baseline="central"
     fill={displayedColor}
   >
-    {formatValue(displayedValue)}
+    {formatCurrency(displayedValue)}
   </text>
 </svg>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatValue, BudgetType, FILabel } from '@utils';
+  import { formatCurrency, BudgetType, FILabel } from '@utils';
   import Donut from './Donut.svelte';
 
   const { CREDIT_I, CREDIT_F, DEBIT_I, DEBIT_F } = BudgetType;
@@ -40,12 +40,12 @@
       <div>Recettes</div>
       <ul class="visually-hidden">
         <li class="i" style:color="#4297A0" on:click={() => select(CREDIT_I)}>
-          Investissement: {formatValue(credit_i)}
+          Investissement: {formatCurrency(credit_i)}
         </li>
         <li class="f" style:color="coral" on:click={() => select(CREDIT_F)}>
-          Fonctionnement: {formatValue(credit_f)}
+          Fonctionnement: {formatCurrency(credit_f)}
         </li>
-        <li class="total">Total: {formatValue(credit_i + credit_f)}</li>
+        <li class="total">Total: {formatCurrency(credit_i + credit_f)}</li>
       </ul>
     </figcaption>
   </figure>
@@ -76,12 +76,12 @@
           style:color="cornflowerblue"
           on:click={() => select(DEBIT_I)}
         >
-          Investissement: {formatValue(debit_i)}
+          Investissement: {formatCurrency(debit_i)}
         </li>
         <li class="f" style:color="#E57F84" on:click={() => select(DEBIT_F)}>
-          Fonctionnement: {formatValue(debit_f)}
+          Fonctionnement: {formatCurrency(debit_f)}
         </li>
-        <li>Total: {formatValue(debit_i + debit_f)}</li>
+        <li>Total: {formatCurrency(debit_i + debit_f)}</li>
       </ul>
     </figcaption>
   </figure>
