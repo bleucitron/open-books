@@ -36,6 +36,21 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: color 0.3s ease-in-out;
+
+    &:hover {
+      color: coral;
+    }
+
+    &.current {
+      color: cornflowerblue;
+      cursor: unset;
+
+      &:hover {
+        color: cornflowerblue;
+        opacity: unset;
+      }
+    }
   }
 
   .home {
@@ -64,24 +79,6 @@
     }
   }
 
-  a {
-    transition: color 0.3s ease-in-out;
-
-    &:hover {
-      color: coral;
-    }
-
-    &.current {
-      color: cornflowerblue;
-      cursor: unset;
-
-      &:hover {
-        color: cornflowerblue;
-        opacity: unset;
-      }
-    }
-  }
-
   nav {
     display: flex;
     justify-content: flex-end;
@@ -107,18 +104,6 @@
           opacity: unset;
         }
       }
-
-      i {
-        font-size: 1.2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-      }
-    }
-
-    Favorite {
-      margin-left: 0.8rem;
     }
   }
 </style>
