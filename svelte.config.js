@@ -25,6 +25,10 @@ const alias = {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   preprocess: preprocess({
+    sass: {
+      prependData: `@import '${__dirname}/src/styles/index'`,
+      renderSync: true,
+    },
     postcss: {
       plugins: [autoprefixer],
     },

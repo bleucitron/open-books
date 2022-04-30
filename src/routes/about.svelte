@@ -15,12 +15,18 @@
 
 <style lang="sass">
   main
-    padding: 2rem 20%
+    max-width: 70ch
+    margin-inline: auto
+    padding-top: 2rem
     padding-bottom: 5rem
+    padding-inline: 2rem
     flex: 1 0
     overflow-y: scroll
 
   @media (max-width: 480px)
     main
       padding: 2rem
+
+  :global
+    +md
 </style>

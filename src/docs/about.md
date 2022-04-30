@@ -1,3 +1,5 @@
+# Foire aux questions
+
 ## Livres ouverts, c'est quoi ?
 
 Livres ouverts est un **moteur de recherche open-source** permettant de parcourir **les budgets des différentes communes françaises**.
