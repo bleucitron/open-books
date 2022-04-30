@@ -97,6 +97,15 @@
     {:then budget}
       {#if !budget}
         <div class="none">Aucun budget</div>
+      {:else if !budget.tree}
+        <div class="none">
+          Pas de plan de compte disponible
+          <p>Nous ne pouvons pas analyser la structure du budget.</p>
+          <p>
+            Vous pouvez néanmoins
+            <Csv data={budget}>télécharger le fichier du budget</Csv>.
+          </p>
+        </div>
       {:else if !$type}
         <DebitOrCredit
           credit_i={budget.value.obnetcre_i}
@@ -105,7 +114,7 @@
           debit_f={budget.value.obnetdeb_f}
           select={selectType}
         />
-      {:else if budget.tree}
+      {:else}
         <div class="main">{formatCurrency(total)}</div>
         <BudgetHisto
           {values}
@@ -113,8 +122,6 @@
           type={$type}
           on:click={({ detail }) => selectCode(detail)}
         />
-      {:else}
-        <p>Pas de plan de compte disponible</p>
       {/if}
     {/await}
   </div>
@@ -148,6 +155,12 @@
       &.clickable:hover
         cursor: pointer
         color: coral
+
+    :global
+      .Csv
+        position: absolute
+        right: 0
+        top: 0
 
   .nomen
     position: absolute
@@ -208,11 +221,11 @@
               background: $water
 
     .none
-      display: flex
-      align-items: center
-      justify-content: center
       font-size: 1.5rem
       text-align: center
+
+      p
+        font-size: initial
 
     .main
       margin-block: 0.5rem

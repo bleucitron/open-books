@@ -10,36 +10,35 @@
   $: csvP = makeCSV(data);
 </script>
 
-<div class="Csv">
-  {#await csvP then csv}
-    <a href={csv.url} download={csv.file}>
-      <Icon id="download" />
-    </a>
-  {/await}
-</div>
+{#await csvP then csv}
+  <a class="Csv" href={csv.url} download={csv.file}>
+    <slot>
+      <i>
+        <Icon id="download" />
+      </i>
+    </slot>
+  </a>
+{/await}
 
 <style lang="sass">
   .Csv
-    position: absolute
-    right: 0
-    top: 0
+    :global
+      .Icon
+        font-size: 1.7rem
+
+  i
     display: flex
+    justify-content: center
     align-items: center
-    font-size: 1.7rem
+    width: 2.2rem
+    height: 2.2rem
+    border-radius: 50%
+    cursor: pointer
+    color: $grey-light
 
-    a
-      display: flex
-      justify-content: center
-      align-items: center
-      width: 2.2rem
-      height: 2.2rem
-      border-radius: 50%
-      cursor: pointer
-      color: $grey-light
+    &:hover
+      background: coral
 
-      &:hover
-        background: coral
-
-        :global(.Icon)
-          color: white
+      :global(.Icon)
+        color: white
 </style>

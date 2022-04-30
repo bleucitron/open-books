@@ -191,7 +191,7 @@
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => {
-      if (!budget || !budget.tree) return null;
+      if (!budget) return null;
 
       const source = $code ? fonctionFromTree($code, budget.tree) : budget;
 

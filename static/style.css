@@ -5,6 +5,14 @@ ul {
   list-style: none;
 }
 
+p {
+  margin-block: 0.5rem;
+}
+
+p a {
+  color: coral;
+}
+
 a {
   text-decoration: none;
 }
