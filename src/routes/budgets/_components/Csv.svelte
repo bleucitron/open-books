@@ -18,35 +18,30 @@
   {/await}
 </div>
 
-<style lang="scss">
-  .Csv {
-    position: absolute;
-    right: 0;
-    font-size: 1.7rem;
-    top: 0;
-    display: flex;
-    align-items: center;
-  }
+<style lang="sass">
+  .Csv
+    position: absolute
+    right: 0
+    top: 0
+    display: flex
+    align-items: center
+    font-size: 1.7rem
 
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
-    cursor: pointer;
+    a
+      display: flex
+      justify-content: center
+      align-items: center
+      width: 2.2rem
+      height: 2.2rem
+      border-radius: 50%
+      cursor: pointer
 
-    &:hover {
-      background: coral;
+      &:hover
+        background: coral
 
-      :global(.Icon) {
-        color: white;
-      }
-    }
+        :global(.Icon)
+          color: white
 
-    :global(.Icon) {
-      color: #999;
-    }
-  }
+      :global(.Icon)
+        color: #999
 </style>

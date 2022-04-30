@@ -55,7 +55,7 @@
   width="100%"
   height="100%"
   viewBox={`0 0 ${radius * 2} ${radius * 2}`}
-  class="donut"
+  class="Donut"
   style:transform={`scale(${scale})`}
 >
   <defs>
@@ -107,27 +107,22 @@
   </text>
 </svg>
 
-<style lang="scss">
-  svg {
-    overflow: inherit;
-    max-width: 30rem;
-    max-height: 30rem;
+<style lang="sass">
+  .Donut
+    overflow: inherit
+    max-width: 30rem
+    max-height: 30rem
 
-    path {
-      transform-origin: center center;
-      transition: transform 0.2s ease-in;
-      cursor: pointer;
+    path
+      transform-origin: center center
+      transition: transform 0.2s ease-in
+      cursor: pointer
 
-      &:hover {
-        transform: scale(1.05);
-      }
-    }
+      &:hover
+        transform: scale(1.05)
 
-    text {
-      font-size: 1.3em;
-      &.label {
-        font-size: 0.8rem;
-      }
-    }
-  }
+    text
+      font-size: 1.3em
+      &.label
+        font-size: 0.8rem
 </style>

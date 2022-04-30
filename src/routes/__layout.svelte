@@ -23,27 +23,26 @@
   </footer>
 </div>
 
-<style class="scss">
-  .page {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    overflow: hidden;
-  }
+<style lang="sass">
+  .page
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    overflow: hidden
 
-  :global(.icon) {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
-  }
+  :global(.icon)
+    width: 1em
+    height: 1em
+    vertical-align: -0.125em
 
-  footer .version {
-    position: absolute;
-    bottom: 0.3rem;
-    left: 0.5rem;
-    font-size: 0.8rem;
-  }
-  footer .white {
-    color: #777;
-  }
+  footer
+    .version
+      position: absolute
+      bottom: 0.3rem
+      left: 0.5rem
+      font-size: 0.8rem
+
+    .white
+      color: #777
+
 </style>

@@ -16,7 +16,7 @@
   $: max = Math.max(credit, debit);
 </script>
 
-<div class="debit-credit">
+<div class="Debit-Credit">
   <figure class="container">
     <Donut
       scale={credit / max}
@@ -87,15 +87,14 @@
   </figure>
 </div>
 
-<style lang="scss">
-  .debit-credit {
-    flex: 1 0;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 8.5rem;
-    font-size: 1.5rem;
-    text-align: center;
-  }
+<style lang="sass">
+  .Debit-Credit
+    flex: 1 0
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 8.5rem
+    width: 100%
+    font-size: 1.5rem
+    text-align: center
 </style>

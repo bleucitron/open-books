@@ -43,85 +43,62 @@
   <LoadingText text={year.toString()} loading={pending} />
 </li>
 
-<style lang="scss">
-  .Year {
-    flex: 1 0;
-    height: 10rem;
-    max-width: 4.5rem;
-    display: flex;
-    flex-flow: column;
-    justify-content: flex-end;
-    align-items: stretch;
-    font-size: 0.8rem;
-    color: #333;
-    opacity: 0.5;
-    cursor: pointer;
-    &:hover:not(.unavailable):not(.selected) {
-      opacity: 0.7;
-      :global(h3) {
-        color: cornflowerblue;
-      }
-      .value {
-        background: cornflowerblue;
-      }
-    }
+<style lang="sass">
+  .Year
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    justify-content: flex-end
+    align-items: stretch
+    height: 10rem
+    max-width: 4.5rem
+    font-size: 0.8rem
+    color: #333
+    opacity: 0.5
+    cursor: pointer
 
-    &.selected {
-      opacity: 1;
-      :global(h3) {
-        color: cornflowerblue;
-      }
+    &:hover:not(.unavailable):not(.selected)
+      opacity: 0.7
+      :global(h3)
+        color: cornflowerblue
 
-      .value {
-        background: cornflowerblue;
-      }
-    }
+      .value
+        background: cornflowerblue
 
-    &:first-child {
-      margin-left: 0;
-    }
+    &.selected
+      opacity: 1
+      :global(h3)
+        color: cornflowerblue
 
-    &:last-child {
-      margin-right: 0;
-    }
+      .value
+        background: cornflowerblue
 
-    :global(h3) {
-      position: relative;
-      font-size: 1rem;
-      margin-top: 1rem;
-      text-align: center;
+    &:first-child
+      margin-left: 0
 
-      :global(.Spinner) {
-        position: absolute;
-        margin-left: 0.3rem;
-      }
-    }
-  }
+    &:last-child
+      margin-right: 0
 
-  .container {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    justify-content: flex-end;
-  }
+  .container
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    justify-content: flex-end
 
-  .value {
-    flex: 0 0;
-    display: flex;
-    padding: 3px;
-    flex-flow: column;
-    align-items: center;
-    background: #666;
-    color: #eee;
-    border-radius: 8px;
-  }
+  .value
+    flex: 0 0
+    display: flex
+    flex-flow: column
+    align-items: center
+    padding: 3px
+    background: #666
+    color: #eee
+    border-radius: 8px
 
-  .unavailable {
-    opacity: 0.2;
-    cursor: default;
-  }
+  .unavailable
+    opacity: 0.2
+    cursor: default
 
-  .pending {
-    opacity: 0.3;
-  }
+  .pending
+    opacity: 0.3
 </style>

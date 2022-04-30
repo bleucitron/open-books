@@ -7,28 +7,24 @@
   <Icon id="loader" />
 </div>
 
-<style lang="scss">
-  @keyframes rotate-loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  .Spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1 0;
-    font-size: var(--size, 1em);
+<style lang="sass">
+  @keyframes rotate-loader
+    from
+      transform: rotate(0)
 
-    &:first-child {
-      animation: rotate-loader 1.5s linear infinite;
-    }
-  }
+    to
+      transform: rotate(360deg)
 
-  .inline {
-    display: inline-flex;
-  }
+  .Spinner
+    display: flex
+    justify-content: center
+    align-items: center
+    flex: 1 0
+    font-size: var(--size, 1em)
+
+    &:first-child
+      animation: rotate-loader 1.5s linear infinite
+
+    &.inline
+      display: inline-flex
 </style>

@@ -11,7 +11,7 @@
   export let clickable = false;
 </script>
 
-<div class="bar" class:clickable on:click>
+<div class="Bar" class:clickable on:click>
   <div class="labels">
     <h3>
       {label}
@@ -27,64 +27,53 @@
   <div class="background" style={`width: ${width * 100}%`} />
 </div>
 
-<style lang="scss">
-  .bar {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem;
-    height: 5rem;
-  }
+<style lang="sass">
+  .Bar
+    position: relative
+    display: flex
+    align-items: stretch
+    padding: 0.5rem 1rem
+    margin: 0.5rem
+    height: 5rem
 
-  .clickable {
-    &:hover {
-      cursor: pointer;
+  .clickable
+    &:hover
+      cursor: pointer
 
-      .background {
-        background: coral;
-      }
-    }
-  }
+      .background
+        background: coral
 
-  .labels {
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    width: 100%;
-    z-index: 1;
+  .labels
+    display: flex
+    flex-flow: column
+    justify-content: space-between
+    width: 100%
+    z-index: 1
 
-    :global(.Icon) {
-      font-size: 1.3rem;
-      vertical-align: middle;
-    }
-  }
+    :global(.Icon)
+      font-size: 1.3rem
+      vertical-align: middle
 
-  h3 {
-    font-size: 1.1rem;
-  }
+  h3
+    font-size: 1.1rem
 
-  .values {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
+  .values
+    display: flex
+    justify-content: space-between
+    align-items: baseline
 
-  .value {
-    font-size: 2rem;
-    line-height: 1.8rem;
-  }
+  .value
+    font-size: 2rem
+    line-height: 1.8rem
 
-  /* .percentage {
-    font-size: 1.5rem;
-  } */
+  // .percentage
+  //   font-size: 1.5rem
 
-  .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: #ed64a3;
-    border-radius: 8px;
-  }
+  .background
+    position: absolute
+    top: 0
+    left: 0
+    height: 100%
+    background: #ed64a3
+    border-radius: 8px
 </style>

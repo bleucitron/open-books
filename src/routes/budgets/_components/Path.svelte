@@ -9,7 +9,7 @@
   $: current = steps.pop()?.label;
 </script>
 
-<div class="path">
+<div class="Path">
   {#if current}
     <div class="current">{current}</div>
   {/if}
@@ -23,32 +23,26 @@
   </div>
 </div>
 
-<style lang="scss">
-  .path {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column-reverse;
-  }
+<style lang="sass">
+  .Path
+    flex: 1 0
+    display: flex
+    flex-flow: column-reverse
 
-  .steps {
-    display: flex;
-    font-size: 0.9rem;
-  }
+    .steps
+      display: flex
+      font-size: 0.9rem
 
-  .step {
-    &:hover {
-      color: coral;
-      cursor: pointer;
-    }
+    .step
+      &:hover
+        color: coral
+        cursor: pointer
 
-    :global(.Icon) {
-      font-size: 1.2em;
-      vertical-align: text-bottom;
-    }
-  }
+      :global(.Icon)
+        font-size: 1.2em
+        vertical-align: text-bottom
 
-  .current {
-    font-size: 2rem;
-    line-height: 1.8rem;
-  }
+    .current
+      font-size: 2rem
+      line-height: 1.8rem
 </style>

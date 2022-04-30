@@ -25,14 +25,13 @@
   {/each}
 </ul>
 
-<style lang="scss">
-  .Years {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    margin: 0;
-    width: 100%;
-  }
+<style lang="sass">
+  .Years
+    display: flex
+    justify-content: center
+    align-items: stretch
+    gap: 0.5rem
+    padding: 1rem 2rem
+    margin: 0
+    width: 100%
 </style>

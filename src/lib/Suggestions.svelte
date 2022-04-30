@@ -46,7 +46,8 @@
 </script>
 
 <svelte:window on:keyup={keyboardGestion} />
-<ul in:slide={{ duration: 200 }}>
+
+<ul class="Suggestions" in:slide={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
     {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
@@ -76,44 +77,40 @@
   {/each}
 </ul>
 
-<style lang="scss">
-  ul {
-    margin: 0;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 260;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    overflow: hidden;
-    font-size: 0.9em;
-  }
+<style lang="sass">
+  .Suggestions
+    margin: 0
+    position: absolute
+    top: 100%
+    left: 0
+    width: 100%
+    z-index: 260
+    border-bottom-left-radius: 12px
+    border-bottom-right-radius: 12px
+    overflow: hidden
+    font-size: 0.9em
 
-  a {
-    background: #555;
-    display: flex;
-    padding: 0.5rem 1rem;
-  }
+  a
+    background: #555
+    display: flex
+    color: white
+    padding: 0.5rem 1rem
 
   .active,
-  a:focus {
-    outline: none;
-    background: coral !important;
-    color: white;
-    cursor: pointer;
-  }
-  .infos {
-    display: flex;
-  }
+  a:focus
+    outline: none
+    background: coral !important
+    color: white
+    cursor: pointer
 
-  .other {
-    margin-left: 0.5rem;
-    font-style: italic;
-    opacity: 0.3;
-  }
+  .infos
+    display: flex
 
-  .Suggestion :global(.Spinner) {
-    justify-content: flex-end;
-  }
+  .other
+    margin-left: 0.5rem
+    font-style: italic
+    opacity: 0.3
+
+  .Suggestion :global(.Spinner)
+    justify-content: flex-end
 </style>

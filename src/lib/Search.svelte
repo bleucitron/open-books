@@ -165,80 +165,66 @@
   {/if}
 </div>
 
-<style lang="scss">
-  * {
-    color: white;
-  }
+<style lang="sass">
+  .Search
+    position: relative
+    max-width: 40rem
+    width: 100%
+    height: fit-content
+    font-size: 1.3rem
 
-  .Search {
-    position: relative;
-    max-width: 40rem;
-    width: 100%;
-    height: fit-content;
-    font-size: 1.3rem;
-  }
+    *
+      color: white
 
-  .searchbar {
-    display: flex;
-    background: #444;
-    color: white;
-    align-items: center;
-    border-color: white;
+  .searchbar
+    display: flex
+    background: #444
+    align-items: center
+    border-color: white
 
-    border-radius: 0.8em;
+    border-radius: 0.8em
 
-    &.open {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+    &.open
+      border-bottom-left-radius: 0
+      border-bottom-right-radius: 0
 
-    :global(.Icon) {
-      margin: 0 0.7em;
-      font-size: 1.3em;
-    }
+    :global(.Icon)
+      margin: 0 0.7em
+      font-size: 1.3em
 
-    &:focus-within {
-      background: #333;
-    }
+    &:focus-within
+      background: #333
 
-    * {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    *
+      display: flex
+      justify-content: center
+      align-items: center
 
-    .reset :global(.Icon) {
-      cursor: pointer;
-    }
-  }
+    .reset :global(.Icon)
+      cursor: pointer
 
-  input {
-    flex: 1 0;
-    padding: 0.6em;
-    padding-left: 0;
-    outline: none;
-    font-size: 1.3em;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid transparent;
+  input
+    flex: 1 0
+    padding: 0.6em
+    padding-left: 0
+    outline: none
+    font-size: 1.3em
+    background: transparent
+    border: none
+    border-bottom: 1px solid transparent
 
-    &::placeholder {
-      color: #777;
-    }
-  }
+    &::placeholder
+      color: #777
 
-  .error {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    font-size: 0.7em;
-    color: #e73737;
-    text-align: center;
-  }
+  .error
+    position: absolute
+    top: 100%
+    width: 100%
+    font-size: 0.7em
+    color: #e73737
+    text-align: center
 
-  @media (max-width: 480px) {
-    input {
-      font-size: 1em;
-    }
-  }
+  @media (max-width: 480px)
+    input
+      font-size: 1em
 </style>

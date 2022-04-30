@@ -15,7 +15,7 @@
   $: values.sort((v1, v2) => v2.value[type] - v1.value[type]);
 </script>
 
-<div class="budgetHisto">
+<div class="BudgetHisto">
   {#each values as { code, label, value, tree }}
     {@const percentage = total ? value[type] / total : 0}
 
@@ -30,14 +30,13 @@
   {/each}
 </div>
 
-<style lang="scss">
-  .budgetHisto {
-    flex: 1 0;
-    display: flex;
-    flex-direction: column;
-    margin-left: 2rem;
-    width: 70%;
-    max-width: 40rem;
-    overflow-y: scroll;
-  }
+<style lang="sass">
+  .BudgetHisto
+    flex: 1 0
+    display: flex
+    flex-direction: column
+    margin-left: 2rem
+    width: 70%
+    max-width: 40rem
+    overflow-y: scroll
 </style>

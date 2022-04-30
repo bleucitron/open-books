@@ -13,17 +13,14 @@
   {@html content}
 </main>
 
-<style lang="scss">
-  main {
-    padding: 2rem 20%;
-    padding-bottom: 5rem;
-    flex: 1 0;
-    overflow-y: scroll;
-  }
+<style lang="sass">
+  main
+    padding: 2rem 20%
+    padding-bottom: 5rem
+    flex: 1 0
+    overflow-y: scroll
 
-  @media (max-width: 480px) {
-    main {
-      padding: 2rem;
-    }
-  }
+  @media (max-width: 480px)
+    main
+      padding: 2rem
 </style>

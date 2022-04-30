@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from './Icon.svelte';
-  import History from './History.svelte';
-  import Favorite from './Favorite.svelte';
+  import HistoryMenu from './HistoryMenu.svelte';
+  import FavoriteMenu from './FavoriteMenu.svelte';
 
   export let path: string;
 </script>
@@ -10,100 +10,85 @@
   <a href="/" class="home" class:current={path === 'home'}>
     <div>
       <Icon id="book-open" />
-      <h1>Livres ouverts</h1>
-      <h2>Les données budgétaires des communes</h2>
+      <div class="main">Livres ouverts</div>
+      <h1>Les données budgétaires des communes</h1>
     </div>
   </a>
   <nav class="Nav">
     <a class="about" href="/about" class:current={path === 'about'}>À propos</a>
-    <History />
-    <Favorite />
+    <HistoryMenu />
+    <FavoriteMenu />
     <a href="https://github.com/iOiurson/open-books">
       <Icon id="github" />
     </a>
   </nav>
 </header>
 
-<style lang="scss">
-  header {
-    display: flex;
-    justify-content: space-between;
-    height: 3rem;
-    padding: 0.7rem;
-  }
+<style lang="sass">
+  header
+    display: flex
+    justify-content: space-between
+    height: 3rem
+    padding: 0.7rem
 
-  a {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: color 0.3s ease-in-out;
+  a
+    display: flex
+    align-items: center
+    cursor: pointer
+    transition: color 0.3s ease-in-out
 
-    &:hover {
-      color: coral;
-    }
+    &:hover
+      color: coral
 
-    &.current {
-      color: cornflowerblue;
-      cursor: unset;
+    &.current
+      color: cornflowerblue
+      cursor: unset
 
-      &:hover {
-        color: cornflowerblue;
-        opacity: unset;
-      }
-    }
-  }
+      &:hover
+        color: cornflowerblue
+        opacity: unset
 
-  .home {
-    font-size: 1.5rem;
+  .home
+    font-size: 1.5rem
 
-    :global(.Icon) {
-      align-self: center;
-    }
+    :global(.Icon)
+      align-self: center
 
-    > div {
-      display: flex;
-      align-items: baseline;
-    }
+    > div
+      display: flex
+      align-items: baseline
 
-    h1 {
-      color: black;
-      margin: 0 0.5rem;
-      font-size: 1.4rem;
-    }
+    .main
+      color: black
+      margin: 0 0.5rem
+      font-size: 1.4rem
 
-    h2 {
-      color: #bbb;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-    }
-  }
+    h1
+      color: #bbb
+      font-size: 1rem
+      display: flex
+      align-items: center
 
-  nav {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding: 0.5rem;
-    color: black;
-    background: white;
-    z-index: 1;
+  nav
+    display: flex
+    justify-content: flex-end
+    gap: 1rem
+    padding: 0.5rem
+    color: black
+    background: white
+    z-index: 1
 
-    a {
-      transition: color 0.3s ease-in-out;
+    a
+      transition: color 0.3s ease-in-out
 
-      &:hover {
-        color: coral;
-      }
+      &:hover
+        color: coral
 
-      &.current {
-        color: cornflowerblue;
-        cursor: unset;
+      &.current
+        color: cornflowerblue
+        cursor: unset
 
-        &:hover {
-          color: cornflowerblue;
-          opacity: unset;
-        }
-      }
-    }
-  }
+        &:hover
+          color: cornflowerblue
+          opacity: unset
 </style>

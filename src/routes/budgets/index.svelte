@@ -6,8 +6,8 @@
   import { type, code } from '@stores';
   import city from '@stores/city';
   import { extractSiren, formatValue } from '@utils/misc';
-  import AddFavorite from '$lib/addFavorite.svelte';
-  import Favorite from '$lib/Favorite.svelte';
+  import FavoriteToggle from '$lib/FavoriteToggle.svelte';
+  import FavoriteMenu from '$lib/FavoriteMenu.svelte';
   import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
 
   const start = 2012;
@@ -84,7 +84,7 @@
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
   import Spinner from '$lib/Spinner.svelte';
-  import History from '$lib/History.svelte';
+  import HistoryMenu from '$lib/HistoryMenu.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
@@ -224,7 +224,7 @@
     </a>
     <div class="info-container">
       <div class="titles">
-        <AddFavorite {name} {insee} {sirens} />
+        <FavoriteToggle {name} {insee} {sirens} />
         <h1>{name}</h1>
         <div class="info">
           {#await cityP}
@@ -245,8 +245,8 @@
   </div>
   <div class="actions">
     <Search on:select={handleSearch} />
-    <History />
-    <Favorite />
+    <HistoryMenu />
+    <FavoriteMenu />
   </div>
 </header>
 
@@ -260,133 +260,113 @@
   </div>
 </div>
 
-<style lang="scss">
-  header {
-    padding: 0 0.7rem;
-    min-height: 3rem;
-    background: #151515;
-    color: white;
+<style lang="sass">
+  header
+    padding: 0 0.7rem
+    min-height: 3rem
+    background: #151515
+    color: white
 
-    position: relative;
-    display: flex;
-    justify-content: space-between;
+    position: relative
+    display: flex
+    justify-content: space-between
 
-    > div {
-      display: flex;
-      align-items: center;
+    > div
+      display: flex
+      align-items: center
 
-      &:first-child {
-        flex: 1;
-      }
+      &:first-child
+        flex: 1
 
-      :global {
-        .Search {
-          width: 30rem;
-          height: 100%;
-          font-size: 1rem;
+      :global
+        .Search
+          width: 30rem
+          height: 100%
+          font-size: 1rem
 
-          :global(.Icon) {
-            font-size: 1rem;
-            margin: 0.8rem;
-          }
-        }
-        .search-input {
-          font-size: 1rem;
-          height: 100%;
+          :global(.Icon)
+            font-size: 1rem
+            margin: 0.8rem
 
-          &::placeholder {
-            color: #666;
-          }
+        .search-input
+          font-size: 1rem
+          height: 100%
 
-          &:focus::placeholder {
-            color: #888;
-          }
-        }
+          &::placeholder
+            color: #666
 
-        .searchbar {
-          height: 100%;
-          background: #252525;
-          border-radius: 0;
-          font-size: 1.1rem;
-        }
-        .searchbar:focus-within {
-          background: #454545;
-        }
+          &:focus::placeholder
+            color: #888
 
-        .Suggestion {
-          font-size: 1em;
-        }
-      }
-    }
+        .searchbar
+          height: 100%
+          background: #252525
+          border-radius: 0
+          font-size: 1.1rem
 
-    .actions {
-      gap: 1rem;
-    }
+          &:focus-within
+            background: #454545
 
-    .info-container {
-      display: flex;
-      flex-direction: column;
-    }
-    .home {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      font-size: 1.5rem;
-      margin-right: 1.2rem;
-      color: #444;
-      transition: color 0.3s ease-in-out;
 
-      &:hover {
-        color: coral;
-      }
-    }
+        .Suggestion
+          font-size: 1em
 
-    .titles {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-    }
+    .actions
+      gap: 1rem
 
-    h1 {
-      font-size: 2rem;
-    }
+    .info-container
+      display: flex
+      flex-direction: column
 
-    .info {
-      margin: 0;
-      display: flex;
-      align-items: flex-end;
-      opacity: 0.3;
+    .home
+      display: flex
+      align-items: center
+      height: 100%
+      font-size: 1.5rem
+      margin-right: 1.2rem
+      color: #444
+      transition: color 0.3s ease-in-out
 
-      span:first-child {
-        margin-right: 3px;
-      }
+      &:hover
+        color: coral
 
-      span:last-child {
-        margin-left: 3px;
-      }
-    }
-  }
+    .titles
+      display: flex
+      align-items: baseline
+      gap: 0.5rem
 
-  menu {
-    margin: 0;
-    color: white;
-    background: #333;
-    display: flex;
-    padding: 1rem;
-    padding-right: 1.5rem;
-  }
+    h1
+      font-size: 2rem
 
-  .content {
-    flex: 1 0;
-    display: flex;
-    flex-flow: row;
-    overflow: hidden;
-  }
+    .info
+      margin: 0
+      display: flex
+      align-items: flex-end
+      opacity: 0.3
 
-  .dataviz {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-  }
+      span:first-child
+        margin-right: 3px
+
+      span:last-child
+        margin-left: 3px
+
+  menu
+    margin: 0
+    color: white
+    background: #333
+    display: flex
+    padding: 1rem
+    padding-right: 1.5rem
+
+  .content
+    flex: 1 0
+    display: flex
+    flex-flow: row
+    overflow: hidden
+
+  .dataviz
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    align-items: center
 </style>

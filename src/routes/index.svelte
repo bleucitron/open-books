@@ -100,78 +100,68 @@
   {/if}
 </main>
 
-<style lang="scss">
-  main {
-    position: relative;
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
+<style lang="sass">
+  main
+    position: relative
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    align-items: center
 
-    :global {
-      .Search {
-        margin-top: 15%;
-      }
-      .Icon {
-        cursor: pointer;
-      }
-    }
+    :global
+      .Search
+        margin-top: 15%
+      .Icon
+        cursor: pointer
 
-    .examples {
-      p {
-        position: relative;
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-        margin: 0;
-        font-size: 0.9rem;
-        text-align: center;
-        color: #bbb;
+    .examples
+      display: flex
+      flex-flow: column
+      align-items: center
+      margin-top: 8rem
 
-        i {
-          position: absolute;
-          right: -1.5rem;
-          display: flex;
-          align-items: center;
-          transition: color 0.3s ease-in-out;
-          &:hover {
-            color: coral;
-          }
-        }
-      }
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      margin-top: 8rem;
+      p
+        position: relative
+        display: flex
+        gap: 0.5rem
+        align-items: center
+        margin: 0
+        font-size: 0.9rem
+        text-align: center
+        color: #bbb
 
-      ul {
-        display: flex;
-        gap: 1.5rem;
-        margin: 0;
-      }
+        i
+          position: absolute
+          right: -1.5rem
+          display: flex
+          align-items: center
+          transition: color 0.3s ease-in-out
+          &:hover
+            color: coral
 
-      li {
-        padding: 0.5rem 0.7rem;
-        margin: 0.7rem 0;
-        text-align: center;
-        border-radius: 1em;
-        transition: color 0.3s ease-in-out;
+      ul
+        display: flex
+        gap: 1.5rem
+        margin: 0
+
+      li
+        padding: 0.5rem 0.7rem
+        margin: 0.7rem 0
+        text-align: center
+        border-radius: 1em
+        transition: color 0.3s ease-in-out
 
         &:hover,
-        &:focus {
-          opacity: 1;
-          color: coral;
-        }
+        &:focus
+          opacity: 1
+          color: coral
 
-        .city {
-          font-size: 1.1rem;
-        }
-        .dpt {
-          font-size: 0.8rem;
-          opacity: 0.5;
-          font-style: italic;
-        }
-      }
-    }
-  }
+        .city
+          font-size: 1.1rem
+
+        .dpt
+          font-size: 0.8rem
+          opacity: 0.5
+          font-style: italic
+
 </style>

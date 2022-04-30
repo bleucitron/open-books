@@ -80,7 +80,7 @@
   );
 </script>
 
-<div class="summary">
+<div class="Summary">
   <header>
     <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
     {#await budgetP then budget}
@@ -124,70 +124,61 @@
   </div>
 </div>
 
-<style lang="scss">
-  .summary {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: stretch;
-    padding: 1rem;
-    width: 100%;
-    background: white;
-    overflow: hidden;
-  }
+<style lang="sass">
+  .Summary
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    justify-content: center
+    align-items: stretch
+    padding: 1rem
+    width: 100%
+    background: white
+    overflow: hidden
 
-  :global(.summary .path) {
-    margin-left: 1rem;
-  }
+  :global(.Summary .Path)
+    margin-left: 1rem
 
-  header {
-    position: relative;
-    display: flex;
-    align-items: baseline;
+  header
+    position: relative
+    display: flex
+    align-items: baseline
 
-    h3 {
-      margin-left: 0.5rem;
-      font-size: 3.5rem;
+    h3
+      margin-left: 0.5rem
+      font-size: 3.5rem
 
-      &.clickable:hover {
-        cursor: pointer;
-        color: coral;
-      }
-    }
-  }
+      &.clickable:hover
+        cursor: pointer
+        color: coral
 
-  .nomen {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    width: fit-content;
-    font-size: 0.9rem;
-    padding: 0 0.2rem;
-    background: #ddd;
-    color: #777;
-    border-radius: 4px;
-    cursor: default;
-  }
+  .nomen
+    position: absolute
+    bottom: 1rem
+    right: 1rem
+    width: fit-content
+    font-size: 0.9rem
+    padding: 0 0.2rem
+    background: #ddd
+    color: #777
+    border-radius: 4px
+    cursor: default
 
-  .values {
-    flex: 1 0;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    width: 100%;
-    overflow-y: hidden;
+  .values
+    flex: 1 0
+    display: flex
+    flex-flow: column
+    align-items: center
+    width: 100%
+    overflow-y: hidden
 
-    .none {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      text-align: center;
-    }
+    .none
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 1.5rem
+      text-align: center
 
-    .main {
-      font-size: 3rem;
-    }
-  }
+    .main
+      font-size: 3rem
 </style>
