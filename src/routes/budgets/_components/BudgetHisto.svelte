@@ -24,8 +24,8 @@
       value={value[type]}
       {percentage}
       width={percentage}
-      clickable={!!tree}
-      on:click={tree ? () => dispatch('click', code) : null}
+      hasMore={!!tree}
+      on:click={() => dispatch('click', code)}
     />
   {/each}
 </div>

@@ -72,12 +72,8 @@
       })
     : [];
   $: steps = $type ? [{ id: null, label: typeToLabel[$type] }, ...steps] : [];
-
   $: values = ($tree && Object.values($tree.tree ?? {})) ?? [];
-  $: total = Object.values(values).reduce(
-    (acc, cur) => acc + cur.value[$type],
-    0,
-  );
+  $: total = $tree ? $tree.value[$type] : 0;
 </script>
 
 <div class="Summary">

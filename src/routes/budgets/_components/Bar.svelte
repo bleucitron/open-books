@@ -8,14 +8,14 @@
   export let percentage: number;
   export let width: number;
   export let label: string;
-  export let clickable = false;
+  export let hasMore = false;
 </script>
 
-<div class="Bar" class:clickable on:click>
+<div class="Bar" on:click>
   <div class="labels">
     <h3>
       {label}
-      {#if clickable}
+      {#if hasMore}
         <Icon id="more-horizontal" />
       {/if}
     </h3>
@@ -35,13 +35,7 @@
     padding: 0.5rem 1rem
     margin: 0.5rem
     height: 5rem
-
-  .clickable
-    &:hover
-      cursor: pointer
-
-      .background
-        background: coral
+    cursor: pointer
 
   .labels
     display: flex
