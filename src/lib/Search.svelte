@@ -131,7 +131,7 @@
 </script>
 
 <div class="Search">
-  <div class="searchbar" class:open={showSuggestions && cities}>
+  <div class="searchbar" class:open={showSuggestions && cities?.length}>
     <Icon id="search" />
     <input
       bind:value
