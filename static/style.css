@@ -1,8 +1,4 @@
-#svelte {
-  display: flex;
-  flex-flow: column;
-  height: 100vh;
-}
+/* #svelte {} */
 
 ul {
   padding: 0;

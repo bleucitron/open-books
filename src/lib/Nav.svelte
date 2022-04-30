@@ -26,10 +26,15 @@
 
 <style lang="sass">
   header
+    position: fixed
+    width: 100vw
     display: flex
     justify-content: space-between
-    height: 3rem
+    height: $headerHeight
     padding: 0.7rem
+    background-color: white
+    z-index: 10
+    box-shadow: 0px 0px 10px 5px white
 
   a
     display: flex

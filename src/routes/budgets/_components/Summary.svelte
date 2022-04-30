@@ -128,6 +128,7 @@
     justify-content: center
     align-items: stretch
     padding: 1rem
+    padding-bottom: 0
     width: 100%
     background: white
     overflow: hidden
@@ -165,6 +166,7 @@
     display: flex
     flex-flow: column
     align-items: center
+    justify-content: center
     width: 100%
     overflow-y: hidden
 
@@ -213,5 +215,6 @@
       text-align: center
 
     .main
+      margin-block: 0.5rem
       font-size: 3rem
 </style>

@@ -266,7 +266,7 @@
     display: flex
     justify-content: space-between
     padding: 0 0.7rem
-    min-height: 3rem
+    height: $headerHeight
     background: $grey-darkest
     color: $grey-dark
 
@@ -357,9 +357,9 @@
     padding-right: 1.5rem
 
   .content
-    flex: 1 0
     display: flex
     flex-flow: row
+    height: calc(100vh - $headerHeight)
     overflow: hidden
 
   .dataviz

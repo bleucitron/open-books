@@ -103,14 +103,15 @@
 <style lang="sass">
   main
     position: relative
-    flex: 1 0
     display: flex
     flex-flow: column
     align-items: center
+    height: 100vh
+    padding-top: $headerHeight
 
     :global
       .Search
-        margin-top: 15%
+        margin-top: 25vh
       .Icon
         cursor: pointer
 

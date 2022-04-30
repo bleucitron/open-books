@@ -16,18 +16,20 @@
 </script>
 
 <div class="BudgetHisto">
-  {#each values as { code, label, value, tree }}
-    {@const percentage = total ? value[type] / total : 0}
+  <div class="content">
+    {#each values as { code, label, value, tree }}
+      {@const percentage = total ? value[type] / total : 0}
 
-    <Bar
-      {label}
-      value={value[type]}
-      {percentage}
-      width={percentage}
-      hasMore={!!tree}
-      on:click={() => dispatch('click', code)}
-    />
-  {/each}
+      <Bar
+        {label}
+        value={value[type]}
+        {percentage}
+        width={percentage}
+        hasMore={!!tree}
+        on:click={() => dispatch('click', code)}
+      />
+    {/each}
+  </div>
 </div>
 
 <style lang="sass">
@@ -35,8 +37,11 @@
     flex: 1 0
     display: flex
     flex-direction: column
-    margin-left: 2rem
-    width: 70%
-    max-width: 40rem
+    width: 100%
     overflow-y: scroll
+
+    .content
+      margin-inline: auto
+      width: 80%
+      max-width: 40rem
 </style>

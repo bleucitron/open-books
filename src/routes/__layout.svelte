@@ -11,31 +11,26 @@
 </script>
 
 <GoogleAnalytics />
-<div class="page">
-  {#if !isBudget}
-    <Nav path={segment || 'home'} />
-  {/if}
+{#if !isBudget}
+  <Nav path={segment || 'home'} />
+{/if}
 
-  <slot />
+<slot />
 
-  <footer>
-    <div class="version" class:white={isBudget}>v{version}</div>
-  </footer>
-</div>
+<footer>
+  <div class="version" class:white={isBudget}>v{version}</div>
+</footer>
 
 <style lang="sass">
-  .page
-    flex: 1 0
-    display: flex
-    flex-flow: column
-    overflow: hidden
-
   :global(.icon)
     width: 1em
     height: 1em
     vertical-align: -0.125em
 
   footer
+    position: fixed
+    width: 100vw
+    bottom: 0
     .version
       position: absolute
       bottom: 0.3rem
