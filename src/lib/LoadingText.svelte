@@ -18,10 +18,10 @@
     text-align: center
 
   .loading
-    color: #151515
+    color: $grey-darkest
     overflow: hidden
-    background-color: #151515
-    background-image: linear-gradient(43deg,#151515 0%,#ffffff 46%,#151515 100%)
+    background-color: $grey-darkest
+    background-image: linear-gradient(43deg, $grey-darkest 0%, white 46%, $grey-darkest 100%)
     background-repeat: no-repeat
     background-size: 80%
     animation: animate-premium 3s linear infinite

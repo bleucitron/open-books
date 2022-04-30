@@ -95,7 +95,7 @@
       <div class="nomen" title="Nomenclature M14">{budget.nomen}</div>
     {/if}
   {/await}
-  <div class="values">
+  <div class={`values ${$type}`}>
     {#await budgetP}
       <Spinner --size="2rem" />
     {:then budget}
@@ -159,8 +159,8 @@
     width: fit-content
     font-size: 0.9rem
     padding: 0 0.2rem
-    background: #ddd
-    color: #777
+    background: $grey-lightest
+    color: $grey
     border-radius: 4px
     cursor: default
 
@@ -171,6 +171,43 @@
     align-items: center
     width: 100%
     overflow-y: hidden
+
+    &.obnetdeb_i
+      :global
+        .Bar
+          .background
+            background: $sand-light
+
+          &:hover
+            .background
+              background: $sand
+    &.obnetdeb_f
+      :global
+        .Bar
+          .background
+            background: $water-light
+
+          &:hover
+            .background
+              background: $water
+    &.obnetcre_i
+      :global
+        .Bar
+          .background
+            background: $sand-light
+
+          &:hover
+            .background
+              background: $sand
+    &.obnetcre_f
+      :global
+        .Bar
+          .background
+            background: $water-light
+
+          &:hover
+            .background
+              background: $water
 
     .none
       display: flex

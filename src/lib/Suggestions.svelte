@@ -91,7 +91,7 @@
     font-size: 0.9em
 
   a
-    background: #555
+    background: $grey-dark
     display: flex
     color: white
     padding: 0.5rem 1rem

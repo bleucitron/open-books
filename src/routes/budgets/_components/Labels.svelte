@@ -49,10 +49,11 @@
     flex-flow: column
     width: 15rem
     margin: 0
+    color: $grey-lightest
 
     li.siren
-      border-top: 1px solid rgba(white, 0.1)
-      margin-bottom: 0.5rem
+      border-top: 1px solid $grey-dark
+      margin-bottom: 2rem
 
       &:first-of-type
         border: none
@@ -62,40 +63,35 @@
       font-size: 1rem
       text-align: right
       padding: 0.25rem 0
+      opacity: 0.2
+      cursor: pointer
 
-      > div
-        opacity: 0.2
-        cursor: pointer
+      &:not(.main) .siren
+        opacity: 0
 
-        &:hover
-          opacity: 0.7
+      &:hover
+        opacity: 0.7
 
-          .info
-            opacity: 0.4
+        .info
+          opacity: 0.4
 
-          .siren
-            opacity: 1
+        .siren
+          opacity: 1
 
       &.selected
         pointer-events: none
         cursor: default
+        opacity: 1
 
-        > div
+        .info
+          opacity: 0.4
+
+        .siren
           opacity: 1
-          color: cornflowerblue
-
-          .info
-            opacity: 0.4
-
-          .siren
-            opacity: 1
 
       .info
         opacity: 0.6
         font-size: 0.7rem
-
-      &:not(.main) .siren
-        opacity: 0
 
     .loading
       position: absolute

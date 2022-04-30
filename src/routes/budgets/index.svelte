@@ -262,14 +262,13 @@
 
 <style lang="sass">
   header
-    padding: 0 0.7rem
-    min-height: 3rem
-    background: #151515
-    color: white
-
     position: relative
     display: flex
     justify-content: space-between
+    padding: 0 0.7rem
+    min-height: 3rem
+    background: $grey-darkest
+    color: $grey-dark
 
     > div
       display: flex
@@ -293,19 +292,19 @@
           height: 100%
 
           &::placeholder
-            color: #666
+            color: $grey-dark
 
           &:focus::placeholder
-            color: #888
+            color: $grey
 
         .searchbar
           height: 100%
-          background: #252525
+          background: $grey-darker
           border-radius: 0
           font-size: 1.1rem
 
           &:focus-within
-            background: #454545
+            background: $grey-dark
 
 
         .Suggestion
@@ -324,7 +323,6 @@
       height: 100%
       font-size: 1.5rem
       margin-right: 1.2rem
-      color: #444
       transition: color 0.3s ease-in-out
 
       &:hover
@@ -337,12 +335,12 @@
 
     h1
       font-size: 2rem
+      color: $grey-lightest
 
     .info
       margin: 0
       display: flex
       align-items: flex-end
-      opacity: 0.3
 
       span:first-child
         margin-right: 3px
@@ -353,7 +351,7 @@
   menu
     margin: 0
     color: white
-    background: #333
+    background: $grey-darker
     display: flex
     padding: 1rem
     padding-right: 1.5rem

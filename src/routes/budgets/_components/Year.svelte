@@ -26,7 +26,6 @@
 
 <li
   class="Year"
-  class:pending
   class:unavailable
   class:selected
   on:click={!unavailable ? select : undefined}
@@ -50,28 +49,22 @@
     flex-flow: column
     justify-content: flex-end
     align-items: stretch
-    height: 10rem
     max-width: 4.5rem
     font-size: 0.8rem
-    color: #333
-    opacity: 0.5
+    color: $grey-darker
+    opacity: 0.4
     cursor: pointer
 
     &:hover:not(.unavailable):not(.selected)
       opacity: 0.7
-      :global(h3)
-        color: cornflowerblue
-
-      .value
-        background: cornflowerblue
 
     &.selected
       opacity: 1
-      :global(h3)
-        color: cornflowerblue
+      // :global(h3)
+      //   color: cornflowerblue
 
-      .value
-        background: cornflowerblue
+      // .value
+      //   background: cornflowerblue
 
     &:first-child
       margin-left: 0
@@ -80,7 +73,7 @@
       margin-right: 0
 
   .container
-    flex: 1 0
+    height: 8rem
     display: flex
     flex-flow: column
     justify-content: flex-end
@@ -91,14 +84,11 @@
     flex-flow: column
     align-items: center
     padding: 3px
-    background: #666
-    color: #eee
+    background: $grey-dark
+    color: white
     border-radius: 8px
 
   .unavailable
-    opacity: 0.2
+    opacity: 0.1
     cursor: default
-
-  .pending
-    opacity: 0.3
 </style>

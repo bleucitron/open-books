@@ -59,12 +59,12 @@
       align-items: baseline
 
     .main
-      color: black
+      color: $grey-darkest
       margin: 0 0.5rem
       font-size: 1.4rem
 
     h1
-      color: #bbb
+      color: $grey-light
       font-size: 1rem
       display: flex
       align-items: center
@@ -74,7 +74,7 @@
     justify-content: flex-end
     gap: 1rem
     padding: 0.5rem
-    color: black
+    color: $grey-darkest
     background: white
     z-index: 1
 

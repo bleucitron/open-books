@@ -74,6 +74,6 @@
     top: 0
     left: 0
     height: 100%
-    background: #ed64a3
+    background: $grey
     border-radius: 8px
 </style>

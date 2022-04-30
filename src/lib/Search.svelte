@@ -174,11 +174,17 @@
     font-size: 1.3rem
 
     *
-      color: white
+      color: $grey-lighter
+
+    &:focus-within
+      .searchbar
+        background: $grey-darker
+      *
+        color: $grey-lightest
 
   .searchbar
     display: flex
-    background: #444
+    background: $grey-dark
     align-items: center
     border-color: white
 
@@ -192,8 +198,6 @@
       margin: 0 0.7em
       font-size: 1.3em
 
-    &:focus-within
-      background: #333
 
     *
       display: flex
@@ -214,7 +218,7 @@
     border-bottom: 1px solid transparent
 
     &::placeholder
-      color: #777
+      color: $grey
 
   .error
     position: absolute

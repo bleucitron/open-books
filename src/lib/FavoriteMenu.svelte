@@ -62,9 +62,8 @@
       position: absolute
       top: calc(100% + 2px)
       right: -10px
-      color: black
       width: 200px
-      border: 1px solid black
+      border: 1px solid $grey-dark
       border-radius: 12px
       transition: all 0.3s
       opacity: 0

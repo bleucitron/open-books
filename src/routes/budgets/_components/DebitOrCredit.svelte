@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formatCurrency, BudgetType, FILabel } from '@utils';
+  import { sand, water } from '@utils/colors';
   import Donut from './Donut.svelte';
 
   const { CREDIT_I, CREDIT_F, DEBIT_I, DEBIT_F } = BudgetType;
@@ -25,13 +26,13 @@
           id: BudgetType.CREDIT_I,
           label: FILabel.I,
           value: credit_i,
-          color: '#4297A0',
+          color: sand,
         },
         {
           id: BudgetType.CREDIT_F,
           label: FILabel.F,
           value: credit_f,
-          color: 'coral',
+          color: water,
         },
       ]}
       on:click={data => select(data.detail.id)}
@@ -57,13 +58,13 @@
           id: BudgetType.DEBIT_I,
           label: FILabel.I,
           value: debit_i,
-          color: 'cornflowerblue',
+          color: sand,
         },
         {
           id: BudgetType.DEBIT_F,
           label: FILabel.F,
           value: debit_f,
-          color: '#E57F84',
+          color: water,
         },
       ]}
       on:click={data => select(data.detail.id)}

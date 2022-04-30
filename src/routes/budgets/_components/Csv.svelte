@@ -35,13 +35,11 @@
       height: 2.2rem
       border-radius: 50%
       cursor: pointer
+      color: $grey-light
 
       &:hover
         background: coral
 
         :global(.Icon)
           color: white
-
-      :global(.Icon)
-        color: #999
 </style>
