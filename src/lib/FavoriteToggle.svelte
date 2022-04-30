@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from '$lib/Icon.svelte';
-  import { favorite } from '@stores/favorite';
+  import favorites from '@stores/favorites';
   import { onMount } from 'svelte';
 
   export let name: string;
@@ -10,16 +10,16 @@
 
   function toggleFavorite(name: string, insee: string, sirens: string[]): void {
     if (!isFavorite) {
-      favorite.addItem({ name, insee, sirens });
+      favorites.addItem({ name, insee, sirens });
       isFavorite = true;
     } else {
-      favorite.removeItem(name);
+      favorites.removeItem(name);
       isFavorite = false;
     }
   }
 
   onMount(async () => {
-    if (!favorite.checkItem(name)) {
+    if (!favorites.checkItem(name)) {
       isFavorite = false;
     } else {
       isFavorite = true;

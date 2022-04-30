@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/env';
-import type { FavoriteSearch } from '@interfaces';
+import type { LinkItem } from '@interfaces';
 
-const { subscribe, set, update } = writable<FavoriteSearch[]>([], () => {
+const { subscribe, set, update } = writable<LinkItem[]>([], () => {
   if (browser) {
     const parsedFavorites = JSON.parse(localStorage.getItem('favorites'));
     if (parsedFavorites) {
@@ -11,10 +11,10 @@ const { subscribe, set, update } = writable<FavoriteSearch[]>([], () => {
   }
 });
 
-export const favorite = {
+const favorites = {
   subscribe,
-  addItem: (newFavoriteItem: FavoriteSearch) =>
-    update((favoriteList: FavoriteSearch[]) => [
+  addItem: (newFavoriteItem: LinkItem) =>
+    update((favoriteList: LinkItem[]) => [
       newFavoriteItem,
       ...favoriteList.filter(item => item.name !== newFavoriteItem.name),
     ]),
@@ -24,13 +24,13 @@ export const favorite = {
   removeItem: (name: string) => {
     const favoritesArray = JSON.parse(localStorage.getItem('favorites'));
     const newFavoritesArray = favoritesArray.filter(
-      (t: FavoriteSearch) => t.name !== name,
+      (t: LinkItem) => t.name !== name,
     );
     localStorage.setItem('favorite', JSON.stringify(newFavoritesArray));
   },
   checkItem: (name: string) => {
     const favorites = JSON.parse(localStorage.getItem('favorites'));
-    const isFavorite = favorites.map((favorite: FavoriteSearch) => {
+    const isFavorite = favorites.map((favorite: LinkItem) => {
       if (favorite.name === name) {
         return false;
       }
@@ -40,8 +40,10 @@ export const favorite = {
   },
 };
 
-favorite.subscribe(value => {
+favorites.subscribe(value => {
   if (browser) {
     localStorage.setItem('favorites', JSON.stringify(value));
   }
 });
+
+export default favorites;

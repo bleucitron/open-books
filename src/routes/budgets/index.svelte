@@ -75,11 +75,11 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  import { history } from '@stores/history';
+  import history from '@stores/history';
   import { budget } from '@stores';
   import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
 
-  import type { Budget, BudgetMap, City, HistorySearch } from '@interfaces';
+  import type { Budget, BudgetMap, City, LinkItem } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
@@ -104,7 +104,7 @@
   $: if ($page) {
     const { searchParams } = $page.url;
     const sirensList = searchParams.get('sirens').split(',');
-    const newHistoryItem: HistorySearch = {
+    const newHistoryItem: LinkItem = {
       name: searchParams.get('name'),
       insee: searchParams.get('insee'),
       sirens: sirensList,
@@ -265,7 +265,7 @@
     position: relative
     display: flex
     justify-content: space-between
-    padding: 0 0.7rem
+    padding: 0 1rem
     height: $headerHeight
     background: $grey-darkest
     color: $grey-dark

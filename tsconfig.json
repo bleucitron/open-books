@@ -5,6 +5,7 @@
     "target": "es2019",
     "noImplicitAny": true,
     "strictNullChecks": false,
+    "moduleResolution": "node",
     "paths": {
       "$lib": ["src/lib"],
       "$lib/*": ["src/lib/*"],

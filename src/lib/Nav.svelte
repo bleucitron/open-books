@@ -31,7 +31,7 @@
     display: flex
     justify-content: space-between
     height: $headerHeight
-    padding: 0.7rem
+    padding: 0.7rem 1rem
     background-color: white
     z-index: 10
     box-shadow: 0px 0px 10px 5px white
@@ -78,7 +78,7 @@
     display: flex
     justify-content: flex-end
     gap: 1rem
-    padding: 0.5rem
+    padding-inline: 0.5rem
     color: $grey-darkest
     background: white
     z-index: 1

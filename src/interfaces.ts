@@ -163,13 +163,7 @@ interface ChartBudgetValue {
   oobdeb: number;
 }
 
-export interface HistorySearch {
-  name: string;
-  insee: string;
-  sirens: string[];
-}
-
-export interface FavoriteSearch {
+export interface LinkItem {
   name: string;
   insee: string;
   sirens: string[];
