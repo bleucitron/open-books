@@ -8,7 +8,7 @@
   import { extractSiren, formatValue } from '@utils/misc';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import FavoriteMenu from '$lib/FavoriteMenu.svelte';
-  import { fillBudgetBySiret, fillBudgetBySirens } from './cache';
+  import { fillBudgetBySiret, fillBudgetBySirens } from './_cache';
 
   const start = 2012;
   const end = new Date().getFullYear();

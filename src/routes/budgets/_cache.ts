@@ -1,3 +1,4 @@
+import { browser } from '$app/env';
 import { getRecords } from '@api';
 import { makeBudget, makeId, orderRecordsBySiret } from '@utils';
 import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
@@ -28,8 +29,9 @@ export function fillBudgetBySiret(
                 year: currYear,
                 records,
               });
-
-              budgetCache[id] = b;
+              if (browser && !(id in budgetCache)) {
+                budgetCache[id] = b;
+              }
 
               return b;
             });
@@ -78,7 +80,7 @@ export function fillBudgetBySirens(
                     records,
                   });
                   const id = makeId(siret, year);
-                  if (!(id in budgetCache)) {
+                  if (browser && !(id in budgetCache)) {
                     budgetCache[id] = b;
                   }
 
