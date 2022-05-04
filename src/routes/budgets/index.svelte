@@ -11,7 +11,7 @@
   import { fillBudgetBySiret, fillBudgetBySirens } from './_cache';
 
   const start = 2012;
-  const end = new Date().getFullYear();
+  const end = new Date().getFullYear() - 1;
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
@@ -53,7 +53,7 @@
           sirens,
           year,
         }),
-        status: 301,
+        status: 302,
       };
     }
 
