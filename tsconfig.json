@@ -3,6 +3,7 @@
   "compilerOptions": {
     "lib": ["esnext", "DOM", "DOM.Iterable"],
     "target": "es2019",
+    "module": "esnext",
     "noImplicitAny": true,
     "strictNullChecks": false,
     "moduleResolution": "node",

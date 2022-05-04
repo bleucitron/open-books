@@ -6,3 +6,4 @@ node_modules
 .idea
 /.vscode
 .vercel_build_output
+.env

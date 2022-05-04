@@ -7,6 +7,8 @@ import type {
   UniteLegale,
 } from '@interfaces';
 
+const env = import.meta.env;
+
 import { get } from './utils/verbs';
 import {
   checkCodes,
@@ -15,7 +17,7 @@ import {
   makeGetSirenEndpoint,
 } from './utils/siren';
 
-const token = 'f72cd59e-d5a0-3a1e-a767-9002a6ae04d2';
+const token = env.VITE_SIRENE_TOKEN;
 const baseUrl = 'https://api.insee.fr/entreprises/sirene/V3';
 
 const headers = {
