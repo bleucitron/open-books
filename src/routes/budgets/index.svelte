@@ -5,7 +5,7 @@
   import { extractSirens } from '@api/utils/siren';
   import { type, code } from '@stores';
   import city from '@stores/city';
-  import { extractSiren, formatValue } from '@utils/misc';
+  import { formatValue } from '@utils/misc';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import FavoriteMenu from '$lib/FavoriteMenu.svelte';
   import { fillBudgetBySiret, fillBudgetBySirens } from './_cache';
@@ -57,8 +57,6 @@
       };
     }
 
-    const mainSiren = extractSiren(siret);
-    await Promise.all(fillBudgetBySirens([mainSiren], [year], $city));
     return {
       props: {
         sirens,

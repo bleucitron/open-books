@@ -14,27 +14,28 @@ export function fillBudgetBySiret(
   years.forEach(currYear => {
     const id = makeId(siret, currYear);
 
-    const p =
-      id in budgetCache
-        ? Promise.resolve(budgetCache[id])
-        : getRecords({
-            ident: [siret],
-            year: currYear,
-          })
-            .catch(() => [])
-            .then(async (records: BudgetRecord[]) => {
-              const b = await makeBudget({
-                city,
-                siret,
-                year: currYear,
-                records,
-              });
-              if (browser && !(id in budgetCache)) {
-                budgetCache[id] = b;
-              }
-
-              return b;
+    const p = !browser
+      ? Promise.resolve(null)
+      : id in budgetCache
+      ? Promise.resolve(budgetCache[id])
+      : getRecords({
+          ident: [siret],
+          year: currYear,
+        })
+          .catch(() => [])
+          .then(async (records: BudgetRecord[]) => {
+            const b = await makeBudget({
+              city,
+              siret,
+              year: currYear,
+              records,
             });
+            if (browser && !(id in budgetCache)) {
+              budgetCache[id] = b;
+            }
+
+            return b;
+          });
 
     budgets.push(p);
   });
@@ -64,7 +65,9 @@ export function fillBudgetBySirens(
   return [...years].reverse().map(year => {
     const cached = siretsInCache.map(id => budgetCache[id]).filter(b => b);
 
-    return !needToFetch
+    return !browser
+      ? Promise.resolve(null)
+      : !needToFetch
       ? Promise.resolve(cached)
       : Promise.all([
           Promise.resolve(cached),
