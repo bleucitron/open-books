@@ -1,4 +1,4 @@
-import json2csv from 'json-2-csv';
+import json2csv from 'json-2-csv'; // CJS import
 import { makeId } from '@utils';
 
 import type {
