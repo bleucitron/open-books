@@ -1,9 +1,10 @@
 import type { FonctionTree } from '@interfaces';
 import { makeFonctionTree } from '@utils';
 
-export const nomenByDecl = new Map();
+export const nomenById = new Map();
 
 export interface Nomen {
+  id: string;
   norme: string;
   exer: string;
   declinaison: string;
@@ -62,10 +63,16 @@ export function buildNomen(s: string): Nomen {
 
   const n = doc.querySelector('Nomenclature');
   const tree = makeFonctionTree(s);
+
+  const norme = n.getAttribute('Norme');
+  const exer = n.getAttribute('Exer');
+  const declinaison = n.getAttribute('Declinaison');
+
   return {
-    norme: n.getAttribute('Norme'),
-    exer: n.getAttribute('Exer'),
-    declinaison: n.getAttribute('Declinaison'),
+    id: `${exer}_${declinaison}`,
+    norme,
+    exer,
+    declinaison,
     fiByChapitre,
     fiByCompte,
     tree,

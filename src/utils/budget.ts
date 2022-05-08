@@ -11,7 +11,7 @@ import type {
   FonctionTreeValue,
 } from '@interfaces';
 
-import { nomenByDecl } from './nomen';
+import { nomenById } from './nomen';
 import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
 import { getNomen } from '@api';
 
@@ -103,7 +103,9 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const nomen = nomens.length > 0 ? nomens[0] : '';
 
   const nomenFilled = await getNomen(year, nomen, city?.population);
-  const tree = nomenFilled ? aggregateData(records, nomenFilled?.tree) : null;
+  const tree = nomenFilled
+    ? aggregateData(records, nomenFilled?.tree, nomenFilled.id)
+    : null;
 
   const treeValues = Object.values(tree ?? {});
 
@@ -241,6 +243,7 @@ export function fonctionFromTree(
 export function aggregateData(
   records: BudgetRecord[],
   tree: FonctionTree,
+  nomenId: string,
 ): FonctionTree {
   const aggregate = Object.values(tree).map(fonction => {
     const { code, tree } = fonction;
@@ -259,7 +262,7 @@ export function aggregateData(
 
     const filteredRecords = records.filter(r => r.fonction?.startsWith(code));
 
-    const nomen = nomenByDecl.get('M14_COM_SUP3500');
+    const nomen = nomenById.get(nomenId);
 
     if (!tree) {
       const records_f = filteredRecords.filter(r => {
@@ -279,7 +282,7 @@ export function aggregateData(
       oobdeb = sumBy(filteredRecords, BudgetCode.OOBDEB);
       oobcre = sumBy(filteredRecords, BudgetCode.OOBCRE);
     } else {
-      const subAgg = aggregateData(filteredRecords, tree);
+      const subAgg = aggregateData(filteredRecords, tree, nomenId);
       const values = Object.values(subAgg).map(agg => agg.value);
       obnetdeb = sumBy(values, BudgetType.DEBIT);
       obnetcre = sumBy(values, BudgetType.CREDIT);
@@ -315,7 +318,7 @@ export function aggregateData(
   return Object.fromEntries(aggregate);
 }
 
-export function makeNomenId(code: string, population: number): string {
+export function makeNomenDecl(code: string, population: number): string {
   let suffix = '';
   if (code) {
     if (!population || population >= 3500) suffix = `_COM_SUP3500`;

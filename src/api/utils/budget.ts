@@ -1,5 +1,4 @@
 import type { BudgetParams } from '@interfaces';
-import { makeNomenId } from './../../utils/budget';
 
 const nbResults = 10000;
 
@@ -56,15 +55,11 @@ export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
   return `${base}?dataset=${allParams}`;
 }
 
-export function makeNomenEndpoint(
-  year: number,
-  code: string,
-  population?: number,
-): string {
+export function makeNomenEndpoint(year: number, decl: string): string {
   const extension = 'xml';
+  const code = decl.split('_')[0];
 
-  const codeSuffix = makeNomenId(code, population);
-  const fileName = `${codeSuffix}.${extension}`;
+  const fileName = `${decl}.${extension}`;
 
   return [year, code, fileName].join('/');
 }
