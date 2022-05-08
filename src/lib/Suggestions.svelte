@@ -52,7 +52,7 @@
     {@const { nom, code, departement } = suggestion}
     <li class="Suggestion">
       <a
-        on:click|stopPropagation={() => handleClick(suggestion)}
+        on:click={() => handleClick(suggestion)}
         on:keypress
         on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
