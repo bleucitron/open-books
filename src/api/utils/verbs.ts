@@ -12,7 +12,9 @@ export function get<T>(url: string, opts?: RequestOptions): Promise<T> {
       throw new Error(resp.statusText);
     }
 
-    const stream = resp.url.endsWith('.xml') ? resp.text() : resp.json();
+    const stream = resp.headers.get('content-type').includes('json')
+      ? resp.json()
+      : resp.text();
 
     return stream;
   });
