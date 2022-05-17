@@ -19,11 +19,9 @@
     display: flex
     justify-content: center
     align-items: center
-    flex: 1 0
     font-size: var(--size, 1em)
 
-    &:first-child
-      animation: rotate-loader 1.5s linear infinite
+    animation: rotate-loader 1.5s linear infinite
 
     &.inline
       display: inline-flex

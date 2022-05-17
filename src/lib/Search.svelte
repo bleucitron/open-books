@@ -6,6 +6,7 @@
   import Spinner from '$lib/Spinner.svelte';
   import { getCity, getCities, getSiret, getSiren } from '@api';
   import { isSiren, isSiret } from '@utils/siren';
+  import { navigating } from '$app/stores';
 
   const dispatch = createEventDispatcher();
 
@@ -29,8 +30,9 @@
       city = cities[0];
     }
     dispatch('select', { city });
-    reset();
   }
+
+  $: if (!$navigating) reset();
 
   function getCityFromSiren(siren: string): void {
     loading = true;

@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { navigating } from '$app/stores';
   import { createEventDispatcher } from 'svelte';
   import { slide } from 'svelte/transition';
   import type { City } from '@interfaces';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let suggestions: City[] = [];
 
@@ -38,8 +40,9 @@
     return current;
   }
 
-  function handleClick(suggestion: City): void {
-    dispatch('select', suggestion);
+  function handleClick(index: number): void {
+    current = index;
+    dispatch('select', suggestions[index]);
   }
 
   $: number = suggestions.length - 1;
@@ -50,15 +53,16 @@
 <ul class="Suggestions" in:slide={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
     {@const { nom, code, departement } = suggestion}
+    {@const active = current === index}
     <li class="Suggestion">
       <a
-        on:click={() => handleClick(suggestion)}
+        on:click={() => handleClick(index)}
         on:keypress
         on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
         href={`/budgets?name=${nom}&insee=${code}`}
         sveltekit:prefetch
-        class:active={current === index}
+        class:active
       >
         <div class="infos">
           <div class="name">{nom}</div>
@@ -69,9 +73,9 @@
           {/if}
         </div>
 
-        <!-- {#if city && city.code === code}
+        {#if active && $navigating}
           <Spinner />
-        {/if} -->
+        {/if}
       </a>
     </li>
   {/each}
@@ -93,8 +97,9 @@
   a
     background: $grey-dark
     display: flex
+    justify-content: space-between
     color: white
-    padding: 0.5rem 1rem
+    padding: 0.5em
 
   .active,
   a:focus
@@ -105,12 +110,15 @@
 
   .infos
     display: flex
+    padding-left: 0.5em
 
   .other
-    margin-left: 0.5rem
+    margin-left: 0.5em
     font-style: italic
     opacity: 0.3
 
-  .Suggestion :global(.Spinner)
-    justify-content: flex-end
+  .Suggestion
+    :global
+      .Icon
+        margin: 0
 </style>
