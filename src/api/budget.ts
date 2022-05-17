@@ -40,11 +40,11 @@ export async function getNomen(
     ? nomenById.get(id)
     : await get<string>(`${nomenUrl}/${endpoint}`, { fetch: altFetch })
         .then(buildNomen)
-        .catch(() =>
+        .catch(() => {
           console.warn(
             `${endpoint} does not contain data to be readed, budget details won't be aggregated`,
-          ),
-        );
+          );
+        });
 
   if (nomen) {
     nomenById.set(id, nomen);

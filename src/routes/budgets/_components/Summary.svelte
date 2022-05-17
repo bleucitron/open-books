@@ -8,25 +8,24 @@
 
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { budget, tree, type, code } from '@stores';
+  import { type, code } from '@stores';
   import {
     typeToLabel,
     stepsFromString,
     fonctionFromTree,
     formatCurrency,
   } from '@utils';
-  import type { Type, Budget } from '@interfaces';
+  import type { Type, Budget, FonctionTreeValue } from '@interfaces';
 
-  import Spinner from '$lib/Spinner.svelte';
   import Csv from './Csv.svelte';
   import Path from './Path.svelte';
   import DebitOrCredit from './DebitOrCredit.svelte';
   import BudgetHisto from './BudgetHisto.svelte';
 
-  export let budgetP: Promise<Budget>;
+  export let budget: Budget;
   export let year: number;
 
-  let steps: { id: string; label: string }[];
+  let breadcrumbs: { id: string; label: string }[];
 
   function updateUrl(): void {
     const u = new URL(url);
@@ -60,70 +59,69 @@
   $: $code = url.searchParams.get('code');
   $: $type = url.searchParams.get('type') as Type;
 
-  $: steps = $budget
-    ? stepsFromString($code).map(code => {
-        const fonction = fonctionFromTree(code, $budget.tree);
-        const { short, label } = fonction ?? {};
+  $: steps = budget ? stepsFromString($code) : [];
+  $: breadcrumbs = steps.map(code => {
+    const fonction = fonctionFromTree(code, budget.tree);
+    const { short, label } = fonction ?? {};
 
-        return {
-          id: code,
-          label: short || label,
-        };
-      })
+    return {
+      id: code,
+      label: short || label,
+    };
+  });
+  $: breadcrumbs = $type
+    ? [{ id: null, label: typeToLabel[$type] }, ...breadcrumbs]
     : [];
-  $: steps = $type ? [{ id: null, label: typeToLabel[$type] }, ...steps] : [];
-  $: values = ($tree && Object.values($tree.tree ?? {})) ?? [];
-  $: total = $tree ? $tree.value[$type] : 0;
+
+  $: tree = steps.reduce<Budget | FonctionTreeValue>(
+    (acc, cur) => acc.tree[cur],
+    budget,
+  );
+  $: values = (tree && Object.values(tree.tree ?? {})) ?? [];
+  $: total = tree ? tree.value[$type] : 0;
 </script>
 
 <div class="Summary">
   <header>
     <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
-    {#await budgetP then budget}
-      <Path {steps} on:click={({ detail }) => selectCode(detail)} />
-      {#if budget}
-        <Csv data={budget} />
-      {/if}
-    {/await}
-  </header>
-  {#await budgetP then budget}
+    <Path steps={breadcrumbs} on:click={({ detail }) => selectCode(detail)} />
     {#if budget}
-      <div class="nomen" title="Nomenclature M14">{budget.nomen}</div>
+      <Csv data={budget} />
     {/if}
-  {/await}
+  </header>
+  {#if budget}
+    <div class="nomen" title="Nomenclature M14">{budget.nomen}</div>
+  {/if}
   <div class={`values ${$type}`}>
-    {#await budgetP}
-      <Spinner --size="2rem" />
-    {:then budget}
-      {#if !budget}
-        <div class="none">Aucun budget</div>
-      {:else if !budget.tree}
-        <div class="none">
-          Pas de plan de compte disponible
-          <p>Nous ne pouvons pas analyser la structure du budget.</p>
-          <p>
-            Vous pouvez néanmoins
-            <Csv data={budget}>télécharger le fichier du budget</Csv>.
-          </p>
-        </div>
-      {:else if !$type}
-        <DebitOrCredit
-          credit_i={budget.value.obnetcre_i}
-          credit_f={budget.value.obnetcre_f}
-          debit_i={budget.value.obnetdeb_i}
-          debit_f={budget.value.obnetdeb_f}
-          select={selectType}
-        />
-      {:else}
-        <div class="main">{formatCurrency(total)}</div>
-        <BudgetHisto
-          {values}
-          {total}
-          type={$type}
-          on:click={({ detail }) => selectCode(detail)}
-        />
-      {/if}
-    {/await}
+    {#if !budget}
+      <div class="none">Aucun budget</div>
+    {:else if !budget.tree}
+      <div class="none">
+        Pas de plan de compte disponible
+        <p>Nous ne pouvons pas analyser la structure du budget.</p>
+        <p>
+          Vous pouvez néanmoins
+          <Csv data={budget}>télécharger le fichier du budget</Csv>.
+        </p>
+      </div>
+    {:else if !$type}
+      <DebitOrCredit
+        credit_i={budget.value.obnetcre_i}
+        credit_f={budget.value.obnetcre_f}
+        debit_i={budget.value.obnetdeb_i}
+        debit_f={budget.value.obnetdeb_f}
+        select={selectType}
+      />
+    {:else}
+      <div class="main">{formatCurrency(total)}</div>
+      <BudgetHisto
+        {values}
+        {total}
+        type={$type}
+        on:click={({ detail }) => selectCode(detail)}
+      />
+    {/if}
+    <!-- {/await} -->
   </div>
 </div>
 

@@ -5,41 +5,33 @@ import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
 
-export function fillBudgetBySiret(
+export function fillBudget(
   siret: string,
-  years: number[],
+  year: number,
   city: City,
-): Promise<Budget>[] {
-  const budgets: Promise<Budget>[] = [];
-  years.forEach(currYear => {
-    const id = makeId(siret, currYear);
+): Promise<Budget> {
+  const id = makeId(siret, year);
 
-    const p = !browser
-      ? Promise.resolve(null)
-      : id in budgetCache
-      ? Promise.resolve(budgetCache[id])
-      : getRecords({
-          ident: [siret],
-          year: currYear,
-        })
-          .catch(() => [])
-          .then(async (records: BudgetRecord[]) => {
-            const b = await makeBudget({
-              city,
-              siret,
-              year: currYear,
-              records,
-            });
-            if (browser && !(id in budgetCache)) {
-              budgetCache[id] = b;
-            }
-
-            return b;
+  return id in budgetCache
+    ? Promise.resolve(budgetCache[id])
+    : getRecords({
+        ident: [siret],
+        year,
+      })
+        .catch(() => [])
+        .then(async (records: BudgetRecord[]) => {
+          const b = await makeBudget({
+            city,
+            siret,
+            year,
+            records,
           });
+          if (browser && !(id in budgetCache)) {
+            budgetCache[id] = b;
+          }
 
-    budgets.push(p);
-  });
-  return budgets;
+          return b;
+        });
 }
 
 export function fillBudgetBySirens(
@@ -65,9 +57,7 @@ export function fillBudgetBySirens(
   return [...years].reverse().map(year => {
     const cached = siretsInCache.map(id => budgetCache[id]).filter(b => b);
 
-    return !browser
-      ? Promise.resolve(null)
-      : !needToFetch
+    return !needToFetch
       ? Promise.resolve(cached)
       : Promise.all([
           Promise.resolve(cached),
