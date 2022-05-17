@@ -73,6 +73,7 @@
 </script>
 
 <script lang="ts">
+  import { browser } from '$app/env';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
@@ -164,21 +165,18 @@
     )
     .map(p => p.then(b => b && (budgetById[b.id] = b)));
 
-  $: otherBudgetPs = fillBudgetBySirens(
-    sirens,
-    [...years].reverse(),
-    $city,
-  ).map(p =>
-    p.then(budgets =>
-      budgets.map(async _b => {
-        const b = await _b;
-        return b && (budgetById[b.id] = b);
-      }),
-    ),
-  );
+  $: otherBudgetPs = browser
+    ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
+        p.then(budgets =>
+          budgets.map(async _b => {
+            const b = await _b;
+            return b && (budgetById[b.id] = b);
+          }),
+        ),
+      )
+    : [];
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
-
   $: loadingP = Promise.all(allPs);
 
   $: sirets = [
