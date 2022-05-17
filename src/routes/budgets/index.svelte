@@ -167,12 +167,7 @@
 
   $: otherBudgetPs = browser
     ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
-        p.then(budgets =>
-          budgets.map(async _b => {
-            const b = await _b;
-            return b && (budgetById[b.id] = b);
-          }),
-        ),
+        p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
       )
     : [];
 

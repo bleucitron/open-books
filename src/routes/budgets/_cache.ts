@@ -5,6 +5,16 @@ import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
 
+/**
+ * Budget cache:
+ * - only filled client-side
+ * - not filled for non empty budgets fetched by fillBudget
+ * - mainly filled with fillBudgetBySirens
+ *
+ * If fillBudget were to fill the cache for non empty fetches,
+ * the way fillBudgetBySirens works would result in skipping sirets fetches.
+ */
+
 export function fillBudget(
   siret: string,
   year: number,
@@ -26,6 +36,23 @@ export function fillBudget(
             year,
             records,
           });
+
+          if (browser) {
+            /**
+             * To avoid refetching budgets with no records,
+             * we first check if the siret is present in the cache for another year,
+             * meaning fillBudgetBySirens has already done its job, and won't skip sirets
+             */
+            const hasSiret = Object.keys(budgetCache).find(k =>
+              k.startsWith(siret),
+            );
+
+            if (hasSiret && !(id in budgetCache)) {
+              if (!(id in budgetCache)) {
+                budgetCache[id] = b;
+              }
+            }
+          }
 
           return b;
         });
