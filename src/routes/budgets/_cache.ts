@@ -26,9 +26,6 @@ export function fillBudget(
             year,
             records,
           });
-          if (browser && !(id in budgetCache)) {
-            budgetCache[id] = b;
-          }
 
           return b;
         });
