@@ -1,5 +1,8 @@
+import { DOMParser } from '@xmldom/xmldom';
 import type { FonctionTree } from '@interfaces';
-import { makeFonctionTree } from '@utils';
+import { extractFonctions } from './budget';
+
+const parser = new DOMParser();
 
 export const nomenById = new Map();
 
@@ -14,19 +17,18 @@ export interface Nomen {
 }
 
 export function buildNomen(s: string): Nomen {
-  const parser = new DOMParser();
   const doc = parser.parseFromString(s, 'application/xml');
 
   const fiByChapitre = new Map();
 
-  const chapters = [...doc.querySelectorAll('Chapitre')];
+  const chapters = Array.from(doc.getElementsByTagName('Chapitre'));
   chapters.forEach(chapter => {
     const code = chapter.getAttribute('Code');
     const fi = chapter.getAttribute('Section');
     fiByChapitre.set(code, fi);
   });
 
-  const books = [...doc.querySelectorAll('Compte')];
+  const books = Array.from(doc.getElementsByTagName('Compte'));
   const fiByCompte = new Map();
 
   function findFI(e: Element): string {
@@ -34,7 +36,6 @@ export function buildNomen(s: string): Nomen {
     const fi = fiByChapitre.get(code);
 
     if (fi) return fi;
-
     if (e.parentNode.nodeName === 'Comptes') return undefined;
 
     return findFI(e.parentNode as Element);
@@ -42,7 +43,7 @@ export function buildNomen(s: string): Nomen {
 
   function assignFI(n: Element): void {
     const code = n.getAttribute('Code');
-    const nodes = [...n.children] as Element[];
+
     let fi = findFI(n);
     if (!fi) {
       const compte =
@@ -54,16 +55,23 @@ export function buildNomen(s: string): Nomen {
       fi = fiByChapitre.get(compte);
     }
     fiByCompte.set(code, fi);
-    nodes.forEach(n => {
-      [...n.children].forEach(assignFI);
+
+    const children = Array.from(n.childNodes).filter(
+      n => n.nodeName === 'Compte',
+    );
+    children.forEach(n => {
+      Array.from(n.childNodes)
+        .filter(n => n.nodeName === 'Compte')
+        .forEach(assignFI);
     });
   }
 
   books.forEach(assignFI);
 
-  const n = doc.querySelector('Nomenclature');
-  const tree = makeFonctionTree(s);
+  const refFonc = Array.from(doc.getElementsByTagName('RefFonctionnelles'))[0];
+  const tree = extractFonctions(refFonc);
 
+  const n = Array.from(doc.getElementsByTagName('Nomenclature'))[0];
   const norme = n.getAttribute('Norme');
   const exer = n.getAttribute('Exer');
   const declinaison = n.getAttribute('Declinaison');

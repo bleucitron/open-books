@@ -159,13 +159,18 @@ export function orderRecordsBySiret(
 }
 
 export function extractFonctions(e: Element): FonctionTree {
-  if (e.tagName !== 'RefFonc' && e.tagName !== 'RefFonctionnelles')
-    throw `${e.tagName} Not a <RefFonc> or a <RefFonctionnelle>`;
+  if (e.nodeName !== 'RefFonc' && e.nodeName !== 'RefFonctionnelles')
+    throw `${e.nodeName} Not a <RefFonc> or a <RefFonctionnelle>`;
 
-  const data = [...e.children].map(element => {
-    const code = element.getAttribute('Code') as string;
-    const label = element.getAttribute('Libelle') as string;
-    const short = element.getAttribute('Lib_court') as string;
+  const children = Array.from(e.childNodes).filter(
+    n => n.nodeName === 'RefFonc',
+  );
+
+  const data = children.map(element => {
+    const e = element as Element;
+    const code = e.getAttribute('Code') as string;
+    const label = e.getAttribute('Libelle') as string;
+    const short = e.getAttribute('Lib_court') as string;
 
     const value: Partial<FonctionTreeValue> = {
       code,
@@ -176,7 +181,7 @@ export function extractFonctions(e: Element): FonctionTree {
       value.short = short;
     }
 
-    if (element.children.length > 0) value.tree = extractFonctions(element);
+    if (children.length > 0) value.tree = extractFonctions(e);
 
     return [code, value];
   });
@@ -184,17 +189,6 @@ export function extractFonctions(e: Element): FonctionTree {
   if (data.length === 0) return null;
 
   return Object.fromEntries(data);
-}
-
-export function makeFonctionTree(txt: string): FonctionTree {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(txt, 'application/xml');
-
-  const refFonc = doc.querySelector('RefFonctionnelles');
-
-  if (!refFonc) throw 'No <RefFonctionnelles> found';
-
-  return extractFonctions(refFonc);
 }
 
 export enum BudgetCode {
