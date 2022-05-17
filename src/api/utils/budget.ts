@@ -43,7 +43,11 @@ export function makeBudgetSimpleEndpoint(params: BudgetParams): string {
 
 export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
   const { year } = params;
-  const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${byYear[year]}`;
+  const yearCode = byYear[year];
+
+  if (!yearCode) return;
+
+  const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${yearCode}`;
 
   const paramString = buildParamString(params);
   const query = `q=${paramString}`;

@@ -18,6 +18,8 @@ export function getRecords(
 ): Promise<BudgetRecord[]> {
   const endpoint = makeBudgetCroiseEndpoint(params);
 
+  if (!endpoint) return Promise.resolve([]);
+
   return get<BudgetFromAPI>(`${recordsUrl}/${endpoint}`, {
     fetch: altFetch,
   }).then(({ records }) => records.map(record => record.fields));
