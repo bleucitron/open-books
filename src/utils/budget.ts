@@ -312,7 +312,7 @@ export function aggregateData(
   return Object.fromEntries(aggregate);
 }
 
-export function makeNomenDecl(code: string, population: number): string {
+export function makeM14Decl(code: string, population: number): string {
   let suffix = '';
   if (code) {
     if (!population || population >= 3500) suffix = `_COM_SUP3500`;
