@@ -83,7 +83,6 @@
       on:click={() => dispatch('click', d)}
     />
   {/each}
-  <circle cx={radius} cy={radius} r={radius - width} fill="transparent" />
   {#if displayedLabel}
     <text
       x="50%"
@@ -112,10 +111,12 @@
     overflow: inherit
     max-width: 30rem
     max-height: 30rem
+    transition: all 0.4s ease-in-out
 
     path
       transform-origin: center center
-      transition: transform 0.2s ease-in
+      transition: transform 0.4s ease-in-out
+      // transition: transform 0.4s ease-in-out, d 0.4s ease-in-out
       cursor: pointer
 
       &:hover
@@ -125,4 +126,11 @@
       font-size: 1.3em
       &.label
         font-size: 0.8rem
+
+  @media (prefers-reduced-motion: reduce)
+    .Donut
+      transition: none
+
+      path
+        transition: none
 </style>
