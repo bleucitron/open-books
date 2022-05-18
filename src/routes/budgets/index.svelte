@@ -8,7 +8,7 @@
   import { formatValue } from '@utils/misc';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import FavoriteMenu from '$lib/FavoriteMenu.svelte';
-  import { fillBudgetBySiret, fillBudgetBySirens } from './_cache';
+  import { fillBudget, fillBudgetBySirens } from './_cache';
 
   const start = 2012;
   const end = new Date().getFullYear() - 1;
@@ -57,6 +57,8 @@
       };
     }
 
+    const budget = await fillBudget(siret, year, $city);
+
     return {
       props: {
         sirens,
@@ -64,17 +66,18 @@
         currentYear: year,
         insee,
         name,
+        budget,
       },
     };
   };
 </script>
 
 <script lang="ts">
+  import { browser } from '$app/env';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import history from '@stores/history';
-  import { budget } from '@stores';
   import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
 
   import type { Budget, BudgetMap, City, LinkItem } from '@interfaces';
@@ -92,9 +95,13 @@
   export let currentYear: number;
   export let insee: string;
   export let name: string;
+  export let budget: Budget;
 
   let budgetById: BudgetMap = {};
 
+  $: if (budget) {
+    budgetById[budget?.id] = budget;
+  }
   $: if (name) {
     budgetById = {};
   }
@@ -150,24 +157,21 @@
         return result;
       });
 
-  $: budgetPs = fillBudgetBySiret(currentSiret, years, $city).map(p =>
-    p.then(b => b && (budgetById[b.id] = b)),
-  );
-  $: otherBudgetPs = fillBudgetBySirens(
-    sirens,
-    [...years].reverse(),
-    $city,
-  ).map(p =>
-    p.then(budgets =>
-      budgets.map(async _b => {
-        const b = await _b;
-        return b && (budgetById[b.id] = b);
-      }),
-    ),
-  );
+  $: budgetPs = years
+    .map(year =>
+      year === currentYear
+        ? Promise.resolve(budget)
+        : fillBudget(currentSiret, year, $city),
+    )
+    .map(p => p.then(b => b && (budgetById[b.id] = b)));
+
+  $: otherBudgetPs = browser
+    ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
+        p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
+      )
+    : [];
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
-
   $: loadingP = Promise.all(allPs);
 
   $: sirets = [
@@ -193,14 +197,9 @@
 
       const source = $code ? fonctionFromTree($code, budget.tree) : budget;
 
-      return $type ? source.value[$type] : 0;
+      return $type ? source?.value[$type] : 0;
     }),
   );
-
-  $: budgetP = budgetPs[yearIndex];
-  $: budgetP.then(b => ($budget = b));
-
-  $: yearIndex = years.findIndex(y => y === currentYear);
 </script>
 
 <svelte:head>
@@ -253,7 +252,7 @@
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    <Summary year={currentYear} {budgetP} />
+    <Summary year={currentYear} {budget} />
     <Years {years} {valuePs} selected={currentYear} select={selectYear} />
   </div>
 </div>

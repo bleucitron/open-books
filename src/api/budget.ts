@@ -7,7 +7,7 @@ import type {
   BudgetFromAPI,
   Fetch,
 } from '@interfaces';
-import { buildNomen, nomenByDecl } from '@utils';
+import { buildNomen, makeNomenDecl, nomenById } from '@utils';
 import type { Nomen } from '@utils/nomen';
 
 const recordsUrl = 'https://data.economie.gouv.fr';
@@ -17,6 +17,8 @@ export function getRecords(
   altFetch?: Fetch,
 ): Promise<BudgetRecord[]> {
   const endpoint = makeBudgetCroiseEndpoint(params);
+
+  if (!endpoint) return Promise.resolve([]);
 
   return get<BudgetFromAPI>(`${recordsUrl}/${endpoint}`, {
     fetch: altFetch,
@@ -32,19 +34,22 @@ export async function getNomen(
   population?: number,
   altFetch?: Fetch,
 ): Promise<Nomen> {
-  const endpoint = makeNomenEndpoint(year, code, population);
-  const nomen: Nomen = nomenByDecl.has(endpoint)
-    ? nomenByDecl.get(endpoint)
+  const decl = makeNomenDecl(code, population);
+  const endpoint = makeNomenEndpoint(year, decl);
+  const id = `${year}_${decl}`;
+
+  const nomen: Nomen = nomenById.has(id)
+    ? nomenById.get(id)
     : await get<string>(`${nomenUrl}/${endpoint}`, { fetch: altFetch })
         .then(buildNomen)
-        .catch(() =>
+        .catch(() => {
           console.warn(
             `${endpoint} does not contain data to be readed, budget details won't be aggregated`,
-          ),
-        );
+          );
+        });
 
   if (nomen) {
-    nomenByDecl.set(nomen.declinaison, nomen);
+    nomenById.set(id, nomen);
   }
 
   return nomen;

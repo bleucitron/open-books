@@ -1,5 +1,4 @@
 import type { BudgetParams } from '@interfaces';
-import { makeNomenId } from './../../utils/budget';
 
 const nbResults = 10000;
 
@@ -44,7 +43,11 @@ export function makeBudgetSimpleEndpoint(params: BudgetParams): string {
 
 export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
   const { year } = params;
-  const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${byYear[year]}`;
+  const yearCode = byYear[year];
+
+  if (!yearCode) return;
+
+  const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${yearCode}`;
 
   const paramString = buildParamString(params);
   const query = `q=${paramString}`;
@@ -56,15 +59,11 @@ export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
   return `${base}?dataset=${allParams}`;
 }
 
-export function makeNomenEndpoint(
-  year: number,
-  code: string,
-  population?: number,
-): string {
+export function makeNomenEndpoint(year: number, decl: string): string {
   const extension = 'xml';
+  const code = decl.split('_')[0];
 
-  const codeSuffix = makeNomenId(code, population);
-  const fileName = `${codeSuffix}.${extension}`;
+  const fileName = `${decl}.${extension}`;
 
   return [year, code, fileName].join('/');
 }

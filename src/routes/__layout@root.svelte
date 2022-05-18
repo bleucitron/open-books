@@ -15,7 +15,9 @@
   <Nav path={segment || 'home'} />
 {/if}
 
-<slot />
+<div style:padding-top="5rem">
+  <slot />
+</div>
 
 <footer>
   <div class="version" class:white={isBudget}>v{version}</div>

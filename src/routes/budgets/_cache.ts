@@ -5,41 +5,57 @@ import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
 
-export function fillBudgetBySiret(
+/**
+ * Budget cache:
+ * - only filled client-side
+ * - not filled for non empty budgets fetched by fillBudget
+ * - mainly filled with fillBudgetBySirens
+ *
+ * If fillBudget were to fill the cache for non empty fetches,
+ * the way fillBudgetBySirens works would result in skipping sirets fetches.
+ */
+
+export function fillBudget(
   siret: string,
-  years: number[],
+  year: number,
   city: City,
-): Promise<Budget>[] {
-  const budgets: Promise<Budget>[] = [];
-  years.forEach(currYear => {
-    const id = makeId(siret, currYear);
+): Promise<Budget> {
+  const id = makeId(siret, year);
 
-    const p = !browser
-      ? Promise.resolve(null)
-      : id in budgetCache
-      ? Promise.resolve(budgetCache[id])
-      : getRecords({
-          ident: [siret],
-          year: currYear,
-        })
-          .catch(() => [])
-          .then(async (records: BudgetRecord[]) => {
-            const b = await makeBudget({
-              city,
-              siret,
-              year: currYear,
-              records,
-            });
-            if (browser && !(id in budgetCache)) {
-              budgetCache[id] = b;
-            }
-
-            return b;
+  return id in budgetCache
+    ? Promise.resolve(budgetCache[id])
+    : getRecords({
+        ident: [siret],
+        year,
+      })
+        .catch(() => [])
+        .then(async (records: BudgetRecord[]) => {
+          const b = await makeBudget({
+            city,
+            siret,
+            year,
+            records,
           });
 
-    budgets.push(p);
-  });
-  return budgets;
+          if (browser) {
+            /**
+             * To avoid refetching budgets with no records,
+             * we first check if the siret is present in the cache for another year,
+             * meaning fillBudgetBySirens has already done its job, and won't skip sirets
+             */
+            const hasSiret = Object.keys(budgetCache).find(k =>
+              k.startsWith(siret),
+            );
+
+            if (hasSiret && !(id in budgetCache)) {
+              if (!(id in budgetCache)) {
+                budgetCache[id] = b;
+              }
+            }
+          }
+
+          return b;
+        });
 }
 
 export function fillBudgetBySirens(
@@ -65,9 +81,7 @@ export function fillBudgetBySirens(
   return [...years].reverse().map(year => {
     const cached = siretsInCache.map(id => budgetCache[id]).filter(b => b);
 
-    return !browser
-      ? Promise.resolve(null)
-      : !needToFetch
+    return !needToFetch
       ? Promise.resolve(cached)
       : Promise.all([
           Promise.resolve(cached),
