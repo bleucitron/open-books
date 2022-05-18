@@ -83,7 +83,7 @@
 
 <div class="Summary">
   <header>
-    <h3 class:clickable={steps.length > 0} on:click={reset}>{year}</h3>
+    <h3 class:clickable={$type} on:click={reset}>{year}</h3>
     <Path steps={breadcrumbs} on:click={({ detail }) => selectCode(detail)} />
     {#if budget}
       <Csv data={budget} />
