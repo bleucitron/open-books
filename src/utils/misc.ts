@@ -70,10 +70,10 @@ export function formatLabel(label: string, name: string = ''): string {
   let formatted = label.replace(n, '').trim().toLowerCase();
 
   toRemove.forEach(c => {
-    formatted = formatted.replace(new RegExp(`${c}$`), '');
+    formatted = formatted.replace(new RegExp(`${c}$|^${c}`, 'g'), '');
   });
 
-  return formatted;
+  return formatted.trim();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
