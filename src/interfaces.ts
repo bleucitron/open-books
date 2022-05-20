@@ -64,6 +64,7 @@ export interface SirenFromAPI {
 export interface Budget extends TreeValue {
   id: string;
   city: string;
+  cityCode: string;
   siren: string;
   siret: string;
   label: string;

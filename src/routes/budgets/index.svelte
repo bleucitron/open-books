@@ -35,13 +35,11 @@
     const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
-      const siretsFromInsee = await getSiretsFromInsee(name, insee, fetch);
-      sirens = extractSirens(siretsFromInsee);
+      const siretsFromInsee = await getSiretsFromInsee(insee, fetch);
+      const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
+      sirens = extractSirens(mainSirets);
 
-      const sirets = siretsFromInsee
-        .filter(e => e.etablissementSiege)
-        .map(e => e.siret)
-        .sort();
+      const sirets = mainSirets.map(e => e.siret).sort();
 
       siret = sirets[0];
 
@@ -167,7 +165,9 @@
 
   $: otherBudgetPs = browser
     ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
-        p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
+        p.then(budgets =>
+          budgets.map(b => b && b.cityCode === insee && (budgetById[b.id] = b)),
+        ),
       )
     : [];
 

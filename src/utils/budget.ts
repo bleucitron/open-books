@@ -122,6 +122,7 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
     siren,
     etabl,
     city: city?.nom,
+    cityCode: city?.code,
     year,
     nomen,
     length,

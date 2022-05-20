@@ -42,12 +42,11 @@ export function getSiret(
 }
 
 export function getSiretsFromInsee(
-  text: string,
   code: string,
   altFetch?: Fetch,
 ): Promise<Etablissement[]> {
   const codes = checkCodes(code);
-  const endpoint = makeSearchSiretEndpoint(text, codes);
+  const endpoint = makeSearchSiretEndpoint(codes);
 
   return get<SiretsFromAPI>(`${baseUrl}/${endpoint}`, {
     ...options,
