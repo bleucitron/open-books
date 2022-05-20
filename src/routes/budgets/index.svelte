@@ -74,7 +74,7 @@
   import history from '@stores/history';
   import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
 
-  import type { Budget, BudgetMap, City, LinkItem } from '@interfaces';
+  import type { Budget, BudgetMap, City } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
@@ -101,13 +101,11 @@
   }
 
   $: if ($page) {
-    const newHistoryItem: LinkItem = {
+    history.addItem({
       name: $city.nom,
       insee,
       sirens,
-    };
-
-    history.addItem(newHistoryItem);
+    });
   }
 
   function selectSiret(s: string): void {

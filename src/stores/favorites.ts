@@ -13,31 +13,18 @@ const { subscribe, set, update } = writable<LinkItem[]>([], () => {
 
 const favorites = {
   subscribe,
-  addItem: (newFavoriteItem: LinkItem) =>
-    update((favoriteList: LinkItem[]) => [
-      newFavoriteItem,
-      ...favoriteList.filter(item => item.name !== newFavoriteItem.name),
+  addItem: (newItem: LinkItem) =>
+    update((items: LinkItem[]) => [
+      newItem,
+      ...items.filter(item => item.name !== newItem.name),
     ]),
   clear: () => {
     set([]);
   },
-  removeItem: (name: string) => {
-    const favoritesArray = JSON.parse(localStorage.getItem('favorites'));
-    const newFavoritesArray = favoritesArray.filter(
-      (t: LinkItem) => t.name !== name,
-    );
-    localStorage.setItem('favorite', JSON.stringify(newFavoritesArray));
-  },
-  checkItem: (name: string) => {
-    const favorites = JSON.parse(localStorage.getItem('favorites'));
-    const isFavorite = favorites.map((favorite: LinkItem) => {
-      if (favorite.name === name) {
-        return false;
-      }
-      return true;
-    });
-    return isFavorite.includes(false);
-  },
+  removeItem: (name: string) =>
+    update((items: LinkItem[]) =>
+      items.filter((t: LinkItem) => t.name !== name),
+    ),
 };
 
 favorites.subscribe(value => {
