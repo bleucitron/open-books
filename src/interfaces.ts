@@ -64,6 +64,7 @@ export interface SirenFromAPI {
 export interface Budget extends TreeValue {
   id: string;
   city: string;
+  cityCode: string;
   siren: string;
   siret: string;
   label: string;
@@ -137,7 +138,6 @@ export interface CSV {
 }
 
 export interface UrlData {
-  name: string;
   insee: string;
   siret: string;
   sirens: string[];

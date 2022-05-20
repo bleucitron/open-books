@@ -14,18 +14,12 @@ export function makeId(siret: string, year: number): string {
   return `${siret}_${year}`;
 }
 
-export function makeBudgetUrl({
-  name,
-  insee,
-  siret,
-  sirens,
-  year,
-}: UrlData): string {
-  if (!name || !insee || !siret || !sirens || !sirens.length || year == null)
+export function makeBudgetUrl({ insee, siret, sirens, year }: UrlData): string {
+  if (!insee || !siret || !sirens || !sirens.length || year == null)
     throw Error('Missing parameter');
 
   const sirensAsString = sirens.join(',');
-  return `/budgets?name=${name}&insee=${insee}&siret=${siret}&sirens=${sirensAsString}&year=${year}`;
+  return `/budgets?insee=${insee}&year=${year}&siret=${siret}&sirens=${sirensAsString}`;
 }
 
 export function normalizeText(text: string): string {
@@ -70,10 +64,10 @@ export function formatLabel(label: string, name: string = ''): string {
   let formatted = label.replace(n, '').trim().toLowerCase();
 
   toRemove.forEach(c => {
-    formatted = formatted.replace(new RegExp(`${c}$`), '');
+    formatted = formatted.replace(new RegExp(`${c}$|^${c}`, 'g'), '');
   });
 
-  return formatted;
+  return formatted.trim();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

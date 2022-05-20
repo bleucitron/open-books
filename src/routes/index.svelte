@@ -44,7 +44,7 @@
     retryTimeout = setTimeout(allowRetry, retryDelay);
   }
 
-  onMount(async () => {
+  onMount(() => {
     timeout = setTimeout(updateExamples, 3000);
     return () => {
       clearTimeout(timeout);

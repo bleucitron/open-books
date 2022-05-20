@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
-  import { getSiretsFromInsee, getCity, getCities } from '@api';
+  import { getSiretsFromInsee, getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { type, code } from '@stores';
   import city from '@stores/city';
@@ -16,7 +16,6 @@
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
   export const load: Load = async ({ url: { searchParams }, fetch }) => {
-    const name = searchParams.get('name');
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
     const sirenString = searchParams.get('sirens');
@@ -26,28 +25,23 @@
 
     let $city = get(city);
 
-    if (!$city) {
-      const cities = await getCities(name, fetch);
-      $city = cities[0];
-      city.set($city);
+    if (!$city || $city.code !== insee) {
+      $city = await getCity(insee, fetch);
     }
 
     const year = parseInt(y) || defaultYear;
 
     if (!siret || !sirens) {
-      const siretsFromInsee = await getSiretsFromInsee(name, insee, fetch);
-      sirens = extractSirens(siretsFromInsee);
+      const siretsFromInsee = await getSiretsFromInsee(insee, fetch);
+      const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
+      sirens = extractSirens(mainSirets);
 
-      const sirets = siretsFromInsee
-        .filter(e => e.etablissementSiege)
-        .map(e => e.siret)
-        .sort();
+      const sirets = mainSirets.map(e => e.siret).sort();
 
       siret = sirets[0];
 
       return {
         redirect: makeBudgetUrl({
-          name,
           insee,
           siret,
           sirens,
@@ -62,10 +56,10 @@
     return {
       props: {
         sirens,
+        currentCity: $city,
         currentSiret: siret,
         currentYear: year,
         insee,
-        name,
         budget,
       },
     };
@@ -80,11 +74,10 @@
   import history from '@stores/history';
   import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
 
-  import type { Budget, BudgetMap, City, LinkItem } from '@interfaces';
+  import type { Budget, BudgetMap, City } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
-  import Spinner from '$lib/Spinner.svelte';
   import HistoryMenu from '$lib/HistoryMenu.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
@@ -92,9 +85,9 @@
 
   export let sirens: string[];
   export let currentSiret: string;
+  export let currentCity: City;
   export let currentYear: number;
   export let insee: string;
-  export let name: string;
   export let budget: Budget;
 
   let budgetById: BudgetMap = {};
@@ -102,20 +95,17 @@
   $: if (budget) {
     budgetById[budget?.id] = budget;
   }
-  $: if (name) {
+  $: if (insee) {
     budgetById = {};
+    city.set(currentCity);
   }
 
   $: if ($page) {
-    const { searchParams } = $page.url;
-    const sirensList = searchParams.get('sirens').split(',');
-    const newHistoryItem: LinkItem = {
-      name: searchParams.get('name'),
-      insee: searchParams.get('insee'),
-      sirens: sirensList,
-    };
-
-    history.addItem(newHistoryItem);
+    history.addItem({
+      name: $city.nom,
+      insee,
+      sirens,
+    });
   }
 
   function selectSiret(s: string): void {
@@ -135,10 +125,12 @@
   }
 
   function handleSearch({ detail }: CustomEvent): void {
-    const { nom, code } = detail.city;
-    const { siret } = detail;
+    const {
+      city: { code },
+      siret,
+    } = detail;
 
-    let url = `/budgets?name=${nom}&insee=${code}`;
+    let url = `/budgets?insee=${code}`;
     if (siret) url += `&siret=${siret}`;
 
     goto(url);
@@ -150,12 +142,7 @@
     );
   };
 
-  $: cityP = $city
-    ? Promise.resolve($city)
-    : getCity(insee).then((result: City) => {
-        city.set(result);
-        return result;
-      });
+  $: ({ nom, departement, population } = $city);
 
   $: budgetPs = years
     .map(year =>
@@ -167,7 +154,9 @@
 
   $: otherBudgetPs = browser
     ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
-        p.then(budgets => budgets.map(b => b && (budgetById[b.id] = b))),
+        p.then(budgets =>
+          budgets.map(b => b && b.cityCode === insee && (budgetById[b.id] = b)),
+        ),
       )
     : [];
 
@@ -203,15 +192,7 @@
 </script>
 
 <svelte:head>
-  {#await cityP}
-    <title>{`Budgets pour ${name}`}</title>
-  {:then city}
-    {#if city}
-      <title>{`Budgets pour ${name} (${city.departement.code})`}</title>
-    {/if}
-  {:catch}
-    <title>{`Budgets pour ${name}`}</title>
-  {/await}
+  <title>{`Budgets pour ${nom} (${departement.code})`}</title>
 </svelte:head>
 
 <header>
@@ -221,21 +202,13 @@
     </a>
     <div class="info-container">
       <div class="titles">
-        <FavoriteToggle {name} {insee} {sirens} />
-        <h1>{name}</h1>
+        <FavoriteToggle name={nom} {insee} {sirens} />
+        <h1>{nom}</h1>
         <div class="info">
-          {#await cityP}
-            <Spinner />
-          {:then { population, departement: { code, nom } }}
-            {#if city}
-              <span>{formatValue(population)} habitants</span>
-              <span>
-                ({nom} - {code})
-              </span>
-            {/if}
-          {:catch error}
-            <div style="color: red">{error}</div>
-          {/await}
+          <span>{formatValue(population)} habitants</span>
+          <span>
+            ({nom} - {departement.code})
+          </span>
         </div>
       </div>
     </div>

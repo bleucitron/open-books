@@ -7,7 +7,7 @@ import type {
   BudgetFromAPI,
   Fetch,
 } from '@interfaces';
-import { buildNomen, makeNomenDecl, nomenById } from '@utils';
+import { buildNomen, makeM14Decl, nomenById } from '@utils';
 import type { Nomen } from '@utils/nomen';
 
 const recordsUrl = 'https://data.economie.gouv.fr';
@@ -34,7 +34,7 @@ export async function getNomen(
   population?: number,
   altFetch?: Fetch,
 ): Promise<Nomen> {
-  const decl = makeNomenDecl(code, population);
+  const decl = code === 'M14' ? makeM14Decl(code, population) : code;
   const endpoint = makeNomenEndpoint(year, decl);
   const id = `${year}_${decl}`;
 

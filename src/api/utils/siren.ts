@@ -1,12 +1,9 @@
-import { normalizeText } from '@utils';
-
 import type { Etablissement } from '@interfaces';
 
 const nbResults = 1000;
 const category = '7210';
 
 interface Params {
-  denominationUniteLegale: string;
   codeCommuneEtablissement: number[];
   categorieJuridiqueUniteLegale: string;
 }
@@ -83,11 +80,10 @@ export function makeGetSiretsEndpoint(sirens: string[]): string {
   return `${base}?${allParams}`;
 }
 
-export function makeSearchSiretEndpoint(text: string, codes: number[]): string {
+export function makeSearchSiretEndpoint(codes: number[]): string {
   const base = 'siret';
 
   const params = buildParamString({
-    denominationUniteLegale: normalizeText(text),
     codeCommuneEtablissement: codes,
     categorieJuridiqueUniteLegale: category,
   });

@@ -14,8 +14,8 @@
     open = !open;
   }
 
-  function createUrl({ name, insee, sirens }: LinkItem): string {
-    const params = `name=${name}&insee=${insee}&sirens=${sirens.join(',')}`;
+  function createUrl({ insee, sirens }: LinkItem): string {
+    const params = `insee=${insee}&sirens=${sirens.join(',')}`;
     return '/budgets?' + params;
   }
 </script>

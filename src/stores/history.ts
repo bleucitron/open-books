@@ -2,8 +2,7 @@ import { writable } from 'svelte/store';
 import { browser } from '$app/env';
 import type { LinkItem } from '@interfaces';
 
-const historyList: string | [] = [];
-const { subscribe, set, update } = writable<LinkItem[]>(historyList, () => {
+const { subscribe, set, update } = writable<LinkItem[]>([], () => {
   if (browser) {
     const parsedHistory = JSON.parse(localStorage.getItem('history'));
     if (parsedHistory) {
@@ -14,10 +13,10 @@ const { subscribe, set, update } = writable<LinkItem[]>(historyList, () => {
 
 const history = {
   subscribe,
-  addItem: (newHistoryItem: LinkItem) =>
+  addItem: (newItem: LinkItem) =>
     update((historyList: LinkItem[]) => [
-      newHistoryItem,
-      ...historyList.filter(item => item.name !== newHistoryItem.name),
+      newItem,
+      ...historyList.filter(item => item.name !== newItem.name),
     ]),
   clear: () => {
     set([]);

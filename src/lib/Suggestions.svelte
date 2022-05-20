@@ -94,6 +94,11 @@
     overflow: hidden
     font-size: 0.9em
 
+    .Suggestion
+      :global
+        .Icon
+          margin: 0
+
   a
     background: $grey-dark
     display: flex
@@ -116,9 +121,4 @@
     margin-left: 0.5em
     font-style: italic
     opacity: 0.3
-
-  .Suggestion
-    :global
-      .Icon
-        margin: 0
 </style>
