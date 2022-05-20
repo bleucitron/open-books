@@ -11,7 +11,10 @@ import type { Fetch } from '@interfaces';
 
 const baseUrl = 'https://geo.api.gouv.fr';
 
-export function getRandomCities(altFetch?: Fetch): Promise<City[]> {
+export function getRandomCities(
+  population: number,
+  altFetch?: Fetch,
+): Promise<City[]> {
   const codes = getRandomDptCodes();
 
   return Promise.all(
@@ -20,7 +23,7 @@ export function getRandomCities(altFetch?: Fetch): Promise<City[]> {
         `${baseUrl}/departements/${code}/communes?fields=departement,population`,
         { fetch: altFetch },
       ).then(communes => {
-        const bigCities = communes.filter(c => c.population >= 1000);
+        const bigCities = communes.filter(c => c.population >= population);
         return bigCities[randomNb(bigCities.length)];
       }),
     ),

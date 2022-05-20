@@ -53,7 +53,7 @@
   });
 
   async function updateExamples(): Promise<void> {
-    examples = await getRandomCities();
+    examples = await getRandomCities(10000);
     allowedToRetry = false;
     resetTimeout();
   }
