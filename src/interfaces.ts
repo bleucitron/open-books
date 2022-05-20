@@ -138,7 +138,6 @@ export interface CSV {
 }
 
 export interface UrlData {
-  name: string;
   insee: string;
   siret: string;
   sirens: string[];
