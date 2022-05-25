@@ -324,7 +324,7 @@
     background: $grey-darker
     display: flex
     padding: 1rem
-    padding-right: 1.5rem
+    padding-right: 0
 
   .content
     display: flex

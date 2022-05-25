@@ -48,8 +48,10 @@
     display: flex
     flex-flow: column
     width: 15rem
+    padding-right: 1rem
     margin: 0
     color: $grey-lightest
+    overflow: auto
 
     li.siren
       border-top: 1px solid $grey-dark
