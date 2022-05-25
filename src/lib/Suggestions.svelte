@@ -60,7 +60,7 @@
         on:keypress
         on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
-        href={`/budgets?name=${nom}&insee=${code}`}
+        href={`/budgets?insee=${code}`}
         sveltekit:prefetch
         class:active
       >

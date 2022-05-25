@@ -25,9 +25,9 @@
 
   function redirect({ city: c, siret }: RedirectData): void {
     $city = c;
-    const { nom, code } = $city;
+    const { code } = $city;
 
-    let url = `/budgets?name=${nom}&insee=${code}`;
+    let url = `/budgets?insee=${code}`;
     if (siret) url += `&siret=${siret}`;
 
     goto(url);
@@ -86,7 +86,7 @@
             } = city}
             <li in:fade={{ duration: 2000, delay: i * 1000 }}>
               <a
-                href={`/budgets?name=${nom}&insee=${code}`}
+                href={`/budgets?insee=${code}`}
                 on:click={() => redirect({ city })}
               >
                 <div class="city">{nom}</div>

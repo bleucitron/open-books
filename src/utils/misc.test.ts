@@ -38,13 +38,12 @@ _makeId('should return error when siret is missing', () => {
 _makeBudgetUrl('should return url', () => {
   assert.is(
     makeBudgetUrl({
-      name: 'a',
       insee: 'b',
       siret: 'c',
       sirens: ['d', 'e', 'f'],
       year: 2020,
     }),
-    '/budgets?name=a&insee=b&siret=c&sirens=d,e,f&year=2020',
+    '/budgets?insee=b&siret=c&sirens=d,e,f&year=2020',
   );
 });
 
@@ -52,7 +51,6 @@ _makeBudgetUrl('should return error when a parameter is empty', () => {
   assert.throws(
     () =>
       makeBudgetUrl({
-        name: '',
         insee: 'b',
         siret: 'c',
         sirens: ['d', 'e', 'f'],
@@ -66,7 +64,6 @@ _makeBudgetUrl('should return error when empty sirens', () => {
   assert.throws(
     () =>
       makeBudgetUrl({
-        name: 'a',
         insee: 'b',
         siret: 'c',
         sirens: [],
