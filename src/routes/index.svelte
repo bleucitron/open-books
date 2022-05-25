@@ -21,7 +21,7 @@
   let allowedToRetry = false;
 
   const delay = 30 * 1000; // 30 seconds
-  const retryDelay = 5 * 1000; // 3 seconds
+  const retryDelay = 5 * 1000; // 5 seconds
 
   function redirect({ city: c, siret }: RedirectData): void {
     $city = c;
