@@ -156,7 +156,7 @@
     ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
         p.then(budgets =>
           budgets
-            .filter(b => b && b.cityCode === insee)
+            .filter(b => b && b.info.city?.code === insee)
             .forEach(b => (budgetById[b.id] = b)),
         ),
       )

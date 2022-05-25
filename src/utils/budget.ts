@@ -50,16 +50,18 @@ const keys = [
 ].map(t => t.toLowerCase());
 
 export async function makeCSV(data: Budget): Promise<CSV> {
-  const { city, label, records } = data;
+  const { info, label, records } = data;
+
+  const main = info.city?.nom ?? label;
 
   const years = [...new Set(records.map(d => d.exer))];
   const year = years.length === 1 ? years[0] : null;
   const sirets = [...new Set(records.map(d => d.ident))];
   const siret = sirets.length === 1 ? sirets[0] : null;
 
-  let file = `budget_${city.toLowerCase()}`;
+  let file = `budget_${main.toLowerCase()}`;
 
-  if (label) file += `_${label.split(' ').join('_')}`;
+  if (label && main !== label) file += `_${label.split(' ').join('_')}`;
   if (siret) file += `_${siret}`;
   if (year) file += `_${year}`;
 
@@ -76,7 +78,7 @@ export async function makeCSV(data: Budget): Promise<CSV> {
 }
 
 export async function makeBudget(data: BudgetRaw): Promise<Budget> {
-  const { city, siret, year, records } = data;
+  const { info, siret, year, records } = data;
 
   const id = makeId(siret, year);
 
@@ -99,8 +101,9 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
     console.log('More than 1 nomen for', siret, year);
   }
 
-  const label = labels.length > 0 ? formatLabel(labels[0], city?.nom) : '';
   const nomen = nomens.length > 0 ? nomens[0] : '';
+  const city = info.city;
+  const label = labels.length > 0 ? formatLabel(labels[0], city?.nom) : '';
 
   const nomenFilled = await getNomen(year, nomen, city?.population);
   const tree = nomenFilled
@@ -121,8 +124,7 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
     siret,
     siren,
     etabl,
-    city: city?.nom,
-    cityCode: city?.code,
+    info,
     year,
     nomen,
     length,

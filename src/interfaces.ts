@@ -63,8 +63,7 @@ export interface SirenFromAPI {
 
 export interface Budget extends TreeValue {
   id: string;
-  city: string;
-  cityCode: string;
+  info: { city: City };
   siren: string;
   siret: string;
   label: string;
@@ -80,7 +79,7 @@ export interface BudgetMap {
 }
 
 export interface BudgetRaw {
-  city: City;
+  info: { city: City };
   siret: string;
   year: number;
   records: BudgetRecord[];
