@@ -82,6 +82,7 @@
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import { redirectToBudget } from '../_utils';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -122,18 +123,6 @@
     url.searchParams.set('year', y.toString());
 
     goto(url.href);
-  }
-
-  function handleSearch({ detail }: CustomEvent): void {
-    const {
-      city: { code },
-      siret,
-    } = detail;
-
-    let url = `/budgets?insee=${code}`;
-    if (siret) url += `&siret=${siret}`;
-
-    goto(url);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -216,7 +205,7 @@
     </div>
   </div>
   <div class="actions">
-    <Search on:select={handleSearch} />
+    <Search on:select={({ detail }) => redirectToBudget(detail)} />
     <HistoryMenu />
     <FavoriteMenu />
   </div>

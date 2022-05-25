@@ -1,20 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { goto } from '$app/navigation';
   import { city } from '@stores';
   import { getRandomCities } from '@api/geo';
   import type { City } from '@interfaces';
+  import { redirectToBudget, type RedirectData } from './_utils';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
 
   export let examples: City[] = [];
 
-  interface RedirectData {
-    city: City;
-    siret?: string;
-  }
 
   let timeout: NodeJS.Timeout;
   let retryTimeout: NodeJS.Timeout;
@@ -23,14 +19,10 @@
   const delay = 30 * 1000; // 30 seconds
   const retryDelay = 5 * 1000; // 5 seconds
 
-  function redirect({ city: c, siret }: RedirectData): void {
-    $city = c;
-    const { code } = $city;
+  function redirect(d: RedirectData): void {
+    if (d.city) $city = d.city;
 
-    let url = `/budgets?insee=${code}`;
-    if (siret) url += `&siret=${siret}`;
-
-    goto(url);
+    redirectToBudget(d)
   }
 
   function allowRetry(): void {
