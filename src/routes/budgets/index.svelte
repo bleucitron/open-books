@@ -1,10 +1,11 @@
 <script lang="ts" context="module">
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
-  import { getSiretsFromInsee, getCity } from '@api';
+  import { getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
   import { type, code } from '@stores';
   import city from '@stores/city';
+  import type { Budget, BudgetMap, City, Etablissement } from '@interfaces';
   import { extractSiren, formatValue } from '@utils/misc';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import FavoriteMenu from '$lib/FavoriteMenu.svelte';
@@ -39,7 +40,9 @@
       }
 
       if (!siret || !sirens) {
-        const siretsFromInsee = await getSiretsFromInsee(insee, fetch);
+        const siretsFromInsee = (await fetch(
+          `sirene/siretsFromInsee/${insee}`,
+        ).then(r => r.json())) as Etablissement[];
         const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
         sirens = extractSirens(mainSirets);
 
@@ -83,8 +86,6 @@
 
   import history from '@stores/history';
   import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
-
-  import type { Budget, BudgetMap, City } from '@interfaces';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
