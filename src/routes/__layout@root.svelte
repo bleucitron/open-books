@@ -2,7 +2,6 @@
   import { page } from '$app/stores';
 
   import Nav from '$lib/Nav.svelte';
-  import GoogleAnalytics from '$lib/GoogleAnalytics.svelte';
 
   const version = __VERSION__;
 
@@ -10,7 +9,6 @@
   $: isBudget = segment === 'budgets';
 </script>
 
-<GoogleAnalytics />
 {#if !isBudget}
   <Nav path={segment || 'home'} />
 {/if}
