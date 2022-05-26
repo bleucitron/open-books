@@ -16,7 +16,7 @@ const byYear: Record<number, string> = {
 
 const base = 'api/records/1.0/search';
 
-function buildParamString(paramByKey: BudgetParams): string {
+function buildBudgetParamString(paramByKey: BudgetParams): string {
   return Object.entries(paramByKey)
     .filter(([key]) => key !== 'year')
     .map(([key, value]) => {
@@ -31,7 +31,7 @@ export function makeBudgetSimpleEndpoint(params: BudgetParams): string {
   const { year } = params;
   const dataset = `dataset=balances-comptables-des-communes-en-${year}`;
 
-  const paramString = buildParamString(params);
+  const paramString = buildBudgetParamString(params);
   const query = `q=${paramString}`;
 
   const rows = `rows=${nbResults}`;
@@ -49,7 +49,7 @@ export function makeBudgetCroiseEndpoint(params: BudgetParams): string {
 
   const dataset = `balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec${yearCode}`;
 
-  const paramString = buildParamString(params);
+  const paramString = buildBudgetParamString(params);
   const query = `q=${paramString}`;
 
   const rows = `rows=${nbResults}`;

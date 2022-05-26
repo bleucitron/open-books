@@ -2,6 +2,7 @@
   import { fade } from 'svelte/transition';
   import Icon from '$lib/Icon.svelte';
   import type { LinkItem } from '@interfaces';
+  import { buildParamString } from '@api/utils/misc';
 
   export let icon = 'clock';
   export let label = 'Liste';
@@ -14,9 +15,11 @@
     open = !open;
   }
 
-  function createUrl({ insee, sirens }: LinkItem): string {
-    const params = `insee=${insee}&sirens=${sirens.join(',')}`;
-    return '/budgets?' + params;
+  function createUrl({ name, ...item }: LinkItem): string {
+    if (!item.insee) item.siret = name;
+
+    const paramString = buildParamString(item);
+    return '/budgets?' + paramString;
   }
 </script>
 

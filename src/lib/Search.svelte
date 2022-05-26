@@ -4,8 +4,8 @@
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
   import Spinner from '$lib/Spinner.svelte';
-  import { getCity, getCities, getSiret, getSiren } from '@api';
-  import { isSiren, isSiret } from '@utils/siren';
+  import { getCities } from '@api';
+  import { isSiret } from '@utils/siren';
   import { navigating } from '$app/stores';
 
   const dispatch = createEventDispatcher();
@@ -34,64 +34,14 @@
 
   $: if (!$navigating) reset();
 
-  function getCityFromSiren(siren: string): void {
-    loading = true;
-
-    getSiren(siren)
-      .then(c => {
-        const { periodesUniteLegale } = c;
-
-        const denominationUniteLegale =
-          periodesUniteLegale[0].denominationUniteLegale;
-        const cityName = denominationUniteLegale
-          .substring(10)
-          .trim()
-          .toLowerCase();
-
-        return getCities(cityName);
-      })
-      .then(cities => {
-        if (loading) {
-          const city = cities[0];
-          dispatch('select', { city });
-        }
-        cities[0];
-      })
-      .catch(() => {
-        error = true;
-        console.error('No such siren found', siren);
-      })
-      .finally(() => (loading = false));
-  }
-
-  function getCityFromSiret(siret: string): void {
-    loading = true;
-
-    getSiret(siret)
-      .then(etabl => {
-        const {
-          adresseEtablissement: { codeCommuneEtablissement: codeInsee },
-        } = etabl;
-
-        return getCity(codeInsee);
-      })
-      .then(city => {
-        if (loading) dispatch('select', { city, siret });
-      })
-      .catch(() => {
-        error = true;
-        console.error('No such siret found', siret);
-      })
-      .finally(() => (loading = false));
-  }
-
   async function handleInput({ target }: Event): Promise<void> {
     loading = false;
     error = false;
 
     const { value } = target as HTMLInputElement;
 
-    if (isSiren(value) || isSiret(value)) {
+    const isText = Number.isNaN(Number(value));
+    if (!isText) {
       showSuggestions = false;
       return;
     }
@@ -112,13 +62,8 @@
       const { value } = target as HTMLInputElement;
       const valueWithoutSpace = value.replace(/ /g, '');
 
-      if (isSiren(valueWithoutSpace)) {
-        getCityFromSiren(valueWithoutSpace);
-        return;
-      }
-
       if (isSiret(valueWithoutSpace)) {
-        getCityFromSiret(valueWithoutSpace);
+        dispatch('select', { siret: valueWithoutSpace });
         return;
       }
     }
@@ -127,6 +72,7 @@
   $: if (selected) {
     value = selected.nom;
   }
+
   $: if (!value) {
     cities = null;
   }
@@ -155,7 +101,11 @@
         </span>
       {:else}
         <span class="reset" on:click={reset}>
-          <Icon id="x" />
+          {#if !showSuggestions && $navigating}
+            <Spinner />
+          {:else}
+            <Icon id="x" />
+          {/if}
         </span>
       {/if}
     {/if}

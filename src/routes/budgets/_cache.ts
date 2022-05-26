@@ -59,8 +59,8 @@ export function fillBudget(
 }
 
 export function fillBudgetBySirens(
-  sirens: string[],
-  years: number[],
+  sirens: string[] = [],
+  years: number[] = [],
   city: City,
 ): Promise<Budget[]>[] {
   const sirensToFetch: string[] = [];

@@ -5,7 +5,7 @@
   import { extractSirens } from '@api/utils/siren';
   import { type, code } from '@stores';
   import city from '@stores/city';
-  import { formatValue } from '@utils/misc';
+  import { extractSiren, formatValue } from '@utils/misc';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import FavoriteMenu from '$lib/FavoriteMenu.svelte';
   import { fillBudget, fillBudgetBySirens } from './_cache';
@@ -21,34 +21,44 @@
     const sirenString = searchParams.get('sirens');
     let siret = searchParams.get('siret');
 
-    let sirens = sirenString?.split(',');
-
-    let $city = get(city);
-
-    if (!$city || $city.code !== insee) {
-      $city = await getCity(insee, fetch);
+    if (!insee && !siret && !sirenString) {
+      return {
+        redirect: '/',
+        status: 302,
+      };
     }
 
     const year = parseInt(y) || defaultYear;
 
-    if (!siret || !sirens) {
-      const siretsFromInsee = await getSiretsFromInsee(insee, fetch);
-      const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
-      sirens = extractSirens(mainSirets);
+    let $city = insee && get(city);
+    let sirens = sirenString?.split(',');
 
-      const sirets = mainSirets.map(e => e.siret).sort();
+    if (insee) {
+      if (!$city || $city.code !== insee) {
+        $city = await getCity(insee, fetch);
+      }
 
-      siret = sirets[0];
+      if (!siret || !sirens) {
+        const siretsFromInsee = await getSiretsFromInsee(insee, fetch);
+        const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
+        sirens = extractSirens(mainSirets);
 
-      return {
-        redirect: makeBudgetUrl({
-          insee,
-          siret,
-          sirens,
-          year,
-        }),
-        status: 302,
-      };
+        const sirets = mainSirets.map(e => e.siret).sort();
+
+        siret = sirets[0];
+
+        return {
+          redirect: makeBudgetUrl({
+            insee,
+            siret,
+            sirens,
+            year,
+          }),
+          status: 302,
+        };
+      }
+    } else if (!sirens) {
+      sirens = [extractSiren(siret)];
     }
 
     const budget = await fillBudget(siret, year, $city);
@@ -96,14 +106,14 @@
   $: if (budget) {
     budgetById[budget?.id] = budget;
   }
-  $: if (insee) {
+  $: if (insee || currentSiret) {
     budgetById = {};
     city.set(currentCity);
   }
 
   $: if ($page) {
     history.addItem({
-      name: $city.nom,
+      name: $city?.nom ?? currentSiret,
       insee,
       sirens,
     });
@@ -131,7 +141,7 @@
     );
   };
 
-  $: ({ nom, departement, population } = $city);
+  $: nom = $city?.nom ?? currentSiret;
 
   $: budgetPs = years
     .map(year =>
@@ -183,7 +193,12 @@
 </script>
 
 <svelte:head>
-  <title>{`Budgets pour ${nom} (${departement.code})`}</title>
+  {#if $city}
+    {@const { nom, departement } = $city}
+    <title>{`Budgets pour ${nom} (${departement.code})`}</title>
+  {:else}
+    <title>{`Budgets pour ${nom}`}</title>
+  {/if}
 </svelte:head>
 
 <header>
@@ -195,12 +210,15 @@
       <div class="titles">
         <FavoriteToggle name={nom} {insee} {sirens} />
         <h1>{nom}</h1>
-        <div class="info">
-          <span>{formatValue(population)} habitants</span>
-          <span>
-            ({nom} - {departement.code})
-          </span>
-        </div>
+        {#if $city}
+          {@const { nom, population, departement } = $city}
+          <div class="info">
+            <span>{formatValue(population)} habitants</span>
+            <span>
+              ({nom} - {departement.code})
+            </span>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
