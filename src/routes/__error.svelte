@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
   import type { Load } from '@sveltejs/kit';
+  import Nav from '$lib/Nav.svelte';
 
-  export const load: Load = ({ error, status }) => {
+  export const load: Load = ({ error }) => {
     return {
       props: {
-        code: status,
         message: error.message,
       },
     };
@@ -13,21 +13,31 @@
 
 <script lang="ts">
   export let message: string;
-  export let code: number;
-  $: title = `${code}: ${message}`;
 </script>
 
-<h1>{title}</h1>
+<Nav path="home" />
 
 <svelte:head>
-  <title>{code}</title>
+  <title>{message}</title>
 </svelte:head>
 
-<h1>{code}</h1>
+<main class="error">
+  <h1>Erreur</h1>
 
-<p>{message}</p>
+  <p>{message}</p>
+</main>
 
 <style lang="sass">
+  .error
+    display: flex
+    flex-flow: column
+    justify-content: center
+    align-items: center
+    height: 100vh
+    padding: 2rem
+    padding-top: $headerHeight
+    text-align: center
+
   h1,
   p
     margin: 0 auto
@@ -35,12 +45,12 @@
   h1
     font-size: 2.8em
     font-weight: 700
-    margin: 0 0 0.5em 0
+    margin: 0
 
   p
     margin: 1em auto
 
   @media (min-width: 480px)
     h1
-      font-size: 4em
+      font-size: 3em
 </style>
