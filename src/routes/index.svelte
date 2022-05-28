@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { city } from '@stores';
   import { getRandomCities } from '@api/geo';
   import type { City } from '@interfaces';
-  import { redirectToBudget, type RedirectData } from './_utils';
+  import { redirectToBudget } from './_utils';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
@@ -17,12 +16,6 @@
 
   const delay = 30 * 1000; // 30 seconds
   const retryDelay = 5 * 1000; // 5 seconds
-
-  function redirect(d: RedirectData): void {
-    if (d.city) $city = d.city;
-
-    redirectToBudget(d)
-  }
 
   function allowRetry(): void {
     allowedToRetry = true;
@@ -55,7 +48,7 @@
 </svelte:head>
 
 <main>
-  <Search on:select={({ detail }) => redirect(detail)} />
+  <Search on:select={({ detail }) => redirectToBudget(detail)} />
 
   {#if examples.length}
     <div class="examples" in:fade={{ duration: 2000 }}>
@@ -78,7 +71,7 @@
             <li in:fade={{ duration: 2000, delay: i * 1000 }}>
               <a
                 href={`/budgets?insee=${code}`}
-                on:click={() => redirect({ city })}
+                on:click={() => redirectToBudget({ city })}
               >
                 <div class="city">{nom}</div>
                 <div class="dpt">({dpt} - {dptCode})</div>

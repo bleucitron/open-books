@@ -72,8 +72,10 @@
         sirens,
         currentCity: $city,
         currentSiret: siret,
-        currentYear: year,
         insee,
+      },
+      stuff: {
+        city: $city,
       },
     };
   };
@@ -90,7 +92,6 @@
   export let sirens: string[];
   export let currentSiret: string;
   export let currentCity: City;
-  export let currentYear: number;
   export let insee: string;
 
   $: $city = currentCity;

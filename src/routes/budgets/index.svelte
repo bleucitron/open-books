@@ -62,7 +62,6 @@
   }
   $: if (insee || currentSiret) {
     budgetById = {};
-    city.set(currentCity);
   }
 
   function selectSiret(s: string): void {
