@@ -11,7 +11,6 @@
 
   export let examples: City[] = [];
 
-
   let timeout: NodeJS.Timeout;
   let retryTimeout: NodeJS.Timeout;
   let allowedToRetry = false;

@@ -1,14 +1,9 @@
 <script lang="ts" context="module">
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
-  import { getCity } from '@api';
-  import { extractSirens } from '@api/utils/siren';
   import { type, code } from '@stores';
   import city from '@stores/city';
-  import type { Budget, BudgetMap, City, Etablissement } from '@interfaces';
-  import { extractSiren, formatValue } from '@utils/misc';
-  import FavoriteToggle from '$lib/FavoriteToggle.svelte';
-  import FavoriteMenu from '$lib/FavoriteMenu.svelte';
+  import type { Budget, BudgetMap, City } from '@interfaces';
   import { fillBudget, fillBudgetBySirens } from './_cache';
 
   const start = 2012;
@@ -16,53 +11,16 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export const load: Load = async ({ url: { searchParams }, fetch }) => {
+  export const load: Load = async ({ url: { searchParams } }) => {
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
     const sirenString = searchParams.get('sirens');
-    let siret = searchParams.get('siret');
-
-    if (!insee && !siret && !sirenString) {
-      return {
-        redirect: '/',
-        status: 302,
-      };
-    }
+    const siret = searchParams.get('siret');
 
     const year = parseInt(y) || defaultYear;
 
-    let $city = insee && get(city);
-    let sirens = sirenString?.split(',');
-
-    if (insee) {
-      if (!$city || $city.code !== insee) {
-        $city = await getCity(insee, fetch);
-      }
-
-      if (!siret || !sirens) {
-        const siretsFromInsee = (await fetch(
-          `sirene/siretsFromInsee/${insee}`,
-        ).then(r => r.json())) as Etablissement[];
-        const mainSirets = siretsFromInsee.filter(e => e.etablissementSiege);
-        sirens = extractSirens(mainSirets);
-
-        const sirets = mainSirets.map(e => e.siret).sort();
-
-        siret = sirets[0];
-
-        return {
-          redirect: makeBudgetUrl({
-            insee,
-            siret,
-            sirens,
-            year,
-          }),
-          status: 302,
-        };
-      }
-    } else if (!sirens) {
-      sirens = [extractSiren(siret)];
-    }
+    const $city = insee && get(city);
+    const sirens = sirenString?.split(',');
 
     const budget = await fillBudget(siret, year, $city);
 
@@ -84,16 +42,11 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  import history from '@stores/history';
-  import { makeId, makeBudgetUrl, fonctionFromTree } from '@utils';
+  import { makeId, fonctionFromTree } from '@utils';
 
-  import Icon from '$lib/Icon.svelte';
-  import Search from '$lib/Search.svelte';
-  import HistoryMenu from '$lib/HistoryMenu.svelte';
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
-  import { redirectToBudget } from '../_utils';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -110,14 +63,6 @@
   $: if (insee || currentSiret) {
     budgetById = {};
     city.set(currentCity);
-  }
-
-  $: if ($page) {
-    history.addItem({
-      name: $city?.nom ?? currentSiret,
-      insee,
-      sirens,
-    });
   }
 
   function selectSiret(s: string): void {
@@ -141,8 +86,6 @@
       budget => budget && budget.siret === siret,
     );
   };
-
-  $: nom = $city?.nom ?? currentSiret;
 
   $: budgetPs = years
     .map(year =>
@@ -193,43 +136,6 @@
   );
 </script>
 
-<svelte:head>
-  {#if $city}
-    {@const { nom, departement } = $city}
-    <title>{`Budgets pour ${nom} (${departement.code})`}</title>
-  {:else}
-    <title>{`Budgets pour ${nom}`}</title>
-  {/if}
-</svelte:head>
-
-<header>
-  <div>
-    <a class="home" href="/">
-      <Icon id="book-open" />
-    </a>
-    <div class="info-container">
-      <div class="titles">
-        <FavoriteToggle name={nom} {insee} {sirens} />
-        <h1>{nom}</h1>
-        {#if $city}
-          {@const { nom, population, departement } = $city}
-          <div class="info">
-            <span>{formatValue(population)} habitants</span>
-            <span>
-              ({nom} - {departement.code})
-            </span>
-          </div>
-        {/if}
-      </div>
-    </div>
-  </div>
-  <div class="actions">
-    <Search on:select={({ detail }) => redirectToBudget(detail)} />
-    <HistoryMenu />
-    <FavoriteMenu />
-  </div>
-</header>
-
 <div class="content">
   <menu>
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
@@ -241,93 +147,6 @@
 </div>
 
 <style lang="sass">
-  header
-    position: relative
-    display: flex
-    justify-content: space-between
-    padding: 0 1rem
-    height: $headerHeight
-    background: $grey-darkest
-    color: $grey-dark
-
-    > div
-      display: flex
-      align-items: center
-
-      &:first-child
-        flex: 1
-
-      :global
-        .Search
-          width: 30rem
-          height: 100%
-          font-size: 1rem
-
-          :global(.Icon)
-            font-size: 1rem
-            margin: 0.8rem
-
-        .search-input
-          font-size: 1rem
-          height: 100%
-
-          &::placeholder
-            color: $grey-dark
-
-          &:focus::placeholder
-            color: $grey
-
-        .searchbar
-          height: 100%
-          background: $grey-darker
-          border-radius: 0
-          font-size: 1.1rem
-
-          &:focus-within
-            background: $grey-dark
-
-
-        .Suggestion
-          font-size: 1em
-
-    .actions
-      gap: 1rem
-
-    .info-container
-      display: flex
-      flex-direction: column
-
-    .home
-      display: flex
-      align-items: center
-      height: 100%
-      font-size: 1.5rem
-      margin-right: 1.2rem
-      transition: color 0.3s ease-in-out
-
-      &:hover
-        color: coral
-
-    .titles
-      display: flex
-      align-items: baseline
-      gap: 0.5rem
-
-    h1
-      font-size: 2rem
-      color: $grey-lightest
-
-    .info
-      margin: 0
-      display: flex
-      align-items: flex-end
-
-      span:first-child
-        margin-right: 3px
-
-      span:last-child
-        margin-left: 3px
-
   menu
     margin: 0
     color: white

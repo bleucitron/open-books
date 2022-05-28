@@ -19,6 +19,9 @@ export function fillBudget(
   siret: string,
   year: number,
   city: City,
+  /**
+   * ALT FETCH ???
+   */
 ): Promise<Budget> {
   const id = makeId(siret, year);
 

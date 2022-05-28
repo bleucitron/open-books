@@ -51,7 +51,9 @@ export function getSiretsFromInsee(
   return get<SiretsFromAPI>(`${baseUrl}/${endpoint}`, {
     ...options,
     fetch: altFetch,
-  }).then(r => r.etablissements);
+  })
+    .then(r => r.etablissements)
+    .catch(() => null);
 }
 
 export function getSiren(siren: string): Promise<UniteLegale> {
