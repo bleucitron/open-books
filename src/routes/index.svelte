@@ -1,13 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
+  import { navigating } from '$app/stores';
   import { getRandomCities } from '@api/geo';
-  import { city } from '@stores';
+  import { city as cityStore } from '@stores';
   import type { City } from '@interfaces';
   import { redirectToBudget } from './_utils';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let examples: City[] = [];
 
@@ -30,7 +32,7 @@
   }
 
   function chooseExample(c: City): void {
-    $city = c;
+    $cityStore = c;
   }
 
   onMount(() => {
@@ -78,7 +80,14 @@
                 href={`/budgets?insee=${code}`}
                 on:click={() => chooseExample(city)}
               >
-                <div class="city">{nom}</div>
+                <div class="city">
+                  <span>
+                    {nom}
+                    {#if $navigating && city === $cityStore}
+                      <Spinner inline />
+                    {/if}
+                  </span>
+                </div>
                 <div class="dpt">({dpt} - {dptCode})</div>
               </a>
             </li>
@@ -148,6 +157,15 @@
 
         .city
           font-size: 1.1rem
+          span
+            position: relative
+
+          :global
+            .Spinner
+              position: absolute
+              right: -1.4rem
+              bottom: 0
+
 
         .dpt
           font-size: 0.8rem
