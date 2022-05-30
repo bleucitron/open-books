@@ -86,7 +86,7 @@
   import Search from '$lib/Search.svelte';
   import HistoryMenu from '$lib/HistoryMenu.svelte';
   import { history } from '@stores';
-  import { redirectToBudget } from '../_utils';
+  import { handleTargetSelection } from '../_utils';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -94,7 +94,7 @@
   export let insee: string;
 
   $: _city = $city ?? currentCity;
-  $: nom = _city.nom ?? currentSiret;
+  $: nom = _city?.nom ?? currentSiret;
 
   $: if ($page) {
     history.addItem({
@@ -141,7 +141,7 @@
     </div>
   </div>
   <div class="actions">
-    <Search on:select={({ detail }) => redirectToBudget(detail)} />
+    <Search on:select={({ detail }) => handleTargetSelection(detail)} />
     <HistoryMenu />
     <FavoriteMenu />
   </div>

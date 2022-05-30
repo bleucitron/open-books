@@ -5,7 +5,7 @@
   import { getRandomCities } from '@api/geo';
   import { city as cityStore } from '@stores';
   import type { City } from '@interfaces';
-  import { redirectToBudget } from './_utils';
+  import { handleTargetSelection } from './_utils';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
@@ -55,7 +55,7 @@
 </svelte:head>
 
 <main>
-  <Search on:select={({ detail }) => redirectToBudget(detail)} />
+  <Search on:select={({ detail }) => handleTargetSelection(detail)} />
 
   {#if examples.length}
     <div class="examples" in:fade={{ duration: 2000 }}>
