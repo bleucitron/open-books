@@ -4,7 +4,7 @@ const nbResults = 1000;
 const category = '7210';
 
 interface Params {
-  codeCommuneEtablissement: number[];
+  codeCommuneEtablissement: string[];
   categorieJuridiqueUniteLegale: string;
 }
 
@@ -25,7 +25,7 @@ function buildParamString(paramByKey: Params): string {
 interface CityCode {
   name: string;
   nb: number;
-  base: number;
+  base: string;
 }
 
 const codesByMain: Record<string, CityCode> = {
@@ -33,30 +33,32 @@ const codesByMain: Record<string, CityCode> = {
   '69123': {
     name: 'Lyon',
     nb: 9,
-    base: 69380,
+    base: '69380',
   },
   '75056': {
     name: 'Paris',
     nb: 20,
-    base: 75100,
+    base: '75100',
   },
   '13055': {
     name: 'Marseille',
     nb: 16,
-    base: 13200,
+    base: '13200',
   },
 };
 
-export function checkCodes(code: string): number[] {
-  let output = [parseInt(code)];
-
+export function checkCodes(code: string): string[] {
   if (code in codesByMain) {
     const { nb, base } = codesByMain[code];
 
-    output = [...output, ...Array(nb).keys()].map(e => base + e + 1);
+    const codes = Array.from({ length: nb }, (_, v) =>
+      (parseInt(base) + v + 1).toString(),
+    );
+
+    return [code, ...codes];
   }
 
-  return output;
+  return [code];
 }
 
 export function makeGetSiretEndpoint(siret: string): string {
@@ -80,7 +82,7 @@ export function makeGetSiretsEndpoint(sirens: string[]): string {
   return `${base}?${allParams}`;
 }
 
-export function makeSearchSiretEndpoint(codes: number[]): string {
+export function makeSearchSiretEndpoint(codes: string[]): string {
   const base = 'siret';
 
   const params = buildParamString({
