@@ -3,6 +3,7 @@
   import Nav from '$lib/Nav.svelte';
 
   export const load: Load = ({ error }) => {
+    console.error('Stack', error.stack);
     return {
       props: {
         message: error.message,
