@@ -1,5 +1,6 @@
 <script lang="ts">
   import { navigating } from '$app/stores';
+  import { city } from '@stores';
   import { createEventDispatcher } from 'svelte';
   import { slide } from 'svelte/transition';
   import type { City } from '@interfaces';
@@ -73,7 +74,7 @@
           {/if}
         </div>
 
-        {#if active && $navigating}
+        {#if $city === suggestion && $navigating}
           <Spinner />
         {/if}
       </a>
