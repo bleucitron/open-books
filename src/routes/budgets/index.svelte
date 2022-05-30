@@ -1,8 +1,6 @@
 <script lang="ts" context="module">
-  import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
   import { type, code } from '@stores';
-  import city from '@stores/city';
   import type { Budget, BudgetMap, City } from '@interfaces';
   import { fillBudget, fillBudgetBySirens } from './_cache';
 
@@ -11,7 +9,7 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export const load: Load = async ({ url: { searchParams } }) => {
+  export const load: Load = async ({ url: { searchParams }, stuff }) => {
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
     const sirenString = searchParams.get('sirens');
@@ -19,15 +17,15 @@
 
     const year = parseInt(y) || defaultYear;
 
-    const $city = insee && get(city);
+    const city = insee && stuff.city;
     const sirens = sirenString?.split(',');
 
-    const budget = await fillBudget(siret, year, $city);
+    const budget = await fillBudget(siret, year, city);
 
     return {
       props: {
         sirens,
-        currentCity: $city,
+        currentCity: city,
         currentSiret: siret,
         currentYear: year,
         insee,
@@ -39,7 +37,7 @@
 
 <script lang="ts">
   import { browser } from '$app/env';
-  import { page } from '$app/stores';
+  import { navigating, page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
@@ -47,6 +45,7 @@
   import Labels from './_components/Labels.svelte';
   import Years from './_components/Years.svelte';
   import Summary from './_components/Summary.svelte';
+  import Spinner from '$lib/Spinner.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
@@ -60,7 +59,7 @@
   $: if (budget) {
     budgetById[budget?.id] = budget;
   }
-  $: if (insee || currentSiret) {
+  $: if (browser && (insee || currentSiret)) {
     budgetById = {};
   }
 
@@ -90,12 +89,12 @@
     .map(year =>
       year === currentYear
         ? Promise.resolve(budget)
-        : fillBudget(currentSiret, year, $city),
+        : fillBudget(currentSiret, year, currentCity),
     )
     .map(p => p.then(b => b && (budgetById[b.id] = b)));
 
   $: otherBudgetPs = browser
-    ? fillBudgetBySirens(sirens, [...years].reverse(), $city).map(p =>
+    ? fillBudgetBySirens(sirens, [...years].reverse(), currentCity).map(p =>
         p.then(budgets =>
           budgets
             .filter(b => b && b.info.city?.code === insee)
@@ -140,8 +139,12 @@
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    <Summary year={currentYear} {budget} />
-    <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+    {#if $navigating}
+      <Spinner />
+    {:else}
+      <Summary year={currentYear} {budget} />
+      <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+    {/if}
   </div>
 </div>
 
@@ -161,8 +164,13 @@
     overflow: hidden
 
   .dataviz
+    :global
+      .Spinner
+        font-size: 3rem
+
     flex: 1 0
     display: flex
     flex-flow: column
     align-items: center
+    justify-content: center
 </style>

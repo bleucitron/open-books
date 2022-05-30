@@ -3,7 +3,7 @@
   import type { Load } from '@sveltejs/kit';
   import { getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
-  import city from '@stores/city';
+  import { city } from '@stores';
   import type { City, Etablissement } from '@interfaces';
   import { makeBudgetUrl } from '@utils';
   import { extractSiren, formatValue } from '@utils/misc';
@@ -70,18 +70,17 @@
     return {
       props: {
         sirens,
-        currentCity: $city,
         currentSiret: siret,
+        currentCity: $city,
         insee,
       },
-      stuff: {
-        city: $city,
-      },
+      stuff: { city: $city }, // needed to communicate with index while server-side
     };
   };
 </script>
 
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
@@ -94,21 +93,26 @@
   export let currentCity: City;
   export let insee: string;
 
-  $: $city = currentCity;
-  $: nom = $city?.nom ?? currentSiret;
+  $: _city = $city ?? currentCity;
+  $: nom = _city.nom ?? currentSiret;
 
   $: if ($page) {
     history.addItem({
-      name: $city?.nom ?? currentSiret,
+      name: nom,
       insee,
       sirens,
     });
   }
+
+  onMount(() => {
+    // for direct access to budget page
+    $city = currentCity;
+  });
 </script>
 
 <svelte:head>
-  {#if city}
-    {@const { nom, departement } = $city}
+  {#if _city}
+    {@const { nom, departement } = _city}
     <title>{`Budgets pour ${nom} (${departement.code})`}</title>
   {:else}
     <title>{`Budgets pour ${nom}`}</title>
@@ -124,8 +128,8 @@
       <div class="titles">
         <FavoriteToggle name={nom} {insee} {sirens} />
         <h1>{nom}</h1>
-        {#if $city}
-          {@const { nom, population, departement } = $city}
+        {#if _city}
+          {@const { nom, population, departement } = _city}
           <div class="info">
             <span>{formatValue(population)} habitants</span>
             <span>

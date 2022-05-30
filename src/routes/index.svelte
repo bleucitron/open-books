@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import { getRandomCities } from '@api/geo';
+  import { city } from '@stores';
   import type { City } from '@interfaces';
   import { redirectToBudget } from './_utils';
 
@@ -26,6 +27,10 @@
     clearTimeout(retryTimeout);
     timeout = setTimeout(updateExamples, delay);
     retryTimeout = setTimeout(allowRetry, retryDelay);
+  }
+
+  function chooseExample(c: City): void {
+    $city = c;
   }
 
   onMount(() => {
@@ -71,7 +76,7 @@
             <li in:fade={{ duration: 2000, delay: i * 1000 }}>
               <a
                 href={`/budgets?insee=${code}`}
-                on:click={() => redirectToBudget({ city })}
+                on:click={() => chooseExample(city)}
               >
                 <div class="city">{nom}</div>
                 <div class="dpt">({dpt} - {dptCode})</div>

@@ -1,12 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import type { City } from '@interfaces';
+  import { navigating } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
   import Suggestions from '$lib/Suggestions.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import { getCities } from '@api';
   import { isSiret } from '@utils/siren';
-  import { navigating } from '$app/stores';
 
   const dispatch = createEventDispatcher();
 
@@ -24,12 +24,8 @@
     cities = null;
   }
 
-  function select(event: CustomEvent): void {
-    let city = event.detail.city;
-    if (!city) {
-      city = cities[0];
-    }
-    dispatch('select', { city });
+  function select({ detail }: CustomEvent): void {
+    dispatch('select', { city: detail });
   }
 
   $: if (!$navigating) reset();

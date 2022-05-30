@@ -1,4 +1,5 @@
 import { goto } from '$app/navigation';
+import { city as cityStore } from '@stores';
 import type { City } from '@interfaces';
 
 export interface RedirectData {
@@ -11,6 +12,7 @@ export function redirectToBudget({ city, siret }: RedirectData): void {
   const params: Record<string, string> = {};
 
   if (city) {
+    cityStore.set(city);
     params.insee = city.code;
   }
   if (siret) params.siret = siret;

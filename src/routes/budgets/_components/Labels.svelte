@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { navigating } from '$app/stores';
   import Spinner from '$lib/Spinner.svelte';
 
   import type { Budget } from '@interfaces';
@@ -14,32 +15,34 @@
 </script>
 
 <ul class="Labels">
-  {#await loadingP}
-    <div class="loading">
-      <Spinner />
-    </div>
-  {/await}
-  {#each sirens as siren}
-    <li class="siren">
-      <ul>
-        {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
-          <li
-            class="siret"
-            class:selected={selected === siret}
-            class:main={i === 0}
-          >
-            <div on:click={() => select(siret)}>
-              <div class="info">
-                <span class="siren">{siren}</span>
-                <span class="etabl">{etabl}</span>
+  {#if !$navigating}
+    {#await loadingP}
+      <div class="loading">
+        <Spinner />
+      </div>
+    {/await}
+    {#each sirens as siren}
+      <li class="siren">
+        <ul>
+          {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
+            <li
+              class="siret"
+              class:selected={selected === siret}
+              class:main={i === 0}
+            >
+              <div on:click={() => select(siret)}>
+                <div class="info">
+                  <span class="siren">{siren}</span>
+                  <span class="etabl">{etabl}</span>
+                </div>
+                <div class="label">{label || defaultLabel}</div>
               </div>
-              <div class="label">{label || defaultLabel}</div>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    </li>
-  {/each}
+            </li>
+          {/each}
+        </ul>
+      </li>
+    {/each}
+  {/if}
 </ul>
 
 <style lang="sass">
