@@ -62,6 +62,8 @@
       display: flex
       align-items: center
       justify-content: center
+      height: 100%
+      padding-inline: 0.5rem
       cursor: pointer
       transition: color 0.3s ease-in-out
       z-index: 3

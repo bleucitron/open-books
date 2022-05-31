@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Nav from '$lib/Nav.svelte';
+  import Header from '$lib/Header.svelte';
 </script>
 
-<Nav path="home" />
+<Header />
 
-<div class="root-layout">
+<div class="slot-container">
   <slot />
 </div>
 
 <style lang="sass">
-  .root-layout
+  .slot-container
     padding-top: $headerHeight
 </style>

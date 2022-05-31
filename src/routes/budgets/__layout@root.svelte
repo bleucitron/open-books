@@ -7,8 +7,6 @@
   import type { City, Etablissement } from '@interfaces';
   import { makeBudgetUrl } from '@utils';
   import { extractSiren, formatValue } from '@utils/misc';
-  import FavoriteToggle from '$lib/FavoriteToggle.svelte';
-  import FavoriteMenu from '$lib/FavoriteMenu.svelte';
 
   const defaultYear = new Date().getFullYear() - 2;
 
@@ -82,9 +80,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';
-  import HistoryMenu from '$lib/HistoryMenu.svelte';
+  import Header from '$lib/Header.svelte';
+  import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import { history } from '@stores';
   import { handleTargetSelection } from '../_utils';
 
@@ -118,105 +116,32 @@
     <title>{`Budgets pour ${nom}`}</title>
   {/if}
 </svelte:head>
-
-<header>
-  <div>
-    <a class="home" href="/">
-      <Icon id="book-open" />
-    </a>
-    <div class="info-container">
-      <div class="titles">
-        <FavoriteToggle name={nom} {insee} {sirens} />
-        <h1>{nom}</h1>
-        {#if _city}
-          {@const { nom, population, departement } = _city}
-          <div class="info">
-            <span>{formatValue(population)} habitants</span>
-            <span>
-              ({nom} - {departement.code})
-            </span>
-          </div>
-        {/if}
-      </div>
+<div class="budget-layout">
+  <Header>
+    <div class="titles">
+      <FavoriteToggle name={nom} {insee} {sirens} />
+      <h1>{nom}</h1>
+      {#if _city}
+        {@const { nom, population, departement } = _city}
+        <div class="info">
+          <span>{formatValue(population)} habitants</span>
+          <span>
+            ({nom} - {departement.code})
+          </span>
+        </div>
+      {/if}
     </div>
-  </div>
-  <div class="actions">
-    <Search on:select={({ detail }) => handleTargetSelection(detail)} />
-    <HistoryMenu />
-    <FavoriteMenu />
-  </div>
-</header>
 
-<slot />
+    <Search on:select={({ detail }) => handleTargetSelection(detail)} />
+  </Header>
+</div>
+
+<div class="slot-container">
+  <slot />
+</div>
 
 <style lang="sass">
-  header
-    position: relative
-    display: flex
-    justify-content: space-between
-    padding: 0 1rem
-    height: $headerHeight
-    background: $grey-darkest
-    color: $grey-dark
-
-    > div
-      display: flex
-      align-items: center
-
-      &:first-child
-        flex: 1
-
-      :global
-        .Search
-          width: 30rem
-          height: 100%
-          font-size: 1rem
-
-          :global(.Icon)
-            font-size: 1rem
-            margin: 0.8rem
-
-        .search-input
-          font-size: 1rem
-          height: 100%
-
-          &::placeholder
-            color: $grey-dark
-
-          &:focus::placeholder
-            color: $grey
-
-        .searchbar
-          height: 100%
-          background: $grey-darker
-          border-radius: 0
-          font-size: 1.1rem
-
-          &:focus-within
-            background: $grey-dark
-
-
-        .Suggestion
-          font-size: 1em
-
-    .actions
-      gap: 1rem
-
-    .info-container
-      display: flex
-      flex-direction: column
-
-    .home
-      display: flex
-      align-items: center
-      height: 100%
-      font-size: 1.5rem
-      margin-right: 1.2rem
-      transition: color 0.3s ease-in-out
-
-      &:hover
-        color: coral
-
+  .budget-layout
     .titles
       display: flex
       align-items: baseline
@@ -236,4 +161,44 @@
 
       span:last-child
         margin-left: 3px
+
+    :global
+      header
+        .slot-container
+          justify-content: space-between
+
+      .Search
+        width: 30rem
+        height: 100%
+        font-size: 1rem
+
+        :global(.Icon)
+          font-size: 1rem
+          margin: 0.8rem
+
+      .search-input
+        font-size: 1rem
+        height: 100%
+
+        &::placeholder
+          color: $grey-dark
+
+        &:focus::placeholder
+          color: $grey
+
+      .searchbar
+        height: 100%
+        background: $grey-darker
+        border-radius: 0
+        font-size: 1.1rem
+
+        &:focus-within
+          background: $grey-dark
+
+      .Suggestion
+        font-size: 1em
+
+  .slot-container
+    padding-top: $headerHeight
+    height: 100vh
 </style>

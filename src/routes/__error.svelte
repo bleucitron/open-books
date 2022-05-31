@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import type { Load } from '@sveltejs/kit';
-  import Nav from '$lib/Nav.svelte';
+  import Header from '$lib/Header.svelte';
 
   export const load: Load = ({ error }) => {
     console.error('Stack', error.stack);
@@ -16,7 +16,7 @@
   export let message: string;
 </script>
 
-<Nav path="home" />
+<Header />
 
 <svelte:head>
   <title>{message}</title>

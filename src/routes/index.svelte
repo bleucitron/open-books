@@ -104,8 +104,6 @@
     display: flex
     flex-flow: column
     align-items: center
-    height: 100vh
-    padding-top: $headerHeight
 
     :global
       .Search

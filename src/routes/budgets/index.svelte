@@ -160,7 +160,7 @@
   .content
     display: flex
     flex-flow: row
-    height: calc(100vh - $headerHeight)
+    height: 100%
     overflow: hidden
 
   .dataviz
