@@ -132,6 +132,10 @@
       return $type ? source?.value[$type] : 0;
     }),
   );
+
+  $: from = $navigating?.from.searchParams.get('insee');
+  $: to = $navigating?.to.searchParams.get('insee');
+  $: showSpinner = from !== to;
 </script>
 
 <div class="content">
@@ -139,7 +143,7 @@
     <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
   </menu>
   <div class="dataviz">
-    {#if $navigating}
+    {#if showSpinner}
       <Spinner />
     {:else}
       <Summary year={currentYear} {budget} />
