@@ -44,7 +44,7 @@
   class:selected
   on:click={!unavailable ? select : undefined}
 >
-  <a href={makeHref(url, year)} class="container">
+  <a href={makeHref(url, year)}>
     {#await valueP then value}
       {#if value}
         <div class="container">
