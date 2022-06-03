@@ -9,7 +9,7 @@
   const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export const load: Load = async ({ url: { searchParams }, stuff }) => {
+  export const load: Load = async ({ url: { searchParams }, stuff, fetch }) => {
     const insee = searchParams.get('insee');
     const y = searchParams.get('year');
     const sirenString = searchParams.get('sirens');
@@ -20,7 +20,7 @@
     const city = insee && stuff.city;
     const sirens = sirenString?.split(',');
 
-    const budget = await fillBudget(siret, year, city);
+    const budget = await fillBudget(siret, year, city, fetch);
 
     return {
       props: {

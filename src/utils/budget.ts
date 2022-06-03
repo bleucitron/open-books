@@ -9,6 +9,7 @@ import type {
   RecordsWithSiret,
   FonctionTree,
   FonctionTreeValue,
+  Fetch,
 } from '@interfaces';
 
 import { nomenById } from './nomen';
@@ -77,7 +78,10 @@ export async function makeCSV(data: Budget): Promise<CSV> {
   };
 }
 
-export async function makeBudget(data: BudgetRaw): Promise<Budget> {
+export async function makeBudget(
+  data: BudgetRaw,
+  fetch?: Fetch,
+): Promise<Budget> {
   const { info, siret, year, records } = data;
 
   const id = makeId(siret, year);
@@ -105,7 +109,7 @@ export async function makeBudget(data: BudgetRaw): Promise<Budget> {
   const city = info.city;
   const label = labels.length > 0 ? formatLabel(labels[0], city?.nom) : '';
 
-  const nomenFilled = await getNomen(year, nomen, city?.population);
+  const nomenFilled = await getNomen(year, nomen, city?.population, fetch);
   const tree = nomenFilled
     ? aggregateData(records, nomenFilled?.tree, nomenFilled.id)
     : null;

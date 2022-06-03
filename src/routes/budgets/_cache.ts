@@ -1,7 +1,7 @@
 import { browser } from '$app/env';
 import { getRecords } from '@api';
 import { makeBudget, makeId, orderRecordsBySiret } from '@utils';
-import type { Budget, BudgetMap, BudgetRecord, City } from '@interfaces';
+import type { Budget, BudgetMap, BudgetRecord, City, Fetch } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
 
@@ -19,26 +19,30 @@ export function fillBudget(
   siret: string,
   year: number,
   city: City,
-  /**
-   * ALT FETCH ???
-   */
+  fetch?: Fetch,
 ): Promise<Budget> {
   const id = makeId(siret, year);
 
   return id in budgetCache
     ? Promise.resolve(budgetCache[id])
-    : getRecords({
-        ident: [siret],
-        year,
-      })
+    : getRecords(
+        {
+          ident: [siret],
+          year,
+        },
+        fetch,
+      )
         .catch(() => [])
         .then(async (records: BudgetRecord[]) => {
-          const b = await makeBudget({
-            info: { city },
-            siret,
-            year,
-            records,
-          });
+          const b = await makeBudget(
+            {
+              info: { city },
+              siret,
+              year,
+              records,
+            },
+            fetch,
+          );
 
           if (browser) {
             /**
