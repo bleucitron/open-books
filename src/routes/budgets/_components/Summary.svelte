@@ -6,6 +6,7 @@
     Voir la fonction aggregateData
   */
 
+  import { browser } from '$app/env';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { type, code } from '@stores';
@@ -14,6 +15,7 @@
     stepsFromString,
     fonctionFromTree,
     formatCurrency,
+    BudgetType,
   } from '@utils';
   import type { Type, Budget, FonctionTreeValue } from '@interfaces';
 
@@ -27,37 +29,29 @@
 
   let breadcrumbs: { id: string; label: string }[];
 
-  function updateUrl(): void {
+  function selectType(type: BudgetType): void {
     const u = new URL(url);
 
-    if (!$code) u.searchParams.delete('code');
-    else u.searchParams.set('code', $code);
+    if (!type) u.searchParams.delete('type');
+    else u.searchParams.set('type', type);
 
-    if (!$type) u.searchParams.delete('type');
-    else u.searchParams.set('type', $type);
-
+    // not sure if i can use an <a> with a <path>
     goto(u.href);
   }
 
-  function selectType(t: Type): void {
-    $type = t;
-    $code = null;
-    updateUrl();
-  }
-  function selectCode(c: string): void {
-    $code = c;
-    updateUrl();
-  }
+  function makeResetHref(url: URL): string {
+    const u = new URL(url);
+    u.searchParams.delete('type');
+    u.searchParams.delete('code');
 
-  function reset(): void {
-    $type = null;
-    $code = null;
-    updateUrl();
+    return u.href;
   }
 
   $: ({ url } = $page);
-  $: $code = url.searchParams.get('code');
-  $: $type = url.searchParams.get('type') as Type;
+  $: if (browser) {
+    code.set(url.searchParams.get('code'));
+    type.set(url.searchParams.get('type') as Type);
+  }
 
   $: steps = budget ? stepsFromString($code) : [];
   $: breadcrumbs = steps.map(code => {
@@ -83,8 +77,8 @@
 
 <div class="Summary">
   <header>
-    <h3 class:clickable={$type} on:click={reset}>{year}</h3>
-    <Path steps={breadcrumbs} on:click={({ detail }) => selectCode(detail)} />
+    <h3 class:clickable={$type}><a href={makeResetHref(url)}>{year}</a></h3>
+    <Path steps={breadcrumbs} />
     {#if budget}
       <Csv data={budget} />
     {/if}
@@ -114,12 +108,7 @@
       />
     {:else}
       <div class="main">{formatCurrency(total)}</div>
-      <BudgetHisto
-        {values}
-        {total}
-        type={$type}
-        on:click={({ detail }) => selectCode(detail)}
-      />
+      <BudgetHisto {values} {total} type={$type} />
     {/if}
     <!-- {/await} -->
   </div>

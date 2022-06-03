@@ -17,9 +17,9 @@
   $: isFavorite = !!$favorites.find(favorite => favorite.name === name);
 </script>
 
-<div class="FavoriteToggle" on:click={toggleFavorite}>
+<button class="FavoriteToggle" on:click={toggleFavorite}>
   <Icon id="star" filled={isFavorite} color="yellow" />
-</div>
+</button>
 
 <style lang="sass">
   .FavoriteToggle
@@ -29,5 +29,4 @@
 
     &:hover
       color: coral
-      cursor: pointer
 </style>

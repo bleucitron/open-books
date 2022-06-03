@@ -62,9 +62,9 @@
       <p>
         Si l'inspiration vous manque...
         {#if allowedToRetry}
-          <i in:fade={{ duration: 1000 }}>
+          <button in:fade={{ duration: 1000 }}>
             <Icon id="refresh-ccw" on:click={updateExamples} />
-          </i>
+          </button>
         {/if}
       </p>
       <ul>
@@ -108,8 +108,6 @@
     :global
       .Search
         margin-top: 25vh
-      .Icon
-        cursor: pointer
 
     .examples
       display: flex
@@ -127,7 +125,7 @@
         text-align: center
         color: #bbb
 
-        i
+        button
           position: absolute
           right: -1.5rem
           display: flex

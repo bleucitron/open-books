@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   import Bar from './Bar.svelte';
-
-  const dispatch = createEventDispatcher();
 
   import type { BudgetType } from '@utils';
   import type { FonctionTreeValue } from '@interfaces';
@@ -21,12 +17,12 @@
       {@const percentage = total ? value[type] / total : 0}
 
       <Bar
+        {code}
         {label}
         value={value[type]}
         {percentage}
         width={percentage}
         hasMore={!!tree}
-        on:click={() => dispatch('click', code)}
       />
     {/each}
   </div>

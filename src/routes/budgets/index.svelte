@@ -37,8 +37,6 @@
 
 <script lang="ts">
   import { browser } from '$app/env';
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
 
@@ -61,22 +59,6 @@
   }
   $: if (browser && (insee || currentSiret)) {
     budgetById = {};
-  }
-
-  function selectSiret(s: string): void {
-    const url = new URL($page.url);
-    url.searchParams.set('siret', s);
-    url.searchParams.set('year', currentYear.toString());
-
-    goto(url.href);
-  }
-
-  function selectYear(y: number): void {
-    const url = new URL($page.url);
-    url.searchParams.set('siret', currentSiret);
-    url.searchParams.set('year', y.toString());
-
-    goto(url.href);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -136,14 +118,14 @@
 
 <div class="content">
   <menu>
-    <Labels {labels} {loadingP} selected={currentSiret} />
+    <Labels {labels} {loadingP} />
   </menu>
   <div class="dataviz">
     {#if $changingCity}
       <Spinner />
     {:else}
       <Summary year={currentYear} {budget} />
-      <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+      <Years {years} {valuePs} />
     {/if}
   </div>
 </div>

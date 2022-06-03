@@ -3,8 +3,6 @@
 
   export let valuePs: Promise<number>[];
   export let years: number[];
-  export let select: (y: number) => void;
-  export let selected: number;
 
   $: maxP = Promise.all(valuePs).then(values => {
     const v = values.filter(v => v) as number[];
@@ -15,13 +13,7 @@
 
 <ul class="Years">
   {#each years as year, i}
-    <Year
-      {year}
-      valueP={valuePs[i]}
-      {maxP}
-      selected={year === selected}
-      select={() => select(year)}
-    />
+    <Year {year} valueP={valuePs[i]} {maxP} />
   {/each}
 </ul>
 

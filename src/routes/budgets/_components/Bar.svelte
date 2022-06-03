@@ -1,17 +1,27 @@
 <script lang="ts">
   import { format } from 'd3-format';
+  import { page } from '$app/stores';
   import { formatCurrency } from '@utils';
 
   import Icon from '$lib/Icon.svelte';
 
+  export let code: string;
   export let value: number;
   export let percentage: number;
   export let width: number;
   export let label: string;
   export let hasMore = false;
+
+  function makeHref(url: URL, code: string): string {
+    const u = new URL(url);
+    u.searchParams.set('code', code);
+
+    return u.href;
+  }
+  $: ({ url } = $page);
 </script>
 
-<div class="Bar" on:click>
+<a href={makeHref(url, code)} class="Bar">
   <div class="labels">
     <h3>
       {label}
@@ -25,7 +35,7 @@
     </div>
   </div>
   <div class="background" style={`width: ${width * 100}%`} />
-</div>
+</a>
 
 <style lang="sass">
   .Bar
@@ -34,7 +44,7 @@
     align-items: stretch
     padding: 0.5rem 1rem
     margin: 0.5rem
-    height: 5rem
+    height: 4rem
     cursor: pointer
 
   .labels

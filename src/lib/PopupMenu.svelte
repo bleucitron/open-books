@@ -24,9 +24,9 @@
 </script>
 
 <div class="PopupMenu" class:open on:mouseleave={() => (open = false)}>
-  <div class="toggle" on:click={togglePopup}>
+  <button class="toggle" on:click={togglePopup}>
     <Icon id={icon} />
-  </div>
+  </button>
   {#if open}
     <div class="content" transition:fade={{ duration: 200 }}>
       {#if items.length === 0}
@@ -41,7 +41,7 @@
           {/each}
         </ul>
       {/if}
-      <div class="delete" on:click={clear}>Effacer</div>
+      <button class="delete" on:click={clear}>Effacer</button>
     </div>
   {/if}
 </div>
@@ -64,7 +64,6 @@
       justify-content: center
       height: 100%
       padding-inline: 0.5rem
-      cursor: pointer
       transition: color 0.3s ease-in-out
       z-index: 3
 
@@ -102,7 +101,6 @@
       margin-bottom: 0.3rem
       font-size: 0.8rem
       text-align: center
-      cursor: pointer
       transition: color 0.3s ease-in-out
 
       &:hover

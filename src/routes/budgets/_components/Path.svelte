@@ -1,10 +1,17 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { page } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
 
-  const dispatch = createEventDispatcher();
-
   export let steps: { id: string; label: string }[];
+
+  function makeUrl(url: URL, code: string): string {
+    const u = new URL(url);
+
+    if (!code) u.searchParams.delete('code');
+    else u.searchParams.set('code', code);
+
+    return u.toString();
+  }
 
   $: current = steps.pop()?.label;
 </script>
@@ -15,10 +22,10 @@
   {/if}
   <div class="steps">
     {#each steps as { id, label }}
-      <div class="step" on:click={() => dispatch('click', id)}>
+      <a href={makeUrl($page.url, id)} class="step">
         {label}
         <Icon id="chevron-right" />
-      </div>
+      </a>
     {/each}
   </div>
 </div>

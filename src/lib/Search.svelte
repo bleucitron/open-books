@@ -92,17 +92,17 @@
     />
     {#if value}
       {#if loading}
-        <span on:click={() => (loading = false)}>
-          <Spinner inline />
-        </span>
+        <button on:click={() => (loading = false)}>
+          <Spinner />
+        </button>
       {:else}
-        <span class="reset" on:click={reset}>
+        <button class="reset" on:click={reset}>
           {#if !showSuggestions && $navigating}
             <Spinner />
           {:else}
             <Icon id="x" />
           {/if}
-        </span>
+        </button>
       {/if}
     {/if}
   </div>
@@ -145,7 +145,6 @@
     :global(.Icon)
       margin: 0 0.7em
       font-size: 1.3em
-
 
     *
       display: flex
