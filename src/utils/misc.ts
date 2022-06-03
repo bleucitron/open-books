@@ -78,7 +78,12 @@ export function sumBy(list: any[], key: string): number {
 export function stepsFromString(s: string): string[] {
   if (!s) return [];
 
-  return s.split('').map((e, i, a) => (i > 0 ? a[i - 1] + e : e));
+  return s.split('').map((char, i, a) => {
+    if (i) {
+      const previous = a.slice(0, i);
+      return previous.join('') + char;
+    } else return char;
+  });
 }
 
 export function randomNb(n: number): number {

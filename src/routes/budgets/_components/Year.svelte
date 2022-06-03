@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tweened } from 'svelte/motion';
   import { quadOut } from 'svelte/easing';
+  import { page } from '$app/stores';
   import { formatCurrency } from '@utils';
   import LoadingText from '$lib/LoadingText.svelte';
 
@@ -8,11 +9,24 @@
   export let valueP: Promise<number> = undefined;
   export let maxP: Promise<number>;
   export let select: () => void = undefined;
-  export let selected = false;
 
   let height = tweened(0, { easing: quadOut });
   let pending = true;
   let unavailable = false;
+
+  function makeHref(url: URL, year: number): string {
+    const u = new URL(url);
+    u.searchParams.set('year', year.toString());
+    u.searchParams.set('siret', currentSiret);
+
+    return u.href;
+  }
+
+  $: ({ url } = $page);
+  $: currentYear = parseInt(url.searchParams.get('year'));
+  $: currentSiret = url.searchParams.get('siret');
+
+  $: selected = year === currentYear;
 
   $: valueP.then(v => {
     pending = false;
@@ -30,16 +44,18 @@
   class:selected
   on:click={!unavailable ? select : undefined}
 >
-  {#await valueP then value}
-    {#if value}
-      <div class="container">
-        <div class="value" style:flex-basis={`${$height}%`}>
-          {formatCurrency(value)}
+  <a href={makeHref(url, year)} class="container">
+    {#await valueP then value}
+      {#if value}
+        <div class="container">
+          <div class="value" style:flex-basis={`${$height}%`}>
+            {formatCurrency(value)}
+          </div>
         </div>
-      </div>
-    {/if}
-  {/await}
-  <LoadingText text={year.toString()} loading={pending} />
+      {/if}
+    {/await}
+    <LoadingText text={year.toString()} loading={pending} />
+  </a>
 </li>
 
 <style lang="sass">
@@ -60,11 +76,6 @@
 
     &.selected
       opacity: 1
-      // :global(h3)
-      //   color: cornflowerblue
-
-      // .value
-      //   background: cornflowerblue
 
     &:first-child
       margin-left: 0
@@ -91,4 +102,5 @@
   .unavailable
     opacity: 0.1
     cursor: default
+    pointer-events: none
 </style>

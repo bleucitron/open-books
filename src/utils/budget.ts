@@ -229,16 +229,18 @@ export const typeToLabel = {
 };
 
 export function fonctionFromTree(
-  code: string,
+  target: string,
   tree: FonctionTree,
+  depth = 0,
 ): FonctionTreeValue {
   if (!tree) return null;
 
-  if (!(code in tree)) {
-    return fonctionFromTree(code, tree[code[0]]?.tree);
+  if (!(target in tree)) {
+    const step = target.slice(0, depth + 1);
+    return fonctionFromTree(target, tree[step]?.tree, depth + 1);
   }
 
-  return tree[code] as FonctionTreeValue;
+  return tree[target] as FonctionTreeValue;
 }
 
 export function aggregateData(

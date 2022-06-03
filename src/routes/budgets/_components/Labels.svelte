@@ -1,21 +1,31 @@
 <script lang="ts">
-  import { navigating } from '$app/stores';
+  import { page } from '$app/stores';
   import Spinner from '$lib/Spinner.svelte';
 
+  import { changingCity } from '@stores';
   import type { Budget } from '@interfaces';
 
   export let labels: Budget[];
-  export let select: (y: string) => void;
-  export let selected: string;
   export let loadingP: Promise<unknown>;
 
   const defaultLabel = 'commune';
+
+  function makeUrl(siret: string): string {
+    const url = new URL($page.url);
+    url.searchParams.set('year', currentYear);
+    url.searchParams.set('siret', siret);
+
+    return url.href;
+  }
+
+  $: currentYear = $page.url.searchParams.get('year');
+  $: currentSiret = $page.url.searchParams.get('siret');
 
   $: sirens = [...new Set(labels.map(({ siren }) => siren))];
 </script>
 
 <ul class="Labels">
-  {#if !$navigating}
+  {#if !$changingCity}
     {#await loadingP}
       <div class="loading">
         <Spinner />
@@ -27,16 +37,16 @@
           {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
             <li
               class="siret"
-              class:selected={selected === siret}
+              class:selected={currentSiret === siret}
               class:main={i === 0}
             >
-              <div on:click={() => select(siret)}>
+              <a href={makeUrl(siret)}>
                 <div class="info">
                   <span class="siren">{siren}</span>
                   <span class="etabl">{etabl}</span>
                 </div>
                 <div class="label">{label || defaultLabel}</div>
-              </div>
+              </a>
             </li>
           {/each}
         </ul>

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type { Load } from '@sveltejs/kit';
-  import { type, code } from '@stores';
+  import { type, code, changingCity } from '@stores';
   import type { Budget, BudgetMap, City } from '@interfaces';
   import { fillBudget, fillBudgetBySirens } from './_cache';
 
@@ -37,8 +37,6 @@
 
 <script lang="ts">
   import { browser } from '$app/env';
-  import { navigating, page } from '$app/stores';
-  import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
 
@@ -61,22 +59,6 @@
   }
   $: if (browser && (insee || currentSiret)) {
     budgetById = {};
-  }
-
-  function selectSiret(s: string): void {
-    const url = new URL($page.url);
-    url.searchParams.set('siret', s);
-    url.searchParams.set('year', currentYear.toString());
-
-    goto(url.href);
-  }
-
-  function selectYear(y: number): void {
-    const url = new URL($page.url);
-    url.searchParams.set('siret', currentSiret);
-    url.searchParams.set('year', y.toString());
-
-    goto(url.href);
   }
 
   $: findSimilarBudget = function (siret: string) {
@@ -132,22 +114,18 @@
       return $type ? source?.value[$type] : 0;
     }),
   );
-
-  $: from = $navigating?.from.searchParams.get('insee');
-  $: to = $navigating?.to.searchParams.get('insee');
-  $: showSpinner = from !== to;
 </script>
 
 <div class="content">
   <menu>
-    <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
+    <Labels {labels} {loadingP} />
   </menu>
   <div class="dataviz">
-    {#if showSpinner}
+    {#if $changingCity}
       <Spinner />
     {:else}
       <Summary year={currentYear} {budget} />
-      <Years {years} {valuePs} selected={currentYear} select={selectYear} />
+      <Years {years} {valuePs} />
     {/if}
   </div>
 </div>

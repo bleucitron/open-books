@@ -28,3 +28,8 @@ a {
   white-space: nowrap;
   border: 0;
 }
+
+button {
+  all: unset;
+  cursor: pointer;
+}

@@ -1,12 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { page } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
-
-  const dispatch = createEventDispatcher();
 
   export let steps: { id: string; label: string }[];
 
-  $: current = steps.pop()?.label;
+  function makeUrl(url: URL, code: string): string {
+    const u = new URL(url);
+
+    if (!code) u.searchParams.delete('code');
+    else u.searchParams.set('code', code);
+
+    return u.toString();
+  }
+
+  $: previous = steps.slice(0, -1);
+  $: current = steps.at(-1)?.label;
 </script>
 
 <div class="Path">
@@ -14,11 +22,11 @@
     <div class="current">{current}</div>
   {/if}
   <div class="steps">
-    {#each steps as { id, label }}
-      <div class="step" on:click={() => dispatch('click', id)}>
+    {#each previous as { id, label }}
+      <a href={makeUrl($page.url, id)} class="step">
         {label}
         <Icon id="chevron-right" />
-      </div>
+      </a>
     {/each}
   </div>
 </div>
