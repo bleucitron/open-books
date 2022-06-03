@@ -29,14 +29,15 @@
 
   let breadcrumbs: { id: string; label: string }[];
 
-  function selectType(type: BudgetType): void {
+  function selectType(t: BudgetType): void {
     const u = new URL(url);
 
-    if (!type) u.searchParams.delete('type');
-    else u.searchParams.set('type', type);
+    if (!t) u.searchParams.delete('type');
+    else u.searchParams.set('type', t);
 
     // not sure if i can use an <a> with a <path>
     goto(u.href);
+    $type = t;
   }
 
   function makeResetHref(url: URL): string {
