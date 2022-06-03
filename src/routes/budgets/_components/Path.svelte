@@ -13,7 +13,8 @@
     return u.toString();
   }
 
-  $: current = steps.pop()?.label;
+  $: previous = steps.slice(0, -1);
+  $: current = steps.at(-1)?.label;
 </script>
 
 <div class="Path">
@@ -21,7 +22,7 @@
     <div class="current">{current}</div>
   {/if}
   <div class="steps">
-    {#each steps as { id, label }}
+    {#each previous as { id, label }}
       <a href={makeUrl($page.url, id)} class="step">
         {label}
         <Icon id="chevron-right" />
