@@ -167,36 +167,36 @@
         .slot-container
           justify-content: space-between
 
-      .Search
-        width: 30rem
-        height: 100%
-        font-size: 1rem
-
-        :global(.Icon)
+        .Search
+          width: 30rem
+          height: 100%
           font-size: 1rem
-          margin: 0.8rem
 
-      .search-input
-        font-size: 1rem
-        height: 100%
+          :global(.Icon)
+            font-size: 1rem
+            margin: 0.8rem
 
-        &::placeholder
-          color: $grey-dark
+        .search-input
+          font-size: 1rem
+          height: 100%
 
-        &:focus::placeholder
-          color: $grey
+          &::placeholder
+            color: $grey-dark
 
-      .searchbar
-        height: 100%
-        background: $grey-darker
-        border-radius: 0
-        font-size: 1.1rem
+          &:focus::placeholder
+            color: $grey
 
-        &:focus-within
-          background: $grey-dark
+        .searchbar
+          height: 100%
+          background: $grey-darker
+          border-radius: 0
+          font-size: 1.1rem
 
-      .Suggestion
-        font-size: 1em
+          &:focus-within
+            background: $grey-dark
+
+        .Suggestion
+          font-size: 1em
 
   .slot-container
     padding-top: $headerHeight
