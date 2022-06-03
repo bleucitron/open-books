@@ -6,6 +6,8 @@
   import type { City } from '@interfaces';
   import Spinner from '$lib/Spinner.svelte';
 
+  const anchorById: Record<string, HTMLAnchorElement> = {};
+
   export let suggestions: City[] = [];
 
   let current: number = undefined;
@@ -34,6 +36,8 @@
 
       case 'Enter': {
         const suggestion = suggestions[current];
+
+        anchorById[suggestion.code].click();
         dispatch('select', suggestion);
         break;
       }
@@ -64,6 +68,7 @@
         href={`/budgets?insee=${code}`}
         sveltekit:prefetch
         class:active
+        bind:this={anchorById[code]}
       >
         <div class="infos">
           <div class="name">{nom}</div>

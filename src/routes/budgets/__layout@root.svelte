@@ -111,7 +111,7 @@
 <svelte:head>
   {#if _city}
     {@const { nom, departement } = _city}
-    <title>{`Budgets pour ${nom} (${departement.code})`}</title>
+    <title>{`Budgets pour ${nom} (${departement?.code})`}</title>
   {:else}
     <title>{`Budgets pour ${nom}`}</title>
   {/if}
@@ -126,7 +126,7 @@
         <div class="info">
           <span>{formatValue(population)} habitants</span>
           <span>
-            ({nom} - {departement.code})
+            ({nom} - {departement?.code})
           </span>
         </div>
       {/if}
