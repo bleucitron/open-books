@@ -67,12 +67,12 @@
     ? [{ id: null, label: typeToLabel[$type] }, ...breadcrumbs]
     : [];
 
-  $: tree = steps.reduce<Budget | FonctionTreeValue>(
+  $: data = steps.reduce<Budget | FonctionTreeValue>(
     (acc, cur) => acc.tree[cur],
     budget,
   );
-  $: values = (tree && Object.values(tree.tree ?? {})) ?? [];
-  $: total = tree ? tree.value[$type] : 0;
+  $: values = (data?.tree && Object.values(data.tree ?? {})) ?? [];
+  $: total = data ? data?.value[$type] : 0;
 </script>
 
 <div class="Summary">
