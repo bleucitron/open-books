@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type { Load } from '@sveltejs/kit';
-  import { type, code } from '@stores';
+  import { type, code, changingCity } from '@stores';
   import type { Budget, BudgetMap, City } from '@interfaces';
   import { fillBudget, fillBudgetBySirens } from './_cache';
 
@@ -37,7 +37,7 @@
 
 <script lang="ts">
   import { browser } from '$app/env';
-  import { navigating, page } from '$app/stores';
+  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
@@ -132,18 +132,14 @@
       return $type ? source?.value[$type] : 0;
     }),
   );
-
-  $: from = $navigating?.from.searchParams.get('insee');
-  $: to = $navigating?.to.searchParams.get('insee');
-  $: showSpinner = from !== to;
 </script>
 
 <div class="content">
   <menu>
-    <Labels {labels} {loadingP} selected={currentSiret} select={selectSiret} />
+    <Labels {labels} {loadingP} selected={currentSiret} />
   </menu>
   <div class="dataviz">
-    {#if showSpinner}
+    {#if $changingCity}
       <Spinner />
     {:else}
       <Summary year={currentYear} {budget} />

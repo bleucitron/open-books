@@ -2,6 +2,7 @@
   import { navigating } from '$app/stores';
   import Spinner from '$lib/Spinner.svelte';
 
+  import { changingCity } from '@stores';
   import type { Budget } from '@interfaces';
 
   export let labels: Budget[];
@@ -15,7 +16,7 @@
 </script>
 
 <ul class="Labels">
-  {#if !$navigating}
+  {#if !$changingCity}
     {#await loadingP}
       <div class="loading">
         <Spinner />
