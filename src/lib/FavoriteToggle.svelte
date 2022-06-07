@@ -19,7 +19,7 @@
 </script>
 
 <button class="FavoriteToggle" on:click={toggleFavorite}>
-  <Icon id="star" filled={isFavorite} color="yellow" />
+  <Icon id="bookmark" filled={isFavorite} color="cornflowerblue" />
 </button>
 
 <style lang="sass">
