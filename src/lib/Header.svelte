@@ -26,8 +26,7 @@
         title="À propos"
         class:current={$page.url.pathname === '/about'}
       >
-        À propos
-        <!-- <Icon id="info" /> -->
+        <Icon id="info" />
       </a>
       <a href="https://github.com/iOiurson/open-books" title="Github">
         <Icon id="github" />
@@ -50,6 +49,15 @@
       background: $grey-darkest
       color: $grey-dark
       box-shadow: none
+
+      nav .home
+        h1
+          color: $grey-darker
+          span
+            color: $grey-dark
+
+        :global(.Icon)
+          color: $grey-dark
 
     nav
       display: flex
@@ -85,20 +93,19 @@
             margin: 0 0.5rem
             font-size: 1.4rem
 
-      .about
-        font-size: 0.9rem
-
       a
         display: inline-flex
         transition: color 0.3s ease-in-out
 
-        span
+        span, :global(.Icon)
           transition: color 0.3s ease-in-out
 
         &:hover:not(.current)
           color: coral
           h1
             span
+              color: coral
+          :global(.Icon)
               color: coral
 
 
