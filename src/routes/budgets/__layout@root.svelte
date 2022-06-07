@@ -92,7 +92,8 @@
   export let insee: string;
 
   $: _city = $city ?? currentCity;
-  $: nom = currentCity?.nom ?? currentSiret;
+  $: nom = _city?.nom ?? currentSiret;
+  $: departement = _city?.departement;
 
   $: if ($page) {
     // do not use $city here, risk of desync with currentCity
@@ -111,12 +112,9 @@
 </script>
 
 <svelte:head>
-  {#if _city}
-    {@const { nom, departement } = $city}
-    <title>{`Budgets pour ${nom} (${departement?.code})`}</title>
-  {:else}
-    <title>{`Budgets pour ${nom}`}</title>
-  {/if}
+  <title>
+    {`Budgets pour ${nom} ${departement ? `(${departement.code})` : ''}`}
+  </title>
 </svelte:head>
 <div class="budget-layout">
   <Header>
