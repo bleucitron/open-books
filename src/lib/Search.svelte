@@ -2,12 +2,14 @@
   import { createEventDispatcher } from 'svelte';
   import { slide } from 'svelte/transition';
   import { flip } from 'svelte/animate';
-  import type { City } from '@interfaces';
+  import type { City, LinkItem } from '@interfaces';
   import { navigating } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
-  import Suggestions from '$lib/Suggestions.svelte';
+  import Suggestions, { type Suggestion } from '$lib/Suggestions.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import { getCities } from '@api';
+  import { history, favorites } from '@stores';
+  import { buildParamString } from '@api/utils/misc';
   import { isSiret } from '@utils/siren';
 
   enum Mode {
@@ -35,11 +37,9 @@
     },
   };
 
-  const selected: City = undefined;
-
   let showMenu = false;
   let showSuggestions = false;
-  let cities: City[] = null;
+  let suggestions: Suggestion[] = null;
   let value = '';
   let loading = false;
   let input: HTMLInputElement;
@@ -48,12 +48,12 @@
 
   function reset(): void {
     value = '';
-    cities = null;
+    suggestions = null;
     showMenu = false;
   }
 
   function select({ detail }: CustomEvent): void {
-    dispatch('select', { city: detail });
+    dispatch('select', detail);
   }
 
   async function handleInput({ target }: Event): Promise<void> {
@@ -69,9 +69,19 @@
       return;
     }
 
-    cities = await getCities(value);
+    suggestions = (await getCities(value)).map((city: City) => {
+      const { code, nom, departement } = city;
 
-    if (cities?.length) showSuggestions = true;
+      return {
+        id: code,
+        label: nom,
+        href: `/budgets?insee=${code}`,
+        sublabel: departement && `${departement.code} - ${departement.nom}`,
+        data: { city },
+      };
+    });
+
+    if (suggestions?.length) showSuggestions = true;
   }
 
   function handleKey({ key, target }: KeyboardEvent): void {
@@ -98,15 +108,25 @@
     mode = id;
     showMenu = false;
   }
+  function createUrl({ data, ...item }: LinkItem): string {
+    if (!item.insee) item.siret = item.name; // no INSEE means a bare SIRET was searched
+
+    const paramString = buildParamString(item);
+    return '/budgets?' + paramString;
+  }
+  function createSuggestion(item: LinkItem): Suggestion {
+    return {
+      id: item.insee,
+      label: item.name,
+      href: createUrl(item),
+      data: item.data,
+    };
+  }
 
   $: if (!$navigating) reset();
 
-  $: if (selected) {
-    value = selected.nom;
-  }
-
   $: if (!value) {
-    cities = null;
+    suggestions = null;
   }
   $: if (mode === Search) {
     input?.focus();
@@ -114,13 +134,27 @@
 
   $: modes = Object.values(modeById).filter(m => m.id !== mode);
   $: currentMode = modeById[mode];
+  $: if (mode === Search) {
+    suggestions = null;
+    showSuggestions = false;
+  }
+  $: if (mode === History) {
+    suggestions = $history.map(createSuggestion);
+    showSuggestions = true;
+  }
+  $: if (mode === Favs) {
+    suggestions = $favorites.map(createSuggestion);
+    showSuggestions = true;
+  }
 </script>
 
 <div class="Search">
-  <div class="searchbar" class:open={showSuggestions && cities?.length}>
+  <div class="searchbar" class:open={showSuggestions && suggestions?.length}>
     <menu
-      on:mouseenter={() => (showMenu = !showMenu)}
-      on:click={() => (showMenu = !showMenu)}
+      on:click={() => {
+        suggestions = null;
+        showMenu = !showMenu;
+      }}
     >
       <button>
         <Icon id={mode} />
@@ -128,7 +162,10 @@
       {#if showMenu}
         <ul in:slide={{ duration }}>
           {#each modes as { id, label } (id)}
-            <button animate:flip={{ duration }} on:click={() => selectMode(id)}>
+            <button
+              animate:flip={{ duration }}
+              on:click|stopPropagation={() => selectMode(id)}
+            >
               <Icon {id} />
               {label}
             </button>
@@ -142,7 +179,7 @@
         bind:this={input}
         on:focus={() => {
           showMenu = false;
-          if (cities?.length > 0) {
+          if (suggestions?.length > 0) {
             showSuggestions = true;
           }
         }}
@@ -171,8 +208,8 @@
   </div>
   {#if error}
     <div class="error">Introuvable</div>
-  {:else if cities && showSuggestions && !showMenu}
-    <Suggestions suggestions={cities} on:select={select} />
+  {:else if suggestions && showSuggestions && !showMenu}
+    <Suggestions {suggestions} on:select={select} />
   {/if}
 </div>
 

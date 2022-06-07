@@ -167,6 +167,7 @@ export interface LinkItem {
   insee: string;
   siret?: string;
   sirens: string[];
+  data?: unknown;
 }
 
 export interface UniteLegale {

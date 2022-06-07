@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
   import { get } from 'svelte/store';
-  import { browser } from '$app/env';
   import type { Load } from '@sveltejs/kit';
   import { getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
@@ -30,7 +29,7 @@
     let sirens = sirenString?.split(',');
 
     if (insee) {
-      if ((browser && !$city) || $city.code !== insee) {
+      if (!$city || $city.code !== insee) {
         $city = await getCity(insee, fetch);
       }
 
@@ -93,13 +92,15 @@
   export let insee: string;
 
   $: _city = $city ?? currentCity;
-  $: nom = _city?.nom ?? currentSiret;
+  $: nom = currentCity?.nom ?? currentSiret;
 
   $: if ($page) {
+    // do not use $city here, risk of desync with currentCity
     history.addItem({
-      name: nom,
+      name: currentCity.nom,
       insee,
       sirens,
+      data: { city: currentCity },
     });
   }
 
@@ -111,7 +112,7 @@
 
 <svelte:head>
   {#if _city}
-    {@const { nom, departement } = _city}
+    {@const { nom, departement } = $city}
     <title>{`Budgets pour ${nom} (${departement?.code})`}</title>
   {:else}
     <title>{`Budgets pour ${nom}`}</title>
@@ -120,7 +121,7 @@
 <div class="budget-layout">
   <Header>
     <div class="titles">
-      <FavoriteToggle name={nom} {insee} {sirens} />
+      <FavoriteToggle name={nom} {insee} {sirens} data={{ city: _city }} />
       <h1>{nom}</h1>
       {#if _city}
         {@const { nom, population, departement } = _city}
@@ -133,7 +134,7 @@
       {/if}
     </div>
 
-    <Search on:select={({ detail }) => handleTargetSelection(detail)} />
+    <Search on:select={({ detail }) => handleTargetSelection(detail.data)} />
   </Header>
 </div>
 

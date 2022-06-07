@@ -7,7 +7,8 @@ export interface TargetData {
   siret?: string;
 }
 
-export function handleTargetSelection({ city, siret }: TargetData): void {
+export function handleTargetSelection(d: TargetData): void {
+  const { city, siret } = d;
   if (city) {
     cityStore.set(city);
   }

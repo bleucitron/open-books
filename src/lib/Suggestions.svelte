@@ -1,16 +1,25 @@
+<script context="module" lang="ts">
+  export interface Suggestion {
+    id: string;
+    label: string;
+    href: string;
+    sublabel?: string;
+    data?: unknown;
+  }
+</script>
+
 <script lang="ts">
   import { navigating } from '$app/stores';
-  import { city } from '@stores';
   import { createEventDispatcher } from 'svelte';
   import { slide } from 'svelte/transition';
-  import type { City } from '@interfaces';
   import Spinner from '$lib/Spinner.svelte';
 
   const anchorById: Record<string, HTMLAnchorElement> = {};
 
-  export let suggestions: City[] = [];
+  export let suggestions: Suggestion[] = [];
 
-  let current: number = undefined;
+  let current: number;
+  let selected: number;
 
   const dispatch = createEventDispatcher();
 
@@ -35,9 +44,10 @@
       }
 
       case 'Enter': {
-        const suggestion = suggestions[current];
+        selected = current;
+        const suggestion = suggestions[selected];
 
-        anchorById[suggestion.code].click();
+        anchorById[suggestion.id].click();
         dispatch('select', suggestion);
         break;
       }
@@ -46,7 +56,7 @@
   }
 
   function handleClick(index: number): void {
-    current = index;
+    selected = index;
     dispatch('select', suggestions[index]);
   }
 
@@ -57,7 +67,7 @@
 
 <ul class="Suggestions" in:slide={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
-    {@const { nom, code, departement } = suggestion}
+    {@const { label, id, sublabel, href } = suggestion}
     {@const active = current === index}
     <li class="Suggestion">
       <a
@@ -65,21 +75,21 @@
         on:keypress
         on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
-        href={`/budgets?insee=${code}`}
+        {href}
         sveltekit:prefetch
         class:active
-        bind:this={anchorById[code]}
+        bind:this={anchorById[id]}
       >
         <div class="infos">
-          <div class="name">{nom}</div>
-          {#if departement}
-            <div class="other">
-              {`${departement.code} - ${departement.nom}`}
+          <div class="name">{label}</div>
+          {#if sublabel}
+            <div class="sublabel">
+              {sublabel}
             </div>
           {/if}
         </div>
 
-        {#if $city === suggestion && $navigating}
+        {#if selected === index && $navigating}
           <Spinner />
         {/if}
       </a>
@@ -97,7 +107,8 @@
     z-index: 260
     border-bottom-left-radius: 12px
     border-bottom-right-radius: 12px
-    overflow: hidden
+    max-height: 29em
+    overflow: auto
     font-size: 0.9em
 
     .Suggestion
@@ -123,7 +134,7 @@
     display: flex
     padding-left: 0.5em
 
-  .other
+  .sublabel
     margin-left: 0.5em
     font-style: italic
     opacity: 0.3
