@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import { get } from 'svelte/store';
+  import { browser } from '$app/env';
   import type { Load } from '@sveltejs/kit';
   import { getCity } from '@api';
   import { extractSirens } from '@api/utils/siren';
@@ -29,7 +30,7 @@
     let sirens = sirenString?.split(',');
 
     if (insee) {
-      if (!$city || $city.code !== insee) {
+      if ((browser && !$city) || $city.code !== insee) {
         $city = await getCity(insee, fetch);
       }
 
@@ -174,17 +175,20 @@
 
           :global(.Icon)
             font-size: 1rem
-            margin: 0.8rem
+            margin-inline: 0.8rem
 
-        .search-input
-          font-size: 1rem
-          height: 100%
+          input, .mode
+            font-size: 1rem
+            height: 100%
 
-          &::placeholder
-            color: $grey-dark
+            &::placeholder
+              color: $grey-dark
 
-          &:focus::placeholder
-            color: $grey
+            &:focus::placeholder
+              color: $grey
+
+          menu button
+            font-size: 0.9rem
 
         .searchbar
           height: 100%
