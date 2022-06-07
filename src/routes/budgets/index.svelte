@@ -37,6 +37,8 @@
 
 <script lang="ts">
   import { browser } from '$app/env';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
 
@@ -87,6 +89,14 @@
 
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
   $: loadingP = Promise.all(allPs);
+  $: Promise.all(budgetPs).then(() => {
+    if (!sirets.includes(currentSiret)) {
+      const url = new URL($page.url);
+      url.searchParams.set('siret', sirets[0]);
+
+      goto(url.href);
+    }
+  });
 
   $: sirets = [
     ...new Set(
