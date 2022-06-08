@@ -137,10 +137,11 @@
   }
   $: if (mode === History) {
     suggestions = $history.map(createSuggestion);
-    showSuggestions = true;
   }
   $: if (mode === Favs) {
     suggestions = $favorites.map(createSuggestion);
+  }
+  $: if (mode === History || mode === Favs) {
     showSuggestions = true;
   }
   $: if (mode === Favs && !$favorites.length) mode = Search;
@@ -205,7 +206,16 @@
   {#if error}
     <div class="error">Introuvable</div>
   {:else if suggestions && showSuggestions}
-    <Suggestions {suggestions} on:select={selectSuggestion} />
+    <Suggestions {suggestions} on:select={selectSuggestion} let:suggestion>
+      {#if mode === Favs}
+        <button
+          on:click|stopPropagation={() =>
+            favorites.removeItem(suggestion.label)}
+        >
+          <Icon id="trash-2" />
+        </button>
+      {/if}
+    </Suggestions>
   {/if}
 </div>
 
@@ -230,6 +240,24 @@
       input
         color: $grey-lightest
 
+    button
+      display: flex
+      justify-content: center
+      align-items: center
+      border-radius: 50%
+
+      &:hover:not(.current)
+        opacity: 1
+
+    :global
+      .Suggestion
+        button
+          opacity: 0.3
+          width: 1.5em
+          height: 1.5em
+          &:hover
+            background: rgba(white, 0.2)
+
   .searchbar
     display: flex
     background: $grey-dark
@@ -248,12 +276,6 @@
       :global(.Icon)
         font-size: 1.1em
 
-    button
-      display: flex
-      justify-content: center
-      align-items: center
-      // height: 100%
-
     menu
       position: relative
       display: flex
@@ -271,9 +293,7 @@
         height: 1.5em
 
     button
-      // padding-block: 0.25em
       opacity: 0.2
-      border-radius: 50%
       height: 2em
       width: 2em
 
@@ -281,7 +301,6 @@
         opacity: 1
 
       &:hover:not(.current)
-        opacity: 1
         background-color: $grey-dark
 
   input, .mode

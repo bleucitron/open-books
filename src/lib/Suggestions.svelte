@@ -91,6 +91,8 @@
 
         {#if selected === index && $navigating}
           <Spinner />
+        {:else}
+          <slot {suggestion} />
         {/if}
       </a>
     </li>
