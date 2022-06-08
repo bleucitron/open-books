@@ -1,7 +1,5 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { slide } from 'svelte/transition';
-  import { flip } from 'svelte/animate';
   import type { City, LinkItem } from '@interfaces';
   import { navigating } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
@@ -17,39 +15,36 @@
     Favs = 'bookmark',
     History = 'clock',
   }
-  const duration = 200;
   const { Search, Favs, History } = Mode;
 
   const dispatch = createEventDispatcher();
 
   const modeById = {
-    [Search]: {
-      id: Search,
-      label: 'Recherche',
+    [History]: {
+      id: History,
+      label: 'Historique',
     },
     [Favs]: {
       id: Favs,
       label: 'Favoris',
     },
-    [History]: {
-      id: History,
-      label: 'Historique',
+    [Search]: {
+      id: Search,
+      label: 'Recherche',
     },
   };
 
-  let showMenu = false;
   let showSuggestions = false;
   let suggestions: Suggestion[] = null;
   let value = '';
-  let loading = false;
   let input: HTMLInputElement;
   let error = false;
   let mode = Search;
+  const modes = Object.values(modeById);
 
-  function reset(): void {
+  function clearSearch(): void {
     value = '';
     suggestions = null;
-    showMenu = false;
   }
 
   function selectSuggestion({ detail }: CustomEvent<Suggestion>): void {
@@ -62,7 +57,6 @@
   async function handleInput({ target }: Event): Promise<void> {
     loading = false;
     error = false;
-    showMenu = false;
 
     const { value } = target as HTMLInputElement;
 
@@ -88,8 +82,6 @@
   }
 
   function handleKey({ key, target }: KeyboardEvent): void {
-    showMenu = false;
-
     if (key === 'Escape') {
       showSuggestions = false;
       input.blur();
@@ -108,8 +100,8 @@
   }
 
   function selectMode(id: Mode): void {
+    if (mode === id) showSuggestions = !showSuggestions;
     mode = id;
-    showMenu = false;
   }
   function createUrl({ data, ...item }: LinkItem): string {
     if (!item.insee) item.siret = item.name; // no INSEE means a bare SIRET was searched
@@ -126,7 +118,7 @@
     };
   }
 
-  $: if (!$navigating) reset();
+  $: if (!$navigating) clearSearch();
 
   $: if (!value) {
     suggestions = null;
@@ -135,8 +127,10 @@
     input?.focus();
   }
 
-  $: modes = Object.values(modeById).filter(m => m.id !== mode);
+  $: loading = !showSuggestions && !!$navigating; // for SIRET search
   $: currentMode = modeById[mode];
+  $: modes[0] = $history?.length ? modeById[History] : null;
+  $: modes[1] = $favorites?.length ? modeById[Favs] : null;
   $: if (mode === Search) {
     suggestions = null;
     showSuggestions = false;
@@ -149,6 +143,15 @@
     suggestions = $favorites.map(createSuggestion);
     showSuggestions = true;
   }
+  $: if (mode === Favs && !$favorites.length) mode = Search;
+  $: if (mode === History && !$history.length) mode = Search;
+
+  $: clear =
+    mode === Search
+      ? clearSearch
+      : mode === History
+      ? history.clear
+      : favorites.clear;
 </script>
 
 <div class="Search">
@@ -156,32 +159,24 @@
     <menu
       on:click={() => {
         suggestions = null;
-        showMenu = !showMenu;
       }}
     >
-      <button>
-        <Icon id={mode} />
-      </button>
-      {#if showMenu}
-        <ul in:slide={{ duration }}>
-          {#each modes as { id, label } (id)}
-            <button
-              animate:flip={{ duration }}
-              on:click|stopPropagation={() => selectMode(id)}
-            >
-              <Icon {id} />
-              {label}
-            </button>
-          {/each}
-        </ul>
-      {/if}
+      {#each modes.filter(x => x) as { id, label }}
+        {@const current = mode === id}
+        <button
+          title={label}
+          class:current
+          on:click|stopPropagation={() => selectMode(id)}
+        >
+          <Icon {id} />
+        </button>
+      {/each}
     </menu>
     {#if mode === Search}
       <input
         bind:value
         bind:this={input}
         on:focus={() => {
-          showMenu = false;
           if (suggestions?.length > 0) {
             showSuggestions = true;
           }
@@ -193,15 +188,15 @@
     {:else}
       <div class="mode">{currentMode.label}</div>
     {/if}
-    {#if value}
+    {#if mode !== Search || value}
       <div class="action">
         {#if loading}
           <button>
             <Spinner />
           </button>
         {:else}
-          <button class="reset" on:click={reset}>
-            <Icon id="x" />
+          <button class="clear" on:click={clear}>
+            <Icon id={mode === Search ? 'x' : 'trash-2'} />
           </button>
         {/if}
       </div>
@@ -209,7 +204,7 @@
   </div>
   {#if error}
     <div class="error">Introuvable</div>
-  {:else if suggestions && showSuggestions && !showMenu}
+  {:else if suggestions && showSuggestions}
     <Suggestions {suggestions} on:select={selectSuggestion} />
   {/if}
 </div>
@@ -228,7 +223,7 @@
 
     &:focus-within
       .searchbar
-        background: $grey-darker
+        background: $grey-darkish
 
 
       color: $grey-lightest
@@ -247,8 +242,11 @@
       border-bottom-right-radius: 0
 
     :global(.Icon)
-      margin: 0 0.7em
       font-size: 1.3em
+      cursor: pointer
+    .clear
+      :global(.Icon)
+        font-size: 1.1em
 
     button
       display: flex
@@ -256,28 +254,35 @@
       align-items: center
       // height: 100%
 
-    .reset :global(.Icon)
-      cursor: pointer
-
     menu
       position: relative
       display: flex
       align-items: center
       justify-content: center
+      margin-inline: 0.7em
 
-      ul
-        position: absolute
-        left: 0
-        top: 100%
+    .action
+      display: flex
+      align-items: center
+      margin-right: 0.5em
 
-        color: $grey-dark
+      button
+        width: 1.5em
+        height: 1.5em
 
-        button
-          padding-block: 0.25em
-          transition: color 0.3s ease-in-out
+    button
+      // padding-block: 0.25em
+      opacity: 0.2
+      border-radius: 50%
+      height: 2em
+      width: 2em
 
-          &:hover
-            color: cornflowerblue
+      &.current
+        opacity: 1
+
+      &:hover:not(.current)
+        opacity: 1
+        background-color: $grey-dark
 
   input, .mode
     flex: 1 0

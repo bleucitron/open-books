@@ -171,16 +171,11 @@
           justify-content: space-between
 
         .Search
-          width: 30rem
+          width: 25em
           height: 100%
-          font-size: 1rem
-
-          :global(.Icon)
-            font-size: 1rem
-            margin-inline: 0.8rem
 
           input, .mode
-            font-size: 1rem
+            font-size: 0.9em
             height: 100%
 
             &::placeholder
@@ -190,7 +185,7 @@
               color: $grey
 
           menu button
-            font-size: 0.9rem
+            font-size: 0.8em
 
         .searchbar
           height: 100%
@@ -202,7 +197,7 @@
             background: $grey-dark
 
         .Suggestion
-          font-size: 1em
+          font-size: 0.8em
 
   .slot-container
     padding-top: $headerHeight
