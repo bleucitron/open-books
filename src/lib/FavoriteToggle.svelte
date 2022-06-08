@@ -19,7 +19,11 @@
 </script>
 
 <button class="FavoriteToggle" on:click={toggleFavorite}>
-  <Icon id="bookmark" filled={isFavorite} color="cornflowerblue" />
+  <Icon
+    id="bookmark"
+    filled={isFavorite}
+    color={isFavorite ? 'cornflowerblue' : 'currentColor'}
+  />
 </button>
 
 <style lang="sass">
@@ -29,5 +33,5 @@
     justify-content: center
 
     &:hover
-      color: coral
+      color: cornflowerblue
 </style>
