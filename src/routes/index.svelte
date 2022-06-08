@@ -55,7 +55,7 @@
 </svelte:head>
 
 <main>
-  <Search on:select={({ detail }) => handleTargetSelection(detail.data)} />
+  <Search on:select={({ detail }) => handleTargetSelection(detail)} />
 
   {#if examples.length}
     <div class="examples" in:fade={{ duration: 2000 }}>

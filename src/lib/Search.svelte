@@ -52,8 +52,11 @@
     showMenu = false;
   }
 
-  function select({ detail }: CustomEvent): void {
-    dispatch('select', detail);
+  function selectSuggestion({ detail }: CustomEvent<Suggestion>): void {
+    const { data } = detail;
+    if (data) {
+      dispatch('select', data);
+    }
   }
 
   async function handleInput({ target }: Event): Promise<void> {
@@ -191,25 +194,23 @@
       <div class="mode">{currentMode.label}</div>
     {/if}
     {#if value}
-      {#if loading}
-        <button on:click={() => (loading = false)}>
-          <Spinner />
-        </button>
-      {:else}
-        <button class="reset" on:click={reset}>
-          {#if !showSuggestions && $navigating}
+      <div class="action">
+        {#if loading}
+          <button>
             <Spinner />
-          {:else}
+          </button>
+        {:else}
+          <button class="reset" on:click={reset}>
             <Icon id="x" />
-          {/if}
-        </button>
-      {/if}
+          </button>
+        {/if}
+      </div>
     {/if}
   </div>
   {#if error}
     <div class="error">Introuvable</div>
   {:else if suggestions && showSuggestions && !showMenu}
-    <Suggestions {suggestions} on:select={select} />
+    <Suggestions {suggestions} on:select={selectSuggestion} />
   {/if}
 </div>
 

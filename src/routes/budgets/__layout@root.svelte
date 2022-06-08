@@ -97,11 +97,14 @@
 
   $: if ($page) {
     // do not use $city here, risk of desync with currentCity
+    const name = currentCity?.nom ?? currentSiret;
+    const data = currentCity ? { city: currentCity } : { siret: currentSiret };
+
     history.addItem({
-      name: currentCity.nom,
+      name,
       insee,
       sirens,
-      data: { city: currentCity },
+      data,
     });
   }
 
@@ -132,7 +135,7 @@
       {/if}
     </div>
 
-    <Search on:select={({ detail }) => handleTargetSelection(detail.data)} />
+    <Search on:select={({ detail }) => handleTargetSelection(detail)} />
   </Header>
 </div>
 
