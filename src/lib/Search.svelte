@@ -229,48 +229,56 @@
     position: relative
     max-width: 40rem
     width: 100%
-    height: 4rem
     font-size: 1.3rem
+    border-radius: 0.8em
+    color: $grey-lightest
+    transition: 0.4s
+    overflow: hidden
 
-    color: $grey-lighter
     input
-      color: $grey-lighter
+      color: $grey-lightest
 
     &:focus-within
       .searchbar
         background: $grey-darkish
 
-
       color: $grey-lightest
       input
         color: $grey-lightest
 
-    button
+    :global(button)
+      transition: 0.4s
       display: flex
       justify-content: center
       align-items: center
       border-radius: 50%
+      opacity: 0.3
+      height: 1.8em
+      width: 1.8em
 
-      &:hover:not(.current)
+      &.current
         opacity: 1
 
-    :global
-      .Suggestion
-        button
-          opacity: 0.3
-          &:hover
-            background: rgba(white, 0.2)
+      &:hover, &:focus
+        opacity: 1
+
+        &:not(.current)
+          background: rgba(black, 0.6)
+
+  :global(.Search .Suggestion)
+    button, :global(.Spinner)
+      width: 1.5em
+      height: 1.5em
+
+    button
+      opacity: 0.3
+      &:hover, &:focus
+        opacity: 1
 
   .searchbar
     display: flex
     background: $grey-dark
     border-color: white
-
-    border-radius: 0.8em
-
-    &.open
-      border-bottom-left-radius: 0
-      border-bottom-right-radius: 0
 
     :global(.Icon)
       font-size: 1.3em
@@ -284,6 +292,7 @@
       display: flex
       align-items: center
       justify-content: center
+      gap: 0.2em
       margin-inline: 0.5em
 
     .action
@@ -294,17 +303,6 @@
       button
         width: 1.5em
         height: 1.5em
-
-    button
-      opacity: 0.2
-      height: 2em
-      width: 2em
-
-      &.current
-        opacity: 1
-
-      &:hover:not(.current)
-        background-color: $grey-dark
 
   input, .mode
     flex: 1 0

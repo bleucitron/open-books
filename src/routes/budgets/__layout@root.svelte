@@ -173,6 +173,8 @@
         .Search
           width: 25em
           height: 100%
+          border-radius: 0
+          overflow: unset
 
           input, .mode
             font-size: 0.9em
@@ -190,7 +192,6 @@
         .searchbar
           height: 100%
           background: $grey-darker
-          border-radius: 0
           font-size: 1.1rem
 
           &:focus-within

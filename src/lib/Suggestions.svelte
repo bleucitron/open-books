@@ -69,7 +69,7 @@
   {#each suggestions as suggestion, index (index)}
     {@const { label, id, sublabel, href } = suggestion}
     {@const active = current === index}
-    <li class="Suggestion">
+    <li class="Suggestion" transition:slide|local={{ duration: 200 }}>
       <a
         on:click={() => handleClick(index)}
         on:keypress
@@ -102,13 +102,10 @@
 <style lang="sass">
   .Suggestions
     margin: 0
-    position: absolute
-    top: 100%
-    left: 0
     width: 100%
     z-index: 260
-    border-bottom-left-radius: 12px
-    border-bottom-right-radius: 12px
+    border-bottom-left-radius: 0.8em
+    border-bottom-right-radius: 0.8em
     max-height: 29em
     overflow: auto
     font-size: 0.9em
@@ -122,7 +119,7 @@
     background: $grey-dark
     display: flex
     justify-content: space-between
-    color: white
+    color: $grey-lightest
     padding: 0.5em
 
   .active,
