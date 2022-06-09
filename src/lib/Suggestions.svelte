@@ -65,7 +65,7 @@
 
 <svelte:window on:keyup={keyboardGestion} />
 
-<ul class="Suggestions" in:slide={{ duration: 200 }}>
+<ul class="Suggestions" transition:slide|local={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
     {@const { label, id, sublabel, href } = suggestion}
     {@const active = current === index}

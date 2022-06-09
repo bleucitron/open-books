@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from 'svelte/transition';
   import { page } from '$app/stores';
   import Spinner from '$lib/Spinner.svelte';
 
@@ -39,6 +40,7 @@
               class="siret"
               class:selected={currentSiret === siret}
               class:main={i === 0}
+              in:fade
             >
               <a href={makeUrl(siret)}>
                 <div class="info">
