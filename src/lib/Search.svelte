@@ -212,8 +212,10 @@
     <Suggestions {suggestions} on:select={selectSuggestion} let:suggestion>
       {#if mode === Favs}
         <button
-          on:click|stopPropagation={() =>
-            favorites.removeItem(suggestion.label)}
+          on:click|preventDefault={() => {
+            // here, stopPropagation does not prevent <a> from navigating
+            favorites.removeItem(suggestion.label);
+          }}
         >
           <Icon id="trash-2" />
         </button>
