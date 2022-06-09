@@ -40,7 +40,7 @@
               class="siret"
               class:selected={currentSiret === siret}
               class:main={i === 0}
-              in:fade
+              in:fade|local
             >
               <a href={makeUrl(siret)}>
                 <div class="info">
