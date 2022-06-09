@@ -31,6 +31,7 @@
     display: flex
     align-items: center
     justify-content: center
+    align-self: flex-end
 
     &:hover
       color: cornflowerblue

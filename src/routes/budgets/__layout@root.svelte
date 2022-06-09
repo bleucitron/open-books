@@ -148,11 +148,11 @@
     .titles
       display: flex
       align-items: baseline
-      gap: 0.5rem
 
     h1
       font-size: 2rem
       color: $grey-lightest
+      margin-right: 0.5rem
 
     .info
       margin: 0
