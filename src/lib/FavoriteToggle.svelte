@@ -5,10 +5,11 @@
   export let name: string;
   export let insee: string;
   export let sirens: string[];
+  export let data: unknown;
 
   function toggleFavorite(): void {
     if (!isFavorite) {
-      favorites.addItem({ name, insee, sirens });
+      favorites.addItem({ name, insee, sirens, data });
     } else {
       favorites.removeItem(name);
     }
@@ -18,7 +19,11 @@
 </script>
 
 <button class="FavoriteToggle" on:click={toggleFavorite}>
-  <Icon id="star" filled={isFavorite} color="yellow" />
+  <Icon
+    id="bookmark"
+    filled={isFavorite}
+    color={isFavorite ? 'cornflowerblue' : 'currentColor'}
+  />
 </button>
 
 <style lang="sass">
@@ -28,5 +33,5 @@
     justify-content: center
 
     &:hover
-      color: coral
+      color: cornflowerblue
 </style>

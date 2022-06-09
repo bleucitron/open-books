@@ -93,12 +93,18 @@
 
   $: _city = $city ?? currentCity;
   $: nom = _city?.nom ?? currentSiret;
+  $: departement = _city?.departement;
 
   $: if ($page) {
+    // do not use $city here, risk of desync with currentCity
+    const name = currentCity?.nom ?? currentSiret;
+    const data = currentCity ? { city: currentCity } : { siret: currentSiret };
+
     history.addItem({
-      name: nom,
+      name,
       insee,
       sirens,
+      data,
     });
   }
 
@@ -109,17 +115,14 @@
 </script>
 
 <svelte:head>
-  {#if _city}
-    {@const { nom, departement } = _city}
-    <title>{`Budgets pour ${nom} (${departement?.code})`}</title>
-  {:else}
-    <title>{`Budgets pour ${nom}`}</title>
-  {/if}
+  <title>
+    {`Budgets pour ${nom} ${departement ? `(${departement.code})` : ''}`}
+  </title>
 </svelte:head>
 <div class="budget-layout">
   <Header>
     <div class="titles">
-      <FavoriteToggle name={nom} {insee} {sirens} />
+      <FavoriteToggle name={nom} {insee} {sirens} data={{ city: _city }} />
       <h1>{nom}</h1>
       {#if _city}
         {@const { nom, population, departement } = _city}
@@ -168,23 +171,21 @@
           justify-content: space-between
 
         .Search
-          width: 30rem
-          height: 100%
-          font-size: 1rem
-
-          :global(.Icon)
-            font-size: 1rem
-            margin: 0.8rem
-
-        .search-input
-          font-size: 1rem
+          width: 25em
           height: 100%
 
-          &::placeholder
-            color: $grey-dark
+          input, .mode
+            font-size: 0.9em
+            height: 100%
 
-          &:focus::placeholder
-            color: $grey
+            &::placeholder
+              color: $grey-dark
+
+            &:focus::placeholder
+              color: $grey
+
+          menu button
+            font-size: 0.8em
 
         .searchbar
           height: 100%
@@ -196,7 +197,7 @@
             background: $grey-dark
 
         .Suggestion
-          font-size: 1em
+          font-size: 0.8em
 
   .slot-container
     padding-top: $headerHeight

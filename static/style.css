@@ -2,6 +2,7 @@
 
 ul {
   padding: 0;
+  margin: 0;
   list-style: none;
 }
 
@@ -32,4 +33,8 @@ a {
 button {
   all: unset;
   cursor: pointer;
+}
+
+menu {
+  all: unset
 }

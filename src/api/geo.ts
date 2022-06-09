@@ -8,6 +8,7 @@ import {
   makeGetCityEndpoint,
 } from './utils/geo';
 import type { Fetch } from '@interfaces';
+import { browser } from '$app/env';
 
 const baseUrl = 'https://geo.api.gouv.fr';
 
@@ -36,8 +37,16 @@ export function getCities(text: string, altFetch?: Fetch): Promise<City[]> {
   return get<City[]>(`${baseUrl}/${endpoint}&limit=5`, { fetch: altFetch });
 }
 
-export function getCity(insee: string, altFetch?: Fetch): Promise<City> {
+const cityCache = new Map();
+
+export async function getCity(insee: string, altFetch?: Fetch): Promise<City> {
+  if (cityCache.has(insee)) {
+    return cityCache.get(insee);
+  }
+
   const endpoint = makeGetCityEndpoint(insee);
 
-  return get<City>(`${baseUrl}/${endpoint}`, { fetch: altFetch });
+  const city = await get<City>(`${baseUrl}/${endpoint}`, { fetch: altFetch });
+  if (browser) cityCache.set(insee, city);
+  return city;
 }

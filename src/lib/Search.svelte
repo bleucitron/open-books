@@ -1,34 +1,58 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import type { City } from '@interfaces';
+  import type { City, LinkItem } from '@interfaces';
   import { navigating } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
-  import Suggestions from '$lib/Suggestions.svelte';
+  import Suggestions, { type Suggestion } from '$lib/Suggestions.svelte';
   import Spinner from '$lib/Spinner.svelte';
   import { getCities } from '@api';
+  import { history, favorites } from '@stores';
+  import { buildParamString } from '@api/utils/misc';
   import { isSiret } from '@utils/siren';
+
+  enum Mode {
+    Search = 'search',
+    Favs = 'bookmark',
+    History = 'clock',
+  }
+  const { Search, Favs, History } = Mode;
 
   const dispatch = createEventDispatcher();
 
-  const selected: City = undefined;
-  let showSuggestions = false;
+  const modeById = {
+    [History]: {
+      id: History,
+      label: 'Historique',
+    },
+    [Favs]: {
+      id: Favs,
+      label: 'Favoris',
+    },
+    [Search]: {
+      id: Search,
+      label: 'Recherche',
+    },
+  };
 
-  let cities: City[] = null;
+  let showSuggestions = false;
+  let suggestions: Suggestion[] = null;
   let value = '';
-  let loading = false;
   let input: HTMLInputElement;
   let error = false;
+  let mode = Search;
+  const modes = Object.values(modeById);
 
-  function reset(): void {
+  function clearSearch(): void {
     value = '';
-    cities = null;
+    suggestions = null;
   }
 
-  function select({ detail }: CustomEvent): void {
-    dispatch('select', { city: detail });
+  function selectSuggestion({ detail }: CustomEvent<Suggestion>): void {
+    const { data } = detail;
+    if (data) {
+      dispatch('select', data);
+    }
   }
-
-  $: if (!$navigating) reset();
 
   async function handleInput({ target }: Event): Promise<void> {
     loading = false;
@@ -42,9 +66,19 @@
       return;
     }
 
-    cities = await getCities(value);
+    suggestions = (await getCities(value)).map((city: City) => {
+      const { code, nom, departement } = city;
 
-    if (cities?.length) showSuggestions = true;
+      return {
+        id: code,
+        label: nom,
+        href: `/budgets?insee=${code}`,
+        sublabel: departement && `${departement.code} - ${departement.nom}`,
+        data: { city },
+      };
+    });
+
+    if (suggestions?.length) showSuggestions = true;
   }
 
   function handleKey({ key, target }: KeyboardEvent): void {
@@ -65,51 +99,128 @@
     }
   }
 
-  $: if (selected) {
-    value = selected.nom;
+  function selectMode(id: Mode): void {
+    if (mode === id) showSuggestions = !showSuggestions;
+    mode = id;
+  }
+  function createUrl({ data, ...item }: LinkItem): string {
+    if (!item.insee) item.siret = item.name; // no INSEE means a bare SIRET was searched
+
+    const paramString = buildParamString(item);
+    return '/budgets?' + paramString;
+  }
+  function createSuggestion(item: LinkItem): Suggestion {
+    return {
+      id: item.insee,
+      label: item.name,
+      href: createUrl(item),
+      data: item.data,
+    };
+  }
+
+  $: if (!$navigating) {
+    if (mode === Search) clearSearch();
+    showSuggestions = false;
   }
 
   $: if (!value) {
-    cities = null;
+    suggestions = null;
   }
+  $: if (mode === Search) {
+    input?.focus();
+  }
+
+  $: loading = !showSuggestions && !!$navigating; // for SIRET search
+  $: currentMode = modeById[mode];
+  $: modes[0] = $history?.length ? modeById[History] : null;
+  $: modes[1] = $favorites?.length ? modeById[Favs] : null;
+  $: if (mode === Search) {
+    suggestions = null;
+    showSuggestions = false;
+  }
+  $: if (mode === History) {
+    suggestions = $history.map(createSuggestion);
+  }
+  $: if (mode === Favs) {
+    suggestions = $favorites.map(createSuggestion);
+  }
+  $: if (mode === History || mode === Favs) {
+    showSuggestions = true;
+  }
+  $: if (mode === Favs && !$favorites.length) mode = Search;
+  $: if (mode === History && !$history.length) mode = Search;
+
+  $: clear =
+    mode === Search
+      ? clearSearch
+      : mode === History
+      ? history.clear
+      : favorites.clear;
 </script>
 
 <div class="Search">
-  <div class="searchbar" class:open={showSuggestions && cities?.length}>
-    <Icon id="search" />
-    <input
-      bind:value
-      bind:this={input}
-      on:focus={() => {
-        if (cities?.length > 0) {
-          showSuggestions = true;
-        }
+  <div class="searchbar" class:open={showSuggestions && suggestions?.length}>
+    <menu
+      on:click={() => {
+        suggestions = null;
       }}
-      on:input={handleInput}
-      on:keydown={handleKey}
-      class="search-input"
-      placeholder="Entrez le nom d'une commune"
-    />
-    {#if value}
-      {#if loading}
-        <button on:click={() => (loading = false)}>
-          <Spinner />
+    >
+      {#each modes.filter(x => x) as { id, label }}
+        {@const current = mode === id}
+        <button
+          title={label}
+          class:current
+          on:click|stopPropagation={() => selectMode(id)}
+        >
+          <Icon {id} />
         </button>
-      {:else}
-        <button class="reset" on:click={reset}>
-          {#if !showSuggestions && $navigating}
+      {/each}
+    </menu>
+    {#if mode === Search}
+      <input
+        bind:value
+        bind:this={input}
+        on:focus={() => {
+          if (suggestions?.length > 0) {
+            showSuggestions = true;
+          }
+        }}
+        on:input={handleInput}
+        on:keydown={handleKey}
+        placeholder="Entrez le nom d'une commune"
+      />
+    {:else}
+      <div class="mode">{currentMode.label}</div>
+    {/if}
+    {#if mode !== Search || value}
+      <div class="action">
+        {#if loading}
+          <button>
             <Spinner />
-          {:else}
-            <Icon id="x" />
-          {/if}
-        </button>
-      {/if}
+          </button>
+        {:else}
+          <button class="clear" on:click={clear}>
+            <Icon id={mode === Search ? 'x' : 'trash-2'} />
+          </button>
+        {/if}
+      </div>
     {/if}
   </div>
   {#if error}
     <div class="error">Introuvable</div>
-  {:else if cities && showSuggestions}
-    <Suggestions suggestions={cities} on:select={select} />
+  {:else if suggestions && showSuggestions}
+    <Suggestions {suggestions} on:select={selectSuggestion} let:suggestion>
+      {#if mode === Favs}
+        <button
+          on:click|preventDefault={() => {
+            // here, stopPropagation does not prevent <a> from navigating
+            favorites.removeItem(suggestion.label);
+          }}
+        >
+          <Icon id="trash-2" />
+        </button>
+      {/if}
+    </Suggestions>
   {/if}
 </div>
 
@@ -118,22 +229,43 @@
     position: relative
     max-width: 40rem
     width: 100%
-    height: fit-content
+    height: 4rem
     font-size: 1.3rem
 
-    *
+    color: $grey-lighter
+    input
       color: $grey-lighter
 
     &:focus-within
       .searchbar
-        background: $grey-darker
-      *
+        background: $grey-darkish
+
+
+      color: $grey-lightest
+      input
         color: $grey-lightest
+
+    button
+      display: flex
+      justify-content: center
+      align-items: center
+      border-radius: 50%
+
+      &:hover:not(.current)
+        opacity: 1
+
+    :global
+      .Suggestion
+        button
+          opacity: 0.3
+          width: 1.5em
+          height: 1.5em
+          &:hover
+            background: rgba(white, 0.2)
 
   .searchbar
     display: flex
     background: $grey-dark
-    align-items: center
     border-color: white
 
     border-radius: 0.8em
@@ -143,23 +275,48 @@
       border-bottom-right-radius: 0
 
     :global(.Icon)
-      margin: 0 0.7em
       font-size: 1.3em
-
-    *
-      display: flex
-      justify-content: center
-      align-items: center
-
-    .reset :global(.Icon)
       cursor: pointer
+    .clear
+      :global(.Icon)
+        font-size: 1.1em
 
-  input
+    menu
+      position: relative
+      display: flex
+      align-items: center
+      justify-content: center
+      margin-inline: 0.7em
+
+    .action
+      display: flex
+      align-items: center
+      margin-right: 0.5em
+
+      button
+        width: 1.5em
+        height: 1.5em
+
+    button
+      opacity: 0.2
+      height: 2em
+      width: 2em
+
+      &.current
+        opacity: 1
+
+      &:hover:not(.current)
+        background-color: $grey-dark
+
+  input, .mode
     flex: 1 0
+    display: flex
+    align-items: center
     padding: 0.6em
     padding-left: 0
     outline: none
     font-size: 1.3em
+    line-height: 1.3em
     background: transparent
     border: none
     border-bottom: 1px solid transparent
