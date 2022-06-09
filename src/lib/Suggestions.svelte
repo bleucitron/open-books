@@ -67,7 +67,7 @@
 
 <ul class="Suggestions" transition:slide|local={{ duration: 200 }}>
   {#each suggestions as suggestion, index (index)}
-    {@const { label, id, sublabel, href } = suggestion}
+    {@const { label, id, sublabel, href, data } = suggestion}
     {@const active = current === index}
     <li class="Suggestion" transition:slide|local={{ duration: 200 }}>
       <a
@@ -82,7 +82,9 @@
       >
         <div class="infos">
           <div class="name">{label}</div>
-          {#if sublabel}
+          {#if data?.city}
+            {@const dpt = data.city.departement}
+            {@const sublabel = dpt && `${dpt.code} - ${dpt.nom}`}
             <div class="sublabel">
               {sublabel}
             </div>
@@ -136,5 +138,5 @@
   .sublabel
     margin-left: 0.5em
     font-style: italic
-    opacity: 0.3
+    opacity: 0.4
 </style>
