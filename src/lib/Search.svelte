@@ -258,8 +258,6 @@
       .Suggestion
         button
           opacity: 0.3
-          width: 1.5em
-          height: 1.5em
           &:hover
             background: rgba(white, 0.2)
 

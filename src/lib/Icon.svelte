@@ -18,9 +18,3 @@
 >
   <use href={`feather-sprite.svg#${id}`} />
 </svg>
-
-<style lang="sass">
-  .Icon
-    transition: fill 0.3s ease-in-out, stroke 0.3s ease-in-out
-
-</style>
