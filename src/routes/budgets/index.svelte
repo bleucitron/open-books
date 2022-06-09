@@ -59,7 +59,7 @@
   $: if (budget) {
     budgetById[budget?.id] = budget;
   }
-  $: if (browser && (insee || currentSiret)) {
+  $: if (browser && insee) {
     budgetById = {};
   }
 
