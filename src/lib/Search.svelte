@@ -118,7 +118,10 @@
     };
   }
 
-  $: if (!$navigating) clearSearch();
+  $: if (!$navigating) {
+    if (mode === Search) clearSearch();
+    showSuggestions = false;
+  }
 
   $: if (!value) {
     suggestions = null;
