@@ -53,7 +53,10 @@ export function getSiretsFromInsee(
     fetch: altFetch,
   })
     .then(r => r.etablissements)
-    .catch(() => null);
+    .catch(e => {
+      console.error('Could not fetch sirets', e);
+      return null;
+    });
 }
 
 export function getSiren(siren: string): Promise<UniteLegale> {
