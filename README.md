@@ -1,36 +1,45 @@
-# Open books
+# Livres Ouverts
 
-You can visit the app [here](https://livres-ouverts.fr).
+L'application est disponible à l'adresse suivante: https://livres-ouverts.fr.
 
-Data exploration for [french cities's budgets](https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec0/table/)
+Il s'agit d'une application d'exploration de données concernant les budgets des communes françaises.
 
-With a little from my friends [BAN API](https://geo.api.gouv.fr/decoupage-administratif/communes) and [Sirene API](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findBySiret).
+Les données utilisées dans ce projet sont toutes ouvertes:
 
-This project is based on:
+- [budgets](https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec0/table/)
+- [SIRENE](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findBySiret)
+- [Géo](https://geo.api.gouv.fr/decoupage-administratif/communes)
+
+Ce projet est basé sur:
 
 - [Svelte](https://svelte.dev/)
 - [SvelteKit](https://kit.svelte.dev/)
 
+Vous pouvez avoir une idée des développements à venir [ici](./roadmap.md).
 
-## Contributing
+## Contributions
 
-### What you're gonna need
-
-Any IDE, but [VSCode](https://code.visualstudio.com/) with [Svelte official extension](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) is recommended.
-
+Ce projet est open-source et ouvert à contributions via Pull Request.
 
 ## Usage
 
+### Prérequis
+
+Vous aurez besoin d'une clé d'API de l'API SIRENE, que vous pouvez demander [ici](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee).
+
+Une fois cette clé récupérée, copiez (ou renommez) le fichier `.env-sample` en `.env`, puis remplacez `xxx-xxx-xxx` par votre clé.
+
+### Développement
+
 ```bash
-npm run dev # launches dev environment
-npm run build # build production-ready project
-npm run export # export static files
-npm run preview # start production app locally
-npm test # launches tests, but none is written yet
+npm install
+npm run dev
 ```
 
-## Resources
+Il est recommandé d'utiliser l'éditeur [VSCode](https://code.visualstudio.com/), ainsi que l'[extensions Svelte officielle](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
-Talks about Svelte:
-- [Rethinking Reactivity](https://www.youtube.com/watch?v=AdNJ3fydeao)
-- [Write less, do more](https://www.youtube.com/watch?v=BzX4aTRPzno)
+### Déploiement
+
+Ce projet est déployé sur [Vercel](https://vercel.com/home). Il utilise actuellement la configuration `adapter-vercel` dans le fichier `svelte.config.js`.
+
+Si vous souhaitez le déployer sur d'autres plateformes, il vous faudra changer d'adapteur. Plus d'infos sur [cette page](https://kit.svelte.dev/docs/adapters).
