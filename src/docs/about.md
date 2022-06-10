@@ -75,7 +75,9 @@ Enfin, la navigation par fonction étant déjà disponible, la navigation par na
 
 ## Ça ne marche pas 🤬!
 
-Livres ouverts est **en phase active de développement**, et est certainement sujet à différents bugs. Ceux-ci seront corrigés au fur et à mesure.
+Livres ouverts est **en phase active de développement**, et est certainement sujet à différents bugs. De plus, la navigation sur mobile n'est pas encore adaptée.
+
+Je fais mon possible pour améliorer cet outil en fonction de mon temps disponible.
 
 **Si vous trouvez un bug, [n'hésitez pas à le remonter](https://twitter.com/r_ourson).**
 
