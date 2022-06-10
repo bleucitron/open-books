@@ -2,7 +2,7 @@
 
 ## Livres ouverts, c'est quoi ?
 
-Livres ouverts est un **moteur de recherche open-source** permettant de parcourir **les budgets des différentes communes françaises**.
+[Livres ouverts](https://www.livres-ouverts.fr) est un **moteur de recherche open-source** permettant de parcourir **les budgets des différentes communes françaises**.
 
 ## C'est payant ?
 
@@ -14,7 +14,7 @@ Ce projet est porté avec une ambition citoyenne. Il ne sera jamais payant.
 
 Depuis plusieurs années, le gouvernement français a une politique promouvant l'ouverture des données publiques.
 
-Néanmoins, malgré la disponibilité de nombreuses données, notamment [sur le portail Data.gouv.fr](https://www.data.gouv.fr/fr/), la plupart sont brutes, obscures et difficiles d'accès, ce qui dessert l'objectif de transparence de ces données.
+Néanmoins, malgré la disponibilité de nombreuses données, notamment [sur le portail data.gouv.fr](https://www.data.gouv.fr/fr/), la plupart sont brutes, obscures et difficiles d'accès, ce qui dessert l'objectif de transparence de ces données.
 
 Les données budgétaires des établissements publics ne font pas exception.
 
@@ -33,7 +33,7 @@ Toutefois, **ce projet s'adresse plus particulièrement aux personnes dont l'exp
 
 ## Qu'est-ce que vous ne trouverez pas ici ?
 
-Livres ouverts ne fournit **aucune analyse** des données budgétaires qu'il présente.
+[Livres ouverts](https://www.livres-ouverts.fr) ne fournit **aucune analyse** des données budgétaires qu'il présente.
 
 Son rôle n'est pas de critiquer ou d'encenser une politique budgétaire, mais de rendre disponible des données au plus grand nombre, afin que certain.e.s puissent s'en saisir et les analyser.
 
@@ -65,15 +65,13 @@ D'autres données concernant les données des communes sont fournies par le Mini
 
 ## C'est tout ?
 
-Actuellement, Livres ouverts ne propose que la navigation par Siret et par année.
+Actuellement, Livres ouverts ne propose que la navigation par Siret, par année, et par fonction. Mais des pistes sont déjà envisagées pour améliorer cet outil.
 
-Bien que présents dans les fichiers CSV à télécharger, aucun détail n'est accessible via l'interface.
+**Il est prévu d'élargir ce projet à d'autres institutions**: départements, régions, ministères, et autres institutions publiques.
 
-Dans une version future, **il est prévu d'intégrer une navigation croisée nature/fonction** similaire à [celle proposée par le Département de la Gironde pour son budget 2018](https://www.gironde.fr/un-budget-au-service-des-solidarites-humaine-et-territoriale#!/explorer).
+Il sera également possible dans une future version de **comparer les budgets** entre eux.
 
-Une telle navigation permettra d'explorer chaque budget plus en détail.
-
-De plus, **il est envisagé d'intégrer les données d'autres types de collectivités locales**: régions, départements, ...
+Enfin, la navigation par fonction étant déjà disponible, la navigation par nature est envisagée, ainsi qu'un affichage plus détaillé de la donnée.
 
 ## Ça ne marche pas 🤬!
 
@@ -83,9 +81,21 @@ Livres ouverts est **en phase active de développement**, et est certainement su
 
 ## Comment puis-je aider ?
 
-Livres ouverts un projet **open-source**, auquel tout le monde peut contribuer.
+Livres ouverts un projet **open-source**, auquel tout le monde peut participer.
 
-Vous pouvez contribuer [ici](https://github.com/iOiurson/open-books), mais il est nécessaire d'être à l'aise avec [Github](https://github.com/).
+Vous pouvez bien sûr [faire des retours](https://twitter.com/r_ourson) sur l'outil, son usage, son design, son ergonomie.
+
+Je suis plus précisément à la **recherche de connaissances métier sur la lecture d'un budget** de commune, afin d'affiner ma compréhension du sujet, et proposer des visulisations plus précises et plus détaillées.
+
+Pour des contributions plus techniques, **vous pouvez participer [ici](https://github.com/iOiurson/open-books)**.
+
+## Y a t'il des gens à remercier ?
+
+Ce projet a été inspiré par **[David Bruant](https://twitter.com/DavidBruant)** et son travail sur [le budget du Département de la Gironde](https://www.gironde.fr/un-budget-au-service-des-solidarites-humaine-et-territoriale#!/explorer).
+
+Je tiens également à remercier **les élèves de Master 2 Développement Web 2021-2022 de l'[ECV Digital](https://www.ecv.fr/digital/)**, qui ont apporté leur contribution à ce projet.
+
+Et un merci à **vous** si vous avez pris le temps d'utiliser cet outil.
 
 ## Qui puis-je contacter ?
 
