@@ -27,9 +27,11 @@
         class:current={$page.url.pathname === '/about'}
       >
         <Icon id="info" />
+        <span>À propos</span>
       </a>
       <a href="https://github.com/iOiurson/open-books" title="Github">
         <Icon id="github" />
+        <span>Source</span>
       </a>
     </span>
   </nav>
@@ -50,14 +52,19 @@
       color: $grey-dark
       box-shadow: none
 
-      nav .home
-        h1
-          color: $grey-darker
-          span
+      nav
+        .home
+          h1
+            color: $grey-darker
+            span
+              color: $grey-dark
+
+          :global(.Icon)
             color: $grey-dark
 
-        :global(.Icon)
-          color: $grey-dark
+        a:not(.home)
+          span
+            display: none
 
     nav
       display: flex
@@ -74,10 +81,6 @@
         height: 100%
         font-size: 1.6rem
         margin-inline: 0.75rem
-        transition: color 0.3s ease-in-out
-
-        &:hover
-          color: coral
 
         :global(.Icon)
           align-self: center
@@ -97,17 +100,12 @@
         display: inline-flex
         transition: color 0.3s ease-in-out
 
-        span, :global(.Icon)
-          transition: color 0.3s ease-in-out
+        &:not(.home)
+          align-items: center
+          gap: 0.3em
 
         &:hover:not(.current)
           color: coral
-          h1
-            span
-              color: coral
-          :global(.Icon)
-              color: coral
-
 
         &.current
           color: cornflowerblue
