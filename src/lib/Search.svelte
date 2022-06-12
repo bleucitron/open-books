@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import type { City, LinkItem } from '@interfaces';
   import { navigating } from '$app/stores';
   import Icon from '$lib/Icon.svelte';
@@ -33,6 +33,9 @@
       label: 'Recherche',
     },
   };
+  const modes = Object.values(modeById);
+
+  export let autofocus = false;
 
   let showSuggestions = false;
   let suggestions: Suggestion[] = null;
@@ -40,7 +43,6 @@
   let input: HTMLInputElement;
   let error = false;
   let mode = Search;
-  const modes = Object.values(modeById);
 
   function clearSearch(): void {
     value = '';
@@ -102,6 +104,9 @@
   function selectMode(id: Mode): void {
     if (mode === id) showSuggestions = !showSuggestions;
     mode = id;
+    if (mode === Search) {
+      input?.focus();
+    }
   }
   function createUrl({ data, ...item }: LinkItem): string {
     if (!item.insee) item.siret = item.name; // no INSEE means a bare SIRET was searched
@@ -118,6 +123,12 @@
     };
   }
 
+  onMount(() => {
+    if (autofocus) {
+      input.focus();
+    }
+  });
+
   $: if (!$navigating) {
     if (mode === Search) clearSearch();
     showSuggestions = false;
@@ -125,9 +136,6 @@
 
   $: if (!value) {
     suggestions = null;
-  }
-  $: if (mode === Search) {
-    input?.focus();
   }
 
   $: loading = !showSuggestions && !!$navigating; // for SIRET search
