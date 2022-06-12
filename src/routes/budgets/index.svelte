@@ -90,7 +90,7 @@
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
   $: loadingP = Promise.all(allPs);
   $: Promise.all(budgetPs).then(() => {
-    if (!sirets.includes(currentSiret)) {
+    if (sirets.length && !sirets.includes(currentSiret)) {
       const url = new URL($page.url);
       url.searchParams.set('siret', sirets[0]);
 
