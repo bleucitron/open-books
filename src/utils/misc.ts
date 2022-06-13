@@ -55,17 +55,24 @@ export function extractEtabl(siret: string): string {
 }
 
 const toRemove = ['-', ' de'];
+export function cleanText(s: string): string {
+  toRemove.forEach(c => {
+    while (s.startsWith(c) || s.endsWith(c)) {
+      s = s.replace(new RegExp(`${c}$|^${c}`, 'g'), '');
+    }
+  });
+
+  return s;
+}
+
 export function formatLabel(label: string, name: string = ''): string {
   const l = normalizeText(label);
   const n = normalizeText(name.toLowerCase());
 
-  if (l === n) return DEFAULT_LABEL;
+  if (l === n) return l;
 
   let formatted = label.replace(n, '').trim().toLowerCase();
-
-  toRemove.forEach(c => {
-    formatted = formatted.replace(new RegExp(`${c}$|^${c}`, 'g'), '');
-  });
+  formatted = cleanText(formatted);
 
   return formatted.trim();
 }

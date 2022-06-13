@@ -4,6 +4,7 @@
   import Spinner from '$lib/Spinner.svelte';
 
   import { changingCity } from '@stores';
+  import { cleanText } from '@utils/misc';
   import type { Budget } from '@interfaces';
 
   export let labels: Budget[];
@@ -32,10 +33,15 @@
         <Spinner />
       </div>
     {/await}
-    {#each sirens as siren}
-      <li class="siren">
+    {#each sirens as siren (siren)}
+      {@const sirenLabels = labels.filter(l => l.siren === siren)}
+      {@const baseLabel = sirenLabels[0].label}
+      <li class="siren" in:fade|local>
         <ul>
-          {#each labels.filter(l => l.siren === siren) as { siret, siren, etabl, label }, i}
+          {#each sirenLabels as { siret, siren, etabl, label }, i (siret)}
+            {@const formattedLabel =
+              i === 0 ? label : cleanText(label.replace(baseLabel, ''))}
+
             <li
               class="siret"
               class:selected={currentSiret === siret}
@@ -47,7 +53,7 @@
                   <span class="siren">{siren}</span>
                   <span class="etabl">{etabl}</span>
                 </div>
-                <div class="label">{label || defaultLabel}</div>
+                <div class="label">{formattedLabel ?? defaultLabel}</div>
               </a>
             </li>
           {/each}
