@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { formatCurrency, BudgetType, FILabel } from '@utils';
   import { sand, water } from '@utils/colors';
   import Donut from './Donut.svelte';
@@ -9,10 +10,20 @@
   export let credit_f: number;
   export let debit_i: number;
   export let debit_f: number;
-  export let select: (t: BudgetType) => void;
+
+  function makeUrl(t: BudgetType): string {
+    const u = new URL($page.url);
+    u.searchParams.set('type', t);
+
+    return u.href;
+  }
 
   $: credit = credit_f + credit_i;
   $: debit = debit_f + debit_i;
+  $: credit_i_url = makeUrl(CREDIT_I);
+  $: credit_f_url = makeUrl(CREDIT_F);
+  $: debit_i_url = makeUrl(DEBIT_I);
+  $: debit_f_url = makeUrl(DEBIT_F);
 
   $: max = Math.max(credit, debit);
 </script>
@@ -23,28 +34,29 @@
       scale={credit / max}
       data={[
         {
-          id: BudgetType.CREDIT_I,
+          id: CREDIT_I,
           label: FILabel.I,
           value: credit_i,
           color: sand,
+          url: credit_i_url,
         },
         {
-          id: BudgetType.CREDIT_F,
+          id: CREDIT_F,
           label: FILabel.F,
           value: credit_f,
           color: water,
+          url: credit_f_url,
         },
       ]}
-      on:click={data => select(data.detail.id)}
     />
     <figcaption>
       <div>Recettes</div>
       <ul class="visually-hidden">
-        <li class="i" style:color="#4297A0" on:click={() => select(CREDIT_I)}>
-          Investissement: {formatCurrency(credit_i)}
+        <li class="i" style:color="#4297A0">
+          <a href={credit_i_url}>Investissement: {formatCurrency(credit_i)}</a>
         </li>
-        <li class="f" style:color="coral" on:click={() => select(CREDIT_F)}>
-          Fonctionnement: {formatCurrency(credit_f)}
+        <li class="f" style:color="coral">
+          <a href={credit_f_url}>Fonctionnement: {formatCurrency(credit_f)}</a>
         </li>
         <li class="total">Total: {formatCurrency(credit_i + credit_f)}</li>
       </ul>
@@ -55,32 +67,29 @@
       scale={debit / max}
       data={[
         {
-          id: BudgetType.DEBIT_I,
+          id: DEBIT_I,
           label: FILabel.I,
           value: debit_i,
           color: sand,
+          url: debit_i_url,
         },
         {
-          id: BudgetType.DEBIT_F,
+          id: DEBIT_F,
           label: FILabel.F,
           value: debit_f,
           color: water,
+          url: debit_f_url,
         },
       ]}
-      on:click={data => select(data.detail.id)}
     />
     <figcaption>
       <div>Dépenses</div>
       <ul class="visually-hidden">
-        <li
-          class="i"
-          style:color="cornflowerblue"
-          on:click={() => select(DEBIT_I)}
-        >
-          Investissement: {formatCurrency(debit_i)}
+        <li class="i" style:color="cornflowerblue">
+          <a href={debit_i_url}>Investissement: {formatCurrency(debit_i)}</a>
         </li>
-        <li class="f" style:color="#E57F84" on:click={() => select(DEBIT_F)}>
-          Fonctionnement: {formatCurrency(debit_f)}
+        <li class="f" style:color="#E57F84">
+          <a href={debit_f_url}>Fonctionnement: {formatCurrency(debit_f)}</a>
         </li>
         <li>Total: {formatCurrency(debit_i + debit_f)}</li>
       </ul>

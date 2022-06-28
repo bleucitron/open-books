@@ -8,14 +8,12 @@
 
   import { browser } from '$app/env';
   import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
   import { type, code } from '@stores';
   import {
     typeToLabel,
     stepsFromString,
     fonctionFromTree,
     formatCurrency,
-    BudgetType,
   } from '@utils';
   import type { Type, Budget, FonctionTreeValue } from '@interfaces';
 
@@ -28,17 +26,6 @@
   export let year: number;
 
   let breadcrumbs: { id: string; label: string }[];
-
-  function selectType(t: BudgetType): void {
-    const u = new URL(url);
-
-    if (!t) u.searchParams.delete('type');
-    else u.searchParams.set('type', t);
-
-    // not sure if i can use an <a> with a <path>
-    goto(u.href);
-    $type = t;
-  }
 
   function makeResetHref(url: URL): string {
     const u = new URL(url);
@@ -105,7 +92,6 @@
         credit_f={budget.value.obnetcre_f}
         debit_i={budget.value.obnetdeb_i}
         debit_f={budget.value.obnetdeb_f}
-        select={selectType}
       />
     {:else}
       <div class="main">{formatCurrency(total)}</div>

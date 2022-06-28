@@ -4,6 +4,7 @@
     value: number;
     label?: string;
     color?: string;
+    url?: string;
   }
 </script>
 
@@ -64,24 +65,26 @@
     </clipPath>
   </defs>
   {#each data as d, i}
-    {@const { value, color } = d}
+    {@const { value, color, url } = d}
     {@const percentage = value / total}
     {@const startAngle = offsets[i] * 360}
     {@const endAngle = startAngle + percentage * 360}
-    <path
-      fill="transparent"
-      stroke={color}
-      stroke-width={2 * width}
-      d={describeArc(radius, radius, radius, startAngle, endAngle, gap)}
-      clip-path="url(#clipCircle)"
-      in:draw={{
-        duration,
-        easing: expoOut,
-      }}
-      on:mouseenter={() => update(d)}
-      on:mouseleave={reset}
-      on:click={() => dispatch('click', d)}
-    />
+    <a href={url}>
+      <path
+        fill="transparent"
+        stroke={color}
+        stroke-width={2 * width}
+        d={describeArc(radius, radius, radius, startAngle, endAngle, gap)}
+        clip-path="url(#clipCircle)"
+        in:draw={{
+          duration,
+          easing: expoOut,
+        }}
+        on:mouseenter={() => update(d)}
+        on:mouseleave={reset}
+        on:click={() => dispatch('click', d)}
+      />
+    </a>
   {/each}
   {#if displayedLabel}
     <text
