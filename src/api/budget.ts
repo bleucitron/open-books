@@ -1,3 +1,4 @@
+import { browser } from '$app/env';
 import { get } from './utils/verbs';
 import { makeBudgetCroiseEndpoint, makeNomenEndpoint } from './utils/budget';
 
@@ -48,7 +49,7 @@ export async function getNomen(
           );
         });
 
-  if (nomen) {
+  if (browser && nomen) {
     nomenById.set(id, nomen);
   }
 
