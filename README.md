@@ -1,10 +1,10 @@
 # Livres Ouverts
 
-L'application est disponible à l'adresse suivante: https://livres-ouverts.fr.
-
 Il s'agit d'une application d'exploration de données concernant les budgets des communes françaises.
 
-Les données utilisées dans ce projet sont toutes ouvertes:
+L'application est disponible à l'adresse suivante: [livres-ouverts.fr](https://livres-ouverts.fr).
+
+Les données utilisées dans ce projet sont toutes publiées sous une licence permettant leur réutilisation :
 
 - [budgets](https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-collectivites-et-des-etablissements-publics-locaux-avec0/table/)
 - [SIRENE](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findBySiret)
@@ -19,7 +19,7 @@ Vous pouvez avoir une idée des développements à venir [ici](./roadmap.md).
 
 ## Contributions
 
-Ce projet est open-source et ouvert à contributions via Pull Request.
+Ce projet est libre et ouvert aux contributions.  Vous pouvez les proposer en créant des /pull requests/.
 
 ## Usage
 
@@ -43,3 +43,7 @@ Il est recommandé d'utiliser l'éditeur [VSCode](https://code.visualstudio.com/
 Ce projet est déployé sur [Vercel](https://vercel.com/home). Il utilise actuellement la configuration `adapter-vercel` dans le fichier `svelte.config.js`.
 
 Si vous souhaitez le déployer sur d'autres plateformes, il vous faudra changer d'adapteur. Plus d'infos sur [cette page](https://kit.svelte.dev/docs/adapters).
+
+## Droits
+
+Le code source de ce dépôt est publié sous [licence MIT](LICENSE.txt).
