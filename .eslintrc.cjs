@@ -15,8 +15,13 @@ module.exports = {
     ecmaVersion: 'lastest',
     sourceType: 'module',
   },
-  plugins: ['svelte3', 'prettier', '@typescript-eslint'],
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  ignorePatterns: ['*.cjs'],
+  plugins: ['svelte3', '@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+  ],
   rules: {
     eqeqeq: ['error', 'always', { null: 'ignore' }],
     'no-alert': 'error',
@@ -69,10 +74,6 @@ module.exports = {
       rules: {
         'unused-export-let': 'error',
       },
-    },
-    {
-      files: ['**/*.ts'],
-      extends: ['plugin:prettier/recommended'],
     },
   ],
   settings: {
