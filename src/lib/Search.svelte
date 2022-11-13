@@ -172,6 +172,9 @@
       on:click={() => {
         suggestions = null;
       }}
+      on:keypress={() => {
+        suggestions = null;
+      }}
     >
       {#each modes.filter(x => x) as { id, label }}
         {@const current = mode === id}

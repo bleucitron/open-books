@@ -1,19 +1,8 @@
-<script context="module" lang="ts">
-  import type { Load } from '@sveltejs/kit';
-  import Header from '$lib/Header.svelte';
-
-  export const load: Load = ({ error }) => {
-    console.error('Stack', error.stack);
-    return {
-      props: {
-        message: error.message,
-      },
-    };
-  };
-</script>
-
 <script lang="ts">
-  export let message: string;
+  import Header from '$lib/Header.svelte';
+  import { page } from '$app/stores';
+
+  $: message = $page.error.message;
 </script>
 
 <Header />

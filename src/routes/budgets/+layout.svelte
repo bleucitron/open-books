@@ -84,7 +84,7 @@
   import Header from '$lib/Header.svelte';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import { history } from '@stores';
-  import { handleTargetSelection } from '../_utils';
+  import { handleTargetSelection } from '../utils';
 
   export let sirens: string[];
   export let currentSiret: string;

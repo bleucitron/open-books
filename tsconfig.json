@@ -8,19 +8,24 @@
     "strictNullChecks": false,
     "moduleResolution": "node",
     "paths": {
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
-      "@api": ["src/api"],
-      "@api/*": ["src/api/*"],
-      "@utils": ["src/utils"],
-      "@utils/*": ["src/utils/*"],
-      "@stores": ["src/stores"],
-      "@stores/*": ["src/stores/*"],
-      "@interfaces": ["src/interfaces"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@docs": ["src/docs"],
-      "@docs/*": ["src/docs/*"]
+      "$lib": ["./src/lib"],
+      "$lib/*": ["./src/lib/*"],
+      "@api": ["./src/api"],
+      "@api/*": ["./src/api/*"],
+      "@utils": ["./src/utils"],
+      "@utils/*": ["./src/utils/*"],
+      "@stores": ["./src/stores"],
+      "@stores/*": ["./src/stores/*"],
+      "@interfaces": ["./src/interfaces"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@docs": ["./src/docs"],
+      "@docs/*": ["./src/docs/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
+  "include": [
+    "./src/**/*.d.ts",
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.svelte"
+  ]
 }

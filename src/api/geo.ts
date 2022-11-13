@@ -8,7 +8,7 @@ import {
   makeGetCityEndpoint,
 } from './utils/geo';
 import type { Fetch } from '@interfaces';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 
 const baseUrl = 'https://geo.api.gouv.fr';
 

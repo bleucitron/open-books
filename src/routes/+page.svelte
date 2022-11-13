@@ -5,7 +5,7 @@
   import { getRandomCities } from '@api/geo';
   import { city as cityStore } from '@stores';
   import type { City } from '@interfaces';
-  import { handleTargetSelection } from './_utils';
+  import { handleTargetSelection } from './utils';
 
   import Icon from '$lib/Icon.svelte';
   import Search from '$lib/Search.svelte';

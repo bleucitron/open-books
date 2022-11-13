@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import type { LinkItem } from '@interfaces';
 
 const { subscribe, set, update } = writable<LinkItem[]>([], () => {

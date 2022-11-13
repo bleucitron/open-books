@@ -6,7 +6,7 @@
     Voir la fonction aggregateData
   */
 
-  import { browser } from '$app/env';
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { type, code } from '@stores';
   import {

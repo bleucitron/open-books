@@ -1,6 +1,6 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf';
-  import Donut from '../routes/budgets/_components/Donut.svelte';
+  import Donut from '../routes/budgets/components/Donut.svelte';
 </script>
 
 <Meta title="Chart/Donut" component={Donut} argTypes={{}} />

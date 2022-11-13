@@ -1,4 +1,4 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { getRecords } from '@api';
 import { makeBudget, makeId, orderRecordsBySiret } from '@utils';
 import type { Budget, BudgetMap, BudgetRecord, City, Fetch } from '@interfaces';

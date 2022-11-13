@@ -2,7 +2,7 @@
   import type { Load } from '@sveltejs/kit';
   import { type, code, changingCity } from '@stores';
   import type { Budget, BudgetMap, City } from '@interfaces';
-  import { fillBudget, fillBudgetBySirens } from './_cache';
+  import { fillBudget, fillBudgetBySirens } from './cache';
 
   const start = 2012;
   const end = new Date().getFullYear() - 1;
@@ -36,16 +36,16 @@
 </script>
 
 <script lang="ts">
-  import { browser } from '$app/env';
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import { makeId, fonctionFromTree } from '@utils';
 
-  import Labels from './_components/Labels.svelte';
-  import Years from './_components/Years.svelte';
-  import Summary from './_components/Summary.svelte';
   import Spinner from '$lib/Spinner.svelte';
+  import Labels from './components/Labels.svelte';
+  import Years from './components/Years.svelte';
+  import Summary from './components/Summary.svelte';
 
   export let sirens: string[];
   export let currentSiret: string;
