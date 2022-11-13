@@ -15,7 +15,7 @@
     "release": "release-it",
     "storybook": "start-storybook -s ./static -p 6006",
     "build-storybook": "build-storybook -s ./static",
-    "test": "uvu -r module-alias/register -r tsm src test"
+    "test": "vitest"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.2.0",
@@ -34,7 +34,6 @@
     "eslint-plugin-svelte3": "^3.4.1",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
-    "module-alias": "^2.2.2",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.6.0",
     "release-it": "^15.5.0",
@@ -43,11 +42,10 @@
     "svelte-check": "^2.9.2",
     "svelte-preprocess": "^4.10.7",
     "tslib": "^2.3.1",
-    "tsm": "^2.1.2",
     "typescript": "^4.6.3",
-    "uvu": "^0.5.2",
     "vite": "^3.2.3",
-    "vite-plugin-markdown": "^2.1.0"
+    "vite-plugin-markdown": "^2.1.0",
+    "vitest": "^0.25.1"
   },
   "type": "module",
   "dependencies": {
@@ -59,12 +57,5 @@
     "json-2-csv": "^3.14.4",
     "marked": "^4.0.10",
     "randomcolor": "^0.6.2"
-  },
-  "_moduleAliases": {
-    "@api": "src/api",
-    "@utils": "src/utils",
-    "@stores": "src/stores",
-    "@interfaces": "src/interfaces",
-    "@docs": "src/docs"
   }
 }
