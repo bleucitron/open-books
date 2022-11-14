@@ -3,7 +3,7 @@
 
 import type { RequestOptions } from '@interfaces';
 
-export function get<T>(url: string, opts?: RequestOptions): Promise<T> {
+export function get<T>(url: string, opts: RequestOptions = {}): Promise<T> {
   const { fetch: altFetch, ...options } = opts;
 
   const fetcher = altFetch ?? fetch;
@@ -12,7 +12,7 @@ export function get<T>(url: string, opts?: RequestOptions): Promise<T> {
       throw new Error(resp.statusText);
     }
 
-    const stream = resp.headers.get('content-type').includes('json')
+    const stream = resp.headers.get('content-type')?.includes('json')
       ? resp.json()
       : resp.text();
 

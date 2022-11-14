@@ -47,6 +47,7 @@ export async function getCity(insee: string, altFetch?: Fetch): Promise<City> {
   const endpoint = makeGetCityEndpoint(insee);
 
   const city = await get<City>(`${baseUrl}/${endpoint}`, { fetch: altFetch });
+
   if (browser) cityCache.set(insee, city);
   return city;
 }

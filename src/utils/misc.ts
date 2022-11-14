@@ -19,7 +19,7 @@ export function makeBudgetUrl({ insee, siret, sirens, year }: UrlData): string {
     throw Error('Missing parameter');
 
   const sirensAsString = sirens.join(',');
-  return `/budgets?insee=${insee}&year=${year}&siret=${siret}&sirens=${sirensAsString}`;
+  return `/${insee}?year=${year}&siret=${siret}&sirens=${sirensAsString}`;
 }
 
 export function normalizeText(text: string): string {

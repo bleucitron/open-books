@@ -2,11 +2,14 @@
   import { get } from 'svelte/store';
   import type { Load } from '@sveltejs/kit';
   import { getCity } from '@api';
-  import { extractSirens } from '@api/utils/siren';
   import { city } from '@stores';
   import type { City, Etablissement } from '@interfaces';
-  import { makeBudgetUrl } from '@utils';
-  import { extractSiren, formatValue } from '@utils/misc';
+  import {
+    makeBudgetUrl,
+    extractSirens,
+    extractSiren,
+    formatValue,
+  } from '@utils';
 
   const defaultYear = new Date().getFullYear() - 2;
 
@@ -84,7 +87,7 @@
   import Header from '$lib/Header.svelte';
   import FavoriteToggle from '$lib/FavoriteToggle.svelte';
   import { history } from '@stores';
-  import { handleTargetSelection } from '../utils';
+  import { handleTargetSelection } from '../(general)/utils';
 
   export let sirens: string[];
   export let currentSiret: string;

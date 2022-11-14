@@ -1,4 +1,4 @@
-import type { Etablissement } from '@interfaces';
+import { SIRENE_TOKEN } from '$env/static/private';
 
 const nbResults = 1000;
 const category = '7210';
@@ -22,44 +22,16 @@ function buildParamString(paramByKey: Params): string {
     .join(' AND ');
 }
 
-interface CityCode {
-  name: string;
-  nb: number;
-  base: string;
-}
+export const baseUrl = 'https://api.insee.fr/entreprises/sirene/V3';
 
-const codesByMain: Record<string, CityCode> = {
-  // Codes for Arrondissements
-  '69123': {
-    name: 'Lyon',
-    nb: 9,
-    base: '69380',
-  },
-  '75056': {
-    name: 'Paris',
-    nb: 20,
-    base: '75100',
-  },
-  '13055': {
-    name: 'Marseille',
-    nb: 16,
-    base: '13200',
-  },
+const headers = {
+  Accept: 'application/json',
+  Authorization: `Bearer ${SIRENE_TOKEN}`,
 };
 
-export function checkCodes(code: string): string[] {
-  if (code in codesByMain) {
-    const { nb, base } = codesByMain[code];
-
-    const codes = Array.from({ length: nb }, (_, v) =>
-      (parseInt(base) + v + 1).toString(),
-    );
-
-    return [code, ...codes];
-  }
-
-  return [code];
-}
+export const options = {
+  headers,
+};
 
 export function makeGetSiretEndpoint(siret: string): string {
   return `siret/${siret}`;
@@ -98,6 +70,24 @@ export function makeSearchSiretEndpoint(codes: string[]): string {
   return `${base}?${allParams}`;
 }
 
-export function extractSirens(etablissements: Etablissement[]): string[] {
-  return [...new Set(etablissements.map(({ siren }) => siren))];
-}
+// Potential endpoints to implement
+
+// export function getSiret(
+//   siret: string,
+//   altFetch?: Fetch,
+// ): Promise<Etablissement> {
+//   const endpoint = makeGetSiretEndpoint(siret);
+
+//   return get<SiretFromAPI>(`${baseUrl}/${endpoint}`, {
+//     ...options,
+//     fetch: altFetch,
+//   }).then(r => r.etablissement);
+// }
+
+// export function getSiren(siren: string): Promise<UniteLegale> {
+//   const endpoint = makeGetSirenEndpoint(siren);
+
+//   return get<SirenFromAPI>(`${baseUrl}/${endpoint}`, options).then(
+//     r => r.uniteLegale,
+//   );
+// }

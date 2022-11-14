@@ -1,6 +1,6 @@
 <script lang="ts">
   export let id: string;
-  export let color: string = undefined;
+  export let color: string | undefined = undefined;
   export let filled = false;
   export let size = '1em';
 </script>
@@ -17,5 +17,5 @@
   on:click
   on:keypress
 >
-  <use href={`feather-sprite.svg#${id}`} />
+  <use href={`/feather-sprite.svg#${id}`} />
 </svg>

@@ -1,7 +1,7 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf';
   import { action } from '@storybook/addon-actions';
-  import Path from '../routes/budgets/components/Path.svelte';
+  import Path from '../routes/oldbudgets/components/Path.svelte';
 
   const steps = [
     { label: 'Step 1', select: () => action('select')('step 1') },

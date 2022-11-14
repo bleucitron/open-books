@@ -3,7 +3,7 @@
   import Icon from './Icon.svelte';
 </script>
 
-<header class:budget={$page.url.pathname === '/budgets'}>
+<header class:budget={$page.url.pathname.startsWith('/commune')}>
   <nav>
     <a class="home" href="/" class:current={$page.url.pathname === '/'}>
       <Icon id="book-open" />
