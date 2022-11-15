@@ -5,6 +5,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "vite dev",
+    "dev:open": "vite dev --open",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
