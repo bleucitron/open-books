@@ -4,12 +4,11 @@
 
   export let name: string;
   export let insee: string;
-  export let sirens: string[];
   export let data: unknown;
 
   function toggleFavorite(): void {
     if (!isFavorite) {
-      favorites.addItem({ name, insee, sirens, data });
+      favorites.addItem({ name, insee, data });
     } else {
       favorites.removeItem(name);
     }

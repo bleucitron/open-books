@@ -11,7 +11,7 @@
 
   export let data: LayoutData;
 
-  $: ({ city, sirens } = data);
+  $: ({ city } = data);
   $: ({ nom, departement, population } = city);
 
   $: insee = $page.params.insee;
@@ -25,7 +25,7 @@
 <div class="budget-layout">
   <Header>
     <div class="titles">
-      <FavoriteToggle name={nom} {insee} {sirens} data={{ city }} />
+      <FavoriteToggle name={nom} {insee} data={{ city }} />
       <h1>{nom}</h1>
       {#if city}
         <div class="info">

@@ -4,7 +4,8 @@ import type { LinkItem } from '@interfaces';
 
 const { subscribe, set, update } = writable<LinkItem[]>([], () => {
   if (browser) {
-    const parsedFavorites = JSON.parse(localStorage.getItem('favorites'));
+    const s = localStorage.getItem('favorites');
+    const parsedFavorites = s ? JSON.parse(s) : null;
     if (parsedFavorites) {
       set(parsedFavorites);
     }

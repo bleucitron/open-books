@@ -166,7 +166,6 @@ export interface LinkItem {
   name: string;
   insee: string;
   siret?: string;
-  sirens: string[];
   data?: unknown;
 }
 

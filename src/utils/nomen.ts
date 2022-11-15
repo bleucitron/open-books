@@ -4,7 +4,7 @@ import { extractFonctions } from './budget';
 
 const parser = new DOMParser();
 
-export const nomenById = new Map();
+export const nomenById = new Map<string, Nomen>();
 
 export interface Nomen {
   id: string;

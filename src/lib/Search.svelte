@@ -74,7 +74,7 @@
       return {
         id: code,
         label: nom,
-        href: `/budgets?insee=${code}`,
+        href: `/commune/${code}`,
         sublabel: departement && `${departement.code} - ${departement.nom}`,
         data: { city },
       };
@@ -112,7 +112,7 @@
     if (!item.insee) item.siret = item.name; // no INSEE means a bare SIRET was searched
 
     const paramString = buildParamString(item);
-    return '/budgets?' + paramString;
+    return `/commune/${item.insee}?` + paramString;
   }
   function createSuggestion(item: LinkItem): Suggestion {
     return {

@@ -1,61 +1,32 @@
-<div>Coucou</div>
-<!-- <script lang="ts" context="module">
-  import type { Load } from '@sveltejs/kit';
+<script lang="ts">
+  import type { LayoutData } from './$types';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
+  import type { Budget } from '@interfaces';
   import { type, code, changingCity } from '@stores';
-  import type { Budget, BudgetMap, City } from '@interfaces';
+  import { makeId, fonctionFromTree } from '@utils';
+  import Spinner from '$lib/Spinner.svelte';
   import { fillBudget, fillBudgetBySirens } from './cache';
+  import Labels from './components/Labels.svelte';
+  import Years from './components/Years.svelte';
 
   const start = 2012;
   const end = new Date().getFullYear() - 1;
-  const defaultYear = end - 1;
   const years = [...Array(end - start + 1).keys()].map(x => x + start);
 
-  export const load: Load = async ({ url: { searchParams }, stuff, fetch }) => {
-    const insee = searchParams.get('insee');
-    const y = searchParams.get('year');
-    const sirenString = searchParams.get('sirens');
-    const siret = searchParams.get('siret');
+  export let data: LayoutData;
 
-    const year = parseInt(y) || defaultYear;
+  let budgetById: Record<string, Budget> = {};
 
-    const city = insee && stuff.city;
-    const sirens = sirenString?.split(',');
-
-    const budget = await fillBudget(siret, year, city, fetch);
-
-    return {
-      props: {
-        sirens,
-        currentCity: city,
-        currentSiret: siret,
-        currentYear: year,
-        insee,
-        budget,
-      },
-    };
-  };
-</script>
-
-<script lang="ts">
-  import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
-
-  import { makeId, fonctionFromTree } from '@utils';
-
-  import Spinner from '$lib/Spinner.svelte';
-  import Labels from './components/Labels.svelte';
-  import Years from './components/Years.svelte';
-  import Summary from './components/Summary.svelte';
-
-  export let sirens: string[];
-  export let currentSiret: string;
-  export let currentCity: City;
-  export let currentYear: number;
-  export let insee: string;
-  export let budget: Budget;
-
-  let budgetById: BudgetMap = {};
+  $: ({ sirens, city } = data); // possiblement déclarer budgetById comme state
+  $: ({
+    params: { insee },
+    url: { searchParams },
+    data: { budget },
+  } = $page);
+  $: year = parseInt(searchParams.get('year') ?? '');
+  $: siret = searchParams.get('siret') ?? '';
 
   $: if (budget) {
     budgetById[budget?.id] = budget;
@@ -71,15 +42,13 @@
   };
 
   $: budgetPs = years
-    .map(year =>
-      year === currentYear
-        ? Promise.resolve(budget)
-        : fillBudget(currentSiret, year, currentCity),
+    .map(y =>
+      y === year ? Promise.resolve(budget) : fillBudget(siret, y, city),
     )
     .map(p => p.then(b => b && (budgetById[b.id] = b)));
 
   $: otherBudgetPs = browser
-    ? fillBudgetBySirens(sirens, [...years].reverse(), currentCity).map(p =>
+    ? fillBudgetBySirens(sirens, [...years].reverse(), city).map(p =>
         p.then(budgets =>
           budgets
             .filter(b => b && b.info.city?.code === insee)
@@ -91,7 +60,7 @@
   $: allPs = [...budgetPs, ...otherBudgetPs] as Promise<unknown>[];
   $: loadingP = Promise.all(allPs);
   $: Promise.all(budgetPs).then(() => {
-    if (sirets.length && !sirets.includes(currentSiret)) {
+    if (sirets.length && !sirets.includes(siret)) {
       const url = new URL($page.url);
       url.searchParams.set('siret', sirets[0]);
 
@@ -109,7 +78,7 @@
 
   $: labels = sirets
     .map(s => {
-      const id = makeId(s, currentYear);
+      const id = makeId(s, year);
       const budget = budgetById[id];
 
       return budget || findSimilarBudget(s);
@@ -135,13 +104,22 @@
     {#if $changingCity}
       <Spinner />
     {:else}
-      <Summary year={currentYear} {budget} />
+      <section>
+        <slot />
+      </section>
+      <!-- <Summary year={currentYear} {budget} /> -->
       <Years {years} {valuePs} />
     {/if}
   </div>
 </div>
 
 <style lang="sass">
+  .content
+    display: flex
+    flex-flow: row
+    height: 100%
+    overflow: hidden
+
   menu
     margin: 0
     color: white
@@ -150,11 +128,8 @@
     padding: 1rem
     padding-right: 0
 
-  .content
-    display: flex
-    flex-flow: row
-    height: 100%
-    overflow: hidden
+  section
+    flex: 1 0
 
   .dataviz
     :global
@@ -166,4 +141,4 @@
     flex-flow: column
     align-items: center
     justify-content: center
-</style> -->
+</style>

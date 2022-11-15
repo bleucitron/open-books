@@ -81,7 +81,7 @@ export async function makeCSV(data: Budget): Promise<CSV> {
 export async function makeBudget(
   data: BudgetRaw,
   fetch?: Fetch,
-): Promise<Budget> {
+): Promise<Budget | null> {
   const { info, siret, year, records } = data;
 
   const id = makeId(siret, year);
@@ -248,7 +248,7 @@ export function aggregateData(
   tree: FonctionTree,
   nomenId: string,
 ): FonctionTree {
-  const aggregate = Object.values(tree).map(fonction => {
+  const aggregate = Object.values(tree ?? {}).map(fonction => {
     const { code, tree } = fonction;
 
     let obnetdeb;
@@ -267,7 +267,7 @@ export function aggregateData(
 
     const nomen = nomenById.get(nomenId);
 
-    if (!tree) {
+    if (!tree && nomen) {
       const records_f = filteredRecords.filter(r => {
         return nomen.fiByCompte.get(r.compte) === 'F';
       });

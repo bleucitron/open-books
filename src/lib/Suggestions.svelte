@@ -76,7 +76,7 @@
         on:focus={() => (current = index)}
         on:mouseenter={() => (current = index)}
         {href}
-        sveltekit:prefetch
+        data-sveltekit-prefetch
         class:active
         bind:this={anchorById[id]}
       >

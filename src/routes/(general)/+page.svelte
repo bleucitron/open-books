@@ -76,10 +76,7 @@
               departement: { nom: dpt, code: dptCode },
             } = city}
             <li in:fade={{ duration: 2000, delay: i * 1000 }}>
-              <a
-                href={`/budgets?insee=${code}`}
-                on:click={() => chooseExample(city)}
-              >
+              <a href="/commune/{code}" on:click={() => chooseExample(city)}>
                 <div class="city">
                   <span>
                     {nom}

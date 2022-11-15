@@ -5,7 +5,7 @@
   const version = __VERSION__;
 
   $: segment = $page.url.pathname.split('/')[1];
-  $: isBudget = segment === 'budgets';
+  $: isBudget = segment === 'commune';
 </script>
 
 <GoogleAnalytics />
