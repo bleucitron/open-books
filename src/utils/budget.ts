@@ -9,12 +9,10 @@ import type {
   RecordsWithSiret,
   FonctionTree,
   FonctionTreeValue,
-  Fetch,
 } from '@interfaces';
 
-import { nomenById } from './nomen';
+import { nomenById, type Nomen } from './nomen';
 import { extractSiren, extractEtabl, formatLabel, sumBy } from './misc';
-import { getNomen } from '@api';
 
 const { json2csvAsync: toCSV } = json2csv;
 
@@ -78,17 +76,12 @@ export async function makeCSV(data: Budget): Promise<CSV> {
   };
 }
 
-export async function makeBudget(
-  data: BudgetRaw,
-  fetch?: Fetch,
-): Promise<Budget | null> {
+export function makeBudget(data: BudgetRaw, nomen: Nomen): Budget {
   const { info, siret, year, records } = data;
 
   const id = makeId(siret, year);
 
   const length = records.length;
-
-  if (length === 0) return null;
 
   const siren = extractSiren(siret);
   const etabl = extractEtabl(siret);
@@ -96,23 +89,14 @@ export async function makeBudget(
   const labels = [
     ...new Set(records.map(record => record.lbudg.toLowerCase())),
   ];
-  const nomens = [...new Set(records.map(record => record.nomen))];
-
   if (labels.length > 1) {
-    console.log('More than 1 label for', siret, year);
-  }
-  if (nomens.length > 1) {
-    console.log('More than 1 nomen for', siret, year);
+    console.warn('More than 1 label for', siret, year);
   }
 
-  const nomen = nomens.length > 0 ? nomens[0] : '';
   const city = info.city;
   const label = labels.length > 0 ? formatLabel(labels[0], city?.nom) : '';
 
-  const nomenFilled = await getNomen(year, nomen, city?.population, fetch);
-  const tree = nomenFilled
-    ? aggregateData(records, nomenFilled?.tree, nomenFilled.id)
-    : null;
+  const tree = aggregateData(records, nomen?.tree, nomen.id);
 
   const treeValues = Object.values(tree ?? {});
 
@@ -130,7 +114,7 @@ export async function makeBudget(
     etabl,
     info,
     year,
-    nomen,
+    nomen: nomen.norme,
     length,
     value: {
       obnetdeb,
@@ -321,10 +305,13 @@ export function aggregateData(
   return Object.fromEntries(aggregate);
 }
 
-export function makeM14Decl(code: string, population: number): string {
+export function makeM14Decl(
+  code: string,
+  population = Number.POSITIVE_INFINITY,
+): string {
   let suffix = '';
   if (code) {
-    if (!population || population >= 3500) suffix = `_COM_SUP3500`;
+    if (population >= 3500) suffix = `_COM_SUP3500`;
     else if (population < 500) suffix = `_COM_INF500`;
     else suffix = `_COM_500_3500`;
   } else {

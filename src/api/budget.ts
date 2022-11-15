@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { get } from './utils/verbs';
 import { makeBudgetCroiseEndpoint, makeNomenEndpoint } from './utils/budget';
 
@@ -34,12 +33,15 @@ export async function getNomen(
   code: string,
   population?: number,
   altFetch?: Fetch,
-): Promise<Nomen> {
+): Promise<Nomen | undefined> {
+  if (!year) throw 'No year provided';
+  if (!code) throw 'No code provided';
+
   const decl = code === 'M14' ? makeM14Decl(code, population) : code;
   const endpoint = makeNomenEndpoint(year, decl);
   const id = `${year}_${decl}`;
 
-  const nomen: Nomen = nomenById.has(id)
+  const nomen = nomenById.has(id)
     ? nomenById.get(id)
     : await get<string>(`${nomenUrl}/${endpoint}`, { fetch: altFetch })
         .then(buildNomen)
@@ -47,11 +49,10 @@ export async function getNomen(
           console.warn(
             `${endpoint} does not contain data to be readed, budget details won't be aggregated`,
           );
+          return undefined;
         });
 
-  if (browser && nomen) {
-    nomenById.set(id, nomen);
-  }
+  nomenById.set(id, nomen);
 
   return nomen;
 }

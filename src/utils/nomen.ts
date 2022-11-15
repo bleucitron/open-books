@@ -4,12 +4,12 @@ import { extractFonctions } from './budget';
 
 const parser = new DOMParser();
 
-export const nomenById = new Map<string, Nomen>();
+export const nomenById = new Map<string, Nomen | undefined>();
 
 export interface Nomen {
   id: string;
   norme: string;
-  exer: string;
+  exer: number;
   declinaison: string;
   fiByChapitre: Map<string, string>;
   fiByCompte: Map<string, string>;
@@ -72,9 +72,9 @@ export function buildNomen(s: string): Nomen {
   const tree = extractFonctions(refFonc);
 
   const n = Array.from(doc.getElementsByTagName('Nomenclature'))[0];
-  const norme = n.getAttribute('Norme');
-  const exer = n.getAttribute('Exer');
-  const declinaison = n.getAttribute('Declinaison');
+  const norme = n.getAttribute('Norme') ?? '';
+  const exer = parseInt(n.getAttribute('Exer') ?? '');
+  const declinaison = n.getAttribute('Declinaison') ?? '';
 
   return {
     id: `${exer}_${declinaison}`,

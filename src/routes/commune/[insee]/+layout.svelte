@@ -17,9 +17,10 @@
 
   export let data: LayoutData;
 
-  let budgetById: Record<string, Budget> = {};
+  let budgetById: Record<string, Budget | undefined> = {};
 
   $: ({ sirens, city } = data); // possiblement déclarer budgetById comme state
+
   $: ({
     params: { insee },
     url: { searchParams },
@@ -52,7 +53,7 @@
         p.then(budgets =>
           budgets
             .filter(b => b && b.info.city?.code === insee)
-            .forEach(b => (budgetById[b.id] = b)),
+            .forEach(b => (budgetById[(b as Budget).id] = b)),
         ),
       )
     : [];
@@ -72,7 +73,7 @@
     ...new Set(
       Object.values(budgetById)
         .filter(b => b)
-        .map((b: Budget) => b.siret),
+        .map(b => (b as Budget).siret),
     ),
   ].sort();
 

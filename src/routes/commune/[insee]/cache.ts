@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
-import { getRecords } from '@api';
+import { getRecords, getNomen } from '@api';
 import { makeBudget, makeId, orderRecordsBySiret } from '@utils';
+import type { Nomen } from '@utils/nomen';
 import type { Budget, BudgetMap, BudgetRecord, City, Fetch } from '@interfaces';
 
 const budgetCache = {} as BudgetMap;
@@ -20,7 +21,7 @@ export function fillBudget(
   year: number,
   city: City,
   fetch?: Fetch,
-): Promise<Budget> {
+): Promise<Budget | undefined> {
   const id = makeId(siret, year);
 
   return id in budgetCache
@@ -34,15 +35,29 @@ export function fillBudget(
       )
         .catch(() => [])
         .then(async (records: BudgetRecord[]) => {
-          const b = await makeBudget(
-            {
-              info: { city },
-              siret,
-              year,
-              records,
-            },
-            fetch,
+          const ns = [...new Set(records.map(record => record.nomen))];
+
+          if (ns.length > 1) {
+            console.warn('More than 1 nomen for', siret, year);
+          }
+
+          const n = ns?.[0];
+
+          const nomen = await getNomen(year, n, city?.population, fetch).catch(
+            () => undefined,
           );
+
+          const b =
+            nomen &&
+            (await makeBudget(
+              {
+                info: { city },
+                siret,
+                year,
+                records,
+              },
+              nomen,
+            ));
 
           if (browser) {
             /**
@@ -55,9 +70,7 @@ export function fillBudget(
             );
 
             if (hasSiret && !(id in budgetCache)) {
-              if (!(id in budgetCache)) {
-                budgetCache[id] = b;
-              }
+              budgetCache[id] = b;
             }
           }
 
@@ -69,7 +82,7 @@ export function fillBudgetBySirens(
   sirens: string[] = [],
   years: number[] = [],
   city: City,
-): Promise<Budget[]>[] {
+): Promise<(Budget | undefined)[]>[] {
   const sirensToFetch: string[] = [];
   let siretsInCache: string[] = [];
 
@@ -94,24 +107,44 @@ export function fillBudgetBySirens(
           Promise.resolve(cached),
           getRecords({ siren: sirensToFetch, year })
             .catch(() => [])
-            .then((records: BudgetRecord[]) =>
-              Promise.all(
-                orderRecordsBySiret(records).map(async ({ siret, records }) => {
-                  const b = await makeBudget({
-                    info: { city },
-                    siret,
-                    year,
-                    records,
-                  });
-                  const id = makeId(siret, year);
-                  if (browser && !(id in budgetCache)) {
-                    budgetCache[id] = b;
-                  }
+            .then(async (records: BudgetRecord[]) => {
+              const ns = [...new Set(records.map(record => record.nomen))];
 
-                  return b;
-                }),
-              ),
-            ),
+              const nomens = await Promise.allSettled(
+                ns.map(n => getNomen(year, n, city?.population, fetch)),
+              ).then(res =>
+                res
+                  .filter(r => r.status === 'fulfilled')
+                  .map(r => (r as PromiseFulfilledResult<Nomen>).value)
+                  .filter(r => r),
+              );
+
+              return orderRecordsBySiret(records).map(({ siret, records }) => {
+                const norme = records[0]?.nomen;
+
+                const nomen = nomens.find(
+                  n => n.exer === year && n.norme === norme,
+                );
+
+                const b =
+                  nomen &&
+                  makeBudget(
+                    {
+                      info: { city },
+                      siret,
+                      year,
+                      records,
+                    },
+                    nomen,
+                  );
+                const id = makeId(siret, year);
+                if (browser && !(id in budgetCache)) {
+                  budgetCache[id] = b;
+                }
+
+                return b;
+              });
+            }),
         ]).then(budgets => budgets.flat());
   });
 }

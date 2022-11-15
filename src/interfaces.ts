@@ -75,7 +75,7 @@ export interface Budget extends TreeValue {
 }
 
 export interface BudgetMap {
-  [k: string]: Budget;
+  [k: string]: Budget | undefined;
 }
 
 export interface BudgetRaw {
