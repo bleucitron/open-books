@@ -19,7 +19,7 @@
 
   let budgetById: Record<string, Budget | undefined> = {};
 
-  $: ({ sirens, city } = data); // possiblement déclarer budgetById comme state
+  $: ({ siret, sirens, city } = data);
 
   $: ({
     params: { insee },
@@ -27,7 +27,6 @@
     data: { budget },
   } = $page);
   $: year = parseInt(searchParams.get('year') ?? '');
-  $: siret = searchParams.get('siret') ?? '';
 
   $: if (budget) {
     budgetById[budget?.id] = budget;
@@ -43,17 +42,27 @@
   };
 
   $: budgetPs = years
-    .map(y =>
-      y === year ? Promise.resolve(budget) : fillBudget(siret, y, city),
-    )
-    .map(p => p.then(b => b && (budgetById[b.id] = b)));
+    .map(y => fillBudget(siret, y, city))
+    .map(p =>
+      p.then(b => {
+        if (b) {
+          budgetById[b.id] = b;
+        }
+        return b;
+      }),
+    );
 
   $: otherBudgetPs = browser
     ? fillBudgetBySirens(sirens, [...years].reverse(), city).map(p =>
         p.then(budgets =>
           budgets
             .filter(b => b && b.info.city?.code === insee)
-            .forEach(b => (budgetById[(b as Budget).id] = b)),
+            .forEach(b => {
+              if (b) {
+                budgetById[(b as Budget).id] = b;
+              }
+              return b;
+            }),
         ),
       )
     : [];
@@ -88,7 +97,7 @@
 
   $: valuePs = budgetPs.map(budgetP =>
     budgetP.then(budget => {
-      if (!budget) return null;
+      if (!budget) return undefined;
 
       const source = $code ? fonctionFromTree($code, budget.tree) : budget;
 

@@ -6,7 +6,7 @@
   import LoadingText from '$lib/LoadingText.svelte';
 
   export let year: number;
-  export let valueP: Promise<number> = undefined;
+  export let valueP: Promise<number | undefined> = undefined;
   export let maxP: Promise<number>;
   export let select: () => void = undefined;
 
@@ -28,7 +28,7 @@
 
   $: selected = year === currentYear;
 
-  $: valueP.then(v => {
+  $: valueP?.then(v => {
     pending = false;
     unavailable = v == null;
   });

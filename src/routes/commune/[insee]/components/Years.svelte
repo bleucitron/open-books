@@ -1,7 +1,7 @@
 <script lang="ts">
   import Year from './Year.svelte';
 
-  export let valuePs: Promise<number>[];
+  export let valuePs: Promise<number | undefined>[];
   export let years: number[];
 
   $: maxP = Promise.all(valuePs).then(values => {
