@@ -7,9 +7,11 @@ export const load: LayoutLoad = async ({ params, fetch }) => {
 
   const siretsFromInsee = (await fetch(`/sirene/sirets/${insee}`, {
     headers: { 'content-type': 'application/json' },
-  }).then(r => r.json())) as Etablissement[];
+  })
+    .then(r => r.json())
+    .catch(() => [])) as Etablissement[];
 
-  if (!siretsFromInsee) {
+  if (!siretsFromInsee.length) {
     throw new Error(
       `Nous ne trouvons pas d'informations SIRENE pour le code INSEE ${insee})`,
     );
