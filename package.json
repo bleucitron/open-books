@@ -48,7 +48,7 @@
     "release-it": "^14.11.6",
     "sass": "^1.42.1",
     "storybook-builder-vite": "^0.1.2",
-    "svelte": "^3.48.0",
+    "svelte": "^3.49.0",
     "svelte-check": "^2.2.6",
     "svelte-loader": "^3.1.2",
     "svelte-preprocess": "^4.9.4",
